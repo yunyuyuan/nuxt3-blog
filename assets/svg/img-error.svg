@@ -1,0 +1,54 @@
+<svg viewBox="0 0 87 87" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .circle{
+    stroke-dasharray:260.75219024795285px, 260.75219024795285px;
+    stroke-dashoffset: 260.75219024795285px;
+    animation: ani-error-circle 1.2s linear;
+    }
+    .line1{
+    stroke-dasharray: 54px 55px;
+    stroke-dashoffset: 55px;
+    stroke-linecap: round;
+    animation: ani-error-line .15s 1.2s linear both;
+    }
+    .line2{
+    stroke-dasharray: 54px 55px;
+    stroke-dashoffset: 55px;
+    stroke-linecap: round;
+    animation: ani-error-line .2s .9s linear both;
+    }
+
+    @keyframes ani-error-line{
+    to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes ani-error-circle {
+    0% {
+    stroke-dasharray: 0, 260.75219024795285px;
+    stroke-dashoffset: 0;
+    }
+    35% {
+    stroke-dasharray: 120px, 120px;
+    stroke-dashoffset: -120px;
+    }
+    70% {
+    stroke-dasharray: 0, 260.75219024795285px;
+    stroke-dashoffset: -260.75219024795285px;
+    }
+    100% {
+    stroke-dasharray: 260.75219024795285px, 0;
+    stroke-dashoffset: -260.75219024795285px;
+    }
+    }
+  </style>
+  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Group-2" transform="translate(2.000000, 2.000000)">
+      <circle id="Oval-2" stroke="rgba(252, 191, 191, .5)" stroke-width="4" cx="41.5" cy="41.5" r="41.5"></circle>
+      <circle class="circle" stroke="#F74444" stroke-width="4" cx="41.5" cy="41.5" r="41.5"></circle>
+      <path class="line1" d="M22.244224,22 L60.4279902,60.1837662" id="Line" stroke="#F74444" stroke-width="3"
+            stroke-linecap="square"></path>
+      <path class="line2" d="M60.755776,21 L23.244224,59.8443492" id="Line" stroke="#F74444" stroke-width="3"
+            stroke-linecap="square"></path>
+    </g>
+  </g>
+</svg>

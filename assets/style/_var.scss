@@ -1,0 +1,32 @@
+$background: #fff;
+$theme-color: #006e79;
+$theme-color-light: #2bb8c5;
+$header-height: 48px;
+$footer-height: 64px;
+$animation-duration: 0.25s;
+$animation-function: cubic-bezier(0, 0, 0, 1);
+$common-transition: all $animation-duration $animation-function;
+$z-index-header: 500;
+$z-index-notify: 1000;
+$z-index-modal: 999;
+$font-source-han-sans: unset;
+
+// $font-source-han-sans: "Source Han Sans", system-ui, monospace;
+
+@mixin mobile {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin square($size: 100%) {
+  width: $size;
+  height: $size;
+}
+
+@mixin textoverflow($line: 1) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-line-clamp: $line;
+}

@@ -1,0 +1,113 @@
+@import "var";
+@import "source-code-pro";
+@import "markdown";
+@import "code-style";
+@import "perfect-scrollbar/css/perfect-scrollbar.css";
+@import "viewerjs/dist/viewer.css";
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  min-width: 100%;
+  background: $background;
+  display: flex;
+}
+
+body.resizing {
+  user-select: none;
+  cursor: ew-resize;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+
+  &.flex {
+    display: flex;
+    align-items: center;
+  }
+
+  &.flexc {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &.w100 {
+    width: 100%;
+  }
+
+  &.h100 {
+    height: 100%;
+  }
+
+  &.s100 {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+#body {
+  min-height: calc(100vh - #{$header-height + $footer-height});
+  padding-top: $header-height;
+}
+
+#__nuxt {
+  margin: auto;
+}
+
+@include mobile {
+  #__nuxt {
+    width: 100%;
+  }
+}
+
+input,
+textarea,
+select {
+  border: 1px solid gray;
+  transition: border $animation-duration $animation-function, box-shadow $animation-duration $animation-function;
+  border-radius: 2px;
+  background: #fff;
+  outline: none;
+
+  &:hover {
+    border-color: black;
+  }
+
+  &:focus {
+    box-shadow: 0 0 4px rgb(255 158 55 / 20%);
+    border-color: #ebc94e;
+    background: white;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    border-color: #a5a5a5;
+    background: rgb(239 239 239);
+  }
+}
+
+input,
+textarea,
+button {
+  outline: none;
+}
+
+textarea {
+  line-height: 25px;
+  font-family: $font-source-han-sans;
+  font-weight: 400;
+}
+
+img[data-viewer] {
+  cursor: zoom-in;
+}
+
+.has-comment {
+  border-bottom: 1px solid $theme-color;
+  padding-bottom: 20px;
+}

@@ -1,0 +1,12 @@
+{
+  // https://v3.nuxtjs.org/concepts/typescript
+  "includes": [
+    "./suffix-shim.d.ts",
+  ],
+  "exclude": [
+    "**/node_modules/*",
+    "./dist",
+    "./.output"
+  ],
+  "extends": "./.nuxt/tsconfig.json",
+}

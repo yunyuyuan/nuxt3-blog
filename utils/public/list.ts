@@ -1,0 +1,53 @@
+import { processEncryptDescrypt } from "../process-encrypt-descrypt";
+import { CommonItem } from "../types";
+import { deepClone, registerCancelWatchEncryptor } from "../utils";
+import { TargetTab } from "~/plugins/target-tab";
+
+/**
+ * 列表页面通用功能
+ */
+export default function useListPage<T extends CommonItem> () {
+  const githubToken = useGithubToken();
+  const encryptor = useEncryptor();
+  const { targetTab, pending, list }: TargetTab = useNuxtApp().$targetTab.value;
+
+  useHead({
+    title: targetTab.name
+  });
+
+  // cancelWatchPasswd
+  const cancelFnList = registerCancelWatchEncryptor();
+
+  const resultList = reactive([]) as T[];
+  watch(pending, async (pend) => {
+    if (!pend) {
+      resultList.splice(0, 0, ...list.value.map((item) => {
+        return deepClone({
+          ...item,
+          _show: true
+        }) as T;
+      }));
+
+      // 根据login状态控制item列表
+      watch(githubToken, () => {
+        resultList.forEach((item) => {
+          item._show = !item.encrypt || !!githubToken.value;
+        });
+      }, { immediate: true });
+
+      // 解密列表数据
+      cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
+        for (const item of resultList) {
+          if (item.encrypt) {
+            await processEncryptDescrypt(item, decrypt, targetTab.url);
+          }
+        }
+      }));
+    }
+  }, { immediate: true });
+
+  return {
+    list: resultList,
+    pending
+  };
+}

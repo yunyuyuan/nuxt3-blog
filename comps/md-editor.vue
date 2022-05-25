@@ -1,0 +1,370 @@
+<script setup lang="ts">
+import throttle from "lodash/throttle.js";
+import debounce from "lodash/debounce.js";
+import { Ref } from "vue";
+import mdEditorStickers from "./md-editor-stickers.vue";
+import { afterInsertHtml, parseMarkdown } from "~/utils/markdown";
+import { markdownTips } from "~/utils/constants";
+
+const props = defineProps<{
+  modelValue: string;
+  disabled: boolean;
+  loading: boolean;
+  getHtml:(_ref: Ref) => void;
+}>();
+
+const emit = defineEmits(["update:modelValue"]);
+
+let editor = null;
+
+const currentView = ref<"edit" | "preview" | "both">("both");
+const currentText = ref<string>("");
+
+// sticker
+const stickerHided = ref<boolean>(true); // sticker面板是否隐藏，即动画结束
+const showStickers = ref<boolean>(false);
+const insertSticker = (text: string) => {
+  if (editor) {
+    editor.trigger("keyboard", "type", { text });
+  }
+};
+
+// markdown参考
+const showMarkdownReference = ref<boolean>(false);
+
+// resize
+const root = ref<HTMLElement>();
+const leftSideWidth = ref<number>(0);
+const lisetenResize = throttle((e: MouseEvent) => {
+  const width = e.x - root.value.getBoundingClientRect().x;
+  leftSideWidth.value = width > 0 ? width : 1;
+}, 100);
+
+const startResize = () => {
+  window.addEventListener("mousemove", lisetenResize);
+  window.addEventListener("mouseup", stopResize);
+  document.body.classList.add("resizing");
+};
+const stopResize = () => {
+  window.removeEventListener("mouseup", stopResize);
+  window.removeEventListener("mousemove", lisetenResize);
+  document.body.classList.remove("resizing");
+};
+
+// 初始化manoco。mounted 或者 loadingChange 后执行，但只执行一次
+const editorContainer = ref<HTMLElement>();
+const initEditor = () => {
+  if (props.loading || editor || !editorContainer.value) {
+    return;
+  }
+  import("monaco-editor").then((module) => {
+    currentText.value = props.modelValue;
+    editor = module.editor.create(editorContainer.value, {
+      value: props.modelValue,
+      language: "markdown",
+      theme: "vs",
+      wordWrap: "on",
+      automaticLayout: true,
+      minimap: {
+        enabled: false
+      },
+      readOnly: props.disabled
+    });
+    editor.onDidChangeModelContent(
+      debounce(() => {
+        const text = editor.getModel().getValue().trim();
+        emit("update:modelValue", text);
+        currentText.value = text;
+      }, 500)
+    );
+  });
+};
+
+watch(
+  () => props.modelValue,
+  (text) => {
+    if (editor && text !== editor.getModel().getValue()) {
+      editor.getModel().setValue(text);
+    }
+  }
+);
+watch(() => props.loading, initEditor);
+watch(
+  () => props.disabled,
+  (readOnly) => {
+    editor?.updateOptions({ readOnly });
+  }
+);
+
+// md改变时，更新html
+const markdownRef = ref<HTMLElement>();
+const currentHtml = ref<string>("");
+watch(
+  currentText,
+  async () => {
+    currentHtml.value = await parseMarkdown(currentText.value);
+    nextTick(() => {
+      if (markdownRef.value) {
+        afterInsertHtml(markdownRef.value, true);
+      }
+    });
+  },
+  { immediate: true }
+);
+// 把htmlRef元素传给parent
+props.getHtml(markdownRef);
+
+onMounted(initEditor);
+onBeforeUnmount(() => {
+  editor?.dispose();
+});
+</script>
+
+<template>
+  <div ref="root" :class="['manage-md-editor', 'flexc', currentView]">
+    <div v-if="props.loading" class="md-loading flex">
+      <svg-icon name="loading" />
+    </div>
+    <div class="editor-head flex">
+      <a title="插入表情" @click="stickerHided ? (showStickers = true) : null">
+        <img src="/sticker/yellow-face/18.png">
+      </a>
+      <a title="markdown参考" @click="showMarkdownReference = true">
+        <svg-icon name="markdown" />
+      </a>
+      <a
+        class="split"
+        title="调整视图"
+        @click="
+          currentView =
+            currentView == 'both'
+              ? 'edit'
+              : currentView == 'edit'
+                ? 'preview'
+                : 'both'
+        "
+      >
+        <svg-icon name="split" />
+      </a>
+      <md-editor-stickers
+        :sticker-hided="stickerHided"
+        :show="showStickers"
+        @hide="showStickers = false"
+        @slide="stickerHided = $event"
+        @insert-sticker="insertSticker"
+      />
+    </div>
+    <div class="editor-body flex">
+      <div
+        class="left-side"
+        :style="
+          currentView == 'both'
+            ? `width: ${leftSideWidth ? `${leftSideWidth}px` : ''}`
+            : ''
+        "
+      >
+        <div ref="editorContainer" />
+      </div>
+      <div ref="resizeRef" class="resizer" @mousedown.left="startResize" />
+      <div class="righr-side">
+        <article ref="markdownRef" class="--markdown" v-html="currentHtml" />
+      </div>
+    </div>
+  </div>
+  <common-modal v-model="showMarkdownReference" :show-ok="false">
+    <template #title>
+      Markdown参考
+    </template>
+    <template #body>
+      <div class="markdown-tips">
+        <p>
+          基本语法参考：<a
+            target="_blank"
+            href="https://github.github.com/gfm"
+          >gfm</a>
+        </p>
+        <ul>
+          <li v-for="tip in markdownTips" :key="tip.regx">
+            <b>{{ tip.regx }}</b>
+            <span>{{ tip.description }}</span>
+          </li>
+        </ul>
+      </div>
+    </template>
+  </common-modal>
+</template>
+
+<style lang="scss">
+@import "assets/style/var";
+
+.manage-md-editor {
+  background: white;
+  position: relative;
+  min-width: 800px;
+  height: 98vh;
+  align-items: stretch;
+
+  > .md-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    @include square;
+
+    background: rgb(0 0 0 / 30%);
+    z-index: 2;
+    justify-content: center;
+
+    svg {
+      @include square(60px);
+    }
+  }
+
+  &.edit {
+    .editor-body {
+      > .left-side {
+        width: 100%;
+        max-width: unset;
+      }
+
+      > .righr-side,
+      > .resizer {
+        display: none;
+      }
+    }
+  }
+
+  &.preview {
+    .editor-body {
+      > .left-side,
+      > .resizer {
+        display: none;
+      }
+
+      > .righr-side {
+        width: 100%;
+        max-width: unset;
+      }
+    }
+  }
+
+  .editor-head {
+    background: #fefffe;
+    position: relative;
+    padding: 8px 10px;
+
+    > a {
+      width: 42px;
+      height: 36px;
+      margin-right: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+      transition: $common-transition;
+      background: rgb(251 251 251);
+      border: 1px solid transparent;
+
+      &:hover {
+        background: rgb(228 228 228);
+      }
+
+      &:active {
+        border-color: rgb(151 151 151);
+      }
+
+      svg,
+      img {
+        @include square(25px);
+      }
+
+      &.split {
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+.editor-body {
+  border-top: 1px solid #e3e3e3;
+  height: calc(100% - 54px);
+
+  > div {
+    height: 100%;
+    max-width: calc(100% - 105px);
+  }
+
+  > .left-side {
+    width: 50%;
+    flex-shrink: 0;
+    min-width: 100px;
+
+    > div {
+      @include square;
+    }
+  }
+
+  > .resizer {
+    width: 4px;
+    background: rgb(200 200 200);
+    flex-shrink: 0;
+    cursor: ew-resize;
+
+    &:hover {
+      background: rgb(174 174 174);
+    }
+
+    @at-root body.resizing & {
+      background: rgb(124 124 124);
+    }
+  }
+
+  > .righr-side {
+    overflow: auto;
+    flex-grow: 1;
+    min-width: 100px;
+  }
+}
+
+.markdown-tips {
+  p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+
+    a {
+      color: $theme-color;
+    }
+  }
+
+  ul {
+    list-style: none;
+    border-top: 1px dotted rgb(212 212 212);
+
+    li {
+      border-bottom: 1px dotted rgb(212 212 212);
+      padding: 16px;
+
+      b {
+        font-size: 13px;
+        color: $theme-color;
+        display: inline-block;
+        width: 300px;
+        white-space: pre;
+      }
+
+      span {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+@include mobile {
+  .manage-md-editor {
+    min-width: unset;
+    width: 100%;
+  }
+}
+</style>
