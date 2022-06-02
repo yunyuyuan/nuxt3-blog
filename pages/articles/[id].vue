@@ -22,7 +22,14 @@ watch(hideMenu, (hide) => {
   }
 });
 
+const captainEl = ref<HTMLElement>();
+const menuEl = ref<HTMLElement>();
+const menuOuterView = ref<boolean>(false);
+
 const listenAnchor = () => {
+  const rect = captainEl.value.getBoundingClientRect();
+  menuOuterView.value = (rect.height + rect.top - 42) < menuEl.value.scrollHeight;
+
   try {
     const links = Array.from(
       markdownRef.value?.querySelectorAll("h1>a, h2>a, h3>a, h4>a, h5>a, h6>a")
@@ -76,7 +83,7 @@ const { root, hasComment } = useComment("articles");
 
 <template>
   <div ref="root" class="article-detail">
-    <div class="captain flex w100" :class="{ 'no-menu': !item.menu.length, compact: hideMenu }">
+    <div ref="captainEl" class="captain flex w100" :class="{ 'no-menu': !item.menu.length, compact: hideMenu }">
       <div class="article-container">
         <h2>{{ item.title }}</h2>
         <common-loading v-if="mdPending" />
@@ -91,11 +98,11 @@ const { root, hasComment } = useComment("articles");
           </div>
         </client-only>
       </div>
-      <div v-if="item.menu.length" class="menu flexc">
+      <div v-if="item.menu.length" :class="{'outer-view': menuOuterView}" class="menu flexc">
         <span class="toggle flex" :title="(hideMenu ? '展开':'压缩')+'目录'" @click="hideMenu = !hideMenu">
           <svg-icon name="up" />
         </span>
-        <ol>
+        <ol ref="menuEl">
           <li v-for="(anchor, idx) in item.menu" :key="idx">
             <a
               :href="anchor.url"
@@ -232,6 +239,19 @@ const { root, hasComment } = useComment("articles");
       width: $menu-size + $menu-margin;
       align-items: flex-end;
 
+      &.outer-view {
+        bottom: 50px;
+        top: unset;
+
+        >.toggle {
+          position: absolute;
+        }
+
+        ol {
+          position: relative;
+        }
+      }
+
       >.toggle {
         position: fixed;
         top: $header-height + 12px;
@@ -257,7 +277,6 @@ const { root, hasComment } = useComment("articles");
         padding: 40px 0 0 $menu-margin;
         width: $menu-size - $menu-margin;
         min-width: $menu-size - $menu-margin;
-        height: calc(100vh - #{$header-height + 40px});
         list-style: none;
         z-index: 1;
 

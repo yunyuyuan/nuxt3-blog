@@ -28,10 +28,10 @@ export default function useListPage<T extends CommonItem> () {
         }) as T;
       }));
 
-      // 根据login状态控制item列表
-      watch(githubToken, () => {
+      // 有token或者密码正确，显示加密的item
+      watch([githubToken, encryptor.passwdCorrect], ([hasToken, hasPwd]) => {
         resultList.forEach((item) => {
-          item._show = !item.encrypt || !!githubToken.value;
+          item._show = !item.encrypt || (!!hasToken || hasPwd);
         });
       }, { immediate: true });
 
