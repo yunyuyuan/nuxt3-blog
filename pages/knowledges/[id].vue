@@ -3,13 +3,13 @@ import useContentPage from "~/utils/public/detail";
 import { KnowledgeItem } from "~/utils/types";
 import { useComment } from "~/utils/utils";
 
-const { item, htmlContent, modifyTime, markdownRef, mdPending } =
+const { item, tabUrl, htmlContent, modifyTime, markdownRef, mdPending } =
   useContentPage<KnowledgeItem>();
 
 useHead({
   title: computed(() => `《${item.title}》`)
 });
-const { root, hasComment } = useComment("knowledges");
+const { root, hasComment } = useComment(tabUrl);
 </script>
 
 <template>

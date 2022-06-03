@@ -4,12 +4,12 @@ import useContentPage from "~/utils/public/detail";
 import { RecordItem } from "~/utils/types";
 import { useComment } from "~/utils/utils";
 
-const { item, htmlContent, publishTime, modifyTime, markdownRef, listPending, mdPending } = useContentPage<RecordItem>();
+const { item, tabUrl, htmlContent, publishTime, modifyTime, markdownRef, listPending, mdPending } = useContentPage<RecordItem>();
 
 useHead({
   title: computed(() => `记录: ${formatTime(item.time, "YYYY-MM-DD")}`)
 });
-const { root, hasComment } = useComment("records");
+const { root, hasComment } = useComment(tabUrl);
 </script>
 
 <template>

@@ -5,6 +5,12 @@
 
 > 🚀 [https://blog.halberd.cn](https://blog.halberd.cn)
 
+### Quick Start
+1. Fork本仓库，勿修改仓库名
+2. 大体参考[旧版教程](https://blog.halberd.cn/articles/6562)
+3. 需要更改vercel的编译参数，如下图：![](https://s1.ax1x.com/2022/06/03/XNXXvR.png)
+4. 若使用评论功能，则需要安装[utterances](https://github.com/apps/utterances)
+
 ### Todo list
 Feature
 - [x] eslint,stylelint

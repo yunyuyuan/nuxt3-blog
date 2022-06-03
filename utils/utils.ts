@@ -57,21 +57,24 @@ export function getUniqueId (): typeof uniqueId {
 /**
  * 展示评论
  */
-export function useComment (key: "articles" | "records" | "knowledges") {
+export function useComment (key: HeaderTabUrl) {
+  const tab = key.substring(1);
+  const hasComment = config.Comment[tab];
   const root = ref<HTMLElement>();
   onMounted(() => {
-    if (config.Comment[key]) {
+    if (hasComment) {
       const script = document.createElement("script");
       script.src = "https://utteranc.es/client.js";
-      script.setAttribute("repo", "yunyuyuan/nuxt3-blog");
+      script.setAttribute("repo", `${config.githubName}/${config.githubRepo}`);
       script.setAttribute("issue-term", "pathname");
       script.setAttribute("theme", "github-light");
+      script.setAttribute("label", "comment");
       script.setAttribute("crossorigin", "anonymous");
       script.setAttribute("async", "");
       root.value.appendChild(script);
     }
   });
-  return { root, hasComment: config.Comment[key] };
+  return { root, hasComment };
 }
 
 // XXX Must declare lifetime hook before using vue feature,like `render()` inside `notify()`.

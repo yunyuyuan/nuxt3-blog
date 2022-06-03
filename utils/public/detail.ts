@@ -85,6 +85,7 @@ export default function useContentPage<T extends CommonItem> () {
 
   return {
     item,
+    tabUrl: targetTab.url,
     htmlContent,
     publishTime,
     modifyTime,

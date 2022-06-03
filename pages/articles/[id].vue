@@ -5,7 +5,7 @@ import { addScrollListener, rmScrollListener } from "~/utils/scroll-event";
 import { getLocalStorage, rmLocalStorage, setLocalStorage, useComment } from "~/utils/utils";
 import { inBrowser } from "~/utils/constants";
 
-const { item, htmlContent, modifyTime, markdownRef, mdPending, htmlInserted } = useContentPage<ArticleItem>();
+const { item, tabUrl, htmlContent, modifyTime, markdownRef, mdPending, htmlInserted } = useContentPage<ArticleItem>();
 
 useHead({
   title: computed(() => item.title)
@@ -27,8 +27,10 @@ const menuEl = ref<HTMLElement>();
 const menuOuterView = ref<boolean>(false);
 
 const listenAnchor = () => {
-  const rect = captainEl.value.getBoundingClientRect();
-  menuOuterView.value = (rect.height + rect.top - 42) < menuEl.value.scrollHeight;
+  if (item.menu.length) {
+    const rect = captainEl.value.getBoundingClientRect();
+    menuOuterView.value = (rect.height + rect.top - 42) < menuEl.value.scrollHeight;
+  }
 
   try {
     const links = Array.from(
@@ -78,7 +80,7 @@ onBeforeUnmount(() => {
   rmScrollListener(listenAnchor);
 });
 
-const { root, hasComment } = useComment("articles");
+const { root, hasComment } = useComment(tabUrl);
 </script>
 
 <template>
