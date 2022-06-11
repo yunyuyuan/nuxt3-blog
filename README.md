@@ -23,6 +23,7 @@ Feature
 - [ ] toggle plugin enabled,and implement conditional build
 - [ ] get new feature by pull source branch with single action 
 - [ ] serverless function to upload image
+- [ ] IV for AES encrypt
 
 Appearance
 - [ ] i18n

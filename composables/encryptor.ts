@@ -96,6 +96,7 @@ export const useEncryptor = () => {
   return {
     usePasswd,
     passwdCorrect,
+    init,
     encrypt,
     decryptOrWatchToDecrypt
   };

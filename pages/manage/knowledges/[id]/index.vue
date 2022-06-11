@@ -70,6 +70,8 @@ import ManageContentEdit from "~/comps/manage-content-edit.vue";
   }
 
   .select {
+    flex-direction: row !important;
+
     svg {
       @include square(32px);
 

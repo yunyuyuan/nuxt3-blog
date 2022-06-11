@@ -9,6 +9,8 @@ import { GithubTokenKey } from "~/utils/constants";
 const isDev = useRuntimeConfig().public.dev;
 
 const pageLoading = useLoading();
+const correctCommitId = useCorrectCommitId();
+
 definePageMeta({
   layout: "blank",
   middleware (to: RouteLocationNormalized) {
@@ -17,8 +19,6 @@ definePageMeta({
     }
   }
 });
-
-const correctCommitId = useCorrectCommitId();
 
 const activeRoute = computed(() => {
   return useRoute().path.replace(/^\/manage\//, "/");
@@ -36,6 +36,8 @@ const toggleMenu = () => {
 // token & password
 const githubToken = useGithubToken();
 const encryptor = useEncryptor();
+// 进入manage界面后，大概率会用到encrypt，所以这里先异步加载，尚未遇到bug
+encryptor.init();
 const allPassed = computed(() => !!githubToken && encryptor.passwdCorrect.value);
 
 const inputToken = ref<string>(githubToken.value);

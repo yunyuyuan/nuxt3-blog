@@ -60,6 +60,10 @@ function loadFinish (error: boolean) {
   imgState.value = error ? "error" : "loaded";
 }
 function refreshView () {
+  if (isEncryptedImg.value) {
+    imgState.value = "loaded";
+    return;
+  }
   if (imgState.value !== "outerView") {
     return;
   }
