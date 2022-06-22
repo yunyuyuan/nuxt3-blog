@@ -214,11 +214,6 @@
   },
   {
     "title": "再重写blog，以及新手建站教程",
-    "id": 6562,
-    "time": 1638440183244,
-    "modifyTime": 1652889765989,
-    "len": 3456,
-    "encrypt": false,
     "menu": [
       {
         "size": "big",
@@ -236,9 +231,39 @@
         "url": "#id-%E8%B4%A6%E5%8F%B7%E4%BB%A5%E5%8F%8A%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"
       },
       {
-        "size": "small",
+        "size": "big",
         "text": "开始",
         "url": "#id-%E5%BC%80%E5%A7%8B"
+      },
+      {
+        "size": "small",
+        "text": "(1) Fork 项目",
+        "url": "#id-(1)Fork%E9%A1%B9%E7%9B%AE"
+      },
+      {
+        "size": "small",
+        "text": "(2) 修改 config.js 配置文件",
+        "url": "#id-(2)%E4%BF%AE%E6%94%B9config.js%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"
+      },
+      {
+        "size": "small",
+        "text": "(3) 导入到 vercel",
+        "url": "#id-(3)%E5%AF%BC%E5%85%A5%E5%88%B0vercel"
+      },
+      {
+        "size": "small",
+        "text": "(4) 修改编译参数",
+        "url": "#id-(4)%E4%BF%AE%E6%94%B9%E7%BC%96%E8%AF%91%E5%8F%82%E6%95%B0"
+      },
+      {
+        "size": "small",
+        "text": "(5) 新建 token",
+        "url": "#id-(5)%E6%96%B0%E5%BB%BAtoken"
+      },
+      {
+        "size": "small",
+        "text": "(6) 完工",
+        "url": "#id-(6)%E5%AE%8C%E5%B7%A5"
       },
       {
         "size": "big",
@@ -246,10 +271,15 @@
         "url": "#id-%E5%B0%8F%E7%BB%93"
       }
     ],
+    "len": 3639,
     "tags": [
       "杂谈",
       "前端"
-    ]
+    ],
+    "id": 6562,
+    "time": 1638440183244,
+    "modifyTime": 1655902034741,
+    "encrypt": false
   },
   {
     "title": "vite+vue3下如何使用动态导入的svg-sprite",

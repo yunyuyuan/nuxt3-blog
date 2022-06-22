@@ -24,14 +24,14 @@
     3,
     4,
     5,
-  6 {
+    6 {
     h#{$size} {
       cursor: pointer;
 
       $base: ($size % 4) * 0.3;
 
       margin: ($base + 1rem) 0 ($base + 0.5rem);
-      display: inline-block;
+      display: block;
       position: relative;
 
       sup {
