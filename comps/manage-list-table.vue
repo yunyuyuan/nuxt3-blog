@@ -204,35 +204,33 @@ function deleteSelect () {
 .manage-list-table {
   margin: 0 auto;
   padding-bottom: 30px;
+  border: 1px solid #e7e7e7;
 
   li {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgb(255 255 255 / 98%);
-    box-shadow: 0 0 9px 0 rgb(0 0 0 / 10%);
-    padding: 25px 30px;
-    border-radius: 4px;
+    background: rgb(255 255 255);
+    padding: 26px 30px;
+    border-radius: 2px;
     transition: $common-transition;
-    margin-bottom: 10px;
+    border-bottom: 1px solid #d8d8d8;
 
     &.list-head {
-      background: fade-out($theme-color-lighten, 0.5);
-      font-weight: bold;
-      padding-top: 10px;
-      padding-bottom: 10px;
+      background: transparent;
+      padding-top: 20px;
+      padding-bottom: 20px;
 
       .col {
-        font-size: 17px !important;
-
-        &:not(:last-of-type) {
-          border-right: 1px solid #ddd;
-        }
+        font-size: 15px !important;
+        font-weight: bold !important;
+        font-style: italic;
+        color: #4c4c4c;
       }
     }
 
     &.list-body:hover {
-      background: rgb(244 251 255 / 98%);
+      background: rgb(251 254 255 / 98%);
     }
 
     .col {

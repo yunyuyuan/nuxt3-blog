@@ -314,7 +314,7 @@ $menu-width: 100px;
   left: 0;
   right: 0;
   bottom: 0;
-  background: #f5f5f5;
+  background: #fbfbfb;
 }
 
 .manage-input-pwd {
