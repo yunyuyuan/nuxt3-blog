@@ -70,6 +70,8 @@ const { root, hasComment } = useComment(tabUrl);
 
       svg {
         @include square(16px);
+
+        fill: $theme-color;
       }
 
       time {

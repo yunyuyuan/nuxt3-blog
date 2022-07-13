@@ -79,8 +79,8 @@ select {
   }
 
   &:focus {
-    box-shadow: 0 0 4px rgb(255 158 55 / 20%);
-    border-color: #ebc94e;
+    box-shadow: 0 0 4px rgba($theme-color-lighten, 20%);
+    border-color: $theme-color;
     background: white;
   }
 
@@ -108,6 +108,6 @@ img[data-viewer] {
 }
 
 .has-comment {
-  border-bottom: 1px solid $theme-color;
+  border-bottom: 1px solid $theme-color-darken;
   padding-bottom: 20px;
 }

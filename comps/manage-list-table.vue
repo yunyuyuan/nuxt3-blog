@@ -217,7 +217,7 @@ function deleteSelect () {
     margin-bottom: 10px;
 
     &.list-head {
-      background: #819a9b;
+      background: fade-out($theme-color-lighten, 0.5);
       font-weight: bold;
       padding-top: 10px;
       padding-bottom: 10px;

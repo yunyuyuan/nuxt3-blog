@@ -124,11 +124,11 @@ onBeforeMount(async () => {
   #footer,
   #body .about {
     a[href] {
-      color: #49b6a3;
+      color: $theme-color;
       transition: $common-transition;
 
       &:hover {
-        color: #50e5d4;
+        color: $theme-color-lighten;
       }
     }
   }

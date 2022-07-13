@@ -26,6 +26,7 @@ Feature
 - [ ] IV for AES encrypt
 
 Appearance
+- [x] global theme color
 - [ ] i18n
 - [ ] left-side layout
 - [ ] dark mode

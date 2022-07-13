@@ -89,7 +89,7 @@ $space: 16px;
       }
 
       &.active {
-        background: #2eb1c9;
+        background: $theme-color;
         color: white;
         box-shadow: 0 0 2px rgb(0 0 0 / 30%);
       }
@@ -170,7 +170,7 @@ $space: 16px;
 
         b {
           font-size: 18px;
-          color: $theme-color;
+          color: $theme-color-darken;
           margin: 0 4px;
           line-height: 22px;
           font-family: $font-source-han-sans;

@@ -48,18 +48,18 @@ button.common-button {
   height: 32px;
   border-radius: 3px;
   border: none;
-  background: #2eb1c9;
+  background: $theme-color;
   transition: $common-transition;
   box-shadow: 0 0 4px rgb(0 135 255 / 52%);
   cursor: pointer;
   color: white;
 
   &:hover {
-    background: #2695a9;
+    background: $theme-color-darken;
   }
 
   &:active {
-    background: #32c2dc;
+    background: $theme-color-lighten;
   }
 
   &.default {

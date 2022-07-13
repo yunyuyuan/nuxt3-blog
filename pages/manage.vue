@@ -281,7 +281,7 @@ $menu-width: 100px;
         margin-top: 20px;
 
         >svg {
-          fill: $theme-color-light;
+          fill: $theme-color;
 
           @include square(40px);
         }

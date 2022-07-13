@@ -23,6 +23,9 @@ const rawLoaderPlugin: Plugin = {
   }
 };
 
+// themeColor
+fs.writeFileSync("./assets/style/_theme.scss", `$theme: ${config.themeColor};`);
+
 // stickers
 const stickers = {};
 fs.readdirSync("./public/sticker").forEach((dir) => {

@@ -163,7 +163,7 @@ $space: 13px;
           }
 
           b {
-            color: $theme-color;
+            color: $theme-color-darken;
             font-size: 17px;
             min-height: 20px;
             line-height: 20px;

@@ -8,6 +8,7 @@ export default {
   SEO_description: "云与原的博客，书写值得书写的东西",
   SEO_keywords: "yunyuyuan,yunyuyuan's blog,云与原,云与原的博客",
 
+  themeColor: "#2aa0bb", // 主题色
   Comment: {
     articles: true,
     records: false,

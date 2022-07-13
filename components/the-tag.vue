@@ -79,11 +79,11 @@ $color: #eaeaea;
   }
 
   &.active {
-    background-color: #20bcd1;
+    background-color: $theme-color;
     color: white;
 
     &::after {
-      border-left-color: #20bcd1;
+      border-left-color: $theme-color;
     }
   }
 }

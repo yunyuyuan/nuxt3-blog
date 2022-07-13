@@ -12,7 +12,7 @@
   > svg {
     @include square(60px);
 
-    fill: $theme-color;
+    fill: $theme-color-darken;
   }
 
   > span {

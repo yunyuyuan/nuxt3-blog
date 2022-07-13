@@ -328,7 +328,7 @@ onMounted(() => {
       > svg {
         @include square(36px);
 
-        fill: $theme-color;
+        fill: $theme-color-darken;
       }
     }
 
@@ -377,7 +377,7 @@ onMounted(() => {
           svg {
             @include square(18px);
 
-            fill: $theme-color-light;
+            fill: $theme-color;
             margin-left: 8px;
           }
         }

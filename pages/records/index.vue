@@ -72,7 +72,7 @@ $space: 16px;
 
     li {
       h2 {
-        color: #1187ab;
+        color: $theme-color-darken;
         text-shadow: 0 0 2px cyan;
       }
 
@@ -115,7 +115,7 @@ $space: 16px;
 
           &:hover {
             b {
-              color: #1187ab;
+              color: $theme-color-darken;
               text-shadow: 0 0 2px cyan;
             }
           }

@@ -24,11 +24,11 @@ const emit = defineEmits(["change"]);
   background: rgb(227 227 227);
   position: relative;
 
-  @include square(20px);
+  @include square(18px);
 
   display: block;
   cursor: pointer;
-  border: 1px solid $theme-color-light;
+  border: 1px solid fade-out($theme-color, 0.7);
 
   &:hover {
     box-shadow: 0 0 5px rgb(210 250 255 / 20%);
@@ -45,7 +45,7 @@ const emit = defineEmits(["change"]);
   }
 
   &.checked {
-    background: $theme-color-light;
+    background: $theme-color;
 
     &::after,
     &.disabled::after {

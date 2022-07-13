@@ -43,8 +43,8 @@
         background: none;
         text-decoration: none;
         position: relative;
-        color: rgb(0 131 171);
-        text-shadow: 0 0 1px rgb(0 131 171 / 3000%);
+        color: $theme-color-darken;
+        text-shadow: 0 0 1px rgba($theme-color, 3000%);
         font-size: math.div(1rem, $size) + 0.9rem;
         display: flex;
 
@@ -87,7 +87,7 @@
     position: relative;
     text-decoration: none;
     transition: $common-transition;
-    color: #009cbf;
+    color: $theme-color;
     left: 0;
     display: inline-flex;
     word-break: keep-all;
@@ -107,7 +107,7 @@
 
     &:hover {
       &::after {
-        background: #009cbf;
+        background: $theme-color;
       }
 
       &[target="_blank"] {
@@ -124,10 +124,10 @@
     }
 
     &:active {
-      color: #1ac1e7;
+      color: $theme-color-darken;
 
       &::after {
-        background: #1ac1e7;
+        background: $theme-color-darken;
       }
     }
 

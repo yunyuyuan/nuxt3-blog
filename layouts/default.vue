@@ -248,7 +248,7 @@ onBeforeUnmount(() => {
       bottom: 0;
       height: 3px;
       z-index: 2;
-      background: $theme-color-light;
+      background: $theme-color;
       transition: width 0.1s linear;
     }
 
@@ -297,7 +297,7 @@ onBeforeUnmount(() => {
     transition: $common-transition;
 
     &:hover {
-      color: #2eb1c9;
+      color: $theme-color;
     }
   }
 
@@ -310,7 +310,7 @@ onBeforeUnmount(() => {
     align-items: center;
     margin-right: 5px;
     transition: $common-transition;
-    fill: #00a4a4;
+    fill: $theme-color;
 
     svg {
       width: 16px;
@@ -320,7 +320,6 @@ onBeforeUnmount(() => {
 
     &:hover {
       transform: scale(1.1);
-      fill: #00c9c9;
     }
   }
 }

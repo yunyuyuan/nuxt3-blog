@@ -334,7 +334,7 @@ onBeforeUnmount(() => {
     text-align: center;
 
     a {
-      color: $theme-color;
+      color: $theme-color-darken;
     }
   }
 
@@ -348,7 +348,7 @@ onBeforeUnmount(() => {
 
       b {
         font-size: 13px;
-        color: $theme-color;
+        color: $theme-color-darken;
         display: inline-block;
         width: 300px;
         white-space: pre;
