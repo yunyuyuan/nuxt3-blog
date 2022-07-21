@@ -11,8 +11,10 @@ $animation-duration: 0.25s;
 $animation-function: cubic-bezier(0, 0, 0, 1);
 $common-transition: all $animation-duration $animation-function;
 $z-index-header: 500;
+$z-index-dropdown: 500;
 $z-index-notify: 1000;
 $z-index-modal: 999;
+$z-index-dropdown: 999;
 $font-source-han-sans: unset;
 
 // $font-source-han-sans: "Source Han Sans", system-ui, monospace;

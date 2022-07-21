@@ -2,7 +2,6 @@
 import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
 import { Ref } from "vue";
-import mdEditorStickers from "./md-editor-stickers.vue";
 import { afterInsertHtml, parseMarkdown } from "~/utils/markdown";
 import { markdownTips } from "~/utils/constants";
 
@@ -21,6 +20,18 @@ const currentView = ref<"edit" | "preview" | "both">("both");
 const currentText = ref<string>("");
 
 // sticker
+const stickersTranslate = {
+  aru: "阿鲁",
+  "yellow-face": "小黄脸"
+};
+const stickersList = toRaw(useRuntimeConfig().public.stickers);
+const stickersTab = Object.keys(stickersList);
+const currentStickerTab = ref<string>(stickersTab[0]);
+const stickerTranslateY = computed<string>(() => {
+  return `translateY(-${
+    (stickersTab.indexOf(currentStickerTab.value) * 100) / stickersTab.length
+  }%)`;
+});
 const stickerHided = ref<boolean>(true); // sticker面板是否隐藏，即动画结束
 const showStickers = ref<boolean>(false);
 const insertSticker = (text: string) => {
@@ -126,7 +137,7 @@ onBeforeUnmount(() => {
       <svg-icon name="loading" />
     </div>
     <div class="editor-head flex">
-      <a title="插入表情" @click="stickerHided ? (showStickers = true) : null">
+      <a title="插入表情" @click="stickerHided && (showStickers = true)">
         <img src="/sticker/yellow-face/18.png">
       </a>
       <a title="markdown参考" @click="showMarkdownReference = true">
@@ -146,13 +157,43 @@ onBeforeUnmount(() => {
       >
         <svg-icon name="split" />
       </a>
-      <md-editor-stickers
-        :sticker-hided="stickerHided"
-        :show="showStickers"
-        @hide="showStickers = false"
-        @slide="stickerHided = $event"
-        @insert-sticker="insertSticker"
-      />
+      <common-dropdown
+        v-model:show="showStickers"
+        v-model:hided="stickerHided"
+      >
+        <div class="s100 flex">
+          <div class="stickers-title flexc">
+            <span
+              v-for="k in stickersTab"
+              :key="k"
+              :class="{ active: currentStickerTab === k }"
+              @click="currentStickerTab = k"
+            >{{ stickersTranslate[k] }}</span>
+          </div>
+          <div class="stickers-container">
+            <div
+              class="inner"
+              :style="{
+                height: `${stickersTab.length * 100}%`,
+                transform: stickerTranslateY,
+              }"
+            >
+              <div v-for="k in stickersTab" :key="k">
+                <div>
+                  <span
+                    v-for="idx in stickersList[k]"
+                    :key="idx"
+                    :title="`${k}/${idx}`"
+                    @click="insertSticker(`![sticker](${k}/${idx})`)"
+                  >
+                    <img :src="`/sticker/${k}/${idx}.png`">
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </common-dropdown>
     </div>
     <div class="editor-body flex">
       <div
@@ -281,6 +322,88 @@ onBeforeUnmount(() => {
 
       &.split {
         margin-left: auto;
+      }
+    }
+
+    > .common-dropdown {
+      left: 10px;
+      overflow: hidden;
+      width: 400px;
+      height: 200px;
+
+      .stickers-title {
+        height: 100%;
+
+        span {
+          font-size: 13px;
+          padding: 0 5px;
+          word-break: break-all;
+          height: 50%;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          transition: $common-transition;
+
+          &:hover {
+            background: rgb(230 230 230);
+          }
+
+          &.active {
+            background: rgb(108 108 108);
+            color: white;
+          }
+        }
+      }
+
+      .stickers-container {
+        height: 100%;
+        overflow: hidden;
+
+        > .inner {
+          transition: $common-transition;
+          transform: translateY(0);
+
+          > div {
+            height: 200px;
+            overflow-y: auto;
+
+            > div {
+              display: flex;
+              flex-wrap: wrap;
+              border: 1px solid #ddd;
+              border-right: none;
+              border-bottom: none;
+
+              span {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                @include square(42px);
+
+                transition: $common-transition;
+                border: 1px solid #ddd;
+                border-left: none;
+                border-top: none;
+
+                &:hover {
+                  background: rgb(228 228 228);
+
+                  img {
+                    transform: scale(1.1);
+                  }
+                }
+
+                img {
+                  @include square(80%);
+
+                  object-fit: contain;
+                  transition: $common-transition;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

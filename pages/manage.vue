@@ -303,6 +303,7 @@ $menu-width: 100px;
       height: 100%;
       width: calc(100% - #{$left + 30px});
       padding: 0 30px 0 $left;
+      overflow: auto;
     }
   }
 }

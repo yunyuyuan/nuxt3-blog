@@ -202,9 +202,11 @@ function deleteSelect () {
 }
 
 .manage-list-table {
-  margin: 0 auto;
-  padding-bottom: 30px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #dbdbdb;
+  box-shadow: 0 0 15px #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 auto 30px 0;
 
   li {
     display: flex;
@@ -217,7 +219,7 @@ function deleteSelect () {
     border-bottom: 1px solid #d8d8d8;
 
     &.list-head {
-      background: transparent;
+      background: #ebebeb;
       padding-top: 20px;
       padding-bottom: 20px;
 

@@ -1,26 +1,57 @@
 <script setup lang="ts">
+import { Ref } from "vue";
 import { ArticleItem, Translation } from "~/utils/types";
 import ManageContentEdit from "~/comps/manage-content-edit.vue";
+
+const allTags = reactive(new Set<string>());
+const showTagSelect = ref<boolean>(false);
+const tagParentRef = ref<HTMLLabelElement>();
+const listenFocusOut = () => {
+  const fn = (e: MouseEvent) => {
+    let curr = e.target as HTMLElement;
+    while (curr) {
+      if (curr === tagParentRef.value) {
+        return;
+      }
+      curr = curr.parentElement;
+    }
+    showTagSelect.value = false;
+    document.removeEventListener("mousedown", fn);
+  };
+  document.addEventListener("mousedown", fn);
+};
 
 // 输入的tag和实际上传的tag不同，上传的tag需要去重
 const inputTags = ref<string>("");
 const inputTagsList = ref<string[]>();
-const calcTagsList = (encrypted) => {
-  inputTagsList.value = !inputTags || encrypted
+const calcTagsList = () => {
+  inputTagsList.value = !inputTags
     ? []
     : Array.from(new Set(inputTags.value
       .split(",")
       .map(tag => tag.trim())
       .filter(tag => !/^\s*$/.test(tag))));
 };
+watch(inputTags, () => calcTagsList());
+const toggleTag = (tag: string) => {
+  if (inputTagsList.value.includes(tag)) {
+    inputTags.value = inputTags.value.replace(new RegExp(`,?\\s*${tag}(\\s*|,|$)`), "");
+  } else {
+    inputTags.value = inputTags.value.concat(`,${tag}`);
+  }
+  calcTagsList();
+};
 
-const preProcessItem = (item: ArticleItem) => {
+const preProcessItem = (item: ArticleItem, list: Ref<ArticleItem[]>) => {
+  const cancelTags = watch(list, (lis) => {
+    try {
+      lis.forEach(item => item.tags.forEach(t => allTags.add(t)));
+      cancelTags();
+    } catch {}
+  }, { immediate: true });
   watch(item.tags, (tags) => {
     inputTags.value = tags.join(",");
-    calcTagsList(item.encrypt);
-  }, { immediate: true });
-  watch(toRef(item, "encrypt"), (encrypted) => {
-    calcTagsList(encrypted);
+    calcTagsList();
   }, { immediate: true });
   watch(inputTagsList, (tags) => {
     if (!item.encrypt) {
@@ -63,19 +94,34 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
           <span>{{ Translation.tags }}
             <svg-icon name="tags" />
           </span>
-          <label
+          <div
+            ref="tagParentRef"
             :title="item.encrypt ? '加密文章不可输入tag' : null"
             class="input-tags flex"
             :class="{ disabled: disabled || item.encrypt }"
           >
-            <input v-model="inputTags" :disabled="disabled || item.encrypt" @focusout="calcTagsList(item.encrypt)">
-            <div class="s100 flex">
-              <span v-if="!inputTagsList.length" class="placeholder">输入标签，用英文逗号分隔</span>
-              <the-tag v-for="tag in inputTagsList" :key="tag">{{
-                tag
-              }}</the-tag>
+            <input v-model="inputTags" :disabled="disabled || item.encrypt" @focusin="showTagSelect = true">
+            <div class="placeholder s100 flex">
+              <span v-if="!inputTagsList.length || item.encrypt" class="text">输入标签，用英文逗号分隔</span>
+              <template v-if="!item.encrypt">
+                <the-tag v-for="tag in inputTagsList" :key="tag">
+                  {{
+                    tag
+                  }}
+                </the-tag>
+              </template>
             </div>
-          </label>
+            <common-dropdown v-model:show="showTagSelect" :focus="false" @open="listenFocusOut">
+              <p>已有标签：</p>
+              <div class="dropdown w100 flex">
+                <the-tag v-for="tag in allTags" :key="tag" :active="inputTagsList.includes(tag)" @click="toggleTag(tag)">
+                  {{
+                    tag
+                  }}
+                </the-tag>
+              </div>
+            </common-dropdown>
+          </div>
         </div>
       </template>
     </manage-content-edit>
@@ -99,7 +145,7 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
       &:focus {
         color: black;
 
-        & ~ div {
+        & ~ .placeholder {
           opacity: 0;
         }
       }
@@ -107,21 +153,17 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
       &:disabled {
         background: rgb(0 0 0 / 5%);
       }
-
-      & ~ div {
-        opacity: 1;
-      }
     }
 
-    > div {
-      opacity: 0;
+    .placeholder {
+      opacity: 1;
       z-index: 1;
       position: absolute;
       top: 0;
       left: 0;
       overflow: hidden;
 
-      >.placeholder {
+      >.text {
         color: rgb(157 157 157);
         font-size: 14px;
         padding-left: 5px;
@@ -129,6 +171,25 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
 
       .common-tag {
         margin-left: 5px;
+      }
+    }
+
+    .common-dropdown {
+      background: white;
+      width: 100%;
+
+      > p {
+        font-size: 13px;
+        margin: 8px 0 0 8px;
+      }
+
+      .dropdown {
+        flex-wrap: wrap;
+        margin: 0 0 8px 8px;
+
+        .common-tag {
+          margin: 8px 8px 0 0;
+        }
       }
     }
   }

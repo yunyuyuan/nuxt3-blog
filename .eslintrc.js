@@ -32,6 +32,7 @@ module.exports = {
     ],
     "@typescript-eslint/no-var-requires": "off",
     "vue/no-multiple-template-root": "off",
+    "vue/no-v-model-argument": "off",
     "vue/no-v-html": "off"
   }
 };

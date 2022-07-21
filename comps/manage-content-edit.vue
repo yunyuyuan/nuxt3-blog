@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Ref } from "vue";
 import { createCommit, deleteList } from "ls:~/utils/manage/github";
+import { Ref } from "vue";
 import MdEditor from "~/comps/md-editor.vue";
 import { CommonItem, HeaderTabs } from "~/utils/types";
 import { notify } from "~/utils/notify/notify";
@@ -11,7 +11,7 @@ import { processEncryptDescrypt } from "~/utils/process-encrypt-descrypt";
 import { useManageContent } from "~/utils/manage/detail";
 
 const props = defineProps<{
-  preProcessItem?:(_item: CommonItem) => void;
+  preProcessItem?:(_item: CommonItem, _list?: Ref<CommonItem[]>) => void;
   /** 更新之前处理item，附带markdown信息 */
   processWithContent?:(_md: string, _html: HTMLElement, _item: CommonItem) => void;
 }>();
@@ -42,7 +42,7 @@ const {
 const activeRoute = targetTab.url;
 
 if (props.preProcessItem) {
-  props.preProcessItem(item);
+  props.preProcessItem(item, list);
 }
 
 const currentOperate = ref<"upload" | "delete" | "">("");
@@ -419,7 +419,7 @@ onMounted(() => {
   }
 
   &-md-info {
-    padding-bottom: 20px;
+    margin-bottom: 30px;
   }
 }
 
