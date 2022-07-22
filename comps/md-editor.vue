@@ -293,6 +293,7 @@ onBeforeUnmount(() => {
     background: #fefffe;
     position: relative;
     padding: 8px 10px;
+    border-top-right-radius: 4px;
 
     > a {
       width: 42px;

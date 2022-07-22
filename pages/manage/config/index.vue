@@ -50,7 +50,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="manage-config s100 flexc">
+  <div class="manage-config w100 flexc">
     <div class="header flex">
       <span>{{ statusText }}</span>
       <common-button icon="upload" :disabled="!canCommit" :loading="processing" @click="doUpload">
@@ -65,6 +65,8 @@ onBeforeUnmount(() => {
 
 <style lang="scss">
 .manage-config {
+  height: calc(100% - 20px);
+
   > .header {
     align-self: flex-end;
     margin: 20px 0;
