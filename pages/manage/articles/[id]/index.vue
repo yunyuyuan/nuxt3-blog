@@ -6,20 +6,6 @@ import ManageContentEdit from "~/comps/manage-content-edit.vue";
 const allTags = reactive(new Set<string>());
 const showTagSelect = ref<boolean>(false);
 const tagParentRef = ref<HTMLLabelElement>();
-const listenFocusOut = () => {
-  const fn = (e: MouseEvent) => {
-    let curr = e.target as HTMLElement;
-    while (curr) {
-      if (curr === tagParentRef.value) {
-        return;
-      }
-      curr = curr.parentElement;
-    }
-    showTagSelect.value = false;
-    document.removeEventListener("mousedown", fn);
-  };
-  document.addEventListener("mousedown", fn);
-};
 
 // 输入的tag和实际上传的tag不同，上传的tag需要去重
 const inputTags = ref<string>("");
@@ -111,7 +97,7 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
                 </the-tag>
               </template>
             </div>
-            <common-dropdown v-model:show="showTagSelect" :focus="false" @open="listenFocusOut">
+            <common-dropdown v-model:show="showTagSelect" :parent="tagParentRef">
               <p>已有标签：</p>
               <div class="dropdown w100 flex">
                 <the-tag v-for="tag in allTags" :key="tag" :active="inputTagsList.includes(tag)" @click="toggleTag(tag)">

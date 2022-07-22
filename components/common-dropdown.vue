@@ -2,17 +2,27 @@
 const props = defineProps({
   hided: Boolean,
   show: Boolean,
-  focus: { type: Boolean, default: true }
+  parent: HTMLElement
 });
 
 const emit = defineEmits(["update:hided", "update:show", "open"]);
 
 const innerRef = ref<HTMLElement>();
-const setInnerFocus = () => {
-  if (props.focus) {
-    innerRef.value.focus();
-  }
+const afterOpen = () => {
   emit("open");
+  const el = props.parent || innerRef.value;
+  const fn = (e: MouseEvent) => {
+    let curr = e.target as HTMLElement;
+    while (curr) {
+      if (curr === el) {
+        return;
+      }
+      curr = curr.parentElement;
+    }
+    emit("update:show", false);
+    document.removeEventListener("mousedown", fn);
+  };
+  document.addEventListener("mousedown", fn);
 };
 </script>
 
@@ -20,14 +30,13 @@ const setInnerFocus = () => {
   <transition
     name="slide"
     @before-enter="emit('update:hided', false)"
-    @after-enter="setInnerFocus"
+    @after-enter="afterOpen"
     @after-leave="emit('update:hided', true)"
   >
     <div
       v-show="show"
       ref="innerRef"
       class="common-dropdown"
-      :tabindex="focus ? '1' : '-1'"
       @focusout="emit('update:show', false)"
     >
       <slot />
@@ -50,7 +59,6 @@ const setInnerFocus = () => {
   transform: scaleY(1) translateY(5px);
   transform-origin: top;
   opacity: 1;
-  outline: none;
 
   &.slide-enter-from {
     transform: scaleY(0.2) translateY(5px);

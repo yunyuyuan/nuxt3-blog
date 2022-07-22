@@ -139,6 +139,43 @@ onBeforeUnmount(() => {
     <div class="editor-head flex">
       <a title="插入表情" @click="stickerHided && (showStickers = true)">
         <img src="/sticker/yellow-face/18.png">
+        <common-dropdown
+          v-model:show="showStickers"
+          v-model:hided="stickerHided"
+        >
+          <div class="s100 flex">
+            <div class="stickers-title flexc">
+              <span
+                v-for="k in stickersTab"
+                :key="k"
+                :class="{ active: currentStickerTab === k }"
+                @click="currentStickerTab = k"
+              >{{ stickersTranslate[k] }}</span>
+            </div>
+            <div class="stickers-container">
+              <div
+                class="inner"
+                :style="{
+                  height: `${stickersTab.length * 100}%`,
+                  transform: stickerTranslateY,
+                }"
+              >
+                <div v-for="k in stickersTab" :key="k">
+                  <div>
+                    <span
+                      v-for="idx in stickersList[k]"
+                      :key="idx"
+                      :title="`${k}/${idx}`"
+                      @click="insertSticker(`![sticker](${k}/${idx})`);showStickers=false"
+                    >
+                      <img :src="`/sticker/${k}/${idx}.png`">
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </common-dropdown>
       </a>
       <a title="markdown参考" @click="showMarkdownReference = true">
         <svg-icon name="markdown" />
@@ -157,43 +194,6 @@ onBeforeUnmount(() => {
       >
         <svg-icon name="split" />
       </a>
-      <common-dropdown
-        v-model:show="showStickers"
-        v-model:hided="stickerHided"
-      >
-        <div class="s100 flex">
-          <div class="stickers-title flexc">
-            <span
-              v-for="k in stickersTab"
-              :key="k"
-              :class="{ active: currentStickerTab === k }"
-              @click="currentStickerTab = k"
-            >{{ stickersTranslate[k] }}</span>
-          </div>
-          <div class="stickers-container">
-            <div
-              class="inner"
-              :style="{
-                height: `${stickersTab.length * 100}%`,
-                transform: stickerTranslateY,
-              }"
-            >
-              <div v-for="k in stickersTab" :key="k">
-                <div>
-                  <span
-                    v-for="idx in stickersList[k]"
-                    :key="idx"
-                    :title="`${k}/${idx}`"
-                    @click="insertSticker(`![sticker](${k}/${idx})`)"
-                  >
-                    <img :src="`/sticker/${k}/${idx}.png`">
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </common-dropdown>
     </div>
     <div class="editor-body flex">
       <div
@@ -326,11 +326,16 @@ onBeforeUnmount(() => {
       }
     }
 
-    > .common-dropdown {
+    .common-dropdown {
       left: 10px;
       overflow: hidden;
       width: 400px;
       height: 200px;
+      cursor: initial;
+
+      @include mobile {
+        width: calc(100% - 20px);
+      }
 
       .stickers-title {
         height: 100%;
@@ -379,6 +384,7 @@ onBeforeUnmount(() => {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                cursor: pointer;
 
                 @include square(42px);
 

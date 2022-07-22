@@ -5,6 +5,9 @@ import {
   Translation
 } from "~/utils/types";
 import ManageContentEdit from "~/comps/manage-content-edit.vue";
+
+const typeSelectShow = ref(false);
+const typeSelectHided = ref(true);
 </script>
 
 <template>
@@ -23,13 +26,17 @@ import ManageContentEdit from "~/comps/manage-content-edit.vue";
           <span>{{ Translation.type }}
             <svg-icon name="type" />
           </span>
-          <div class="select flex">
-            <select v-model="item.type" :disabled="disabled">
-              <option v-for="tp in KnowledgeTabs" :key="tp" :value="tp">
-                {{ KnowledgeTabsList.find((i) => i.key === tp).name }}
-              </option>
-            </select>
-            <svg-icon :name="item.type" />
+          <div class="select" @click="!disabled && typeSelectHided && (typeSelectShow = true)">
+            <a tabindex="1" class="flex" :class="{active: !typeSelectHided, disabled: disabled}">
+              {{ KnowledgeTabsList.find((i) => i.key === item.type).name }}
+              <svg-icon :name="item.type" />
+            </a>
+            <common-dropdown v-model:show="typeSelectShow" v-model:hided="typeSelectHided" class="flexc">
+              <div v-for="tp in KnowledgeTabs" :key="tp" class="flex" :class="{active: item.type===tp}" @click="item.type=tp;typeSelectShow=false">
+                <span>{{ KnowledgeTabsList.find((i) => i.key === tp).name }}</span>
+                <svg-icon :name="tp" />
+              </div>
+            </common-dropdown>
           </div>
         </div>
       </template>
@@ -71,11 +78,80 @@ import ManageContentEdit from "~/comps/manage-content-edit.vue";
 
   .select {
     flex-direction: row !important;
+    position: relative;
 
-    svg {
-      @include square(32px);
+    > a {
+      padding: 0 8px;
+      border: 1px solid gray;
+      transition: border $animation-duration $animation-function, box-shadow $animation-duration $animation-function;
+      border-radius: 2px;
+      background: #fff;
+      cursor: pointer;
 
-      margin-left: 10px;
+      &:hover {
+        border-color: black;
+      }
+
+      &.active {
+        box-shadow: 0 0 4px rgba($theme-color-lighten, 20%);
+        border-color: $theme-color;
+        background: white;
+      }
+
+      &.disabled {
+        cursor: not-allowed;
+        border-color: #a5a5a5;
+        background: rgb(239 239 239);
+      }
+
+      > svg {
+        @include square(32px);
+
+        margin-left: 10px;
+      }
+    }
+
+    .common-dropdown {
+      width: 100%;
+      align-items: stretch;
+
+      > div {
+        justify-content: space-around;
+        padding: 4px;
+        transition: $common-transition;
+        cursor: pointer;
+
+        &:first-of-type {
+          border-top-left-radius: inherit;
+          border-top-right-radius: inherit;
+        }
+
+        &:last-of-type {
+          border-bottom-left-radius: inherit;
+          border-bottom-right-radius: inherit;
+        }
+
+        &:not(.active):hover {
+          background: rgb(230 230 230);
+        }
+
+        &.active {
+          background: $theme-color-lighten;
+        }
+
+        &:not(:last-of-type) {
+          border-bottom: 1px solid rgb(199 199 199);
+        }
+
+        span {
+          font-size: 14px;
+          word-break: keep-all;
+        }
+
+        svg {
+          @include square(26px);
+        }
+      }
     }
   }
 }
