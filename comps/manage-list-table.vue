@@ -90,8 +90,7 @@ function deleteSelect () {
     </common-button>
   </div>
   <ul class="manage-list-table">
-    <common-loading v-if="pending" />
-    <li v-else class="list-head">
+    <li class="list-head">
       <div class="col col-id">
         ID
       </div>
@@ -113,8 +112,10 @@ function deleteSelect () {
         选择
       </div>
     </li>
+    <common-loading v-if="pending" />
     <li
       v-for="item in searchedList"
+      v-else
       v-show="item._show"
       :key="item.id"
       class="list-body"
@@ -282,6 +283,10 @@ function deleteSelect () {
         }
       }
     }
+  }
+
+  .common-loading {
+    margin: 20px 0;
   }
 }
 
