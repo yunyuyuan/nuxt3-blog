@@ -28,8 +28,8 @@ const filteredList = computed(() => {
   );
 });
 
-function toggleTags (tag: string) {
-  const newTags = this.tags;
+const toggleTags = (tag: string) => {
+  const newTags = tags.value.slice();
   const searchIdx = newTags.indexOf(tag);
   if (searchIdx > -1) {
     newTags.splice(searchIdx, 1);
@@ -37,7 +37,7 @@ function toggleTags (tag: string) {
     newTags.push(tag);
   }
   navigateTo({ query: { tag: newTags.join(",") } }, { replace: true });
-}
+};
 </script>
 
 <template>

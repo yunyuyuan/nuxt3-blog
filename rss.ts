@@ -1,7 +1,7 @@
 import config from "./config";
 import dayjs from "./utils/_dayjs";
 
-export function escapeHtml (s) {
+export function escapeHtml (s: string) {
   return s.toString()
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -15,7 +15,7 @@ class Node {
   content: string;
   children = [];
 
-  constructor (tag: string, content?) {
+  constructor (tag: string, content?: string) {
     this.tag = tag;
     this.content = content;
   }
