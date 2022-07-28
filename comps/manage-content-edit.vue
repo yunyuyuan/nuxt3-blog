@@ -96,12 +96,12 @@ const doUpload = async () => {
         .join(", ")}`
     });
   }
+  // 需要clone一份item，clone的item仅用于上传
+  const newItem = deepClone(toRaw(item));
   // 处理item
   if (props.processWithContent) {
-    props.processWithContent(inputMarkdown.value, markdownRef.value, item);
+    props.processWithContent(inputMarkdown.value, markdownRef.value, newItem);
   }
-  // 是否需要clone一份item，防止加密后显示乱码，clone的item仅用于上传
-  const newItem = item.encrypt ? deepClone(toRaw(item)) : toRaw(item);
   if (!newItem.id) {
     newItem.id = randomId();
   }

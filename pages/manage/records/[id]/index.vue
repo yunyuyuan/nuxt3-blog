@@ -13,9 +13,11 @@ const addImg = (item: RecordItem) => {
   item.images.push({ src: "", alt: "", id: getUniqueId() });
 };
 
-const processImages = (_, _2, item) => {
-  // 去掉没有src的image
-  item.images = item.images.filter(img => !!img.src);
+const processImages = (_, _2, item: RecordItem) => {
+  // 删除id
+  item.images.forEach((img) => {
+    delete img.id;
+  });
 };
 </script>
 

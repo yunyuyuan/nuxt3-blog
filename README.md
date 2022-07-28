@@ -24,6 +24,7 @@ Feature
 - [ ] get new feature by pull source branch with single action 
 - [ ] serverless function to upload image
 - [ ] IV for AES encrypt
+- [ ] pagination
 
 Appearance
 - [x] global theme color
