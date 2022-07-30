@@ -76,6 +76,8 @@ const initEditor = () => {
       theme: "vs",
       wordWrap: "on",
       automaticLayout: true,
+      glyphMargin: false,
+      folding: false,
       minimap: {
         enabled: false
       },

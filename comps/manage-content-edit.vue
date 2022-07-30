@@ -356,7 +356,7 @@ onMounted(() => {
           height: 30px;
           font-size: 14px;
           font-weight: 600;
-          margin: 0 24px 0 16px;
+          margin: 0 24px 0 8px;
           flex-shrink: 0;
           display: flex;
           align-items: center;
@@ -439,6 +439,12 @@ onMounted(() => {
 
     &-base-info > .detail {
       > div {
+        padding: 0 8px;
+
+        >span {
+          margin: 0 12px 0 8px;
+        }
+
         > div {
           flex-direction: column;
           align-items: flex-start;
