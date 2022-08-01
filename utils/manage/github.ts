@@ -175,7 +175,7 @@ export function deleteList (
   dels: CommonItem[]
 ): Promise<boolean | void> {
   const commitInfo =
-    dels.length === 1 ? `"${dels[0].id}"` : `${dels.length} items`;
+    dels.length === 1 ? `'${dels[0].id}'` : `${dels.length} items`;
   const targetTab: TargetTab = useNuxtApp().$targetTab.value;
   const folder = targetTab.targetTab.url;
   return createCommit(
