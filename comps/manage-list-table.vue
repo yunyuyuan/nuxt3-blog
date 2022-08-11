@@ -207,7 +207,7 @@ function deleteSelect () {
   box-shadow: 0 0 15px #e0e0e0;
   border-radius: 4px;
   overflow: hidden;
-  margin: 0 auto 30px 0;
+  margin: 0 auto 30px;
 
   li {
     display: flex;
