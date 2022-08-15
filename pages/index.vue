@@ -1,4 +1,4 @@
-<script lang="ts">
+<script setup lang="ts">
 import { HeaderTabs } from "~/utils/types";
 
 definePageMeta({

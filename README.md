@@ -22,7 +22,7 @@ Feature
 - [ ] full-static build(await for nuxt3)
 - [ ] toggle plugin enabled,and implement conditional build
 - [ ] get new feature by pull source branch with single action 
-- [ ] serverless function to upload image
+- [x] serverless function to upload image
 - [ ] IV for AES encrypt
 - [ ] pagination
 

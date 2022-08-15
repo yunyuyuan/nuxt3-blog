@@ -5,6 +5,7 @@ import { isAuthor } from "~/utils/manage/github";
 import { notify } from "~/utils/notify/notify";
 import { calcRocketUrl, rmLocalStorage, setLocalStorage } from "~/utils/utils";
 import { GithubTokenKey } from "~/utils/constants";
+import UploadImage from "~~/comps/upload-image.vue";
 
 const isDev = useRuntimeConfig().public.dev;
 
@@ -19,6 +20,9 @@ definePageMeta({
     }
   }
 });
+
+// 上传图片
+const showUploadImage = ref(false);
 
 const activeRoute = computed(() => {
   return useRoute().path.replace(/^\/manage\//, "/");
@@ -104,6 +108,11 @@ const modalOk = () => {
       <div class="w100 flexc" :class="{hide: !menuShow}">
         <ul>
           <li>
+            <a @click="showUploadImage = true">
+              图片
+            </a>
+          </li>
+          <li>
             <nuxt-link
               to="/manage/config"
               :class="{ active: activeRoute.startsWith('/config') }"
@@ -164,6 +173,7 @@ const modalOk = () => {
       </label>
     </template>
   </common-modal>
+  <upload-image v-model="showUploadImage" />
 </template>
 
 <style lang="scss">

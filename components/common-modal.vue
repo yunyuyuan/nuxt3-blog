@@ -9,6 +9,10 @@ defineProps({
   },
   modelValue: Boolean,
   loading: Boolean,
+  wrapClass: {
+    type: String,
+    default: ""
+  },
   showOk: {
     type: Boolean,
     default: true
@@ -49,6 +53,7 @@ const close = () => {
           role="document"
           tabindex="1"
           class="common-modal"
+          :class="wrapClass"
           @keyup.enter="emit('confirm')"
           @keyup.escape="close"
         >
