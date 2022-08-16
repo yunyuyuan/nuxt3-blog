@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { createCommit, deleteList } from "ls:~/utils/manage/github";
-import { Ref } from "vue";
+import type { Ref } from "vue";
 import MdEditor from "~/comps/md-editor.vue";
 import { CommonItem, HeaderTabs } from "~/utils/types";
 import { notify } from "~/utils/notify/notify";

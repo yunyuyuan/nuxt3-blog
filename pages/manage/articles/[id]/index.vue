@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref } from "vue";
+import type { Ref } from "vue";
 import { ArticleItem, Translation } from "~/utils/types";
 import ManageContentEdit from "~/comps/manage-content-edit.vue";
 

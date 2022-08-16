@@ -15,7 +15,7 @@ const toggleFilterType = (type: KnowledgeTab) => {
   filterType.value = filterType.value === type ? undefined : type;
 };
 
-const searchFn = (item: KnowledgeItem, s: string) => item.title.includes(s);
+const searchFn = (item: KnowledgeItem, s: string) => item.title?.includes(s);
 </script>
 
 <template>

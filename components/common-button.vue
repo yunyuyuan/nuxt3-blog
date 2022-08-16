@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType } from "vue";
+import type { PropType } from "vue";
 
 defineProps({
   icon: { type: String, default: "" },

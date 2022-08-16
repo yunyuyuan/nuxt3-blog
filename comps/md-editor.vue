@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
-import { Ref } from "vue";
+import type { Ref } from "vue";
 import { afterInsertHtml, parseMarkdown } from "~/utils/markdown";
 import { markdownTips } from "~/utils/constants";
 

@@ -1,4 +1,4 @@
-import { Ref } from "vue";
+import type { Ref } from "vue";
 import { CommonItem, HeaderTab, HeaderTabs } from "~/utils/types";
 import { timeStamp } from "~/utils/constants";
 
