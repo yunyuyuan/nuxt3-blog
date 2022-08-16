@@ -1,5 +1,5 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
-import { registerCancelWatchEncryptor, createNewItem, deepClone, assignItem, fetchList } from "../utils";
+import { registerCancelWatchEncryptor, createNewItem, deepClone, assignItem, fetchList, fetchMd } from "../utils";
 import { useHasModified, useStatusText } from ".";
 
 /**
@@ -7,7 +7,7 @@ import { useHasModified, useStatusText } from ".";
  */
 export function useManageContent () {
   const encryptor = useEncryptor();
-  const itemId = useRoute().params.id;
+  const itemId = useRoute().params.id as string;
 
   const targetTab = useCurrentTab().value;
   const { pending: listPending, data: list } = fetchList(targetTab.url);
@@ -66,7 +66,7 @@ export function useManageContent () {
 
   let mdPending_ = null;
   if (!isNew) {
-    const { pending, data: content } = useFetch(`/rebuild${targetTab.url}/${itemId}.md?s=${item.modifyTime}`);
+    const { pending, data: content } = fetchMd(targetTab.url, itemId);
     mdPending_ = pending;
     watch(content, async (markdown: string) => {
       if (markdown) {

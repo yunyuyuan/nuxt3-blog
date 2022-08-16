@@ -1,7 +1,7 @@
 import { parseMarkdown, afterInsertHtml } from "../markdown";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList } from "../utils";
+import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList, fetchMd } from "../utils";
 import { formatTime } from "../_dayjs";
 
 /**
@@ -36,7 +36,7 @@ export default function useContentPage<T extends CommonItem> () {
   // 所有页面都有markdown
   const mdContent = ref<string>("");
   const htmlContent = ref<string>("");
-  const { pending, data: content } = useFetch(`/rebuild${targetTab.url}/${id}.md?s=${item.modifyTime}`);
+  const { pending, data: content } = fetchMd(targetTab.url, id);
 
   watch(pending, async (pend) => {
     if (!pend) {

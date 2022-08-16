@@ -2,10 +2,18 @@ import { AllKeys, CommonItem, HeaderTabs, HeaderTabUrl, NeedsItem } from "./type
 import { githubRepoUrl, inBrowser, timeStamp } from "./constants";
 import config from "~/config";
 
+// Why is the `key` required?
 export const fetchList = (tab: HeaderTabUrl) => {
   return useFetch<CommonItem[]>(`/rebuild/json${tab}.json?s=${timeStamp}`, {
     key: tab,
     default: () => []
+  });
+};
+
+export const fetchMd = (tab: HeaderTabUrl, id: string) => {
+  return useFetch<string>(`/rebuild${tab}/${id}.md?s=${timeStamp}`, {
+    key: `${tab}/${id}`,
+    default: () => ""
   });
 };
 
