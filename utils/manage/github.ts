@@ -2,7 +2,6 @@ import { CommonItem } from "../types";
 import { getNowDayjs } from "~/utils/_dayjs";
 import config from "~/config";
 import { notify } from "~/utils/notify/notify";
-import { TargetTab } from "~/plugins/target-tab";
 
 async function post (data: string, token_?: string) {
   const token = token_ || useGithubToken().value;
@@ -176,8 +175,7 @@ export function deleteList (
 ): Promise<boolean | void> {
   const commitInfo =
     dels.length === 1 ? `'${dels[0].id}'` : `${dels.length} items`;
-  const targetTab: TargetTab = useNuxtApp().$targetTab.value;
-  const folder = targetTab.targetTab.url;
+  const folder = useCurrentTab().value.url;
   return createCommit(
     `Delete ${commitInfo} from ${folder}`,
     [

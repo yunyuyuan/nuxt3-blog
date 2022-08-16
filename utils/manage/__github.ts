@@ -22,7 +22,7 @@ export function deleteList (
   newList: CommonItem[],
   dels: CommonItem[]
 ): Promise<boolean | void> {
-  const folder = useNuxtApp().$targetTab.value.targetTab.url;
+  const folder = useCurrentTab().value.url;
   import.meta.hot.send("rebuild:update", {
     additions: [{
       path: `public/rebuild/json${folder}.json`,

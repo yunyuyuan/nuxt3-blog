@@ -1,6 +1,7 @@
+let handle: NodeJS.Timer = null;
+
 export const useLoading = () => {
   const loadingState = useState<number>("loading", () => 0);
-  let handle: NodeJS.Timer = null;
 
   const finish = () => {
     if (handle) {

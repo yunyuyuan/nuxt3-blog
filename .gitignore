@@ -2,8 +2,6 @@
 nuxt.d.ts
 .output
 
-yarn.lock
-
 # Logs
 logs
 *.log

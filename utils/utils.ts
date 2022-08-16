@@ -1,6 +1,13 @@
 import { AllKeys, CommonItem, HeaderTabs, HeaderTabUrl, NeedsItem } from "./types";
-import { githubRepoUrl, inBrowser } from "./constants";
+import { githubRepoUrl, inBrowser, timeStamp } from "./constants";
 import config from "~/config";
+
+export const fetchList = (tab: HeaderTabUrl) => {
+  return useFetch<CommonItem[]>(`/rebuild/json${tab}.json?s=${timeStamp}`, {
+    key: tab,
+    default: () => []
+  });
+};
 
 /**
  * 计算rocket的url

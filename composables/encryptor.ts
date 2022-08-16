@@ -2,6 +2,12 @@ import { notify } from "~/utils/notify/notify";
 
 type DecryptFunction = (_s: string) => Promise<string>;
 
+let CryptoJS = null;
+
+const init = async () => {
+  CryptoJS = (await import("crypto-js")).default as any;
+};
+
 export const useEncryptor = () => {
   /** 密码本体 */
   const usePasswd = useState<string>("passwd", () => "");
@@ -9,11 +15,6 @@ export const useEncryptor = () => {
   const passwdCorrect = useState<boolean>("passwdCurrect", () => false);
   /** 同一个密码只会提示一次错误信息 */
   const incorrectPwd = useState<string>("incorrectPasswd", () => "");
-  let CryptoJS = null;
-
-  const init = async () => {
-    CryptoJS = (await import("crypto-js")).default as any;
-  };
 
   const encrypt: DecryptFunction = async (s: string) => {
     if (!s) {

@@ -1,9 +1,8 @@
 import { parseMarkdown, afterInsertHtml } from "../markdown";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { createNewItem, registerCancelWatchEncryptor, assignItem } from "../utils";
+import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList } from "../utils";
 import { formatTime } from "../_dayjs";
-import { TargetTab } from "~/plugins/target-tab";
 
 /**
  * 详情页面通用功能
@@ -15,7 +14,8 @@ export default function useContentPage<T extends CommonItem> () {
 
   const id = route.params.id as string;
 
-  const { targetTab, pending: listPending, list }: TargetTab = useNuxtApp().$targetTab.value;
+  const targetTab = useCurrentTab().value;
+  const { pending: listPending, data: list } = fetchList(targetTab.url);
 
   const item = reactive(createNewItem(targetTab.url)) as T;
 

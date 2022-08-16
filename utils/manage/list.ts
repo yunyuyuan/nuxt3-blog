@@ -1,14 +1,15 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { registerCancelWatchEncryptor, deepClone } from "../utils";
-import { TargetTab } from "~/plugins/target-tab";
+import { registerCancelWatchEncryptor, deepClone, fetchList } from "../utils";
 
 /**
  * 管理页面列表通用功能
  */
 export function useManageList () {
   const encryptor = useEncryptor();
-  const { targetTab, pending, list }: TargetTab = useNuxtApp().$targetTab.value;
+
+  const targetTab = useCurrentTab().value;
+  const { pending, data: list } = fetchList(targetTab.url);
 
   useHead({
     title: `${targetTab.name}列表管理`

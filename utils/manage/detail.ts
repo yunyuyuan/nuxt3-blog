@@ -1,7 +1,6 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
-import { registerCancelWatchEncryptor, createNewItem, deepClone, assignItem } from "../utils";
+import { registerCancelWatchEncryptor, createNewItem, deepClone, assignItem, fetchList } from "../utils";
 import { useHasModified, useStatusText } from ".";
-import { TargetTab } from "~/plugins/target-tab";
 
 /**
  * 管理页面详情编辑通用功能
@@ -9,7 +8,9 @@ import { TargetTab } from "~/plugins/target-tab";
 export function useManageContent () {
   const encryptor = useEncryptor();
   const itemId = useRoute().params.id;
-  const { targetTab, pending: listPending, list }: TargetTab = useNuxtApp().$targetTab.value;
+
+  const targetTab = useCurrentTab().value;
+  const { pending: listPending, data: list } = fetchList(targetTab.url);
 
   useHead({
     title: `${targetTab.name}详情管理`
@@ -65,7 +66,7 @@ export function useManageContent () {
 
   let mdPending_ = null;
   if (!isNew) {
-    const { pending, data: content } = useLazyFetch(`/rebuild${targetTab.url}/${itemId}.md?s=${Date.now()}`);
+    const { pending, data: content } = useFetch(`/rebuild${targetTab.url}/${itemId}.md?s=${item.modifyTime}`);
     mdPending_ = pending;
     watch(content, async (markdown: string) => {
       if (markdown) {

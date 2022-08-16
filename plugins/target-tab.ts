@@ -1,26 +1,9 @@
-import type { Ref } from "vue";
-import { CommonItem, HeaderTab, HeaderTabs } from "~/utils/types";
-import { timeStamp } from "~/utils/constants";
-
-export type TargetTab = {targetTab: HeaderTab, pending?: Ref<boolean>, list?: Ref<CommonItem[]>};
+import { HeaderTabs } from "~/utils/types";
 
 export default defineNuxtPlugin(() => {
-  return {
-    provide: {
-      targetTab: computed(() => {
-        const path = useRoute().path;
-        const target = HeaderTabs.find(tab => path.includes(tab.url));
-        if (target) {
-          const { pending, data } = useFetch(`/rebuild/json${target.url}.json?s=${timeStamp}`);
-          return {
-            targetTab: target, pending, list: data as Ref<CommonItem[]>
-          };
-        } else {
-          return {
-            targetTab: target
-          };
-        }
-      })
-    }
-  };
+  const router = useRouter();
+  router.beforeEach((to) => {
+    const target = HeaderTabs.find(tab => to.path.includes(tab.url));
+    useCurrentTab().value = target;
+  });
 });

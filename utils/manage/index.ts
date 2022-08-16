@@ -49,7 +49,7 @@ export function keysOfCommonItem (): AllKeys[] {
   let keys: AllKeys[] = [];
   try {
     // 在跳转路由时，触发了监听，但是已经找不到target了
-    switch (useNuxtApp().$targetTab.value.targetTab.url as HeaderTabUrl) {
+    switch (useCurrentTab().value.url as HeaderTabUrl) {
       case "/articles":
         keys = ["title", "tags"];
         break;

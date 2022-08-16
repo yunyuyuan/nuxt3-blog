@@ -19,7 +19,7 @@ const registryFilter = (customFilter) => {
     })
   );
 };
-const searchFn = (item: ArticleItem, s: string) => item.title?.includes(s);
+const searchFn = (item: ArticleItem, s: string) => item.title.includes(s);
 </script>
 
 <template>

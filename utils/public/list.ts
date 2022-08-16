@@ -1,7 +1,6 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { deepClone, registerCancelWatchEncryptor } from "../utils";
-import { TargetTab } from "~/plugins/target-tab";
+import { deepClone, fetchList, registerCancelWatchEncryptor } from "../utils";
 
 /**
  * 列表页面通用功能
@@ -9,7 +8,9 @@ import { TargetTab } from "~/plugins/target-tab";
 export default function useListPage<T extends CommonItem> () {
   const githubToken = useGithubToken();
   const encryptor = useEncryptor();
-  const { targetTab, pending, list }: TargetTab = useNuxtApp().$targetTab.value;
+
+  const targetTab = useCurrentTab().value;
+  const { pending, data: list } = fetchList(targetTab.url);
 
   useHead({
     title: targetTab.name
