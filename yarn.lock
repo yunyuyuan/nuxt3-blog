@@ -499,12 +499,12 @@
     unimport "^0.4.5"
     untyped "^0.4.4"
 
-"@nuxt/kit@3.0.0-rc.1":
-  version "3.0.0-rc.1"
-  resolved "https://registry.npmmirror.com/@nuxt/kit/-/kit-3.0.0-rc.1.tgz#e65e739e986abf5bfe99fa44a3bf44bacc66a35a"
+"@nuxt/kit@3.0.0-rc.8":
+  version "3.0.0-rc.8"
+  resolved "https://registry.npmmirror.com/@nuxt/kit/-/kit-3.0.0-rc.8.tgz#e65e739e986abf5bfe99fa44a3bf44bacc66a35a"
   integrity sha512-FkbO7DPkJxuLqeiWEMUI8OWXaQ4qzmreIjslIPrc9buYdB9nbJqVVzQRicxcKzF09R7VwpJTiG6onIZq6iGuDQ==
   dependencies:
-    "@nuxt/schema" "3.0.0-rc.1"
+    "@nuxt/schema" "3.0.0-rc.8"
     c12 "^0.2.9"
     consola "^2.15.3"
     defu "^6.0.0"
@@ -523,9 +523,9 @@
     unimport "^0.6.7"
     untyped "^0.4.5"
 
-"@nuxt/schema@3.0.0-rc.1", "@nuxt/schema@^3.0.0-rc.6":
-  version "3.0.0-rc.1"
-  resolved "https://registry.npmmirror.com/@nuxt/schema/-/schema-3.0.0-rc.1.tgz#d8fab177f4b58fcdb83bd530a887d3b4acea90b7"
+"@nuxt/schema@3.0.0-rc.8", "@nuxt/schema@^3.0.0-rc.6":
+  version "3.0.0-rc.8"
+  resolved "https://registry.npmmirror.com/@nuxt/schema/-/schema-3.0.0-rc.8.tgz#d8fab177f4b58fcdb83bd530a887d3b4acea90b7"
   integrity sha512-ODl9cmjH8fupvXjzITIvYT4OzapNvLrvWq9QUUgLhgv3Uxl2iX2J03oLj2aCQgfhte4mJhgHsBrtXvDLF/1GwA==
   dependencies:
     c12 "^0.2.9"
@@ -570,12 +570,12 @@
   resolved "https://registry.npmmirror.com/@nuxt/ui-templates/-/ui-templates-0.3.2.tgz#68bbc300a31cd14833f36fa69f6a6218cd8e1a16"
   integrity sha512-o0KRB0Mna/M5QxqMe+XvlfKczFz3CQMlkEr6Ztyphp+00jq1Ti0AXdq1XAt9hXI3LoZRh4+2vVX331UaIZQQzQ==
 
-"@nuxt/vite-builder@3.0.0-rc.1":
-  version "3.0.0-rc.1"
-  resolved "https://registry.npmmirror.com/@nuxt/vite-builder/-/vite-builder-3.0.0-rc.1.tgz#20d32786d19ecff787903807ae2d145207d449ec"
+"@nuxt/vite-builder@3.0.0-rc.8":
+  version "3.0.0-rc.8"
+  resolved "https://registry.npmmirror.com/@nuxt/vite-builder/-/vite-builder-3.0.0-rc.8.tgz#20d32786d19ecff787903807ae2d145207d449ec"
   integrity sha512-SaGm7hfA46SP7x49bfFDLHLORXcUvLyEiXGwNlVwMZXCZnXUscYiEF7Fsk9JdJZbbztpUbRLtG5UAr311gvQBQ==
   dependencies:
-    "@nuxt/kit" "3.0.0-rc.1"
+    "@nuxt/kit" "3.0.0-rc.8"
     "@rollup/plugin-replace" "^4.0.0"
     "@vitejs/plugin-vue" "^3.0.2"
     "@vitejs/plugin-vue-jsx" "^2.0.0"
@@ -5899,24 +5899,24 @@ number-is-nan@^1.0.0:
   resolved "https://registry.npmmirror.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha512-4jbtZXNAsfZbAHiiqjLPBiCl16dES1zI4Hpzzxw61Tk+loF+sBDBKx1ICKKKwIqQ7M0mFn1TmkN7euSncWgHiQ==
 
-nuxi@3.0.0-rc.1:
-  version "3.0.0-rc.1"
-  resolved "https://registry.npmmirror.com/nuxi/-/nuxi-3.0.0-rc.1.tgz#d4995d0e6c546a851877fcf747a38d214df4c8cd"
+nuxi@3.0.0-rc.8:
+  version "3.0.0-rc.8"
+  resolved "https://registry.npmmirror.com/nuxi/-/nuxi-3.0.0-rc.8.tgz#d4995d0e6c546a851877fcf747a38d214df4c8cd"
   integrity sha512-2zAuRQnTUFPvway0sNinuQ9x4h+cDrOaWRCRCHYOZq1uSqco5G0wSiI/TzDsQfSMZjCU44wVAzSMJceTozoggQ==
   optionalDependencies:
     fsevents "~2.3.2"
 
-nuxt@3.0.0-rc.1:
-  version "3.0.0-rc.1"
-  resolved "https://registry.npmmirror.com/nuxt/-/nuxt-3.0.0-rc.1.tgz#91d5a7d1cfaf36c09cc6bef28724f30a61c88835"
+nuxt@3.0.0-rc.8:
+  version "3.0.0-rc.8"
+  resolved "https://registry.npmmirror.com/nuxt/-/nuxt-3.0.0-rc.8.tgz#91d5a7d1cfaf36c09cc6bef28724f30a61c88835"
   integrity sha512-4LLs/I4BJz8j20mHfPEMDhnYV2GJGK8jE7pHqJ3L0r2QZg4JrCHSUWXi07+gERvHcKCnv6zGyTmPspJx/9A9Qw==
   dependencies:
     "@nuxt/devalue" "^2.0.0"
-    "@nuxt/kit" "3.0.0-rc.1"
-    "@nuxt/schema" "3.0.0-rc.1"
+    "@nuxt/kit" "3.0.0-rc.8"
+    "@nuxt/schema" "3.0.0-rc.8"
     "@nuxt/telemetry" "^2.1.4"
     "@nuxt/ui-templates" "^0.3.1"
-    "@nuxt/vite-builder" "3.0.0-rc.1"
+    "@nuxt/vite-builder" "3.0.0-rc.8"
     "@vue/reactivity" "^3.2.37"
     "@vue/shared" "^3.2.37"
     "@vueuse/head" "^0.7.9"
@@ -5934,7 +5934,7 @@ nuxt@3.0.0-rc.1:
     magic-string "^0.26.2"
     mlly "^0.5.12"
     nitropack "^0.4.22"
-    nuxi "3.0.0-rc.1"
+    nuxi "3.0.0-rc.8"
     ohash "^0.1.5"
     ohmyfetch "^0.4.18"
     pathe "^0.3.4"

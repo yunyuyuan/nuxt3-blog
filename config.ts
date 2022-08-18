@@ -9,6 +9,8 @@ export default {
   SEO_keywords: "yunyuyuan,yunyuyuan's blog,云与原,云与原的博客",
 
   themeColor: "#2aa0bb", // 主题色
+  CommentRepoId: "R_kgDOGRGGfg", // https://giscus.app/zh-CN
+  CommentDiscussionCategoryId: "DIC_kwDOGRGGfs4CQ5Jp", // https://giscus.app/zh-CN
   Comment: {
     articles: true,
     records: false,

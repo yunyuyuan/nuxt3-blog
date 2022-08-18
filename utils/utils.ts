@@ -79,11 +79,18 @@ export function useComment (key: HeaderTabUrl) {
   onMounted(() => {
     if (hasComment) {
       const script = document.createElement("script");
-      script.src = "https://utteranc.es/client.js";
-      script.setAttribute("repo", `${config.githubName}/${config.githubRepo}`);
-      script.setAttribute("issue-term", "pathname");
-      script.setAttribute("theme", "github-light");
-      script.setAttribute("label", "comment");
+      script.src = "https://giscus.app/client.js";
+      script.setAttribute("data-repo", `${config.githubName}/${config.githubRepo}`);
+      script.setAttribute("data-repo-id", config.CommentRepoId);
+      script.setAttribute("data-category", "Announcements");
+      script.setAttribute("data-category-id", config.CommentDiscussionCategoryId);
+      script.setAttribute("data-mapping", "pathname");
+      script.setAttribute("data-strict", "0");
+      script.setAttribute("data-reactions-enabled", "1");
+      script.setAttribute("data-emit-metadata", "0");
+      script.setAttribute("data-input-position", "top");
+      script.setAttribute("data-theme", "preferred_color_scheme");
+      script.setAttribute("data-lang", "zh-CN");
       script.setAttribute("crossorigin", "anonymous");
       script.setAttribute("async", "");
       root.value.appendChild(script);

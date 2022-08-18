@@ -9,7 +9,7 @@
 1. Fork本仓库，勿修改仓库名
 2. 大体参考[旧版教程](https://blog.halberd.cn/articles/6562)
 3. 需要更改vercel的编译参数，如下图：![](https://s1.ax1x.com/2022/06/03/XNXXvR.png)
-4. 若使用评论功能，则需要安装[utterances](https://github.com/apps/utterances)
+4. 若使用评论功能，则需要安装[giscus](https://github.com/apps/giscus)，并开启[discussion](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository)，然后填写`config.ts`中的`CommentRepoId`和`CommentDiscussionCategoryId`(参考[giscus.app](https://giscus.app/zh-CN))
 
 ### Todo list
 Feature
