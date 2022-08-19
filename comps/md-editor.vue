@@ -243,7 +243,6 @@ onBeforeUnmount(() => {
 .manage-md-editor {
   background: white;
   position: relative;
-  min-width: 800px;
   height: 98vh;
   align-items: stretch;
 

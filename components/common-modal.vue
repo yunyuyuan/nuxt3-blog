@@ -63,10 +63,10 @@ const close = () => {
               <h3>
                 <slot name="title" />
               </h3>
-              <a class="flex modal-close" @click="close">
-                <svg-icon name="close" />
-              </a>
             </div>
+            <a class="flex modal-close" @click="close">
+              <svg-icon name="close" />
+            </a>
             <div class="modal-body">
               <slot name="body" />
             </div>
@@ -140,38 +140,38 @@ const close = () => {
       height: 32px;
       border-bottom: 1px solid #e1e1e1;
       color: rgb(55 55 55);
+    }
 
-      > .modal-close {
-        position: absolute;
-        cursor: pointer;
-        top: 23px;
-        right: 28px;
-        transition: $common-transition;
-        border-radius: 3px;
+    > .modal-close {
+      position: absolute;
+      cursor: pointer;
+      top: 23px;
+      right: 32px;
+      transition: $common-transition;
+      border-radius: 3px;
 
-        @include square(24px);
+      @include square(24px);
 
-        background: white;
-        justify-content: center;
+      background: white;
+      justify-content: center;
 
-        &:hover {
-          background: rgb(240 240 240);
-        }
+      &:hover {
+        background: rgb(240 240 240);
+      }
 
-        &:active {
-          background: rgb(221 221 221);
-
-          > svg {
-            fill: black;
-          }
-        }
+      &:active {
+        background: rgb(221 221 221);
 
         > svg {
-          @include square(12px);
-
-          fill: #474747;
-          transition: $common-transition;
+          fill: black;
         }
+      }
+
+      > svg {
+        @include square(12px);
+
+        fill: #474747;
+        transition: $common-transition;
       }
     }
 
