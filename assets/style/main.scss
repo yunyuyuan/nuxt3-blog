@@ -111,8 +111,10 @@ img[data-viewer] {
   border-bottom: 1px solid $theme-color-darken;
   padding-bottom: 20px;
 }
+
 .giscus {
-  margin-top: 30px;
+  margin: 30px 2px 0;
+  width: unset;
 }
 
 ::-webkit-scrollbar {
