@@ -34,7 +34,7 @@ export function useStatusText () {
     if (!useGithubToken().value) {
       return "请先正确输入token，再进行操作";
     } else if (!useCorrectCommitId().value) {
-      return "commit id与github不一致";
+      return "commit id与github不一致，请等待编译，或检查编译是否正常";
     }
     return status.value;
   });

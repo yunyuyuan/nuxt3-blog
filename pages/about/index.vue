@@ -28,7 +28,7 @@ onBeforeMount(async () => {
       </p>
     </div>
     <div class="status">
-      Last build &lt;<a target="_blank" :href="commitUrl">{{ sha }}</a>&gt; successed at
+      Last built &lt;<a target="_blank" :href="commitUrl">{{ sha }}</a>&gt; succeeded at
       <time>{{ buildTime }}</time>
     </div>
   </div>
