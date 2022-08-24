@@ -23,7 +23,7 @@ const openEdit = computed(() => {
 let headroom;
 const headerRef = ref();
 onMounted(async () => {
-  const Headroom = (await import("headroom.js")).default as any;
+  const Headroom = (await import("headroom.js")).default;
   headroom = new Headroom(headerRef.value, {
     offset: 48
   });
@@ -107,6 +107,7 @@ onBeforeUnmount(() => {
     right: 0;
     height: $header-height;
     background: #303947;
+    box-shadow: 0 0 8px #4c4c4c8e;
     z-index: $z-index-header;
     transition: $common-transition;
 
@@ -252,9 +253,9 @@ onBeforeUnmount(() => {
       transition: width 0.1s linear;
     }
 
-    &.headroom--not-top {
-      box-shadow: 0 0 8px #4c4c4c;
-      height: $header-height - 6px;
+    &:not(.headroom--pinned).headroom--not-top {
+      transform: translateY(-100%);
+      box-shadow: none;
 
       .item {
         font-size: 18px;
