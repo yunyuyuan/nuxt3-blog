@@ -1,17 +1,19 @@
 import { AllKeys, CommonItem, HeaderTabs, HeaderTabUrl, NeedsItem } from "./types";
-import { githubRepoUrl, inBrowser, timeStamp } from "./constants";
+import { githubRepoUrl, inBrowser } from "./constants";
 import config from "~/config";
+
+const timestamp = () => useRuntimeConfig().public.timestamp;
 
 // Why is the `key` required?
 export const fetchList = (tab: HeaderTabUrl) => {
-  return useFetch<CommonItem[]>(`/rebuild/json${tab}.json?s=${timeStamp}`, {
+  return useFetch<CommonItem[]>(`/rebuild/json${tab}.json?s=${timestamp()}`, {
     key: tab,
     default: () => []
   });
 };
 
 export const fetchMd = (tab: HeaderTabUrl, id: string) => {
-  return useFetch<string>(`/rebuild${tab}/${id}.md?s=${timeStamp}`, {
+  return useFetch<string>(`/rebuild${tab}/${id}.md?s=${timestamp()}`, {
     key: `${tab}/${id}`,
     default: () => ""
   });

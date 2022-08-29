@@ -1,5 +1,5 @@
 import { createApp, createVNode, render } from "vue";
-import { timeStamp, inBrowser } from "./constants";
+import { inBrowser } from "./constants";
 import { notify } from "./notify/notify";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
@@ -65,7 +65,7 @@ const commonImgExtension = {
           const matcher = src.match(/^(.*?)\/(\d*)$/);
           if (matcher) {
             const [, name, tone] = matcher;
-            return `${prefix}<img src="/sticker/${name}/${tone}.png?ran=${timeStamp}" alt="${alt}"/>`;
+            return `${prefix}<img src="/sticker/${name}/${tone}.png?ran=${useRuntimeConfig().public.timestamp}" alt="${alt}"/>`;
           }
         }
         const mather = alt.match(/^(.*?)\[(.*?) x (.*?)]$/);

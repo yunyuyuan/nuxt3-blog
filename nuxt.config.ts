@@ -42,6 +42,8 @@ if (config.CloudflareAnalyze) {
   });
 }
 
+const timestamp = Date.now();
+
 // const prefix = "monaco-editor/esm/vs";
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
@@ -73,6 +75,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       stickers,
+      timestamp,
       dev: process.env.NODE_ENV === "development"
     },
     app: {

@@ -9,7 +9,6 @@ export const GithubTokenKey = "github-token";
 
 export const githubRepoUrl = `https://github.com/${config.githubName}/${config.githubRepo}`;
 
-export const timeStamp = Date.now();
 export const inBrowser = process.client;
 export const themeBackground = ThemeBackgroundImage;
 
