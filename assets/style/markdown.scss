@@ -384,8 +384,9 @@
       border-radius: 0 0 0.3rem 0.3rem;
       max-height: 100vh;
       background: white;
-      font-size: 0.77rem;
-      line-height: 1.4rem;
+      font-size: 0.84rem;
+      font-weight: 500;
+      line-height: 1.3rem;
       position: relative;
       overflow-x: auto;
     }
@@ -448,6 +449,8 @@
     pre {
       >code.hljs {
         padding: 0.5rem 0.8rem;
+        font-size: 0.74rem;
+        line-height: 1.3rem;
       }
     }
 
