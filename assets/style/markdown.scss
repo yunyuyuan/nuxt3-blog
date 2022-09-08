@@ -239,17 +239,18 @@
   }
 
   code {
-    font-family: "Source Code Pro", serif;
+    font-family: $font-code;
     font-weight: 600;
     letter-spacing: 0;
 
     &:not(.hljs) {
-      background: rgb(135 135 135 / 10%);
-      padding: 0.22rem 0.48em;
       border-radius: 3px;
-      color: #ff3c00;
-      margin: 0 0.25rem;
+      border: 1px solid rgb(0 0 0 / 15%);
+      color: #f00;
       font-size: 0.85em;
+      font-weight: 400;
+      margin: 0 0.25rem;
+      padding: 0.22rem 0.48em;
     }
   }
 
@@ -329,7 +330,7 @@
     >small {
       position: absolute;
       left: 50%;
-      font-family: "Source Code Pro", serif;
+      font-family: $font-code;
       transform: translateX(-50%);
       top: 6px;
       font-size: 0.65rem;

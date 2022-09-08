@@ -18,6 +18,9 @@ $z-index-dropdown: 999;
 // $font-source-han-sans: unset;
 $font-source-han-sans: "Source Han Sans", system-ui, monospace;
 
+// $font-code: "Source Code Pro", serif;
+$font-code: "Fira Code", serif;
+
 @mixin mobile {
   @media screen and (max-width: 768px) {
     @content;

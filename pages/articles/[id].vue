@@ -282,8 +282,8 @@ const { root, hasComment } = useComment(tabUrl);
         list-style: none;
         z-index: 1;
 
-        $mouse-out-color: #929292;
-        $mouse-in-color: #6b6363;
+        $mouse-out-color: #777;
+        $mouse-in-color: #4d4646;
 
         &:hover {
           a {

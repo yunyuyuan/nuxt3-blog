@@ -1,6 +1,8 @@
 @import "var";
-@import "source-code-pro";
+
+// @import "source-code-pro";
 @import "source-han-sans";
+@import "fira-code";
 @import "markdown";
 @import "code-style";
 @import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -8,6 +10,7 @@
 
 html {
   scroll-behavior: smooth;
+  font-family: $font-source-han-sans;
 }
 
 html,

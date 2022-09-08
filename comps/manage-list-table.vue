@@ -253,7 +253,7 @@ function deleteSelect () {
       &-id {
         flex-basis: 6%;
         font-size: 14px;
-        font-family: "Source Code Pro", cursive;
+        font-family: $font-code;
         font-weight: 600;
       }
 

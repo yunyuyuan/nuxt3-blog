@@ -125,7 +125,7 @@ onBeforeUnmount(() => {
       word-break: keep-all;
       cursor: pointer;
       font-size: 20px;
-      font-family: "Source Code Pro", serif;
+      font-family: $font-code;
 
       span {
         position: absolute;

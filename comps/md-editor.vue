@@ -85,7 +85,7 @@ const initEditor = () => {
     });
     editor.onDidChangeModelContent(
       debounce(() => {
-        const text = editor.getModel().getValue().trim();
+        const text = editor.getModel().getValue();
         emit("update:modelValue", text);
         currentText.value = text;
       }, 500)
