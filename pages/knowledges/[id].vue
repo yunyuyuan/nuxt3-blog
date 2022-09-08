@@ -137,12 +137,12 @@ const { root, hasComment } = useComment(tabUrl);
 
         p {
           font-family: $font-source-han-sans;
-          font-size: 13px;
+          font-size: 13.5px;
           line-height: 24px;
           letter-spacing: 0.15px;
           padding-left: 20px;
           white-space: pre-wrap;
-          color: #2c2c2c;
+          color: #1b1b1b;
           word-break: break-word;
         }
       }

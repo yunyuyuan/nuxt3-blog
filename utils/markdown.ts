@@ -165,7 +165,7 @@ let converter = null;
 
 export async function parseMarkdown (text: string) {
   if (!converter) {
-    const showdown = (await import("showdown")).default as any;
+    const showdown = (await import("showdown")).default;
     converter = new showdown.Converter({
       ...options,
       extensions: [
@@ -193,7 +193,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
         const dotes = document.createElement("div");
         const lang = document.createElement("small");
         const language = el.className.replace(/^.*?language-([^ ]+).*?$/, "$1");
-        const hljs = (await import("highlight.js")).default as any;
+        const hljs = (await import("highlight.js")).default;
         lang.innerText = (
           hljs.getLanguage(language) || { name: language }
         ).name;
@@ -206,7 +206,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
     if (!forEdit) {
       if (!useNuxtApp().$isMobile) {
         mdEl.querySelectorAll("pre>code:not(.ps)").forEach(async (el) => {
-          const PerfectScrollbar = (await import("perfect-scrollbar")).default as any;
+          const PerfectScrollbar = (await import("perfect-scrollbar")).default;
           const scrollbar = new PerfectScrollbar(el);
           destroyFns.push(() => scrollbar.destroy());
         });
@@ -255,7 +255,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
           actions.appendChild(span);
         });
         copyBtn.title = "copy";
-        const ClipboardJS = (await import("clipboard")).default as any;
+        const ClipboardJS = (await import("clipboard")).default;
         const clipboard = new ClipboardJS(copyBtn, {
           target: function (trigger) {
             return trigger.parentElement.parentElement.querySelector("code");
@@ -279,7 +279,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
         });
       });
     }
-    const pangu = (await import("pangu")).default as any;
+    const pangu = (await import("pangu")).default;
     pangu.spacingElementByClassName("--markdown");
     htmlInserted && (htmlInserted.value = true);
   });

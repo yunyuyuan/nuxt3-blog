@@ -3,12 +3,14 @@ import { getNowDayjs } from "~/utils/_dayjs";
 import config from "~/config";
 import { notify } from "~/utils/notify/notify";
 
+let axios = null;
+
 async function post (data: string, token_?: string) {
   const token = token_ || useGithubToken().value;
   if (!token) {
     throw new Error("缺少token");
   }
-  const axios = (await import("axios")).default as any;
+  axios = axios || (await import("axios")).default;
   return await axios.post(
     "https://api.github.com/graphql",
     { query: data },

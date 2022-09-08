@@ -1,5 +1,54 @@
 [
   {
+    "title": "树莓派bt下载器/局域网NAS/远程控制",
+    "menu": [
+      {
+        "size": "big",
+        "text": "准备",
+        "url": "#id-%E5%87%86%E5%A4%87"
+      },
+      {
+        "size": "big",
+        "text": "开工",
+        "url": "#id-%E5%BC%80%E5%B7%A5"
+      },
+      {
+        "size": "small",
+        "text": "硬盘检查",
+        "url": "#id-%E7%A1%AC%E7%9B%98%E6%A3%80%E6%9F%A5"
+      },
+      {
+        "size": "small",
+        "text": "bt 下载器",
+        "url": "#id-bt%E4%B8%8B%E8%BD%BD%E5%99%A8"
+      },
+      {
+        "size": "small",
+        "text": "局域网 NAS",
+        "url": "#id-%E5%B1%80%E5%9F%9F%E7%BD%91NAS"
+      },
+      {
+        "size": "small",
+        "text": "远程控制（非必须）",
+        "url": "#id-%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%EF%BC%88%E9%9D%9E%E5%BF%85%E9%A1%BB%EF%BC%89"
+      },
+      {
+        "size": "big",
+        "text": "完工",
+        "url": "#id-%E5%AE%8C%E5%B7%A5"
+      }
+    ],
+    "len": 4260,
+    "tags": [
+      "树莓派",
+      "nas"
+    ],
+    "id": 4343,
+    "time": 1662638618123,
+    "modifyTime": 1662638995125,
+    "encrypt": false
+  },
+  {
     "title": "使用serverless function上传图片",
     "menu": [
       {

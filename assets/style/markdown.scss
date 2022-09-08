@@ -16,8 +16,8 @@
   word-break: break-word;
   line-height: $line-height;
   font-family: $font-source-han-sans;
-  font-size: 0.92rem;
-  font-weight: 400;
+  font-size: 0.98rem;
+  font-weight: 500;
 
   @each $size in 1,
     2,
@@ -48,10 +48,10 @@
         font-size: math.div(1rem, $size) + 0.9rem;
         display: flex;
 
-        &:hover::before {
+        &::before {
           content: "#";
           position: absolute;
-          font-size: 1rem;
+          font-size: math.div(1rem, $size) + 0.6rem;
           left: -5px;
           transform: translateX(-100%);
         }

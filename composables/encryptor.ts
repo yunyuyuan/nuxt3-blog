@@ -5,7 +5,7 @@ type DecryptFunction = (_s: string) => Promise<string>;
 let CryptoJS = null;
 
 const init = async () => {
-  CryptoJS = (await import("crypto-js")).default as any;
+  CryptoJS = CryptoJS || (await import("crypto-js")).default;
 };
 
 export const useEncryptor = () => {

@@ -98,6 +98,26 @@ const doUpload = async () => {
     uploading.value = false;
   }
 };
+
+const resultInput = ref<HTMLInputElement>();
+let clipboard = null;
+
+onMounted(async () => {
+  const ClipboardJS = clipboard || (await import("clipboard")).default;
+  clipboard = new ClipboardJS(resultInput.value, {
+    target: function (trigger) {
+      return trigger;
+    }
+  }).on("success", () => {
+    notify({
+      title: "复制成功！"
+    });
+  });
+});
+
+onUnmounted(() => {
+  clipboard?.destroy();
+});
 </script>
 
 <template>
@@ -117,7 +137,7 @@ const doUpload = async () => {
       <div class="flexc">
         <div class="result flex">
           <span>上传结果：</span>
-          <input v-model="resultUrl" disabled>
+          <input ref="resultInput" v-model="resultUrl" readonly>
         </div>
         <label
           class="flex"
