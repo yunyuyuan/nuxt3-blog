@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { createCommit } from "ls:~/utils/manage/github";
 import config from "~/config.ts?raw";
+import config_ from "~/config";
 import { inBrowser } from "~/utils/constants";
 import { useStatusText } from "~/utils/manage";
 
 useHead({
-  title: "配置管理"
+  title: `配置管理${config_.SEO_title}`
 });
 
 let editor = null;

@@ -3,11 +3,12 @@ import { formatTime, literalTime } from "~/utils/_dayjs";
 import useContentPage from "~/utils/public/detail";
 import { RecordItem } from "~/utils/types";
 import { useComment } from "~/utils/utils";
+import config from "~/config";
 
 const { item, tabUrl, htmlContent, publishTime, modifyTime, markdownRef, listPending, mdPending } = useContentPage<RecordItem>();
 
 useHead({
-  title: computed(() => `记录: ${formatTime(item.time, "YYYY-MM-DD")}`)
+  title: computed(() => `记录: ${formatTime(item.time, "YYYY-MM-DD")}${config.SEO_title}`)
 });
 const { root, hasComment } = useComment(tabUrl);
 </script>

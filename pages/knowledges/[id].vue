@@ -2,12 +2,13 @@
 import useContentPage from "~/utils/public/detail";
 import { KnowledgeItem } from "~/utils/types";
 import { useComment } from "~/utils/utils";
+import config from "~/config";
 
 const { item, tabUrl, htmlContent, modifyTime, markdownRef, mdPending } =
   useContentPage<KnowledgeItem>();
 
 useHead({
-  title: computed(() => `《${item.title}》`)
+  title: computed(() => `《${item.title}》${config.SEO_title}`)
 });
 const { root, hasComment } = useComment(tabUrl);
 </script>

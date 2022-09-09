@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import axios from "axios";
 import FormData from "form-data";
-import { notify } from "~~/utils/notify/notify";
-import { getLocalStorage, setLocalStorage } from "~~/utils/utils";
+import { notify } from "~/utils/notify/notify";
+import { getLocalStorage, setLocalStorage } from "~/utils/utils";
 
 const props = defineProps({
   modelValue: Boolean

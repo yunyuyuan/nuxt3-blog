@@ -1,6 +1,7 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { registerCancelWatchEncryptor, createNewItem, deepClone, assignItem, fetchList, fetchMd } from "../utils";
 import { useHasModified, useStatusText } from ".";
+import config from "~/config";
 
 /**
  * 管理页面详情编辑通用功能
@@ -13,7 +14,7 @@ export function useManageContent () {
   const { pending: listPending, data: list } = fetchList(targetTab.url);
 
   useHead({
-    title: `${targetTab.name}详情管理`
+    title: `${targetTab.name}详情管理${config.SEO_title}`
   });
 
   const isNew = itemId === "new";

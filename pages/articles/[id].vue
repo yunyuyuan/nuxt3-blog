@@ -4,11 +4,12 @@ import { ArticleItem } from "~/utils/types";
 import { addScrollListener, rmScrollListener } from "~/utils/scroll-event";
 import { getLocalStorage, rmLocalStorage, setLocalStorage, useComment } from "~/utils/utils";
 import { inBrowser } from "~/utils/constants";
+import config from "~/config";
 
 const { item, tabUrl, htmlContent, modifyTime, markdownRef, mdPending, htmlInserted } = useContentPage<ArticleItem>();
 
 useHead({
-  title: computed(() => item.title)
+  title: computed(() => item.title + config.SEO_title)
 });
 
 const activeAnchor = ref<string>();

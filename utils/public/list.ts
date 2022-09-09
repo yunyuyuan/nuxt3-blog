@@ -1,6 +1,7 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
 import { deepClone, fetchList, registerCancelWatchEncryptor } from "../utils";
+import config from "~/config";
 
 /**
  * 列表页面通用功能
@@ -13,7 +14,7 @@ export default function useListPage<T extends CommonItem> () {
   const { pending, data: list } = fetchList(targetTab.url);
 
   useHead({
-    title: targetTab.name
+    title: targetTab.name + config.SEO_title
   });
 
   // cancelWatchPasswd
