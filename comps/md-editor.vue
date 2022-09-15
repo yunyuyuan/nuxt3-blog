@@ -182,7 +182,7 @@ onBeforeUnmount(() => {
       <a title="markdown参考" @click="showMarkdownReference = true">
         <svg-icon name="markdown" />
       </a>
-      <a class="preview" @click="emit('preview')">预览</a>
+      <a class="preview" title="提交预览" @click="emit('preview')"><svg-icon name="preview" /></a>
       <a
         class="split"
         title="调整视图"

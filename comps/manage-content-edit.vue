@@ -159,6 +159,8 @@ const getUploadInfo = async () => {
     md: mdContent
   };
 };
+const previewInfoEl = ref();
+const previewMdEl = ref();
 const setPreviewInfo = async () => {
   const info = await getUploadInfo();
   if (!info) { return; }
@@ -166,6 +168,11 @@ const setPreviewInfo = async () => {
   previewInfo.value = JSON.stringify(item, null, 4);
   previewContent.value = md;
   showPreviewModal.value = true;
+  nextTick(async () => {
+    const hljs = (await import("highlight.js")).default;
+    hljs.highlightElement(previewInfoEl.value);
+    hljs.highlightElement(previewMdEl.value);
+  });
 };
 const doUpload = async () => {
   const info = await getUploadInfo();
@@ -274,7 +281,8 @@ onMounted(() => {
         </span>
         <common-checkbox
           :checked="item.encrypt"
-          :disabled="!decrypted"
+          :disabled="!decrypted || !blockDecrypted"
+          :title="!blockDecrypted && '请先解密blocks'"
           @change="item.encrypt = $event"
         />
       </div>
@@ -305,14 +313,18 @@ onMounted(() => {
   <common-modal
     v-model="showPreviewModal"
     :show-cancel="false"
+    modal-width="1000"
+    wrap-class="preview-modal"
     @confirm="showPreviewModal = false"
   >
     <template #title>
       提交预览
     </template>
     <template #body>
-      <pre>{{ previewInfo }}</pre>
-      <pre>{{ previewContent }}</pre>
+      <p>基础信息</p>
+      <span ref="previewInfoEl" class="language-json info">{{ previewInfo }}</span>
+      <p>内容</p>
+      <span ref="previewMdEl" class="language-markdown md">{{ previewContent }}</span>
     </template>
   </common-modal>
 </template>
@@ -482,6 +494,37 @@ onMounted(() => {
 
   &-md-info {
     margin-bottom: 30px;
+  }
+}
+
+.preview-modal {
+  .modal-body {
+    > p {
+      background: $theme-color;
+      color: white;
+      font-size: 18px;
+      padding: 6px;
+      text-align: center;
+    }
+
+    > span {
+      display: block;
+      padding: 8px;
+      overflow-x: auto;
+      border: 1px solid rgb(187 187 187);
+
+      &.info {
+        white-space: pre;
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+        font-family: $font-code;
+      }
+
+      &.md {
+        white-space: pre-line;
+        word-break: break-word;
+      }
+    }
   }
 }
 
