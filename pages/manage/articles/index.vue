@@ -27,10 +27,9 @@ const searchFn = (item: ArticleItem, s: string) => item.title.includes(s);
     <manage-list-table
       col-prefix="article-"
       :registry-filter="registryFilter"
-      :show-filter="!!searchTag.size"
       :search-fn="searchFn"
     >
-      <template #filter>
+      <template v-if="searchTag.size" #filter>
         <div class="filter-tag">
           <the-tag
             v-for="tag in searchTag"

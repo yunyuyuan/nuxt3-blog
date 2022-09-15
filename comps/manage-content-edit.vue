@@ -9,6 +9,7 @@ import { deepClone, getLocalStorage, rmLocalStorage } from "~/utils/utils";
 import { loadOrDumpDraft, randomId } from "~/utils/manage";
 import { processEncryptDescrypt } from "~/utils/process-encrypt-descrypt";
 import { useManageContent } from "~/utils/manage/detail";
+import { encryptBlocksRegexp } from "~~/utils/markdown";
 
 const props = defineProps<{
   preProcessItem?:(_item: CommonItem, _list?: Ref<CommonItem[]>) => void;
@@ -32,6 +33,7 @@ const {
   item,
   isNew,
   decrypted,
+  blockDecrypted,
   draftMarkdownContent,
   markdownContent,
   pending,
@@ -98,12 +100,10 @@ const doUpload = async () => {
   }
   // 需要clone一份item，clone的item仅用于上传
   const newItem = deepClone(toRaw(item));
+  let mdContent = inputMarkdown.value;
   // 处理item
   if (props.processWithContent) {
-    props.processWithContent(inputMarkdown.value, markdownRef.value, newItem);
-  }
-  if (!newItem.id) {
-    newItem.id = randomId();
+    props.processWithContent(mdContent, markdownRef.value, newItem);
   }
   if (newItem.encrypt) {
     // 处理加密
@@ -114,6 +114,37 @@ const doUpload = async () => {
       });
     }
     await processEncryptDescrypt(newItem, encryptor.encrypt, targetTab.url);
+  } else if (item.encryptBlocks && !blockDecrypted.value) {
+    // 未解密，不处理
+  } else {
+    // encryptBlocks
+    const reg = new RegExp(encryptBlocksRegexp, "gd");
+    let matcher;
+    const encryptBlocks = [];
+    while (true) {
+      matcher = reg.exec(mdContent);
+      if (matcher) {
+        if (!encryptor.usePasswd.value) {
+          return notify({
+            type: "error",
+            title: "请先输入密码"
+          });
+        }
+        const [start, end] = matcher.indices[2];
+        const encryptedText = await encryptor.encrypt(matcher[2]);
+        mdContent = mdContent.slice(0, start) + encryptedText + mdContent.slice(end);
+        encryptBlocks.push({
+          start,
+          end: end + encryptedText.length - matcher[2].length
+        });
+      } else {
+        break;
+      }
+    }
+    newItem.encryptBlocks = encryptBlocks.length ? encryptBlocks.reverse() : null;
+  }
+  if (!newItem.id) {
+    newItem.id = randomId();
   }
   // 更新日期
   const nowTime = getNowStamp();
@@ -132,8 +163,8 @@ const doUpload = async () => {
     {
       path: `public/rebuild${activeRoute}/${newItem.id}.md`,
       content: newItem.encrypt
-        ? await encryptor.encrypt(inputMarkdown.value)
-        : inputMarkdown.value
+        ? await encryptor.encrypt(mdContent)
+        : mdContent
     }
   ]).then((success) => {
     if (success) {
@@ -239,7 +270,7 @@ onMounted(() => {
       <md-editor
         v-model="inputMarkdown"
         :get-html="getHtml"
-        :disabled="!decrypted"
+        :disabled="!decrypted || !blockDecrypted"
         :loading="mdPending"
       />
     </client-only>

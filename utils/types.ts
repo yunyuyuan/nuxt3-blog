@@ -3,6 +3,10 @@ export type NeedsItem = {
   time: number;
   modifyTime: number;
   encrypt: boolean;
+  encryptBlocks?: {
+    start: number;
+    end: number;
+  }[] | null;
   _show?: boolean;
 };
 

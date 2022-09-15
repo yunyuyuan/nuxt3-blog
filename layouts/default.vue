@@ -32,6 +32,10 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   headroom?.destroy();
 });
+
+const encryptor = useEncryptor();
+const showPwdModal = ref(false);
+const inputPwd = ref(encryptor.usePasswd.value);
 </script>
 
 <template>
@@ -60,9 +64,14 @@ onBeforeUnmount(() => {
       >
         <svg-icon name="github" />
       </a>
-      <nuxt-link v-else class="home flex" :to="openEdit" title="🚀">
-        <svg-icon name="rocket" />
-      </nuxt-link>
+      <div v-else class="home go-manage flex">
+        <nuxt-link :to="openEdit" title="🚀">
+          <svg-icon name="rocket" />
+        </nuxt-link>
+        <div class="pwd flex" :class="{valid: encryptor.passwdCorrect.value}" title="密码" @click="showPwdModal = true">
+          <svg-icon name="password" />
+        </div>
+      </div>
       <sub />
       <nuxt-link class="about" to="/about" title="关于">
         <img class="s100" src="/favicon.jpg" alt="头像">
@@ -79,6 +88,14 @@ onBeforeUnmount(() => {
       </div>
     </footer>
   </div>
+  <common-modal v-model="showPwdModal" @confirm="encryptor.usePasswd.value = inputPwd;showPwdModal = false">
+    <template #title>
+      密码
+    </template>
+    <template #body>
+      <input v-model="inputPwd" placeholder="请输入密码" style="font-size: 16px;padding: 5px;width: calc(100% - 12px);">
+    </template>
+  </common-modal>
 </template>
 
 <style lang="scss">
@@ -209,9 +226,56 @@ onBeforeUnmount(() => {
       transition: $common-transition;
     }
 
-    .home:hover {
-      svg {
-        fill: white;
+    .home {
+      height: $header-height;
+
+      &:hover {
+        svg {
+          fill: white;
+        }
+      }
+    }
+
+    .go-manage {
+      position: relative;
+      display: flex;
+      justify-content: center;
+
+      >a {
+        height: 100%;
+      }
+
+      div.pwd {
+        cursor: pointer;
+        overflow: hidden;
+        justify-content: center;
+        background: white;
+        box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+        border-radius: 8px;
+        padding: 8px 20px;
+        position: absolute;
+        bottom: 0;
+        transition: $common-transition;
+        transform-origin: top;
+        transform: translateY(100%) scaleY(0);
+
+        svg {
+          fill: rgb(0 0 0);
+
+          @include square(20px);
+        }
+
+        &.valid {
+          svg {
+            fill: $theme-color-darken;
+          }
+        }
+      }
+
+      &:hover {
+        div.pwd {
+          transform: translateY(100%) scaleY(100%);
+        }
       }
     }
 
@@ -256,15 +320,6 @@ onBeforeUnmount(() => {
     &:not(.headroom--pinned).headroom--not-top {
       transform: translateY(-100%);
       box-shadow: none;
-
-      .item {
-        font-size: 18px;
-      }
-
-      .home,
-      .about {
-        @include square(23px);
-      }
     }
   }
 }

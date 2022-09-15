@@ -429,6 +429,13 @@
     }
   }
 
+  .encrypt-block {
+    border: 1px solid rgb(199 199 199);
+    border-radius: 8px;
+    padding: 8px;
+    margin: 10px 0;
+  }
+
   div.embed-video {
     width: 100%;
     max-width: 50rem;

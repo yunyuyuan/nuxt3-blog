@@ -24,6 +24,7 @@ Feature
 - [ ] get new feature by pull source branch with single action 
 - [x] serverless function to upload image
 - [ ] IV for AES encrypt
+- [x] partial encrypt
 - [ ] pagination
 
 Appearance

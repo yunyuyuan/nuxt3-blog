@@ -23,16 +23,7 @@ watch(hideMenu, (hide) => {
   }
 });
 
-const captainEl = ref<HTMLElement>();
-const menuEl = ref<HTMLElement>();
-const menuOuterView = ref<boolean>(false);
-
 const listenAnchor = () => {
-  if (item.menu.length) {
-    const rect = captainEl.value.getBoundingClientRect();
-    menuOuterView.value = (rect.height + rect.top - 42) < menuEl.value.scrollHeight;
-  }
-
   try {
     const links = Array.from(
       markdownRef.value?.querySelectorAll("h1>a, h2>a, h3>a, h4>a, h5>a, h6>a")
@@ -86,7 +77,7 @@ const { root, hasComment } = useComment(tabUrl);
 
 <template>
   <div ref="root" class="article-detail">
-    <div ref="captainEl" class="captain flex w100" :class="{ 'no-menu': !item.menu.length, compact: hideMenu }">
+    <div class="captain w100" :class="{'has-comment': hasComment}">
       <div class="article-container">
         <h2>{{ item.title }}</h2>
         <common-loading v-if="mdPending" />
@@ -100,12 +91,28 @@ const { root, hasComment } = useComment(tabUrl);
             />
           </div>
         </client-only>
+        <div class="more-info flex">
+          <div class="tag flex">
+            <span>标签:</span>
+            <the-tag
+              v-for="tag in item.tags"
+              :key="tag"
+              :href="'/articles?tag=' + tag"
+            >
+              {{ tag }}
+            </the-tag>
+          </div>
+          <span class="time">
+            更新于:
+            <span>{{ modifyTime }}</span>
+          </span>
+        </div>
       </div>
-      <div v-if="item.menu.length" :class="{'outer-view': menuOuterView}" class="menu flexc">
+      <div v-if="item.menu.length" class="menu flexc" :class="{compact: hideMenu}">
         <span class="toggle flex" :title="(hideMenu ? '展开':'压缩')+'目录'" @click="hideMenu = !hideMenu">
           <svg-icon name="up" />
         </span>
-        <ol ref="menuEl">
+        <ol>
           <li v-for="(anchor, idx) in item.menu" :key="idx">
             <a
               :href="anchor.url"
@@ -118,22 +125,6 @@ const { root, hasComment } = useComment(tabUrl);
         </ol>
       </div>
     </div>
-    <div class="more-info flex" :class="{'has-comment': hasComment}">
-      <div class="tag flex">
-        <span>标签:</span>
-        <the-tag
-          v-for="tag in item.tags"
-          :key="tag"
-          :href="'/articles?tag=' + tag"
-        >
-          {{ tag }}
-        </the-tag>
-      </div>
-      <span class="time">
-        更新于:
-        <span>{{ modifyTime }}</span>
-      </span>
-    </div>
   </div>
 </template>
 
@@ -141,28 +132,18 @@ const { root, hasComment } = useComment(tabUrl);
 @import "assets/style/var";
 
 .article-detail {
-  $min-article-size: 500px;
-  $menu-size: 180px;
-  $menu-margin: 20px;
-  $compact-menu-size: 30px;
-  $compact-menu-margin: 5px;
-  $base-article-size: 880px;
-
   margin-bottom: 60px;
 
   .captain {
+    display: flex;
+    align-items: flex-start;
     margin: auto;
-    position: relative;
-    max-width: 1050px;
-    min-width: $min-article-size + $menu-size + $menu-margin;
+    width: 1000px;
 
     > .article-container {
+      flex-grow: 1;
       position: relative;
-      width: $base-article-size;
-      min-width: $min-article-size;
-      margin: 0 $menu-size + $menu-margin 0 20px;
-      padding-bottom: 60px;
-      border-bottom: 1px solid #c7c7c7;
+      margin: 0 0 0 20px;
 
       > h2 {
         margin: 30px 0 40px;
@@ -182,83 +163,53 @@ const { root, hasComment } = useComment(tabUrl);
         position: relative;
         z-index: 2;
       }
-    }
 
-    &.compact {
-      >.article-container {
-        margin-right: $compact-menu-size + $compact-menu-margin;
-        width: $base-article-size + ($menu-size - $compact-menu-size);
-      }
+      >.more-info {
+        margin-top: 30px;
+        border-top: 1px solid #c7c7c7;
+        padding: 20px 0 0;
+        text-align: center;
+        font-size: 12px;
 
-      > .menu {
-        width: $compact-menu-size + $compact-menu-margin;
+        div {
+          flex-wrap: wrap;
 
-        >.toggle {
-          >svg {
-            transform: rotate(-90deg);
+          span {
+            word-break: keep-all;
+            margin-right: 8px;
           }
-        }
-
-        ol {
-          width: $compact-menu-size - $compact-menu-margin;
-          min-width: $compact-menu-size - $compact-menu-margin;
 
           a {
-            padding: 10px !important;
+            margin: 0 8px 8px 0;
 
-            &::before {
-              left: 50% !important;
-              transform: translateX(-50%);
-            }
-
-            span {
-              display: none;
+            &:not(:last-of-type) {
+              margin-right: 8px;
             }
           }
         }
-      }
 
-      ~ .more-info {
-        padding-right: $compact-menu-size + $compact-menu-margin;
-      }
-    }
+        > span {
+          margin-left: auto;
 
-    &.no-menu {
-      width: $base-article-size;
-
-      > .article-container {
-        margin: 0 auto;
-      }
-
-      ~ .more-info {
-        padding-right: 0;
+          span {
+            color: #ff6a00;
+          }
+        }
       }
     }
 
     > .menu {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: $menu-size + $menu-margin;
+      position: sticky;
+      top: $header-height;
       align-items: flex-end;
+      padding: 15px 0 55px;
+      margin-left: 36px;
 
-      &.outer-view {
-        bottom: 50px;
-        top: unset;
-
-        >.toggle {
-          position: absolute;
-        }
-
-        ol {
-          position: relative;
-        }
+      @at-root #default-layout #header:not(.headroom--pinned).headroom--not-top + #body & {
+        top: 0;
       }
 
       >.toggle {
-        position: fixed;
-        top: $header-height + 12px;
-        z-index: 2;
         cursor: pointer;
 
         &:hover > svg {
@@ -275,13 +226,9 @@ const { root, hasComment } = useComment(tabUrl);
       }
 
       ol {
-        position: fixed;
-        top: $header-height;
-        padding: 40px 0 0 $menu-margin;
-        width: $menu-size - $menu-margin;
-        min-width: $menu-size - $menu-margin;
+        padding: 20px 0 0 5px;
+        width: 170px;
         list-style: none;
-        z-index: 1;
 
         $mouse-out-color: #777;
         $mouse-in-color: #4d4646;
@@ -366,36 +313,30 @@ const { root, hasComment } = useComment(tabUrl);
           }
         }
       }
-    }
-  }
 
-  .more-info {
-    padding: 8px $menu-size + $menu-margin 20px 20px;
-    text-align: center;
-    font-size: 12px;
-
-    div {
-      flex-wrap: wrap;
-
-      span {
-        word-break: keep-all;
-        margin-right: 8px;
-      }
-
-      a {
-        margin: 0 8px 8px 0;
-
-        &:not(:last-of-type) {
-          margin-right: 8px;
+      &.compact {
+        >.toggle {
+          >svg {
+            transform: rotate(-90deg);
+          }
         }
-      }
-    }
 
-    > span {
-      margin-left: auto;
+        ol {
+          width: 30px;
 
-      span {
-        color: #ff6a00;
+          a {
+            padding: 10px !important;
+
+            &::before {
+              left: 50% !important;
+              transform: translateX(-50%);
+            }
+
+            span {
+              display: none;
+            }
+          }
+        }
       }
     }
   }
@@ -419,10 +360,6 @@ const { root, hasComment } = useComment(tabUrl);
 
       > .menu {
         display: none;
-
-        ul {
-          display: none;
-        }
       }
     }
 

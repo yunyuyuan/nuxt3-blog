@@ -92,6 +92,7 @@ const { root, hasComment } = useComment(tabUrl);
       padding-bottom: 20px;
       position: relative;
       display: flex;
+      width: 100%;
 
       >.cover {
         flex-shrink: 0;

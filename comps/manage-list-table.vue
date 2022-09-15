@@ -9,7 +9,6 @@ const { targetTab, list, pending, customFilter } = useManageList();
 
 const props = defineProps<{
   colPrefix: string;
-  showFilter: boolean;
   registryFilter?:(_: typeof customFilter) => void;
   // FIXME how to use Generic here?
   searchFn:(_item: object, _search: string) => boolean;
@@ -19,7 +18,8 @@ if (props.registryFilter) {
   props.registryFilter(customFilter);
 }
 
-const header = Object.keys(useSlots()).filter(
+const slots = useSlots();
+const header = Object.keys(slots).filter(
   key => !key.startsWith("_") && !key.includes("filter")
 );
 
@@ -70,8 +70,7 @@ function deleteSelect () {
 <template>
   <div class="manage-list-head flex">
     <input v-model="searchValue" placeholder="输入文字进行搜索">
-    <div v-show="showFilter" class="filter flex">
-      <span>筛选：</span>
+    <div v-if="slots.filter" class="filter flex">
       <slot name="filter" />
     </div>
     <del style="margin: 0 auto;" />
@@ -189,6 +188,10 @@ function deleteSelect () {
     margin-left: 8px;
     font-size: 13px;
     flex-wrap: wrap;
+
+    &::before {
+      content: "筛选：";
+    }
   }
 
   > span {

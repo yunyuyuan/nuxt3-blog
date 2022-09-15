@@ -45,6 +45,7 @@ export function useManageContent () {
   };
 
   const decrypted = ref<boolean>(false);
+  const blockDecrypted = ref<boolean>(false);
   watch(listPending, async (pend) => {
     if (!pend) {
       if (!isNew) {
@@ -60,23 +61,36 @@ export function useManageContent () {
           }));
         }
       } else {
-        decrypted.value = !item.encrypt;
+        decrypted.value = true;
+        blockDecrypted.value = true;
       }
     }
   }, { immediate: true });
 
-  let mdPending_ = null;
+  let mdPending = null;
   if (!isNew) {
     const { pending, data: content } = fetchMd(targetTab.url, itemId);
-    mdPending_ = pending;
+    mdPending = pending;
     watch(content, async (markdown: string) => {
       if (markdown) {
         markdownContent.value = markdown.trim();
         // 取到结果后，处理解密
         if (item.encrypt) {
           cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
-            markdownContent.value = await decrypt(markdownContent.value.trim());
+            markdownContent.value = (await decrypt(markdownContent.value)).trim();
           }));
+        } else if (item.encryptBlocks) {
+          cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
+            let newMarkdownContent = markdownContent.value;
+            for (const block of item.encryptBlocks) {
+              const { start, end } = block;
+              newMarkdownContent = newMarkdownContent.slice(0, start) + await decrypt(newMarkdownContent.slice(start, end)) + newMarkdownContent.slice(end);
+            }
+            markdownContent.value = newMarkdownContent;
+            blockDecrypted.value = true;
+          }));
+        } else {
+          blockDecrypted.value = true;
         }
       }
     }, { immediate: true });
@@ -84,7 +98,7 @@ export function useManageContent () {
 
   const { hasModified, markdownModified } = useHasModified({ item, origin: originItem });
   // 额外加上是否修改提示
-  const pending = computed(() => listPending.value || (mdPending_ && mdPending_.value));
+  const pending = computed(() => listPending.value || (mdPending && mdPending.value));
   const { statusText: statusText_, canCommit: canCommit_, processing, toggleProcessing } = useStatusText();
   const canUpload = computed(() => canCommit_.value && hasModified.value);
   const statusText = computed(() => {
@@ -128,10 +142,11 @@ export function useManageContent () {
     item,
     isNew,
     decrypted,
+    blockDecrypted,
     markdownContent,
     draftMarkdownContent,
     listPending,
-    mdPending: mdPending_,
+    mdPending,
     pending
   };
 }

@@ -17,6 +17,8 @@ function recursiveReplace (
   return result;
 }
 
+export const encryptBlocksRegexp = /(^|\n)\[encrypt]\n([\s\S]+?)\n\[\/encrypt]/;
+
 const paragraphTabExtension = {
   type: "lang",
   filter (text) {
@@ -58,7 +60,7 @@ const commonImgExtension = {
   filter (text) {
     return recursiveReplace(
       text,
-      /(^|[^\\])!\[(.*?)]\((.*?)\)/,
+      /(^|[^\\])!\[(.+?)]\((.*?)\)/,
       (_a, prefix, alt, src) => {
         // sticker
         if (alt === "sticker") {
@@ -91,7 +93,7 @@ const colorTextExtension = {
   filter (text) {
     return recursiveReplace(
       text,
-      /(^|[^\\])-\(([#a-zA-Z0-9]+): (.*?)\)-/,
+      /(^|[^\\])-\(([#a-zA-Z0-9]+): (.+?)\)-/,
       (_a, prefix, color, txt) => {
         return `${prefix}<span style="color: ${color}">${txt}</span>`;
       }
@@ -154,6 +156,18 @@ const fieldExtension = {
     );
   }
 };
+const encryptBlockExtension = {
+  type: "lang",
+  filter (text) {
+    return recursiveReplace(
+      text,
+      encryptBlocksRegexp,
+      (_a, prefix, txt) => {
+        return `${prefix}<div class="encrypt-block">${converter.makeHtml(txt)}</div>`;
+      }
+    );
+  }
+};
 
 const options = {
   tables: true,
@@ -177,7 +191,8 @@ export async function parseMarkdown (text: string) {
         colorTextExtension,
         fieldExtension,
         youtubeExtension,
-        biliExtension
+        biliExtension,
+        encryptBlockExtension
       ]
     });
   }

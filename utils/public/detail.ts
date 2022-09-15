@@ -11,6 +11,7 @@ export default function useContentPage<T extends CommonItem> () {
   const route = useRoute();
   const encryptor = useEncryptor();
   const markdownRef = ref<HTMLElement>();
+  const githubToken = useGithubToken();
 
   const id = route.params.id as string;
 
@@ -51,6 +52,23 @@ export default function useContentPage<T extends CommonItem> () {
             htmlContent.value = mdContent.value;
           }
         ));
+      } else if (item.encryptBlocks) {
+        let newMarkdownContent = mdContent.value;
+        for (const block of item.encryptBlocks) {
+          const { start, end } = block;
+          newMarkdownContent = githubToken.value
+            ? newMarkdownContent.slice(0, start) + "加密内容![sticker](aru/59)" + newMarkdownContent.slice(end)
+            : newMarkdownContent.slice(0, start - 10) + newMarkdownContent.slice(end + 11);
+        }
+        htmlContent.value = await parseMarkdown(newMarkdownContent);
+        cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
+          let newMarkdownContent = mdContent.value;
+          for (const block of item.encryptBlocks) {
+            const { start, end } = block;
+            newMarkdownContent = newMarkdownContent.slice(0, start) + await decrypt(newMarkdownContent.slice(start, end)) + newMarkdownContent.slice(end);
+          }
+          htmlContent.value = await parseMarkdown(newMarkdownContent);
+        }));
       } else {
         htmlContent.value = await parseMarkdown(mdContent.value);
       }

@@ -22,17 +22,16 @@ const searchFn = (item: KnowledgeItem, s: string) => item.title.includes(s);
   <div class="manage-knowledge">
     <manage-list-table
       :registry-filter="registryFilter"
-      :show-filter="!!filterType"
       col-prefix="knowledge-"
       :search-fn="searchFn"
     >
-      <template #filter>
+      <template v-if="!!filterType" #filter>
         <span
           class="filter-type flex"
-          :title="KnowledgeTabsList.find((i) => i.key === filterType)?.name"
+          :title="KnowledgeTabsList.find((i) => i.key === filterType).name"
           @click="toggleFilterType(filterType)"
         >
-          <svg-icon v-if="filterType" :name="filterType" />
+          <svg-icon :name="filterType" />
         </span>
       </template>
       <template #title="{ data: title, dataUrl }">
