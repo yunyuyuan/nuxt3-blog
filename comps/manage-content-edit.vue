@@ -42,13 +42,15 @@ const {
 } = useManageContent();
 
 const activeRoute = targetTab.url;
+const encryptor = useEncryptor();
 
 if (props.preProcessItem) {
   props.preProcessItem(item, list);
 }
 
 const currentOperate = ref<"upload" | "delete" | "">("");
-const showDeleteModal = ref<boolean>(false);
+const showDeleteModal = ref(false);
+const showPreviewModal = ref(false);
 
 let markdownRef = null;
 const getHtml = (ref: Ref) => {
@@ -66,8 +68,8 @@ watch([inputMarkdown, draftMarkdownContent], ([text, text1]) => {
 });
 
 const baseInfo = ref<HTMLElement>();
-
-const encryptor = useEncryptor();
+const previewInfo = ref("");
+const previewContent = ref("");
 
 /** 更新list */
 const replaceOld = (newItem: CommonItem) => {
@@ -86,7 +88,7 @@ const replaceOld = (newItem: CommonItem) => {
   }
   return cloneList;
 };
-const doUpload = async () => {
+const getUploadInfo = async () => {
   // 检查是否invalid
   const invalidInfo = baseInfo.value.querySelectorAll("span.invalid");
   if (invalidInfo.length) {
@@ -152,8 +154,23 @@ const doUpload = async () => {
     newItem.time = nowTime;
   }
   newItem.modifyTime = nowTime;
-
-  currentOperate.value = "upload";
+  return {
+    item: newItem,
+    md: mdContent
+  };
+};
+const setPreviewInfo = async () => {
+  const info = await getUploadInfo();
+  if (!info) { return; }
+  const { item, md } = info;
+  previewInfo.value = JSON.stringify(item, null, 4);
+  previewContent.value = md;
+  showPreviewModal.value = true;
+};
+const doUpload = async () => {
+  const info = await getUploadInfo();
+  if (!info) { return; }
+  const { item: newItem, md } = info;
   toggleProcessing();
   createCommit(`Update ${HeaderTabs.find(i => i.url === activeRoute).name}-${newItem.id}`, [
     {
@@ -163,8 +180,8 @@ const doUpload = async () => {
     {
       path: `public/rebuild${activeRoute}/${newItem.id}.md`,
       content: newItem.encrypt
-        ? await encryptor.encrypt(mdContent)
-        : mdContent
+        ? await encryptor.encrypt(md)
+        : md
     }
   ]).then((success) => {
     if (success) {
@@ -272,6 +289,7 @@ onMounted(() => {
         :get-html="getHtml"
         :disabled="!decrypted || !blockDecrypted"
         :loading="mdPending"
+        @preview="setPreviewInfo()"
       />
     </client-only>
   </div>
@@ -282,6 +300,19 @@ onMounted(() => {
   >
     <template #title>
       确认删除?
+    </template>
+  </common-modal>
+  <common-modal
+    v-model="showPreviewModal"
+    :show-cancel="false"
+    @confirm="showPreviewModal = false"
+  >
+    <template #title>
+      提交预览
+    </template>
+    <template #body>
+      <pre>{{ previewInfo }}</pre>
+      <pre>{{ previewContent }}</pre>
     </template>
   </common-modal>
 </template>

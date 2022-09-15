@@ -87,15 +87,15 @@ const inputPwd = ref(encryptor.usePasswd.value);
         <span class="flex"><a class="rss" target="_blank" href="/sitemap.xml" title="rss">RSS <svg-icon name="rss" /></a>| Powered By <a class="nuxt" href="https://v3.nuxtjs.org/" target="_blank">Nuxtjs</a></span>
       </div>
     </footer>
+    <common-modal v-model="showPwdModal" @confirm="encryptor.usePasswd.value = inputPwd;showPwdModal = false">
+      <template #title>
+        密码
+      </template>
+      <template #body>
+        <input v-model="inputPwd" placeholder="请输入密码" style="font-size: 16px;padding: 5px;width: calc(100% - 12px);">
+      </template>
+    </common-modal>
   </div>
-  <common-modal v-model="showPwdModal" @confirm="encryptor.usePasswd.value = inputPwd;showPwdModal = false">
-    <template #title>
-      密码
-    </template>
-    <template #body>
-      <input v-model="inputPwd" placeholder="请输入密码" style="font-size: 16px;padding: 5px;width: calc(100% - 12px);">
-    </template>
-  </common-modal>
 </template>
 
 <style lang="scss">

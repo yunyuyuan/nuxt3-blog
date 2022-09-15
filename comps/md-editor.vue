@@ -12,7 +12,7 @@ const props = defineProps<{
   getHtml:(_ref: Ref) => void;
 }>();
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "preview"]);
 
 let editor = null;
 
@@ -182,7 +182,7 @@ onBeforeUnmount(() => {
       <a title="markdown参考" @click="showMarkdownReference = true">
         <svg-icon name="markdown" />
       </a>
-      <a>预览</a>
+      <a class="preview" @click="emit('preview')">预览</a>
       <a
         class="split"
         title="调整视图"
@@ -323,7 +323,7 @@ onBeforeUnmount(() => {
         @include square(25px);
       }
 
-      &.split {
+      &.preview {
         margin-left: auto;
       }
     }
