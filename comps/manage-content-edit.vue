@@ -116,6 +116,8 @@ const getUploadInfo = async () => {
       });
     }
     await processEncryptDescrypt(newItem, encryptor.encrypt, targetTab.url);
+    mdContent = await encryptor.encrypt(mdContent);
+    delete item.encryptBlocks;
   } else if (item.encryptBlocks && !blockDecrypted.value) {
     // 未解密，不处理
   } else {
@@ -186,9 +188,7 @@ const doUpload = async () => {
     },
     {
       path: `public/rebuild${activeRoute}/${newItem.id}.md`,
-      content: newItem.encrypt
-        ? await encryptor.encrypt(md)
-        : md
+      content: md
     }
   ]).then((success) => {
     if (success) {
