@@ -145,7 +145,11 @@ const getUploadInfo = async () => {
         break;
       }
     }
-    newItem.encryptBlocks = encryptBlocks.length ? encryptBlocks.reverse() : null;
+    if (encryptBlocks.length) {
+      newItem.encryptBlocks = encryptBlocks.reverse();
+    } else {
+      delete item.encryptBlocks;
+    }
   }
   if (!newItem.id) {
     newItem.id = randomId();
