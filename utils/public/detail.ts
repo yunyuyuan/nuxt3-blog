@@ -39,8 +39,8 @@ export default function useContentPage<T extends CommonItem> () {
   const htmlContent = ref<string>("");
   const { pending, data: content } = fetchMd(targetTab.url, id);
 
-  watch(pending, async (pend) => {
-    if (!pend) {
+  watch([listPending, pending], async ([listPend, pend]) => {
+    if (!listPend && !pend) {
       mdContent.value = content.value as string;
       // 取到结果后，处理解密
       if (item.encrypt) {

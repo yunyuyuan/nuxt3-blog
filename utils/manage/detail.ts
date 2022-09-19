@@ -71,8 +71,8 @@ export function useManageContent () {
   if (!isNew) {
     const { pending, data: content } = fetchMd(targetTab.url, itemId);
     mdPending = pending;
-    watch(content, async (markdown: string) => {
-      if (markdown) {
+    watch([listPending, content], async ([listPend, markdown]) => {
+      if (!listPend && markdown) {
         markdownContent.value = markdown.trim();
         // 取到结果后，处理解密
         if (item.encrypt) {
