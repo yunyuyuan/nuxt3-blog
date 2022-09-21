@@ -25,7 +25,11 @@ export default function useContentPage<T extends CommonItem> () {
 
   watch(listPending, async (pend) => {
     if (!pend) {
-      assignItem(item, list.value.find(item => item.id === Number(id)));
+      const foundItem = list.value.find(item => item.id === Number(id));
+      if (!foundItem) {
+        showError({ statusCode: 404 });
+      }
+      assignItem(item, foundItem);
       if (item.encrypt) {
         cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
           await processEncryptDescrypt(item, decrypt, targetTab.url);

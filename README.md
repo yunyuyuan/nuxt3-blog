@@ -14,7 +14,7 @@
 ### Todo list
 Feature
 - [x] eslint,stylelint
-- [ ] error page
+- [x] error page
 - [ ] different passwd(unnecessary)
 - [x] localhost server for committing
 - [ ] testing

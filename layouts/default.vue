@@ -142,7 +142,6 @@ const inputPwd = ref(encryptor.usePasswd.value);
       word-break: keep-all;
       cursor: pointer;
       font-size: 20px;
-      font-family: $font-code;
 
       span {
         position: absolute;

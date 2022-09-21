@@ -51,7 +51,6 @@ onBeforeMount(async () => {
       height: calc(100vh - #{$footer-height});
       padding-bottom: $footer-height;
       position: relative;
-      font-family: $font-source-han-sans;
 
       img {
         position: absolute;

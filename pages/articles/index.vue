@@ -170,7 +170,6 @@ $space: 13px;
             display: block;
             transition: $common-transition;
             word-break: break-word;
-            font-family: $font-source-han-sans;
             letter-spacing: 0.2px;
           }
 

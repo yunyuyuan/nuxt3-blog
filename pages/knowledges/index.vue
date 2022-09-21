@@ -173,7 +173,6 @@ $space: 16px;
           color: $theme-color-darken;
           margin: 0 4px;
           line-height: 22px;
-          font-family: $font-source-han-sans;
 
           @include textoverflow;
         }

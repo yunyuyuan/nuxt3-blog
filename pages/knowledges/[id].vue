@@ -115,7 +115,6 @@ const { root, hasComment } = useComment(tabUrl);
           margin-bottom: 15px;
           position: relative;
           width: 100%;
-          font-family: $font-source-han-sans;
           word-break: break-word;
 
           a {
@@ -138,7 +137,6 @@ const { root, hasComment } = useComment(tabUrl);
         }
 
         p {
-          font-family: $font-source-han-sans;
           font-size: 13.5px;
           line-height: 24px;
           letter-spacing: 0.15px;

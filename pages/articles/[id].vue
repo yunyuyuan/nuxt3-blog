@@ -151,7 +151,6 @@ const { root, hasComment } = useComment(tabUrl);
         color: #1d1d1d;
         word-break: break-word;
         letter-spacing: 0.5px;
-        font-family: $font-source-han-sans;
       }
 
       >.common-loading {
