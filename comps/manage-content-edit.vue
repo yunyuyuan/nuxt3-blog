@@ -102,7 +102,7 @@ const getUploadInfo = async () => {
   }
   // 需要clone一份item，clone的item仅用于上传
   const newItem = deepClone(toRaw(item));
-  let mdContent = inputMarkdown.value;
+  let mdContent = inputMarkdown.value.replace("\r\n", "\n");
   // 处理item
   if (props.processWithContent) {
     props.processWithContent(mdContent, markdownRef.value, newItem);

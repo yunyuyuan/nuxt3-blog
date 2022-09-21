@@ -227,7 +227,7 @@ const { root, hasComment } = useComment(tabUrl);
 
       ol {
         padding: 20px 0 0 5px;
-        width: 170px;
+        width: 160px;
         list-style: none;
 
         $mouse-out-color: #777;

@@ -41,7 +41,7 @@ export default function useContentPage<T extends CommonItem> () {
 
   watch([listPending, pending], async ([listPend, pend]) => {
     if (!listPend && !pend) {
-      mdContent.value = content.value as string;
+      mdContent.value = content.value;
       // 取到结果后，处理解密
       if (item.encrypt) {
         cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(
