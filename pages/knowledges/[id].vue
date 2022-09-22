@@ -85,7 +85,7 @@ const { root, hasComment } = useComment(tabUrl);
   .captain {
     margin: auto;
     position: relative;
-    width: 900px;
+    width: 1000px;
 
     > .info {
       margin: 40px 0 20px;

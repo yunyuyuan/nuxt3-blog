@@ -220,11 +220,11 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
     // 方便起见，edit下不会创建svg-icon，**只有**游客界面才会创建
     if (!forEdit) {
       if (!useNuxtApp().$isMobile) {
-        mdEl.querySelectorAll("pre>code:not(.ps)").forEach(async (el) => {
-          const PerfectScrollbar = (await import("perfect-scrollbar")).default;
-          const scrollbar = new PerfectScrollbar(el);
-          destroyFns.push(() => scrollbar.destroy());
-        });
+        // mdEl.querySelectorAll("pre>code:not(.ps)").forEach(async (el) => {
+        //   const PerfectScrollbar = (await import("perfect-scrollbar")).default;
+        //   const scrollbar = new PerfectScrollbar(el);
+        //   destroyFns.push(() => scrollbar.destroy());
+        // });
       }
       mdEl
         .querySelectorAll(".image-container > img")

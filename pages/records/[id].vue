@@ -49,8 +49,7 @@ const { root, hasComment } = useComment(tabUrl);
 
 .record-detail {
   margin: 30px 20px 80px;
-  min-width: 800px;
-  max-width: 1600px;
+  width: 1000px;
 
   .images {
     display: flex;

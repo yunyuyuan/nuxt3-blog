@@ -138,12 +138,14 @@ const { root, hasComment } = useComment(tabUrl);
     display: flex;
     align-items: flex-start;
     margin: auto;
-    width: 1000px;
 
     > .article-container {
       flex-grow: 1;
       position: relative;
       margin: 0 0 0 20px;
+      width: 900px;
+      max-width: 900px;
+      min-width: 900px;
 
       > h2 {
         margin: 30px 0 40px;
