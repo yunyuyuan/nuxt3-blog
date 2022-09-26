@@ -206,6 +206,11 @@ const close = () => {
   .common-modal {
     >.inner {
       margin-top: 12px;
+
+      > .modal-body {
+        max-height: unset;
+        height: calc(100vh - 160px);
+      }
     }
   }
 }
