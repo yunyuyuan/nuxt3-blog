@@ -58,7 +58,7 @@ const close = () => {
           @keyup.escape="close"
         >
           <div class="bg" @click.self="maskClosable ? close() : null" />
-          <div class="inner" :style="`width: ${modalWidth}px`">
+          <div class="inner flexc" :style="`width: ${modalWidth}px`">
             <div class="modal-title flex">
               <h3>
                 <slot name="title" />
@@ -135,6 +135,7 @@ const close = () => {
     box-shadow: 0 0 20px rgb(0 0 0 / 30%);
     transition: $common-transition;
     max-width: calc(100% - 64px);
+    align-items: stretch;
 
     > .modal-title {
       padding: 0 0 14px;
@@ -177,13 +178,14 @@ const close = () => {
     }
 
     > .modal-body {
-      margin: 20px 0;
-      max-height: calc(100vh - 360px);
+      margin-top: 20px;
+      max-height: calc(100vh - 300px);
       overflow: auto;
     }
 
     > .modal-foot {
       justify-content: flex-end;
+      margin-top: 20px;
 
       > .ok {
         margin-right: 12px;
@@ -206,10 +208,11 @@ const close = () => {
   .common-modal {
     >.inner {
       margin-top: 12px;
+      max-height: calc(100vh - 64px);
 
       > .modal-body {
         max-height: unset;
-        height: calc(100vh - 160px);
+        height: unset;
       }
     }
   }
