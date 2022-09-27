@@ -215,7 +215,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
   </div>
-  <common-modal v-model="showMarkdownReference" :show-ok="false">
+  <common-modal v-model="showMarkdownReference" :show-ok="false" :show-cancel="false">
     <template #title>
       Markdown参考
     </template>

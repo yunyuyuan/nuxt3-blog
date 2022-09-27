@@ -316,6 +316,7 @@ onMounted(() => {
   </common-modal>
   <common-modal
     v-model="showPreviewModal"
+    :show-ok="false"
     :show-cancel="false"
     modal-width="1000"
     wrap-class="preview-modal"
