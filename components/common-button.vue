@@ -23,7 +23,7 @@ const hasSlot = computed(() => typeof useSlots().default === "function");
   <button
     class="common-button"
     :disabled="disabled"
-    :class="[size, theme]"
+    :class="[size, theme, {loading}]"
     @click="loading ? null : emit('click', $event)"
   >
     <svg-icon
@@ -62,6 +62,10 @@ button.common-button {
     background: $theme-color-lighten;
   }
 
+  &.loading {
+    cursor: progress;
+  }
+
   &.default {
     background: #fff;
     box-shadow: 0 0 4px rgb(84 70 70 / 10%);
@@ -95,12 +99,11 @@ button.common-button {
   }
 
   &:disabled {
-    background: gray;
     box-shadow: 0 0 4px rgb(0 0 0 / 10%);
     cursor: not-allowed;
-    color: white;
     border: none;
 
+    &,
     &:hover {
       color: white;
       background: gray;

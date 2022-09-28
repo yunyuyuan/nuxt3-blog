@@ -200,6 +200,10 @@ const close = () => {
       width: calc(95% - 32px) !important;
       padding-left: 16px;
       padding-right: 16px;
+
+      > .modal-close {
+        right: 16px;
+      }
     }
   }
 }
