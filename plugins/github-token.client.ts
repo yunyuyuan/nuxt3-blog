@@ -6,7 +6,6 @@ import { GithubTokenKey } from "~/utils/constants";
 export default defineNuxtPlugin(() => {
   if (useRuntimeConfig().public.dev) {
     useGithubToken().value = "LocalServer";
-    useCorrectCommitId().value = true;
     return;
   }
 

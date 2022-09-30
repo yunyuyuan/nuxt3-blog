@@ -2,7 +2,7 @@
 import type { PropType } from "vue";
 import { ModalContainerId } from "~/utils/constants";
 
-defineProps({
+const props = defineProps({
   confirmTheme: {
     type: String as PropType<"primary" | "danger">,
     default: "primary"
@@ -28,6 +28,22 @@ defineProps({
   modalWidth: {
     type: String,
     default: "500"
+  },
+  modalTitle: {
+    type: String,
+    default: undefined
+  },
+  modalContent: {
+    type: String,
+    default: undefined
+  },
+  onCancel_: {
+    type: Function,
+    default: undefined
+  },
+  onOk: {
+    type: Function,
+    default: undefined
   }
 });
 
@@ -37,7 +53,16 @@ const emit = defineEmits(["confirm", "cancel", "update:modelValue"]);
 const setFocus = () => {
   root.value.focus();
 };
+const ok = () => {
+  if (props.onOk) {
+    return props.onOk();
+  }
+  emit("confirm");
+};
 const close = () => {
+  if (props.onCancel_) {
+    return props.onCancel_();
+  }
   emit("cancel");
   emit("update:modelValue", false);
 };
@@ -54,20 +79,26 @@ const close = () => {
           tabindex="1"
           class="common-modal"
           :class="wrapClass"
-          @keyup.enter="emit('confirm')"
+          @keyup.enter="ok"
           @keyup.escape="close"
         >
           <div class="bg" @click.self="maskClosable ? close() : null" />
           <div class="inner flexc" :style="`width: ${modalWidth}px`">
             <div class="modal-title flex">
               <h3>
-                <slot name="title" />
+                <template v-if="modalTitle">
+                  {{ modalTitle }}
+                </template>
+                <slot v-else name="title" />
               </h3>
             </div>
             <a class="flex modal-close" @click="close">
               <svg-icon name="close" />
             </a>
             <div class="modal-body">
+              <p v-if="modalContent">
+                {{ modalContent }}
+              </p>
               <slot name="body" />
             </div>
             <div v-if="showOk || showCancel" class="modal-foot flex">
@@ -76,7 +107,7 @@ const close = () => {
                 class="ok"
                 :loading="loading"
                 :theme="confirmTheme"
-                @click="emit('confirm')"
+                @click="ok"
               >
                 确定
               </common-button>

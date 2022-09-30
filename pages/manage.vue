@@ -10,7 +10,6 @@ import UploadImage from "~/comps/upload-image.vue";
 const isDev = useRuntimeConfig().public.dev;
 
 const pageLoading = useLoading();
-const correctCommitId = useCorrectCommitId();
 
 definePageMeta({
   layout: "blank",
@@ -129,9 +128,9 @@ const modalOk = () => {
             </nuxt-link>
           </li>
         </ul>
-        <div :title="!correctCommitId ? 'commitId不一致!' : allPassed ? '全部验证通过!':'token与密码'" @click="showModal = true">
+        <div :title="allPassed ? '全部验证通过!':'token与密码'" @click="showModal = true">
           <svg-icon
-            :class="{invalid: !correctCommitId, active: allPassed }"
+            :class="{invalid: !githubToken, active: allPassed }"
             name="password"
           />
         </div>

@@ -1,6 +1,9 @@
+import { createVNode, render } from "vue";
+import { ModalContainerId } from "../constants";
 import { notify } from "../notify/notify";
 import { CommonItem, AllKeys, HeaderTabUrl } from "../types";
 import { getLocalStorage, assignItem, setLocalStorage } from "../utils";
+import CommonModal from "~/components/common-modal.vue";
 
 export function randomId (exist: CommonItem[] = [], len = 4) {
   const ids: number[] = exist.map(item => item.id);
@@ -29,16 +32,13 @@ export function useStatusText () {
   const processing = computed(() => !!status.value);
 
   const githubToken = useGithubToken();
-  const correctCommitId = useCorrectCommitId();
   const statusText = computed<string>((): string => {
     if (!useGithubToken().value) {
       return "请先正确输入token，再进行操作";
-    } else if (!useCorrectCommitId().value) {
-      return "commit id与github不一致，请等待编译，或检查编译是否正常";
     }
     return status.value;
   });
-  const canCommit = computed<boolean>(() => githubToken.value && correctCommitId.value);
+  const canCommit = computed<boolean>(() => !!githubToken.value);
   return { toggleProcessing, processing, statusText, canCommit };
 }
 
@@ -110,4 +110,29 @@ export function useHasModified ({ item, origin }: { item: CommonItem, origin: Co
         : item[k] !== origin[k];
     }));
   return { hasModified, markdownModified };
+}
+/**
+ * commit id 不一致
+ */
+export function createCommitModal () {
+  return new Promise<boolean>((resolve) => {
+    const container = document.createElement("div");
+    const vm = createVNode(CommonModal, {
+      modelValue: true,
+      modalTitle: "警告",
+      modalContent: "commit id 与最新版本不一致，确认提交？可能会覆盖新版本"
+    });
+    vm.props.onOk = () => {
+      render(null, container);
+      resolve(true);
+    };
+    vm.props.onCancel_ = () => {
+      render(null, container);
+      resolve(false);
+    };
+    render(vm, container);
+    document
+      .getElementById(ModalContainerId)
+      .appendChild(container.firstElementChild);
+  });
 }

@@ -1,4 +1,5 @@
 import { CommonItem } from "../types";
+import { createCommitModal } from ".";
 import { getNowDayjs } from "~/utils/_dayjs";
 import config from "~/config";
 import { notify } from "~/utils/notify/notify";
@@ -33,31 +34,6 @@ export async function isAuthor (token: string): Promise<boolean> {
     viewer {
       login
     }
-  }`,
-    token
-  );
-  const err = result.data.errors;
-  if (err) {
-    throw new Error(err);
-  } else {
-    const verified = result.data.data.viewer.login === config.githubName;
-    if (verified) {
-      // 验证 commit id
-      useGithubToken().value = token;
-      const app = useRuntimeConfig().app;
-      getCommitId().then((commitId) => {
-        if (commitId && commitId.startsWith(app.NUXT_ENV_CURRENT_GIT_SHA)) {
-          useCorrectCommitId().value = true;
-        }
-      });
-    }
-    return verified;
-  }
-}
-
-/** @description 获取最后一个 commit id */
-async function getCommitId (): Promise<string> {
-  const result = await post(`query {
     repository(name: "${config.githubRepo}", owner: "${config.githubName}") {
       defaultBranchRef {
         target {
@@ -71,17 +47,21 @@ async function getCommitId (): Promise<string> {
         }
       }
     }
-  }`);
+  }`,
+    token
+  );
   const err = result.data.errors;
   if (err) {
-    notify({
-      type: "error",
-      title: err[0].type,
-      description: err[0].message
-    });
+    throw new Error(err);
   } else {
-    return result.data.data.repository.defaultBranchRef.target.history.nodes[0]
-      .oid;
+    const verified = result.data.data.viewer.login === config.githubName;
+    if (verified) {
+      // token 验证成功
+      useGithubToken().value = token;
+      // 更新 commit id
+      useCorrectSha().value = result.data.data.repository.defaultBranchRef.target.history.nodes[0].oid;
+    }
+    return verified;
   }
 }
 
@@ -97,7 +77,10 @@ export async function createCommit (
   additions: { path: string; content: string }[] = [],
   deletions: { path: string }[] = []
 ): Promise<boolean> {
-  const app = useRuntimeConfig().app;
+  const correctSha = useCorrectSha().value;
+  if (useRuntimeConfig().app.NUXT_ENV_CURRENT_GIT_SHA !== correctSha && !(await createCommitModal())) {
+    throw new Error("Interrupt by user");
+  }
   let add = "";
   let del = "";
   if (additions.length) {
@@ -127,7 +110,7 @@ export async function createCommit (
     "YYYY-MM-DD HH:mm:ss"
   )}]${commit}"
         },
-        expectedHeadOid: "${app.NUXT_ENV_CURRENT_GIT_SHA}",
+        expectedHeadOid: "${correctSha}",
         fileChanges: {
           ${add}
           ${del}
