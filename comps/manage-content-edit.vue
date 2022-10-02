@@ -184,6 +184,7 @@ const doUpload = async () => {
   const info = await getUploadInfo();
   if (!info) { return; }
   const { item: newItem, md } = info;
+  currentOperate.value = "upload";
   toggleProcessing();
   createCommit(`Update ${HeaderTabs.find(i => i.url === activeRoute).name}-${newItem.id}`, [
     {
