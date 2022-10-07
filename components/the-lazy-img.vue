@@ -59,6 +59,7 @@ function loadFinish (error: boolean) {
   }
   imgState.value = error ? "error" : "loaded";
 }
+let watchEncrypt = null;
 function refreshView () {
   if (isEncryptedImg.value) {
     imgState.value = "loaded";
@@ -66,6 +67,21 @@ function refreshView () {
   }
   if (imgState.value !== "outerView") {
     return;
+  }
+  if (!watchEncrypt) {
+    // 第一次调用，此watch必须放在imgState.value !== "outerView"判断之后
+    // 如果把watch放在setup顶层，则在图片加密且已有密码的情况下，watch被immediate执行，加密图片被置为loaded
+    // 而后又被解密，走refreshView()，上面的判断就直接return了，执行不到下面的代码，导致无loading显示
+    watchEncrypt = watch(
+      isEncryptedImg,
+      (isEncryptedImg) => {
+        if (isEncryptedImg) {
+          // 如果是加密图片，则直接置为loaded
+          imgState.value = "loaded";
+        }
+      },
+      { immediate: true }
+    );
   }
   const winHeight = window.innerHeight;
   const winWidth = window.innerWidth;
@@ -105,16 +121,6 @@ watch(
     imgState.value = "outerView";
     nextTick(init);
   }
-);
-watch(
-  isEncryptedImg,
-  (isEncryptedImg) => {
-    if (isEncryptedImg) {
-      // 如果是加密图片，则直接置为loaded
-      imgState.value = "loaded";
-    }
-  },
-  { immediate: true }
 );
 
 onMounted(() => {
