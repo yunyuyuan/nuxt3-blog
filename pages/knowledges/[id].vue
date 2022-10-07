@@ -110,6 +110,9 @@ const { root, hasComment } = useComment(tabUrl);
       }
 
       .text-info {
+        align-items: flex-start;
+        flex-grow: 1;
+
         h2 {
           text-align: center;
           margin-bottom: 15px;
