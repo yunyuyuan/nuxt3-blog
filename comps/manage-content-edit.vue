@@ -112,11 +112,12 @@ const getUploadInfo = async () => {
     if (!encryptor.usePasswd.value) {
       return notify({
         type: "error",
-        title: "请先输入密码"
+        title: "请先解密"
       });
     }
     await processEncryptDescrypt(newItem, encryptor.encrypt, targetTab.url);
     mdContent = await encryptor.encrypt(mdContent);
+    // 整篇加密的markdown，不会再有加密块
     delete item.encryptBlocks;
   } else if (item.encryptBlocks && !blockDecrypted.value) {
     // 未解密，不处理
@@ -131,7 +132,7 @@ const getUploadInfo = async () => {
         if (!encryptor.usePasswd.value) {
           return notify({
             type: "error",
-            title: "请先输入密码"
+            title: "请先解密"
           });
         }
         const [start, end] = matcher.indices[2];
@@ -275,7 +276,7 @@ onMounted(() => {
       删除
     </common-button>
   </div>
-  <div class="manage-content-base-info flexc" data-title="基础信息">
+  <div class="manage-content-base-info flexc" :title="item.encrypt && !decrypted ? '请先解密' : ''" data-title="基础信息">
     <span v-if="isNew" class="new flex">
       <svg-icon name="new" />
     </span>
@@ -287,7 +288,7 @@ onMounted(() => {
         <common-checkbox
           :checked="item.encrypt"
           :disabled="!decrypted || !blockDecrypted"
-          :title="!blockDecrypted && '请先解密blocks'"
+          :title="!blockDecrypted ? '请先解密blocks' : ''"
           @change="item.encrypt = $event"
         />
       </div>

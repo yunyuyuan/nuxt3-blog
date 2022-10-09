@@ -76,6 +76,7 @@ export function useManageContent () {
         markdownContent.value = markdown.trim();
         // 取到结果后，处理解密
         if (item.encrypt) {
+          blockDecrypted.value = true;
           cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
             markdownContent.value = (await decrypt(markdownContent.value)).trim();
           }));
