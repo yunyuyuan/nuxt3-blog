@@ -19,7 +19,7 @@
     "monaco-editor": "^0.33.0",
     "pangu": "^4.0.7",
     "showdown": "^1.9.1",
-    "v-viewer": "^3.0.10"
+    "viewerjs": "^1.10.5"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
@@ -38,7 +38,7 @@
     "lint-staged": "^12.4.1",
     "lodash": "^4.17.21",
     "multiparty": "^4.2.3",
-    "nuxt": "3.0.0-rc.8",
+    "nuxt": "3.0.0-rc.11",
     "postcss-html": "^1.4.1",
     "prompt": "^1.3.0",
     "sass": "^1.43.4",

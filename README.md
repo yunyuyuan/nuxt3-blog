@@ -19,7 +19,7 @@ Feature
 - [x] localhost server for committing
 - [ ] testing
 - [ ] custom markdown syntax highlight on monaco editor 
-- [ ] full-static build(await for nuxt3)
+- [x] full-static site generate(SSG)
 - [ ] toggle plugin enabled,and implement conditional build
 - [ ] get new feature by pull source branch with single action 
 - [x] serverless function to upload image

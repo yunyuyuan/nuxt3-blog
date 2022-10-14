@@ -3,30 +3,30 @@ import useContentPage from "~/utils/public/detail";
 import { KnowledgeItem } from "~/utils/types";
 import { useComment } from "~/utils/utils";
 import config from "~/config";
+import { initViewer } from "~/utils/viewer";
 
-const { item, tabUrl, htmlContent, modifyTime, markdownRef, mdPending } =
+const { item, tabUrl, modifyTime, markdownRef, mdPending } =
   useContentPage<KnowledgeItem>();
 
 useHead({
   title: computed(() => `《${item.title}》${config.SEO_title}`)
 });
 const { root, hasComment } = useComment(tabUrl);
+initViewer(root);
 </script>
 
 <template>
   <div ref="root" class="knowledges-detail">
     <div class="captain flexc w100" :class="{'has-comment': hasComment}">
       <div class="info">
-        <client-only>
-          <div v-viewer class="cover">
-            <the-lazy-img
-              :src="item.cover"
-              alt="cover"
-              :container-size="['150px', '250px']"
-              viewer
-            />
-          </div>
-        </client-only>
+        <div class="cover">
+          <the-lazy-img
+            :src="item.cover"
+            alt="cover"
+            :container-size="['150px', '250px']"
+            viewer
+          />
+        </div>
         <div class="text-info flexc">
           <h2>
             {{ item.title }}
@@ -61,12 +61,10 @@ const { root, hasComment } = useComment(tabUrl);
           <span />
         </div>
       </div>
-      <common-loading v-if="mdPending" />
-      <client-only>
-        <div v-viewer class="article-container">
-          <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
-        </div>
-      </client-only>
+      <common-loading v-show="mdPending" :show-in-first="false" />
+      <div class="article-container">
+        <article ref="markdownRef" class="--markdown" />
+      </div>
       <span class="modify">
         更新于：
         <time>{{ modifyTime }}</time>

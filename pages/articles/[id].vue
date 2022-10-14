@@ -5,8 +5,9 @@ import { addScrollListener, rmScrollListener } from "~/utils/scroll-event";
 import { getLocalStorage, rmLocalStorage, setLocalStorage, useComment } from "~/utils/utils";
 import { inBrowser } from "~/utils/constants";
 import config from "~/config";
+import { initViewer } from "~/utils/viewer";
 
-const { item, tabUrl, htmlContent, modifyTime, markdownRef, mdPending, htmlInserted } = useContentPage<ArticleItem>();
+const { item, tabUrl, modifyTime, markdownRef, mdPending, htmlInserted } = useContentPage<ArticleItem>();
 
 useHead({
   title: computed(() => item.title + config.SEO_title)
@@ -63,9 +64,7 @@ onMounted(() => {
         addScrollListener(listenAnchor);
       });
     }
-  },
-  { immediate: true }
-  );
+  }, { immediate: true });
 });
 
 onBeforeUnmount(() => {
@@ -73,6 +72,7 @@ onBeforeUnmount(() => {
 });
 
 const { root, hasComment } = useComment(tabUrl);
+initViewer(root);
 </script>
 
 <template>
@@ -80,17 +80,13 @@ const { root, hasComment } = useComment(tabUrl);
     <div class="captain w100" :class="{'has-comment': hasComment}">
       <div class="article-container">
         <h2>{{ item.title }}</h2>
-        <common-loading v-if="mdPending" />
-        <client-only>
-          <div v-viewer class="html-container">
-            <article
-              v-show="!mdPending"
-              ref="markdownRef"
-              class="--markdown"
-              v-html="htmlContent"
-            />
-          </div>
-        </client-only>
+        <common-loading v-show="mdPending" :show-in-first="false" />
+        <div ref="viewerContainer" class="html-container">
+          <article
+            ref="markdownRef"
+            class="--markdown"
+          />
+        </div>
         <div class="more-info flex">
           <div class="tag flex">
             <span>标签:</span>

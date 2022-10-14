@@ -294,7 +294,7 @@ onMounted(() => {
       </div>
       <slot v-for="slot in slots" :name="slot" :item="item" :disabled="!decrypted" />
     </div>
-    <common-loading v-if="listPending" />
+    <common-loading v-show="listPending" :show-in-first="false" />
   </div>
   <div class="manage-content-md-info" data-title="内容">
     <client-only>

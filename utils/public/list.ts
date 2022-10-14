@@ -1,6 +1,7 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
 import { deepClone, fetchList, registerCancelWatchEncryptor } from "../utils";
+import { isPrerender } from "./../constants";
 import config from "~/config";
 
 /**
@@ -22,7 +23,7 @@ export default function useListPage<T extends CommonItem> () {
 
   const resultList = reactive([]) as T[];
   watch(pending, async (pend) => {
-    if (!pend) {
+    if (!pend || isPrerender) {
       resultList.splice(0, 0, ...list.value.map((item) => {
         return deepClone({
           ...item,

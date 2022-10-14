@@ -1,6 +1,8 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
-import { registerCancelWatchEncryptor, createNewItem, deepClone, assignItem, fetchList, fetchMd } from "../utils";
+import { registerCancelWatchEncryptor, createNewItem, deepClone, assignItem, fetchList, fetchMdManage } from "../utils";
+import { isPrerender } from "./../constants";
 import { useHasModified, useStatusText } from ".";
+
 import config from "~/config";
 
 /**
@@ -47,7 +49,7 @@ export function useManageContent () {
   const decrypted = ref<boolean>(false);
   const blockDecrypted = ref<boolean>(false);
   watch(listPending, async (pend) => {
-    if (!pend) {
+    if (!pend || isPrerender) {
       if (!isNew) {
         assignItem(originItem, deepClone(list.value.find(item => item.id === Number(itemId))));
         assignItem(item, deepClone(toRaw(originItem)));
@@ -69,10 +71,10 @@ export function useManageContent () {
 
   let mdPending = null;
   if (!isNew) {
-    const { pending, data: content } = fetchMd(targetTab.url, itemId);
+    const { pending, data: content } = fetchMdManage(targetTab.url, itemId);
     mdPending = pending;
     watch([listPending, content], async ([listPend, markdown]) => {
-      if (!listPend && markdown) {
+      if ((!listPend && markdown) || isPrerender) {
         markdownContent.value = markdown.trim();
         // 取到结果后，处理解密
         if (item.encrypt) {

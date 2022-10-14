@@ -3,30 +3,13 @@ import { initScrollTrigger } from "~/utils/scroll-event";
 import {
   SvgContainerId,
   NotificationContainerId,
-  ModalContainerId,
-  ViewerAttr
+  ModalContainerId
 } from "~/utils/constants";
 
 export default defineNuxtPlugin((app: NuxtApp) => {
   app.$router.options.scrollBehavior = () => {
     return { left: 0, top: 0 };
   };
-
-  // That's work fine, page will wait for dynamic import.
-  addRouteMiddleware("load-viewer", async (to) => {
-    const vueApp = app.vueApp;
-    // 目前只有游客详情页面会使用viewer
-    if (!vueApp._context.directives.viewer && /^\/[^/]+\/\d{4}/.test(to.path)) {
-      const VueViewer = (await import("v-viewer")).default;
-      vueApp.use(VueViewer, {
-        defaultOptions: {
-          filter (img: HTMLImageElement) {
-            return img.hasAttribute(ViewerAttr);
-          }
-        }
-      });
-    }
-  }, { global: true });
 
   initScrollTrigger();
   // init code theme

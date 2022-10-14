@@ -178,8 +178,16 @@ const options = {
 let converter = null;
 
 export async function parseMarkdown (text: string) {
+  const showdown = (await import("showdown")).default;
+  return parseMarkdown_(text, showdown);
+}
+
+export function parseMarkdownSync (text: string, showdown) {
+  return parseMarkdown_(text, showdown);
+}
+
+function parseMarkdown_ (text: string, showdown) {
   if (!converter) {
-    const showdown = (await import("showdown")).default;
     converter = new showdown.Converter({
       ...options,
       extensions: [

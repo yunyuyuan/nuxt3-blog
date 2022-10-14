@@ -1,20 +1,44 @@
+import fs from "fs";
 import { AllKeys, CommonItem, HeaderTabs, HeaderTabUrl, NeedsItem } from "./types";
-import { githubRepoUrl, inBrowser } from "./constants";
+import { githubRepoUrl, inBrowser, isPrerender } from "./constants";
 import config from "~/config";
 
 const timestamp = () => useRuntimeConfig().public.timestamp;
 
-// Why is the `key` required?
 export const fetchList = (tab: HeaderTabUrl) => {
+  if (isPrerender) {
+    return {
+      data: {
+        value: JSON.parse(fs.readFileSync(`./public/rebuild/json${tab}.json`).toString())
+      },
+      pending: ref(true)
+    };
+  }
+  return fetchListManage(tab);
+};
+
+export const fetchListManage = (tab: HeaderTabUrl) => {
   return useFetch<CommonItem[]>(`/rebuild/json${tab}.json?s=${timestamp()}`, {
-    key: tab,
+    key: process.env.NODE_ENV + tab,
     default: () => []
   });
 };
 
 export const fetchMd = (tab: HeaderTabUrl, id: string) => {
+  if (isPrerender) {
+    return {
+      data: {
+        value: fs.readFileSync(`./public/rebuild${tab}/${id}.md`).toString()
+      },
+      pending: ref(true)
+    };
+  }
+  return fetchMdManage(tab, id);
+};
+
+export const fetchMdManage = (tab: HeaderTabUrl, id: string) => {
   return useFetch<string>(`/rebuild${tab}/${id}.md?s=${timestamp()}`, {
-    key: `${tab}/${id}`,
+    key: process.env.NODE_ENV + `${tab}/${id}`,
     default: () => ""
   });
 };

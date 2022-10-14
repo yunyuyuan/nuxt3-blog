@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
-import { defineNuxtConfig } from "nuxt";
 import { Plugin } from "vite";
 import { dataToEsm } from "rollup-pluginutils";
 import config from "./config";
@@ -48,8 +47,7 @@ const timestamp = Date.now();
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
   telemetry: false,
-  target: "static",
-  ssr: false,
+  // ssr: false,
   app: {
     head: {
       htmlAttrs: {
@@ -83,7 +81,10 @@ export default defineNuxtConfig({
     }
   },
   nitro: {
-    output: { dir: "{{ rootDir }}/.output", serverDir: "{{ output.dir }}/server", publicDir: "{{ output.dir }}/public" }
+    output: { dir: "{{ rootDir }}/.output", serverDir: "{{ output.dir }}/server", publicDir: "{{ output.dir }}/public" },
+    prerender: {
+      ignore: ["/manage"]
+    }
   },
   hooks: {
     // why this don't work?

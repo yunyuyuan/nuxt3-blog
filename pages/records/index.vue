@@ -11,7 +11,6 @@ const years = computed(() => {
     items: RecordItem[];
   }[] = [];
   recordList
-    .filter(item => item._show)
     .forEach((item) => {
       const year = dayjs.utc(item.time).year();
       const exist = result.find(v => v.year === year);
@@ -30,12 +29,12 @@ const years = computed(() => {
 
 <template>
   <div class="record-list">
-    <common-loading v-if="pending" />
+    <common-loading v-show="pending" :show-in-first="false" />
     <ul>
       <li v-for="year in years" :key="year.year">
         <h2>{{ year.year }}</h2>
         <div class="contain flex">
-          <div v-for="item in year.items" :key="item.id" class="item flexc">
+          <div v-for="item in year.items" v-show="item._show" :key="item.id" class="item flexc">
             <b :title="formatTime(item.time)">{{
               formatTime(item.time, "MM.DD")
             }}</b>
