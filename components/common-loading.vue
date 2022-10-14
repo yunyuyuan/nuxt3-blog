@@ -1,5 +1,16 @@
+<script setup lang="ts">
+defineProps({
+  showInFirst: {
+    type: Boolean,
+    default: true
+  }
+});
+
+const isFirstLoad = useFirstLoad();
+</script>
+
 <template>
-  <div class="common-loading flexc">
+  <div v-show="showInFirst || !isFirstLoad" class="common-loading flexc">
     <svg-icon name="loading" />
     <span>Loading...</span>
   </div>

@@ -111,10 +111,9 @@ function deleteSelect () {
         选择
       </div>
     </li>
-    <common-loading v-if="pending" />
+    <common-loading v-show="pending" :show-in-first="false" />
     <li
       v-for="item in searchedList"
-      v-else
       v-show="item._show"
       :key="item.id"
       class="list-body"

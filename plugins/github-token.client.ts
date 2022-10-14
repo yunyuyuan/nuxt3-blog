@@ -1,7 +1,7 @@
+import { inBrowser, GithubTokenKey } from "~/utils/constants";
 import { getLocalStorage } from "~/utils/utils";
 import { isAuthor } from "~/utils/manage/github";
 import { notify } from "~/utils/notify/notify";
-import { GithubTokenKey } from "~/utils/constants";
 
 export default defineNuxtPlugin(() => {
   if (useRuntimeConfig().public.dev) {
@@ -10,7 +10,7 @@ export default defineNuxtPlugin(() => {
   }
 
   const localToken = getLocalStorage(GithubTokenKey);
-  if (localToken) {
+  if (inBrowser && localToken) {
     // 进入界面时，检查token
     isAuthor(localToken)
       .then((res) => {

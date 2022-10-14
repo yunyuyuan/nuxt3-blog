@@ -2,7 +2,6 @@
 import { formatTime, literalTime } from "~/utils/_dayjs";
 import {
   KnowledgeItem,
-  KnowledgeTab,
   KnowledgeTabs,
   KnowledgeTabsList
 } from "~/utils/types";
@@ -15,37 +14,41 @@ const isAll = computed(
   () => !(KnowledgeTabs as string[]).includes(currentTab.value)
 );
 
+const tabs = computed(() => [
+  { name: "全部", key: "", active: isAll.value },
+  ...KnowledgeTabsList.map(item => ({ ...item, active: currentTab.value === item.key }))
+]);
+
 const filteredList = computed(() => {
   if (!isAll.value) {
     return knowledgesList.filter(item => item.type === currentTab.value);
   }
   return knowledgesList;
 });
-function getFilteredListLength (tab?: KnowledgeTab) {
-  if (!tab) {
-    return knowledgesList.filter(item => item._show).length;
-  }
-  return knowledgesList.filter(item => item.type === tab && item._show)
-    .length;
+function getFilteredListLength (tab?: string) {
+  return knowledgesList.filter(item => item._show && (!tab || item.type === tab)).length;
 }
-function goTo (tab?: KnowledgeTab) {
+function goTo (tab?: string) {
   navigateTo({ query: { type: tab } }, { replace: true });
 }
+
+// FIXME
+const un = ref(0);
+onMounted(() => {
+  un.value += 1;
+});
 </script>
 
 <template>
   <div class="knowledge-list">
     <nav class="flex">
-      <span :class="{ active: isAll }" @click="goTo()">
-        全部<b>{{ getFilteredListLength() }}</b>
-      </span>
-      <span v-for="type_ in KnowledgeTabsList" :key="type_.key" :class="{ active: type_.key === currentTab }" @click="goTo(type_.key)">
-        {{ type_.name }}
-        <b>{{ getFilteredListLength(type_.key) }}</b>
+      <span v-for="tab in tabs" :key="tab.key + un" :class="{ active: tab.key === currentTab }" @click="goTo(tab.key)">
+        {{ tab.name }}
+        <b>{{ getFilteredListLength(tab.key) }}</b>
       </span>
     </nav>
     <div class="body flexc">
-      <common-loading v-if="pending" />
+      <common-loading v-show="pending" :show-in-first="false" />
       <nuxt-link
         v-for="item in filteredList"
         v-show="item._show"

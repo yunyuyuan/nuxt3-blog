@@ -58,7 +58,7 @@ const toggleTags = (tag: string) => {
       </span>
     </div>
     <div class="body flexc">
-      <common-loading v-if="pending" />
+      <common-loading v-show="pending" :show-in-first="false" />
       <ul class="w100">
         <li v-for="item in filteredList" v-show="item._show" :key="item.id">
           <nuxt-link :to="'/articles/' + String(item.id)">

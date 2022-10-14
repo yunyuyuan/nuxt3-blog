@@ -1,23 +1,55 @@
-// import Viewer from 'viewerjs';
-// import { Directive, VNode } from 'vue';
+import Viewer from "viewerjs";
+import type { Ref } from "vue";
+import { inBrowser, ViewerAttr } from "./constants";
 
-// const options: Viewer.Options = {
+function useMutationObserver (
+  target: HTMLElement,
+  callback: MutationCallback
+) {
+  let observer: MutationObserver | undefined;
 
-// }
+  const cleanup = () => {
+    if (observer) {
+      observer.disconnect();
+      observer = undefined;
+    }
+  };
+  if (window && "MutationObserver" in window && target) {
+    observer = new MutationObserver(callback);
+    observer.observe(target, { attributes: true, childList: true, characterData: true, subtree: true });
+  }
 
-// export default function () {
-//   let currentViewer: Viewer;
+  return cleanup;
+}
 
-//   const directive: Directive = {
-//     mounted(el: HTMLElement, _, vnode: VNode) {
-//       currentViewer = new Viewer(el, options);
-//     },
-//     updated() {
-//       currentViewer?.update();
-//     },
-//     beforeUnmount() {
-//       currentViewer?.destroy();
-//     }
-//   }
-//   return directive;
-// }
+/**
+ * viewerjs
+ */
+export function initViewer (el?: Ref<HTMLElement>): Ref<HTMLElement> | void {
+  if (!inBrowser) { return; }
+  let viewerContainer;
+  let viewer: Viewer;
+  let stop = () => null;
+
+  onMounted(() => {
+    if (!el) {
+      el = viewerContainer = ref<HTMLElement>(null);
+    }
+    viewer = new Viewer(el.value, {
+      filter (image: HTMLImageElement) {
+        return image.hasAttribute(ViewerAttr);
+      }
+    });
+    stop = useMutationObserver(el.value, () => {
+      nextTick(() => {
+        viewer?.update();
+      });
+    });
+  });
+
+  onBeforeUnmount(() => {
+    stop();
+    viewer?.destroy();
+  });
+  return viewerContainer;
+}

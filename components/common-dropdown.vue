@@ -2,7 +2,7 @@
 const props = defineProps({
   hided: Boolean,
   show: Boolean,
-  parent: HTMLElement
+  parent: Object
 });
 
 const emit = defineEmits(["update:hided", "update:show", "open"]);
