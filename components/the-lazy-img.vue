@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ViewerAttr } from "~/utils/constants";
+import { ViewerAttr, isPrerender } from "~/utils/constants";
 import { addScrollListener, rmScrollListener } from "~/utils/scroll-event";
 
 const props = defineProps({
@@ -143,6 +143,7 @@ const attr = ViewerAttr;
     :title="title"
     @click="containerClick"
   >
+    <img v-if="!isEncryptedImg && isPrerender" :src="props.src" :alt="alt">
     <span v-if="isImgErr || isImgLoading" class="svg flexc s100">
       <svg-icon :name="isImgErr ? 'img-error' : 'loading'" />
       <span v-show="isImgErr" class="tips">click to reload</span>
