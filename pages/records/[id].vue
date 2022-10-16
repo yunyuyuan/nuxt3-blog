@@ -6,7 +6,7 @@ import { useComment } from "~/utils/utils";
 import config from "~/config";
 import { initViewer } from "~~/utils/viewer";
 
-const { item, tabUrl, publishTime, modifyTime, markdownRef, mdPending } = useContentPage<RecordItem>();
+const { item, tabUrl, publishTime, modifyTime, htmlContent, markdownRef, mdPending } = useContentPage<RecordItem>();
 
 useHead({
   title: computed(() => `记录: ${formatTime(item.time, "YYYY-MM-DD")}${config.SEO_title}`)
@@ -35,7 +35,7 @@ initViewer(root);
       </p>
       <common-loading v-show="mdPending" :show-in-first="false" />
       <div class="article-container">
-        <article ref="markdownRef" class="--markdown" />
+        <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
       </div>
     </div>
   </div>

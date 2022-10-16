@@ -24,6 +24,7 @@ export default function useContentPage<T extends CommonItem> () {
 
   // cancelWatchPasswd
   const cancelFnList = registerCancelWatchEncryptor();
+  let destroyFns: ReturnType<typeof afterInsertHtml> = [];
 
   watch(listPending, async (pend) => {
     if (!pend || isPrerender) {
@@ -95,16 +96,12 @@ export default function useContentPage<T extends CommonItem> () {
     }
   }, { immediate: true });
 
-  let destroyFns: ReturnType<typeof afterInsertHtml> = [];
   const htmlInserted = ref<boolean>(false);
   // 监听htmlContent变化，处理afterInsertHTML
-  watch(htmlContent, (html) => {
-    markdownRef.value.innerHTML = html;
-    destroyFns = afterInsertHtml(markdownRef.value, false, htmlInserted);
-  });
-
-  onMounted(() => {
-    markdownRef.value.innerHTML = htmlContent.value;
+  watch(htmlContent, () => {
+    if (markdownRef.value) {
+      destroyFns = afterInsertHtml(markdownRef.value, false, htmlInserted);
+    }
   });
 
   onBeforeUnmount(() => {

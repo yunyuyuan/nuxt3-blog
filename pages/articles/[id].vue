@@ -7,7 +7,7 @@ import { inBrowser } from "~/utils/constants";
 import config from "~/config";
 import { initViewer } from "~/utils/viewer";
 
-const { item, tabUrl, modifyTime, markdownRef, mdPending, htmlInserted } = useContentPage<ArticleItem>();
+const { item, tabUrl, modifyTime, htmlContent, markdownRef, mdPending, htmlInserted } = useContentPage<ArticleItem>();
 
 useHead({
   title: computed(() => item.title + config.SEO_title)
@@ -85,6 +85,7 @@ initViewer(root);
           <article
             ref="markdownRef"
             class="--markdown"
+            v-html="htmlContent"
           />
         </div>
         <div class="more-info flex">

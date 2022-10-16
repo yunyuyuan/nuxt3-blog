@@ -5,7 +5,7 @@ import { useComment } from "~/utils/utils";
 import config from "~/config";
 import { initViewer } from "~/utils/viewer";
 
-const { item, tabUrl, modifyTime, markdownRef, mdPending } =
+const { item, tabUrl, modifyTime, markdownRef, htmlContent, mdPending } =
   useContentPage<KnowledgeItem>();
 
 useHead({
@@ -63,7 +63,7 @@ initViewer(root);
       </div>
       <common-loading v-show="mdPending" :show-in-first="false" />
       <div class="article-container">
-        <article ref="markdownRef" class="--markdown" />
+        <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
       </div>
       <span class="modify">
         更新于：
