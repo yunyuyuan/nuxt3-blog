@@ -3,7 +3,7 @@ import useContentPage from "~/utils/public/detail";
 import { ArticleItem } from "~/utils/types";
 import { addScrollListener, rmScrollListener } from "~/utils/scroll-event";
 import { getLocalStorage, rmLocalStorage, setLocalStorage, useComment } from "~/utils/utils";
-import { inBrowser } from "~/utils/constants";
+import { inBrowser, isPrerender } from "~/utils/constants";
 import config from "~/config";
 import { initViewer } from "~/utils/viewer";
 
@@ -41,31 +41,33 @@ const listenAnchor = () => {
   } catch {}
 };
 
-onMounted(() => {
-  watch(mdPending, (pend) => {
-    if (!pend) {
-      const hash = useRoute().hash;
-      nextTick(() => {
-        if (hash) {
-          watch(htmlInserted, (inserted) => {
-            if (inserted) {
-              window.scrollTo({
-                top: document
-                  .getElementById(
-                    encodeURIComponent(decodeURIComponent(hash.slice(1)))
-                  )
-                  ?.getBoundingClientRect().y
-              });
-            }
-          }, { immediate: true });
-        } else {
-          listenAnchor();
-        }
-        addScrollListener(listenAnchor);
-      });
-    }
-  }, { immediate: true });
-});
+if (!isPrerender) {
+  onMounted(() => {
+    watch(mdPending, (pend) => {
+      if (!pend) {
+        const hash = useRoute().hash;
+        nextTick(() => {
+          if (hash) {
+            watch(htmlInserted, (inserted) => {
+              if (inserted) {
+                window.scrollTo({
+                  top: document
+                    .getElementById(
+                      encodeURIComponent(decodeURIComponent(hash.slice(1)))
+                    )
+                    ?.getBoundingClientRect().y
+                });
+              }
+            }, { immediate: true });
+          } else {
+            listenAnchor();
+          }
+          addScrollListener(listenAnchor);
+        });
+      }
+    }, { immediate: true });
+  });
+}
 
 onBeforeUnmount(() => {
   rmScrollListener(listenAnchor);

@@ -1,5 +1,5 @@
 import { createApp, createVNode, render } from "vue";
-import { inBrowser } from "./constants";
+import { inBrowser, isPrerender } from "./constants";
 import { notify } from "./notify/notify";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
@@ -36,7 +36,7 @@ const headerExtension = {
       (_a, prefix, tone, content) => {
         const size = tone.length;
         const anchor = "id-" + encodeURIComponent(content);
-        return `${prefix}<h${size}><sup class="fake-head" id="${anchor}"></sup><a class="header-link" href="#${anchor}">${converter.makeHtml(
+        return `${prefix}<h${size}><sup class="fake-head" ${!isPrerender ? `id="${anchor}"` : ""}></sup><a class="header-link" href="#${anchor}">${converter.makeHtml(
           content
         )}</a></h${size}>`;
       }
