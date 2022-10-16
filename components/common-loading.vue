@@ -10,7 +10,7 @@ const isFirstLoad = useFirstLoad();
 </script>
 
 <template>
-  <div v-show="showInFirst || !isFirstLoad" class="common-loading flexc">
+  <div :class="{hide: !showInFirst && isFirstLoad}" class="common-loading flexc">
     <svg-icon name="loading" />
     <span>Loading...</span>
   </div>
@@ -20,6 +20,10 @@ const isFirstLoad = useFirstLoad();
 @import "assets/style/var";
 
 .common-loading {
+  &.hide {
+    display: none;
+  }
+
   > svg {
     @include square(60px);
 
