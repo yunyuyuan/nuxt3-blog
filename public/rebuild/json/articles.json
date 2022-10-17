@@ -1,5 +1,28 @@
 [
   {
+    "title": "浏览器debug：打断点",
+    "menu": [
+      {
+        "size": "big",
+        "text": "讲解",
+        "url": "#id-%E8%AE%B2%E8%A7%A3"
+      },
+      {
+        "size": "big",
+        "text": "使用 vscode 调试",
+        "url": "#id-%E4%BD%BF%E7%94%A8vscode%E8%B0%83%E8%AF%95"
+      }
+    ],
+    "len": 1455,
+    "tags": [
+      "前端"
+    ],
+    "id": 7260,
+    "time": 1666027678610,
+    "modifyTime": 1666027678610,
+    "encrypt": false
+  },
+  {
     "title": "树莓派bt下载器/局域网NAS/远程控制",
     "menu": [
       {
