@@ -1,6 +1,6 @@
 [
   {
-    "title": "浏览器debug：打断点",
+    "title": "web开发调试：打断点",
     "menu": [
       {
         "size": "big",
@@ -19,7 +19,7 @@
     ],
     "id": 7260,
     "time": 1666027678610,
-    "modifyTime": 1666027678610,
+    "modifyTime": 1666028045156,
     "encrypt": false
   },
   {
