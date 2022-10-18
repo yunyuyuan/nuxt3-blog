@@ -42,12 +42,13 @@ if (config.CloudflareAnalyze) {
 }
 
 const timestamp = Date.now();
+const isDev = process.env.NODE_ENV === "development";
 
 // const prefix = "monaco-editor/esm/vs";
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
   telemetry: false,
-  // ssr: false,
+  ssr: !isDev,
   app: {
     head: {
       htmlAttrs: {
@@ -74,7 +75,7 @@ export default defineNuxtConfig({
     public: {
       stickers,
       timestamp,
-      dev: process.env.NODE_ENV === "development"
+      dev: isDev
     },
     app: {
       NUXT_ENV_CURRENT_GIT_SHA: execSync("git rev-parse HEAD").toString().trim()

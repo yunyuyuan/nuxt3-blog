@@ -19,7 +19,7 @@ const dragIn = ref(false);
 const img = ref<File>();
 const imgUrl = ref();
 const token = ref(getLocalStorage("smms-token"));
-const resultUrl = ref("暂无");
+const resultUrl = ref("");
 const uploading = ref(false);
 
 const setImage = (e: Event) => {
@@ -137,7 +137,7 @@ onUnmounted(() => {
       <div class="flexc">
         <div class="result flex">
           <span>上传结果：</span>
-          <input ref="resultInput" v-model="resultUrl" readonly>
+          <input ref="resultInput" v-model="resultUrl" placeholder="暂无" readonly>
         </div>
         <label
           class="flex"

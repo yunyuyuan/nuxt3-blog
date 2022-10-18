@@ -107,7 +107,7 @@ const modalOk = () => {
       <div class="w100 flexc" :class="{hide: !menuShow}">
         <ul>
           <li>
-            <a @click="showUploadImage = true">
+            <a class="upload-img-btn" @click="showUploadImage = true">
               图片
             </a>
           </li>
@@ -209,6 +209,10 @@ $menu-width: 100px;
         border-radius: 2px;
 
         li {
+          .upload-img-btn {
+            cursor: cell;
+          }
+
           a {
             display: block;
             text-align: center;

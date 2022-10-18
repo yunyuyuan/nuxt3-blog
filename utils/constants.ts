@@ -39,6 +39,10 @@ export const markdownTips: {
     description: "红色的文字"
   },
   {
+    regx: "_(文字)_",
+    description: "带下划线的文字"
+  },
+  {
     regx: "[html][/html]",
     description: "直接插入HTML"
   },

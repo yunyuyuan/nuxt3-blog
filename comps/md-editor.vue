@@ -4,6 +4,7 @@ import debounce from "lodash/debounce.js";
 import type { Ref } from "vue";
 import { afterInsertHtml, parseMarkdown } from "~/utils/markdown";
 import { markdownTips } from "~/utils/constants";
+import { initViewer } from "~~/utils/viewer";
 
 const props = defineProps<{
   modelValue: string;
@@ -131,6 +132,7 @@ onMounted(initEditor);
 onBeforeUnmount(() => {
   editor?.dispose();
 });
+initViewer(markdownRef);
 </script>
 
 <template>
@@ -139,7 +141,7 @@ onBeforeUnmount(() => {
       <svg-icon name="loading" />
     </div>
     <div class="editor-head flex">
-      <a title="插入表情" @click="stickerHided && (showStickers = true)">
+      <a title="添加表情" @click="stickerHided && (showStickers = true)">
         <img src="/sticker/yellow-face/18.png">
         <common-dropdown
           v-model:show="showStickers"

@@ -1,5 +1,5 @@
 import { createApp, createVNode, render } from "vue";
-import { inBrowser, isPrerender } from "./constants";
+import { inBrowser, isPrerender, ViewerAttr } from "./constants";
 import { notify } from "./notify/notify";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
@@ -72,14 +72,14 @@ const commonImgExtension = {
         }
         const mather = alt.match(/^(.*?)\[(.*?) x (.*?)]$/);
         if (!mather) {
-          return `${prefix}<span class="image-container"><img alt="${alt}" title="${alt}" src="${src}"/><small class="desc">${alt}</small></span>`;
+          return `${prefix}<span class="image-container"><img ${ViewerAttr} alt="${alt}" title="${alt}" src="${src}"/><small class="desc">${alt}</small></span>`;
         }
         // with dimension
         const [, alt_, w, h] = mather;
         const justHeight = !w;
         return `${prefix}<span class="image-container${
           justHeight ? " just-height" : ""
-        }"><img alt="${alt_}" title="${alt_}" style="${
+        }"><img ${ViewerAttr} alt="${alt_}" title="${alt_}" style="${
           w ? `width: ${w} !important;` : ""
         }${
           h ? `height: ${h} !important;` : ""
@@ -96,6 +96,18 @@ const colorTextExtension = {
       /(^|[^\\])-\(([#a-zA-Z0-9]+): (.+?)\)-/,
       (_a, prefix, color, txt) => {
         return `${prefix}<span style="color: ${color}">${txt}</span>`;
+      }
+    );
+  }
+};
+const underlineTextExtension = {
+  type: "lang",
+  filter (text) {
+    return recursiveReplace(
+      text,
+      /(^|[^\\])_\((.+?)\)_/,
+      (_a, prefix, txt) => {
+        return `${prefix}<span style="text-decoration: underline">${txt}</span>`;
       }
     );
   }
@@ -197,6 +209,7 @@ function parseMarkdown_ (text: string, showdown) {
         commonImgExtension,
         htmlExtension,
         colorTextExtension,
+        underlineTextExtension,
         fieldExtension,
         youtubeExtension,
         biliExtension,
@@ -234,6 +247,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
         //   destroyFns.push(() => scrollbar.destroy());
         // });
       }
+      // lazy-img
       mdEl
         .querySelectorAll(".image-container > img")
         .forEach((el: HTMLImageElement) => {
@@ -256,7 +270,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
             vm.unmount();
           });
         });
-      // copy <pre>
+      // copy button and theme button in <pre>
       mdEl.querySelectorAll("pre:not(.processed-pre)").forEach(async (el: HTMLPreElement) => {
         el.classList.add("processed-pre");
         const actions = document.createElement("span");
@@ -293,7 +307,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
           clipboard.destroy();
         });
       });
-      // target=_blank
+      // target=_blank link
       mdEl.querySelectorAll("a[target=_blank]:not(.processed-a)").forEach((el) => {
         el.classList.add("processed-a");
         createSvgIcon("open-link", (span) => {
