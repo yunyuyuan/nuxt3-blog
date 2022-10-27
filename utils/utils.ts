@@ -68,16 +68,12 @@ export function calcRocketUrl () {
 /**
  * localStorage 操作
  */
-export function getLocalStorage<T extends string> (key: string, defaultValue?: T): T {
+export function getLocalStorage<T extends string> (key: string): T {
   if (inBrowser) {
     const item = localStorage.getItem(key);
-    if (item === null && typeof defaultValue === "string") {
-      localStorage.setItem(key, defaultValue);
-      return defaultValue;
-    }
     return item as T;
   }
-  return defaultValue || null;
+  return null;
 }
 
 export function setLocalStorage (key: string, value: string) {

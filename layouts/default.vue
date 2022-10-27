@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { githubRepoUrl, inBrowser } from "~/utils/constants";
+import { githubRepoUrl, inBrowser, isPrerender } from "~/utils/constants";
 import { HeaderTabs } from "~/utils/types";
 import { calcRocketUrl } from "~/utils/utils";
 import config from "~/config";
@@ -42,7 +42,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
 
 <template>
   <div id="default-layout" :class="{'in-about': inAbout}">
-    <div class="mode-bg" :class="[themeMode, {active: !isFirst}]" />
+    <div v-if="!isPrerender" class="mode-bg" :class="[themeMode, {active: !isFirst}]" />
     <nav id="header" ref="headerRef" class="flex w100">
       <nuxt-link
         v-for="item in HeaderTabs"
@@ -58,7 +58,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
         <span />
       </nuxt-link>
       <del />
-      <a class="mode" :class="themeMode" :title="`切换到${themeMode === 'light' ? '夜间' : '日间'}模式`" @click="toggleThemeMode">
+      <a v-if="!isPrerender" class="mode" :class="themeMode" :title="`切换到${themeMode === 'light' ? '夜间' : '日间'}模式`" @click="toggleThemeMode">
         <span>
           <svg-icon name="mode-light" />
           <svg-icon name="mode-dark" />
