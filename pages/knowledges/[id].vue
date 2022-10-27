@@ -129,7 +129,7 @@ initViewer(root);
               fill: #002eff;
 
               @include dark-mode {
-                fill: white;
+                fill: $theme-color-lighten;
               }
             }
           }
@@ -335,7 +335,7 @@ initViewer(root);
           fill: black;
 
           @include dark-mode {
-            fill: rgb(211 211 211);
+            fill: $theme-color-lighten;
           }
 
           @keyframes rotate {
