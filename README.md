@@ -32,4 +32,4 @@ Appearance
 - [x] global theme color
 - [ ] i18n
 - [ ] left-side layout
-- [ ] dark mode
+- [x] dark mode

@@ -207,6 +207,12 @@ function deleteSelect () {
 .manage-list-table {
   border: 1px solid #dbdbdb;
   box-shadow: 0 0 15px #e0e0e0;
+
+  @include dark-mode {
+    border-color: rgb(95 95 95);
+    box-shadow: 0 0 15px #2b2b2b;
+  }
+
   border-radius: 4px;
   overflow: hidden;
   margin: 0 auto 30px;
@@ -216,6 +222,12 @@ function deleteSelect () {
     align-items: center;
     justify-content: space-between;
     background: rgb(255 255 255);
+
+    @include dark-mode {
+      background: rgb(88 88 88);
+      border-color: rgb(128 128 128);
+    }
+
     padding: 26px 30px;
     border-radius: 2px;
     transition: $common-transition;
@@ -223,6 +235,11 @@ function deleteSelect () {
 
     &.list-head {
       background: #ebebeb;
+
+      @include dark-mode {
+        background: rgb(54 54 54);
+      }
+
       padding-top: 20px;
       padding-bottom: 20px;
 
@@ -231,11 +248,19 @@ function deleteSelect () {
         font-weight: bold !important;
         font-style: italic;
         color: #4c4c4c;
+
+        @include dark-mode {
+          color: white;
+        }
       }
     }
 
     &.list-body:hover {
       background: rgb(251 254 255 / 98%);
+
+      @include dark-mode {
+        background: #505050;
+      }
     }
 
     .col {
@@ -246,6 +271,10 @@ function deleteSelect () {
         color: black;
         text-decoration: none;
         display: block;
+
+        @include dark-mode {
+          color: white;
+        }
 
         &:hover {
           text-decoration: underline;

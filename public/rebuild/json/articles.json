@@ -1,5 +1,28 @@
 [
   {
+    "title": "dark mode实现——全站暗黑模式切换",
+    "menu": [
+      {
+        "size": "big",
+        "text": "color",
+        "url": "#id-color"
+      },
+      {
+        "size": "big",
+        "text": "background",
+        "url": "#id-background"
+      }
+    ],
+    "len": 1591,
+    "tags": [
+      "前端"
+    ],
+    "id": 4211,
+    "time": 1666808831991,
+    "modifyTime": 1666881846976,
+    "encrypt": false
+  },
+  {
     "title": "web开发调试：打断点",
     "menu": [
       {

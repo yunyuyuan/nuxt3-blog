@@ -15,6 +15,7 @@ const inputText = ref<string>(config);
 
 const { statusText, canCommit, processing, toggleProcessing } = useStatusText();
 
+const { themeMode } = useThemeMode();
 if (inBrowser) {
   onMounted(() => {
     import("monaco-editor").then((module) => {
@@ -27,6 +28,11 @@ if (inBrowser) {
           enabled: false
         }
       });
+      watch(themeMode, (mode) => {
+        editor.updateOptions({
+          theme: mode === "light" ? "vs" : "vs-dark"
+        });
+      }, { immediate: true });
       editor.onDidChangeModelContent(() => {
         const text = editor.getModel().getValue();
         inputText.value = text;

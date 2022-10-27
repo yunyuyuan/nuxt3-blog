@@ -51,6 +51,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: black;
 
   .notification {
     flex-shrink: 0;

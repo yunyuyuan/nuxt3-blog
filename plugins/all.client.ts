@@ -12,11 +12,12 @@ export default defineNuxtPlugin((app: NuxtApp) => {
   };
 
   initScrollTrigger();
-  // init code theme
+  // init theme
   document.body.setAttribute(
     "code-theme",
     localStorage.getItem("code-theme") || "light"
   );
+  document.documentElement.classList.add(`${useThemeMode().themeMode.value}-mode`);
 
   const fragment = new DocumentFragment();
 

@@ -127,6 +127,10 @@ initViewer(root);
               @include square(18px);
 
               fill: #002eff;
+
+              @include dark-mode {
+                fill: white;
+              }
             }
           }
 
@@ -145,6 +149,10 @@ initViewer(root);
           white-space: pre-wrap;
           color: #1b1b1b;
           word-break: break-word;
+
+          @include dark-mode {
+            color: rgb(235 235 235);
+          }
         }
       }
     }
@@ -309,6 +317,10 @@ initViewer(root);
           width: 100%;
           height: 1px;
           background: black;
+
+          @include dark-mode {
+            background: rgb(206 206 206);
+          }
         }
       }
 
@@ -320,6 +332,11 @@ initViewer(root);
           right: 8px;
           bottom: 0;
           animation: rotate 5s linear infinite;
+          fill: black;
+
+          @include dark-mode {
+            fill: rgb(211 211 211);
+          }
 
           @keyframes rotate {
             0% {
@@ -346,7 +363,7 @@ initViewer(root);
       font-size: 12px;
       margin-left: auto;
       margin-top: 40px;
-      color: #ff6a00;
+      color: #f80;
     }
   }
 }

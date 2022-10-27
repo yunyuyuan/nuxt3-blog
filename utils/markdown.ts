@@ -1,6 +1,7 @@
 import { createApp, createVNode, render } from "vue";
 import { inBrowser, isPrerender, ViewerAttr } from "./constants";
 import { notify } from "./notify/notify";
+import initHljs from "./hljs";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
 
@@ -229,7 +230,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
         const dotes = document.createElement("div");
         const lang = document.createElement("small");
         const language = el.className.replace(/^.*?language-([^ ]+).*?$/, "$1");
-        const hljs = (await import("highlight.js")).default;
+        const hljs = await initHljs();
         lang.innerText = (
           hljs.getLanguage(language) || { name: language }
         ).name;

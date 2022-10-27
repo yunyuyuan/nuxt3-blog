@@ -114,6 +114,8 @@ $space: 13px;
   .body {
     $footer-color: #7c7c7c;
     $footer-hover: black;
+    $footer-color-dark: rgb(218 218 218);
+    $footer-hover-dark: rgb(253 253 253);
 
     align-self: stretch;
     margin: 0 20px;
@@ -144,6 +146,14 @@ $space: 13px;
             .foot {
               color: $footer-hover;
 
+              @include dark-mode {
+                color: $footer-hover-dark;
+
+                b {
+                  background: $footer-hover-dark;
+                }
+              }
+
               b {
                 background: $footer-hover;
               }
@@ -156,6 +166,11 @@ $space: 13px;
           display: block;
           text-decoration: none;
           border-bottom: 1px solid #f3f3f3;
+
+          @include dark-mode {
+            border-color: rgb(87 87 87);
+          }
+
           padding: $space * 0.8 0 $space * 1.4 $space * 0.8;
 
           &:active b {
@@ -171,6 +186,10 @@ $space: 13px;
             transition: $common-transition;
             word-break: break-word;
             letter-spacing: 0.2px;
+
+            @include dark-mode {
+              color: $theme-color-lighten;
+            }
           }
 
           .foot {
@@ -179,6 +198,13 @@ $space: 13px;
             color: $footer-color;
             transition: $common-transition;
             height: 18px;
+
+            @include dark-mode {
+              &,
+              b {
+                color: $footer-color-dark;
+              }
+            }
 
             b {
               height: 60%;

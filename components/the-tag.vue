@@ -26,6 +26,7 @@ const emit = defineEmits(["click"]);
 
 $size: 1.6rem;
 $color: #eaeaea;
+$color-dark: #1e1e1e;
 
 .common-tag {
   user-select: none;
@@ -43,6 +44,11 @@ $color: #eaeaea;
   line-height: math.div($size, 2);
   text-decoration: none;
   word-break: keep-all;
+
+  @include dark-mode {
+    background: $color-dark;
+    color: #fff;
+  }
 
   // &:after,
   // &:before {
@@ -70,8 +76,11 @@ $color: #eaeaea;
   // }
 
   &:hover {
-    background-color: #d7d7d7;
-    color: black;
+    background: #d7d7d7;
+
+    @include dark-mode {
+      background: #535353;
+    }
 
     &::after {
       border-left-color: #d7d7d7;
@@ -79,8 +88,13 @@ $color: #eaeaea;
   }
 
   &.active {
-    background-color: $theme-color;
+    background: $theme-color;
     color: white;
+
+    @include dark-mode {
+      background: $theme-color-lighten;
+      color: black;
+    }
 
     &::after {
       border-left-color: $theme-color;

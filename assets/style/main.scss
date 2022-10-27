@@ -13,12 +13,19 @@ html {
   scroll-behavior: smooth;
   font-size: 16px;
   font-family: $font-source-han-sans;
+  background: $background;
+  transition: background 0s $animation-function $animation-duration * 2;
+  color: black;
+
+  @include dark-mode(true) {
+    color: white;
+    background: $background-dark;
+  }
 }
 
 html,
 body {
   min-width: 100%;
-  background: $background;
   display: flex;
 }
 
@@ -79,6 +86,7 @@ select {
   border-radius: 2px;
   background: #fff;
   outline: none;
+  color: black;
 
   &:hover {
     border-color: black;
@@ -94,6 +102,27 @@ select {
     cursor: not-allowed;
     border-color: #a5a5a5;
     background: rgb(239 239 239);
+  }
+
+  @include dark-mode {
+    color: white;
+    background: #2d2d2d;
+
+    &:hover {
+      border-color: white;
+    }
+
+    &:focus {
+      box-shadow: 0 0 4px rgba($theme-color-lighten, 20%);
+      border-color: $theme-color-lighten;
+      background: rgb(36 36 36);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      border-color: #a5a5a5;
+      background: rgb(121 121 121);
+    }
   }
 }
 
@@ -114,6 +143,11 @@ img[data-viewer] {
 
 .has-comment {
   border-bottom: 1px solid $theme-color-darken;
+
+  @include dark-mode {
+    border-color: $theme-color;
+  }
+
   padding-bottom: 20px;
 }
 
@@ -134,5 +168,13 @@ img[data-viewer] {
 
   &:hover {
     background: rgb(150 150 150);
+  }
+
+  @include dark-mode {
+    background: rgb(100 100 100);
+
+    &:hover {
+      background: rgb(150 150 150);
+    }
   }
 }

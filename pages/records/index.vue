@@ -70,9 +70,20 @@ $space: 16px;
     margin: auto;
 
     li {
+      @include dark-mode {
+        &::marker {
+          color: white;
+        }
+      }
+
       h2 {
         color: $theme-color-darken;
         text-shadow: 0 0 2px cyan;
+
+        @include dark-mode {
+          color: $theme-color-lighten;
+          text-shadow: 0 0 2px cyan;
+        }
       }
 
       &:hover {
@@ -116,6 +127,11 @@ $space: 16px;
             b {
               color: $theme-color-darken;
               text-shadow: 0 0 2px cyan;
+
+              @include dark-mode {
+                color: $theme-color-lighten;
+                background: $background-dark;
+              }
             }
           }
 
@@ -124,6 +140,11 @@ $space: 16px;
             padding: 0 5px;
             font-size: 16px;
             background: $background;
+
+            @include dark-mode {
+              background: $background-dark;
+            }
+
             transition: $common-transition;
           }
 

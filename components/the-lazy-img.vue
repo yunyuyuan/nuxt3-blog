@@ -174,7 +174,7 @@ const attr = ViewerAttr;
   }
 
   .svg {
-    background: rgba($background, 0.5);
+    background: rgba(#fff, 0.5);
     justify-content: center;
     position: absolute;
     top: 0;

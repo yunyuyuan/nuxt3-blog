@@ -131,6 +131,10 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
       &:focus {
         color: black;
 
+        @include dark-mode {
+          color: white;
+        }
+
         & ~ .placeholder {
           opacity: 0;
         }
@@ -161,7 +165,6 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
     }
 
     .common-dropdown {
-      background: white;
       width: 100%;
 
       > p {

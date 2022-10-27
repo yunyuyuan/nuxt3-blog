@@ -3,7 +3,7 @@ import useContentPage from "~/utils/public/detail";
 import { ArticleItem } from "~/utils/types";
 import { addScrollListener, rmScrollListener } from "~/utils/scroll-event";
 import { getLocalStorage, rmLocalStorage, setLocalStorage, useComment } from "~/utils/utils";
-import { inBrowser, isPrerender } from "~/utils/constants";
+import { isPrerender } from "~/utils/constants";
 import config from "~/config";
 import { initViewer } from "~/utils/viewer";
 
@@ -15,7 +15,7 @@ useHead({
 
 const activeAnchor = ref<string>();
 
-const hideMenu = ref<boolean>(inBrowser && !!getLocalStorage("hideMenu"));
+const hideMenu = ref<boolean>(!!getLocalStorage("hideMenu"));
 watch(hideMenu, (hide) => {
   if (hide) {
     setLocalStorage("hideMenu", "true");
@@ -152,6 +152,10 @@ initViewer(root);
         color: #1d1d1d;
         word-break: break-word;
         letter-spacing: 0.5px;
+
+        @include dark-mode {
+          color: white;
+        }
       }
 
       >.common-loading {
@@ -167,6 +171,11 @@ initViewer(root);
       >.more-info {
         margin-top: 30px;
         border-top: 1px solid #c7c7c7;
+
+        @include dark-mode {
+          border-color: rgb(190 190 190);
+        }
+
         padding: 20px 0 0;
         text-align: center;
         font-size: 12px;
@@ -214,6 +223,10 @@ initViewer(root);
 
         &:hover > svg {
           fill: #333;
+
+          @include dark-mode {
+            fill: rgb(247 247 247);
+          }
         }
 
         >svg {
@@ -221,6 +234,11 @@ initViewer(root);
 
           transition: $common-transition;
           fill: #777;
+
+          @include dark-mode {
+            fill: rgb(209 209 209);
+          }
+
           transform: rotate(90deg);
         }
       }
@@ -232,6 +250,8 @@ initViewer(root);
 
         $mouse-out-color: #777;
         $mouse-in-color: #4d4646;
+        $mouse-out-color-dark: rgb(226 226 226);
+        $mouse-in-color-dark: #fff;
 
         &:hover {
           a {
@@ -244,6 +264,14 @@ initViewer(root);
             &.small {
               &::before {
                 border: 1px solid $mouse-in-color;
+              }
+            }
+
+            @include dark-mode {
+              color: $mouse-in-color-dark;
+
+              &::before {
+                background: $mouse-in-color-dark;
               }
             }
           }
@@ -259,6 +287,11 @@ initViewer(root);
           transition: $common-transition;
           position: relative;
           color: $mouse-out-color;
+
+          @include dark-mode {
+            color: $mouse-out-color-dark;
+          }
+
           border-radius: 4px;
           word-break: break-word;
           margin-bottom: 9px;
@@ -271,6 +304,11 @@ initViewer(root);
             @include square(8px);
 
             background: $mouse-out-color;
+
+            @include dark-mode {
+              background: $mouse-out-color-dark;
+            }
+
             left: 5px;
             flex-shrink: 0;
             transition: $common-transition;
@@ -287,12 +325,26 @@ initViewer(root);
 
               background: transparent !important;
               border: 1px solid $mouse-out-color;
+
+              @include dark-mode {
+                border-color: $mouse-out-color-dark;
+              }
             }
           }
 
           &:hover {
             background: #f5f5f5;
             color: black;
+
+            @include dark-mode {
+              background: #2c2c2c;
+              color: white;
+
+              &::before {
+                background: white;
+                border-color: white;
+              }
+            }
 
             &::before {
               background: black;
@@ -302,9 +354,20 @@ initViewer(root);
 
           &.active {
             $active-color: #006fff;
+            $active-color-dark: rgb(255 255 255);
 
             background: #e3efff;
             color: $active-color;
+
+            @include dark-mode {
+              color: $active-color-dark;
+              background: rgb(24 24 24);
+
+              &::before {
+                background: $active-color-dark;
+                border-color: $active-color-dark;
+              }
+            }
 
             &::before {
               background: $active-color;

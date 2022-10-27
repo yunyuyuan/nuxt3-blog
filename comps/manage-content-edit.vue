@@ -9,7 +9,7 @@ import { deepClone, getLocalStorage, rmLocalStorage } from "~/utils/utils";
 import { loadOrDumpDraft, randomId } from "~/utils/manage";
 import { processEncryptDescrypt } from "~/utils/process-encrypt-descrypt";
 import { useManageContent } from "~/utils/manage/detail";
-import { encryptBlocksRegexp } from "~~/utils/markdown";
+import { encryptBlocksRegexp } from "~/utils/markdown";
 
 const props = defineProps<{
   preProcessItem?:(_item: CommonItem, _list?: Ref<CommonItem[]>) => void;
@@ -348,6 +348,10 @@ onMounted(() => {
       font-size: 13px;
       margin: 0 15px 0 auto;
       color: #b80000;
+
+      @include dark-mode {
+        color: #ffa6a6;
+      }
     }
 
     .draft {
@@ -366,12 +370,18 @@ onMounted(() => {
   }
 
   $border: rgb(216 216 216);
+  $border-dark: rgb(116 116 116);
+  $bg-dark: rgb(73 73 73);
 
   &-base-info > .detail,
   &-md-info > .manage-md-editor {
     border-radius: 0 4px 4px;
     box-shadow: 0 0 15px rgb(0 0 0 / 7%);
     border: 1px solid $border;
+
+    @include dark-mode {
+      border-color: $border-dark;
+    }
   }
 
   &-base-info,
@@ -383,6 +393,12 @@ onMounted(() => {
       display: block;
       background: white;
       color: #4d4d4d;
+
+      @include dark-mode {
+        background: $bg-dark;
+        color: #fdfdfd;
+      }
+
       padding: 7px 16px;
       position: absolute;
       top: 1px;
@@ -390,6 +406,11 @@ onMounted(() => {
       font-size: 15px;
       border-radius: 3px 3px 0 0;
       border: 1px solid $border;
+
+      @include dark-mode {
+        border-color: $border-dark;
+      }
+
       border-bottom: none;
       transform: translateY(-100%);
       z-index: 2;
@@ -410,12 +431,21 @@ onMounted(() => {
         @include square(36px);
 
         fill: $theme-color-darken;
+
+        @include dark-mode {
+          fill: $theme-color-lighten;
+        }
       }
     }
 
     > .info {
       width: 100%;
       background: white;
+
+      @include dark-mode {
+        background: $bg-dark;
+      }
+
       padding: 28px 0;
       align-items: flex-start;
       box-sizing: border-box;
@@ -429,6 +459,11 @@ onMounted(() => {
 
         &:not(:last-of-type) {
           border-bottom: 1px dotted rgb(226 226 226);
+
+          @include dark-mode {
+            border-color: rgb(129 129 129);
+          }
+
           margin-bottom: 20px;
           padding-bottom: 20px;
         }
@@ -445,6 +480,10 @@ onMounted(() => {
           justify-content: space-between;
           position: relative;
 
+          @include dark-mode {
+            color: white;
+          }
+
           &.invalid::before {
             content: "*";
             color: red;
@@ -460,6 +499,10 @@ onMounted(() => {
 
             fill: $theme-color;
             margin-left: 8px;
+
+            @include dark-mode {
+              fill: $theme-color-lighten;
+            }
           }
         }
 
@@ -490,6 +533,11 @@ onMounted(() => {
       position: absolute;
       border-radius: 0 4px 4px;
       background: rgb(255 255 255 / 60%);
+
+      @include dark-mode {
+        background: rgb(255 255 255 / 20%);
+      }
+
       justify-content: center;
       top: 0;
       left: 0;

@@ -2,6 +2,7 @@
 @import "./theme";
 
 $background: #fff;
+$background-dark: #363636;
 $theme-color: $theme;
 $theme-color-lighten: color.adjust($theme-color, $lightness: 20%);
 $theme-color-darken: color.adjust($theme-color, $lightness: -10%);
@@ -10,7 +11,10 @@ $footer-height: 64px;
 $animation-duration: 0.25s;
 $animation-function: cubic-bezier(0, 0, 0, 1);
 $common-transition: all $animation-duration $animation-function;
+$z-index-mode-bg: 10;
+$z-index-body: 20;
 $z-index-header: 500;
+$z-index-footer: 30;
 $z-index-notify: 1000;
 $z-index-modal: 999;
 $z-index-dropdown: 999;
@@ -37,4 +41,16 @@ $font-code: "Fira Code", serif;
   text-overflow: ellipsis;
   word-break: break-all;
   -webkit-line-clamp: $line;
+}
+
+@mixin dark-mode($is-html: false) {
+  @if $is-html {
+    &.dark-mode {
+      @content;
+    }
+  } @else {
+    @at-root html.dark-mode & {
+      @content;
+    }
+  }
 }

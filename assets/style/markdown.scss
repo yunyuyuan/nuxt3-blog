@@ -18,6 +18,11 @@
   font-family: $font-source-han-sans;
   font-size: 0.98rem;
   font-weight: 400;
+  color: rgb(15 15 15);
+
+  @include dark-mode {
+    color: #ededed;
+  }
 
   @each $size in 1,
     2,
@@ -45,6 +50,11 @@
         position: relative;
         color: $theme-color-darken;
         text-shadow: 0 0 1px rgba($theme-color, 3000%);
+
+        @include dark-mode {
+          color: $theme-color-lighten;
+        }
+
         font-size: math.div(1rem, $size) + 0.9rem;
         display: flex;
 
@@ -73,6 +83,11 @@
     width: 100%;
     height: 1px;
     background: gray;
+
+    @include dark-mode {
+      background: rgb(199 199 199);
+    }
+
     margin: 2rem 0;
     border: none;
   }
@@ -87,6 +102,11 @@
     text-decoration: none;
     transition: $common-transition;
     color: $theme-color;
+
+    @include dark-mode {
+      color: $theme-color-lighten;
+    }
+
     left: 0;
     display: inline-flex;
     word-break: keep-all;
@@ -99,6 +119,11 @@
       height: 1px;
       position: absolute;
       background: gray;
+
+      @include dark-mode {
+        background: rgb(202 202 202);
+      }
+
       transition: $common-transition;
       top: calc(100% + 3px);
       left: 0;
@@ -107,6 +132,10 @@
     &:hover {
       &::after {
         background: $theme-color;
+
+        @include dark-mode {
+          background: white;
+        }
       }
 
       &[target="_blank"] {
@@ -139,6 +168,10 @@
       width: 12px;
       height: 12px;
       fill: #0039ff;
+
+      @include dark-mode {
+        fill: #fff;
+      }
     }
   }
 
@@ -190,6 +223,11 @@
   div.embed-video {
     >small {
       color: gray;
+
+      @include dark-mode {
+        color: rgb(214 214 214);
+      }
+
       font-size: 0.65rem;
       line-height: 0.65rem;
       margin-top: 16px;
@@ -214,6 +252,11 @@
     margin: 1rem 0;
     background: rgb(239 239 239);
     border-radius: 0 0.5rem 0.5rem 0;
+
+    @include dark-mode {
+      border-left-color: #a800a8;
+      background: #1b1b1b;
+    }
   }
 
   table {
@@ -250,6 +293,11 @@
       font-weight: 400;
       margin: 0 0.25rem;
       padding: 0.22rem 0.48em;
+
+      @include dark-mode {
+        border-color: #616161;
+        color: #84ffc8;
+      }
     }
   }
 
@@ -289,6 +337,11 @@
     margin: 1.3rem 0;
     border-radius: 8px;
     border: 1px solid #dadada;
+
+    @include dark-mode {
+      border-color: rgb(73 73 73);
+    }
+
     box-shadow: 0 0 8px rgb(0 0 0 / 20%);
     position: relative;
     background: #f3f3f3;
@@ -381,7 +434,7 @@
       word-break: keep-all;
       padding: 0.5rem 0.8rem;
       border-top: 1px solid #e4e4e4;
-      border-radius: 0 0 0.3rem 0.3rem;
+      border-radius: 0 0 8px 8px;
       max-height: 100vh;
       background: white;
       font-size: 0.87rem;

@@ -50,6 +50,12 @@ const afterOpen = () => {
 .common-dropdown {
   background: white;
   box-shadow: 0 0 16px rgb(0 0 0 / 30%);
+
+  @include dark-mode {
+    background: $background-dark;
+    box-shadow: 0 0 16px rgb(0 0 0 / 30%);
+  }
+
   border-radius: 4px;
   border: 1px solid #ddd;
   transition: $common-transition;

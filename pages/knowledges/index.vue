@@ -87,12 +87,23 @@ $space: 16px;
       display: flex;
       align-items: center;
 
-      &:hover {
+      @include dark-mode {
+        &:not(.active):hover {
+          background: #5c5c5c;
+        }
+      }
+
+      &:not(.active):hover {
         background: #e1e1e1;
       }
 
       &.active {
         background: $theme-color;
+
+        @include dark-mode {
+          background: $theme-color-darken;
+        }
+
         color: white;
         box-shadow: 0 0 2px rgb(0 0 0 / 30%);
       }
@@ -103,7 +114,7 @@ $space: 16px;
         height: 17px;
         line-height: 17px;
         text-align: center;
-        background: #e28d5b;
+        background: #f3884a;
         color: white;
         border-radius: 8px;
         margin-left: 4px;
@@ -138,6 +149,10 @@ $space: 16px;
         bottom: 0;
         left: 0;
         background: #f3f3f3;
+
+        @include dark-mode {
+          background: rgb(129 129 129);
+        }
       }
 
       &:not(:last-of-type) {
@@ -159,6 +174,10 @@ $space: 16px;
         overflow: hidden;
         padding: 5px;
 
+        @include dark-mode {
+          color: white;
+        }
+
         &::after {
           position: absolute;
           left: 10px;
@@ -174,6 +193,11 @@ $space: 16px;
         b {
           font-size: 18px;
           color: $theme-color-darken;
+
+          @include dark-mode {
+            color: $theme-color-lighten;
+          }
+
           margin: 0 4px;
           line-height: 22px;
 
@@ -184,6 +208,11 @@ $space: 16px;
       time {
         font-size: 12px;
         color: #696969;
+
+        @include dark-mode {
+          color: rgb(202 202 202);
+        }
+
         margin: 0 5px 0 auto;
         transition: $common-transition;
         word-break: keep-all;

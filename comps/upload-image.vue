@@ -210,6 +210,10 @@ onUnmounted(() => {
       margin-bottom: 20px;
       background: rgb(240 240 240);
 
+      @include dark-mode {
+        background: rgb(47 47 47);
+      }
+
       &:hover {
         border-color: rgb(59 59 59);
       }

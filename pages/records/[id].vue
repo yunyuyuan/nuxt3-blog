@@ -69,11 +69,20 @@ initViewer(root);
         @include square(16px);
 
         fill: $theme-color;
+
+        @include dark-mode {
+          fill: $theme-color-lighten;
+        }
       }
 
       time {
+        color: black;
         font-size: 12px;
         line-height: 16px;
+
+        @include dark-mode {
+          color: rgb(221 221 221);
+        }
       }
     }
 

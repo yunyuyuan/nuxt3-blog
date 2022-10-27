@@ -4,6 +4,7 @@ import { HeaderTabs } from "~/utils/types";
 import { calcRocketUrl } from "~/utils/utils";
 import config from "~/config";
 
+const { themeMode, toggleThemeMode, isFirst } = useThemeMode();
 const pageLoading = useLoading();
 const route = useRoute();
 const footerDomain = inBrowser ? window.location.hostname : "";
@@ -12,6 +13,7 @@ const activeRoute = computed(() => {
   const path = route.path.split("/")[1];
   return path;
 });
+
 const inAbout = computed(() => {
   return route.path.startsWith("/about");
 });
@@ -40,6 +42,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
 
 <template>
   <div id="default-layout" :class="{'in-about': inAbout}">
+    <div class="mode-bg" :class="[themeMode, {active: !isFirst}]" />
     <nav id="header" ref="headerRef" class="flex w100">
       <nuxt-link
         v-for="item in HeaderTabs"
@@ -55,6 +58,13 @@ const inputPwd = ref(encryptor.usePasswd.value);
         <span />
       </nuxt-link>
       <del />
+      <a class="mode" :class="themeMode" :title="`切换到${themeMode === 'light' ? '夜间' : '日间'}模式`" @click="toggleThemeMode">
+        <span>
+          <svg-icon name="mode-light" />
+          <svg-icon name="mode-dark" />
+        </span>
+      </a>
+      <sub />
       <a
         v-if="openEdit === githubRepoUrl"
         class="home flex"
@@ -99,11 +109,14 @@ const inputPwd = ref(encryptor.usePasswd.value);
 </template>
 
 <style lang="scss">
+@use "sass:math";
 @import "assets/style/var";
 
 #body {
   min-height: calc(100vh - #{$header-height + $footer-height});
   padding-top: $header-height;
+  z-index: $z-index-body;
+  position: relative;
 }
 
 #__nuxt {
@@ -117,6 +130,62 @@ const inputPwd = ref(encryptor.usePasswd.value);
 }
 
 #default-layout {
+  $circle-w: calc(200vw * 1.5);
+  $circle-h: calc(200vh * 1.5);
+
+  @keyframes light-dark {
+    0% {
+      background: $background;
+      width: 0;
+      height: 0;
+    }
+
+    100% {
+      background: $background-dark;
+      width: $circle-w;
+      height: $circle-h;
+    }
+  }
+
+  @keyframes dark-light {
+    0% {
+      background: $background-dark;
+      width: 0;
+      height: 0;
+    }
+
+    100% {
+      background: $background;
+      width: $circle-w;
+      height: $circle-h;
+    }
+  }
+
+  >.mode-bg {
+    position: fixed;
+    z-index: $z-index-mode-bg;
+    width: 0;
+    height: 0;
+    top: math.div($header-height, 2);
+    right: 50px;
+    border-radius: 50%;
+
+    &.active {
+      animation-duration: $animation-duration * 2;
+      animation-timing-function: $animation-function;
+      animation-fill-mode: forwards;
+      transform: translate(50%, -50%);
+
+      &.light {
+        animation-name: dark-light;
+      }
+
+      &.dark {
+        animation-name: light-dark;
+      }
+    }
+  }
+
   #header {
     position: fixed;
     top: 0;
@@ -127,6 +196,10 @@ const inputPwd = ref(encryptor.usePasswd.value);
     box-shadow: 0 0 8px #4c4c4c8e;
     z-index: $z-index-header;
     transition: $common-transition;
+
+    @include dark-mode {
+      box-shadow: 0 0 8px rgb(15 15 15 / 56%);
+    }
 
     .item {
       color: white;
@@ -218,6 +291,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
       margin: auto;
     }
 
+    .mode,
     .home,
     .about {
       @include square(28px);
@@ -225,12 +299,35 @@ const inputPwd = ref(encryptor.usePasswd.value);
       transition: $common-transition;
     }
 
+    .mode,
     .home {
       height: $header-height;
 
       &:hover {
         svg {
           fill: white;
+        }
+      }
+    }
+
+    .mode {
+      cursor: pointer;
+      overflow: hidden;
+
+      > span {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: all $animation-duration cubic-bezier(0, -0.01, 0.23, 1.56);
+
+        svg {
+          flex-shrink: 0;
+        }
+      }
+
+      &.dark {
+        > span {
+          transform: translateY(-100%);
         }
       }
     }
@@ -257,6 +354,14 @@ const inputPwd = ref(encryptor.usePasswd.value);
         transition: $common-transition;
         transform-origin: top;
         transform: translateY(100%) scaleY(0);
+
+        @include dark-mode {
+          background: #636363;
+
+          svg {
+            fill: white;
+          }
+        }
 
         svg {
           fill: rgb(0 0 0);
@@ -325,10 +430,17 @@ const inputPwd = ref(encryptor.usePasswd.value);
 
 #footer {
   height: $footer-height;
+  position: relative;
+  z-index: $z-index-footer;
 
   .middle {
     font-size: 13px;
     color: #7c7c7c;
+
+    @include dark-mode {
+      color: rgb(194 194 194);
+    }
+
     margin: auto;
     transition: $common-transition;
 
@@ -349,6 +461,15 @@ const inputPwd = ref(encryptor.usePasswd.value);
 
   a {
     color: #1c1c1c;
+
+    @include dark-mode {
+      color: white;
+
+      &:hover {
+        color: $theme-color-lighten;
+      }
+    }
+
     transition: $common-transition;
 
     &:hover {

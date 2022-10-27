@@ -86,7 +86,17 @@ const typeSelectHided = ref(true);
       transition: border $animation-duration $animation-function, box-shadow $animation-duration $animation-function;
       border-radius: 2px;
       background: #fff;
+      color: black;
       cursor: pointer;
+
+      @include dark-mode {
+        background: rgb(54 54 54);
+        color: rgb(255 255 255);
+
+        &:hover {
+          border-color: white;
+        }
+      }
 
       &:hover {
         border-color: black;
@@ -137,6 +147,16 @@ const typeSelectHided = ref(true);
 
         &.active {
           background: $theme-color-lighten;
+        }
+
+        @include dark-mode {
+          &:not(.active):hover {
+            background: rgb(75 75 75);
+          }
+
+          &.active {
+            background: $theme-color-darken;
+          }
         }
 
         &:not(:last-of-type) {

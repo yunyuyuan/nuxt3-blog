@@ -4,7 +4,7 @@ import debounce from "lodash/debounce.js";
 import type { Ref } from "vue";
 import { afterInsertHtml, parseMarkdown } from "~/utils/markdown";
 import { markdownTips } from "~/utils/constants";
-import { initViewer } from "~~/utils/viewer";
+import { initViewer } from "~/utils/viewer";
 
 const props = defineProps<{
   modelValue: string;
@@ -64,6 +64,7 @@ const stopResize = () => {
 };
 
 // 初始化manoco。mounted 或者 loadingChange 后执行，但只执行一次
+const { themeMode } = useThemeMode();
 const editorContainer = ref<HTMLElement>();
 const initEditor = () => {
   if (props.loading || editor || !editorContainer.value) {
@@ -84,6 +85,11 @@ const initEditor = () => {
       },
       readOnly: props.disabled
     });
+    watch(themeMode, (mode) => {
+      editor.updateOptions({
+        theme: mode === "light" ? "vs" : "vs-dark"
+      });
+    }, { immediate: true });
     editor.onDidChangeModelContent(
       debounce(() => {
         const text = editor.getModel().getValue();
@@ -245,6 +251,11 @@ initViewer(markdownRef);
 
 .manage-md-editor {
   background: white;
+
+  @include dark-mode {
+    background: rgb(73 73 73);
+  }
+
   position: relative;
   height: 98vh;
   align-items: stretch;
@@ -295,6 +306,11 @@ initViewer(markdownRef);
 
   .editor-head {
     background: #fefffe;
+
+    @include dark-mode {
+      background: rgb(73 73 73);
+    }
+
     position: relative;
     padding: 8px 10px;
     border-top-right-radius: 4px;
@@ -311,6 +327,18 @@ initViewer(markdownRef);
       transition: $common-transition;
       background: rgb(251 251 251);
       border: 1px solid transparent;
+
+      @include dark-mode {
+        background: rgb(224 224 224);
+
+        &:hover {
+          background: rgb(161 161 161);
+        }
+
+        &:active {
+          border-color: rgb(88 88 88);
+        }
+      }
 
       &:hover {
         background: rgb(228 228 228);
@@ -353,6 +381,19 @@ initViewer(markdownRef);
           align-items: center;
           cursor: pointer;
           transition: $common-transition;
+
+          @include dark-mode {
+            background: rgb(99 99 99);
+
+            &:hover {
+              background: rgb(68 68 68);
+            }
+
+            &.active {
+              background: rgb(26 26 26);
+              color: white;
+            }
+          }
 
           &:hover {
             background: rgb(230 230 230);

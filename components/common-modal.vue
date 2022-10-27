@@ -152,12 +152,22 @@ const close = () => {
     right: 0;
     bottom: 0;
     background: rgb(0 0 0 / 35%);
+
+    @include dark-mode {
+      background: rgb(255 255 255 / 10%);
+    }
+
     z-index: 1;
   }
 
   > .inner {
     z-index: 2;
     background: white;
+
+    @include dark-mode {
+      background: $background-dark;
+    }
+
     border-radius: 6px;
     margin: auto;
     padding: 18px 32px 22px;
@@ -173,6 +183,10 @@ const close = () => {
       height: 32px;
       border-bottom: 1px solid #e1e1e1;
       color: rgb(55 55 55);
+
+      @include dark-mode {
+        color: #eee;
+      }
     }
 
     > .modal-close {
@@ -187,6 +201,22 @@ const close = () => {
 
       background: white;
       justify-content: center;
+
+      @include dark-mode {
+        background: transparent;
+
+        > svg {
+          fill: white;
+        }
+
+        &:hover {
+          background: rgb(29 29 29);
+        }
+
+        &:active {
+          background: rgb(90 90 90);
+        }
+      }
 
       &:hover {
         background: rgb(240 240 240);

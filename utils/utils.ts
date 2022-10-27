@@ -68,11 +68,16 @@ export function calcRocketUrl () {
 /**
  * localStorage 操作
  */
-export function getLocalStorage (key: string): string {
+export function getLocalStorage<T extends string> (key: string, defaultValue?: T): T {
   if (inBrowser) {
-    return localStorage.getItem(key);
+    const item = localStorage.getItem(key);
+    if (item === null && typeof defaultValue === "string") {
+      localStorage.setItem(key, defaultValue);
+      return defaultValue;
+    }
+    return item as T;
   }
-  return null;
+  return defaultValue || null;
 }
 
 export function setLocalStorage (key: string, value: string) {
@@ -104,6 +109,11 @@ export function useComment (key: HeaderTabUrl) {
   const root = ref<HTMLElement>();
   onMounted(() => {
     if (hasComment) {
+      const { themeMode } = useThemeMode();
+      const getTheme = () => {
+        return themeMode.value === "light" ? "light" : "dark_dimmed";
+      };
+
       const script = document.createElement("script");
       script.src = "https://giscus.app/client.js";
       script.setAttribute("data-repo", `${config.githubName}/${config.githubRepo}`);
@@ -115,11 +125,22 @@ export function useComment (key: HeaderTabUrl) {
       script.setAttribute("data-reactions-enabled", "1");
       script.setAttribute("data-emit-metadata", "0");
       script.setAttribute("data-input-position", "top");
-      script.setAttribute("data-theme", "preferred_color_scheme");
+      script.setAttribute("data-theme", getTheme());
       script.setAttribute("data-lang", "zh-CN");
       script.setAttribute("crossorigin", "anonymous");
       script.setAttribute("async", "");
       root.value.appendChild(script);
+      watch(themeMode, () => {
+        const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+        if (!iframe) { return; }
+        iframe.contentWindow.postMessage({
+          giscus: {
+            setConfig: {
+              theme: getTheme()
+            }
+          }
+        }, "https://giscus.app");
+      });
     }
   });
   return { root, hasComment };

@@ -332,6 +332,10 @@ $menu-width: 100px;
   right: 0;
   bottom: 0;
   background: #fbfbfb;
+
+  @include dark-mode {
+    background: $background-dark;
+  }
 }
 
 .manage-input-pwd {
