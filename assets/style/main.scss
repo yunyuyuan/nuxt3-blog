@@ -13,14 +13,6 @@ html {
   scroll-behavior: smooth;
   font-size: 16px;
   font-family: $font-source-han-sans;
-  background: $background;
-  transition: background 0s $animation-function $animation-duration * 2;
-  color: black;
-
-  @include dark-mode(true) {
-    color: white;
-    background: $background-dark;
-  }
 }
 
 html,
@@ -29,9 +21,20 @@ body {
   display: flex;
 }
 
-body.resizing {
-  user-select: none;
-  cursor: ew-resize;
+body {
+  background: $background;
+  transition: background 0s $animation-function $animation-duration * 2;
+  color: black;
+
+  @include dark-mode(true) {
+    color: white;
+    background: $background-dark;
+  }
+
+  &.resizing {
+    user-select: none;
+    cursor: ew-resize;
+  }
 }
 
 * {

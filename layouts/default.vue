@@ -60,8 +60,8 @@ const inputPwd = ref(encryptor.usePasswd.value);
       <del />
       <a v-if="!isPrerender" class="mode" :class="themeMode" :title="`切换到${themeMode === 'light' ? '夜间' : '日间'}模式`" @click="toggleThemeMode">
         <span>
-          <svg-icon name="mode-light" />
           <svg-icon name="mode-dark" />
+          <svg-icon name="mode-light" />
         </span>
       </a>
       <sub />

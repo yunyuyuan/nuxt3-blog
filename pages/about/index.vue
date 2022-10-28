@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isPrerender, themeBackground } from "~/utils/constants";
+import { isDev, isPrerender, themeBackground } from "~/utils/constants";
 import config from "~/config";
 
 const useSha = useCorrectSha();
@@ -15,7 +15,7 @@ const paragraphs = [
 ];
 
 onBeforeMount(async () => {
-  buildTime.value = (isPrerender ? (await (await fetch("/timestamp.txt")).text()) : "xxxx-xx-xx");
+  buildTime.value = ((!isPrerender && !isDev) ? (await (await fetch("/timestamp.txt")).text()) : "xxxx-xx-xx");
 });
 </script>
 
@@ -107,7 +107,7 @@ onBeforeMount(async () => {
     width: 100%;
     left: 0;
     bottom: 20px;
-    z-index: 2;
+    z-index: $z-index-footer;
 
     .middle {
       color: #a1a1a1;

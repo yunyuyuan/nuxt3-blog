@@ -43,13 +43,13 @@ $font-code: "Fira Code", serif;
   -webkit-line-clamp: $line;
 }
 
-@mixin dark-mode($is-html: false) {
-  @if $is-html {
+@mixin dark-mode($is-self: false) {
+  @if $is-self {
     &.dark-mode {
       @content;
     }
   } @else {
-    @at-root html.dark-mode & {
+    @at-root body.dark-mode & {
       @content;
     }
   }
