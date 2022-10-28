@@ -4,7 +4,7 @@ export default {
   githubName: "yunyuyuan", // github账户名
   githubRepo: "nuxt3-blog", // 勿修改
   githubBranch: "master", // 勿修改
-  domain: "https://blog.halberd.cn", // rss域名
+  domain: "https://blog.yunyuyuan.net", // rss域名
   SEO_title: " - yunyuyuan blog",
   SEO_description: "云与原的博客，书写值得书写的东西",
   SEO_keywords: "yunyuyuan,yunyuyuan's blog,云与原,云与原的博客",
@@ -17,5 +17,5 @@ export default {
     records: false,
     knowledges: false
   }, // 是否开启评论
-  CloudflareAnalyze: "92cdf13c9c964ad1ab71c638c6fde0fc" // cloudflare的webanalyze
+  CloudflareAnalyze: "89460884e1e44e02a7320077f16d620f" // cloudflare的webanalyze
 };
