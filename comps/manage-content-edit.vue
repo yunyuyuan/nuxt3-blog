@@ -12,7 +12,7 @@ import { useManageContent } from "~/utils/manage/detail";
 import { encryptBlocksRegexp } from "~/utils/markdown";
 
 const props = defineProps<{
-  preProcessItem?:(_item: CommonItem, _list?: Ref<CommonItem[]>) => void;
+  preProcessItem?:(_item: CommonItem, _list?: Ref<CommonItem[]> | {value: CommonItem[]}) => void;
   /** 更新之前处理item，附带markdown信息 */
   processWithContent?:(_md: string, _html: HTMLElement, _item: CommonItem) => void;
 }>();
@@ -234,7 +234,9 @@ const delDraft = () => {
   hasDraft.value = false;
 };
 onMounted(() => {
-  watch(listPending, (pend) => {
+  // FIXME Why do we need to watch item.id?
+  // Seems like watcher of listPending has been triggered with wrong order.
+  watch([listPending, () => item.id], ([pend, _]) => {
     if (!pend) {
       hasDraft.value = getLocalStorage(draftPrefix()) !== null;
     }

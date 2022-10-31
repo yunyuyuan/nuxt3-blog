@@ -53,6 +53,7 @@ const afterOpen = () => {
 
   @include dark-mode {
     background: $background-dark;
+    border-color: rgb(186 186 186);
     box-shadow: 0 0 16px rgb(0 0 0 / 30%);
   }
 

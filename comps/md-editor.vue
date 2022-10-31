@@ -329,14 +329,18 @@ initViewer(markdownRef);
       border: 1px solid transparent;
 
       @include dark-mode {
-        background: rgb(224 224 224);
+        background: rgb(40 40 40);
+
+        svg {
+          fill: rgb(207 207 207);
+        }
 
         &:hover {
-          background: rgb(161 161 161);
+          background: rgb(29 29 29);
         }
 
         &:active {
-          border-color: rgb(88 88 88);
+          border-color: rgb(0 0 0);
         }
       }
 
@@ -422,6 +426,11 @@ initViewer(markdownRef);
               display: flex;
               flex-wrap: wrap;
               border: 1px solid #ddd;
+
+              @include dark-mode {
+                border-color: rgb(180 180 180);
+              }
+
               border-right: none;
               border-bottom: none;
 
@@ -435,11 +444,20 @@ initViewer(markdownRef);
 
                 transition: $common-transition;
                 border: 1px solid #ddd;
+
+                @include dark-mode {
+                  border-color: rgb(180 180 180);
+                }
+
                 border-left: none;
                 border-top: none;
 
                 &:hover {
                   background: rgb(228 228 228);
+
+                  @include dark-mode {
+                    background: rgb(140 140 140);
+                  }
 
                   img {
                     transform: scale(1.1);
@@ -510,6 +528,10 @@ initViewer(markdownRef);
 
     a {
       color: $theme-color-darken;
+
+      @include dark-mode {
+        color: $theme-color-lighten;
+      }
     }
   }
 
@@ -524,6 +546,11 @@ initViewer(markdownRef);
       b {
         font-size: 13px;
         color: $theme-color-darken;
+
+        @include dark-mode {
+          color: $theme-color-lighten;
+        }
+
         display: inline-block;
         width: 300px;
         white-space: pre;

@@ -9,7 +9,7 @@ export const fetchList = (tab: HeaderTabUrl) => {
   if (isPrerender) {
     return {
       data: {
-        value: JSON.parse(fs.readFileSync(`./public/rebuild/json${tab}.json`).toString())
+        value: JSON.parse(fs.readFileSync(`./public/rebuild/json${tab}.json`).toString()) as CommonItem[]
       },
       pending: ref(true)
     };
