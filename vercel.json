@@ -1,4 +1,8 @@
 {
+    "framework": null,
+    "buildCommand": "yarn generate",
+    "outputDirectory": "./.output/public",
+    "installCommand": "yarn install",
     "github": {
         "silent": true,
         "autoJobCancelation": true
