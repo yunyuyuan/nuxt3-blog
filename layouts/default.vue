@@ -4,7 +4,7 @@ import { HeaderTabs } from "~/utils/types";
 import { calcRocketUrl } from "~/utils/utils";
 import config from "~/config";
 
-const { themeMode, toggleThemeMode, isFirst } = useThemeMode();
+const { themeMode, toggleThemeMode } = useThemeMode();
 const pageLoading = useLoading();
 const route = useRoute();
 const footerDomain = inBrowser ? window.location.hostname : "";
@@ -22,6 +22,11 @@ const openEdit = computed(() => {
   return calcRocketUrl();
 });
 
+const toggleTheme = () => {
+  toggleThemeMode();
+  isFirst.value = false;
+};
+
 let headroom;
 const headerRef = ref();
 onMounted(async () => {
@@ -38,6 +43,7 @@ onBeforeUnmount(() => {
 const encryptor = useEncryptor();
 const showPwdModal = ref(false);
 const inputPwd = ref(encryptor.usePasswd.value);
+const isFirst = ref(true);
 </script>
 
 <template>
@@ -58,7 +64,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
         <span />
       </nuxt-link>
       <del />
-      <a v-if="!isPrerender" class="mode" :class="themeMode" :title="`切换到${themeMode === 'light' ? '夜间' : '日间'}模式`" @click="toggleThemeMode">
+      <a v-if="!isPrerender" class="mode" :class="themeMode" :title="`切换到${themeMode === 'light' ? '夜间' : '日间'}模式`" @click="toggleTheme">
         <span>
           <svg-icon name="mode-dark" />
           <svg-icon name="mode-light" />
