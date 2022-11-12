@@ -31,7 +31,7 @@ const years = computed(() => {
   <div class="record-list">
     <common-loading v-show="pending" :show-in-first="false" />
     <ul>
-      <li v-for="year in years" :key="year.year">
+      <li v-for="year in years" v-show="year.items.some(item => item._show)" :key="year.year">
         <h2>{{ year.year }}</h2>
         <div class="contain flex">
           <div v-for="item in year.items" v-show="item._show" :key="item.id" class="item flexc">
