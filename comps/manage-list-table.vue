@@ -112,7 +112,7 @@ function deleteSelect () {
       </div>
     </li>
     <common-loading v-show="pending" :show-in-first="false" />
-    <div v-if="!searchedList.length" class="flex empty">
+    <div v-if="!searchedList.length && !pending" class="flex empty">
       空空如也~
     </div>
     <li
