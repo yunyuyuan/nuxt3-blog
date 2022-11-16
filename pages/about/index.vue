@@ -2,8 +2,8 @@
 import { isDev, isPrerender, themeBackground } from "~/utils/constants";
 import config from "~/config";
 
-const useSha = useCorrectSha();
-const commitUrl = computed(() => `https://github.com/${config.githubName}/${config.githubRepo}/commit/${useSha.value}`);
+const commitSha = computed(() => useRuntimeConfig().app.NUXT_ENV_CURRENT_GIT_SHA);
+const commitUrl = computed(() => `https://github.com/${config.githubName}/${config.githubRepo}/commit/${commitSha.value}`);
 const buildTime = ref<string>("Unknown");
 
 const paragraphs = [
@@ -28,7 +28,7 @@ onBeforeMount(async () => {
       </p>
     </div>
     <div class="status">
-      Last built &lt;<a target="_blank" :href="commitUrl">{{ useSha.substring(0, 8) }}</a>&gt; succeeded at
+      Last built &lt;<a target="_blank" :href="commitUrl">{{ commitSha.substring(0, 8) }}</a>&gt; succeeded at
       <time>{{ buildTime }}</time>
     </div>
   </div>
