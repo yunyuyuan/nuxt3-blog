@@ -20,16 +20,22 @@ export default async function (req: VercelRequest, res: VercelResponse) {
       const file = data.files.file[0];
 
       const formData = new FormData();
-      let fp;
+      let fp: any = fs.createReadStream(file.path);
+      let size = fp.size;
       // tinypng
       if (tinyPngToken) {
         tinify.key = tinyPngToken;
-        fp = tinify.fromFile(file.path).toBuffer();
-      } else {
-        fp = fs.createReadStream(file.path);
+        try {
+          const source = tinify.fromFile(file.path);
+          const buffer = await source.toBuffer();
+          fp = buffer;
+          size = Buffer.byteLength(buffer);
+        } catch (e) {
+          throw new Error(`Error from tinypng: ${e.toString()}`);
+        }
       }
       formData.append("smfile", fp, {
-        knownLength: file.size,
+        knownLength: size,
         filepath: file.path,
         filename: file.originalFilename
       });
