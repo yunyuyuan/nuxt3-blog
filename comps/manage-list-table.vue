@@ -112,6 +112,9 @@ function deleteSelect () {
       </div>
     </li>
     <common-loading v-show="pending" :show-in-first="false" />
+    <div v-if="!searchedList.length" class="flex empty">
+      空空如也~
+    </div>
     <li
       v-for="item in searchedList"
       v-show="item._show"
@@ -216,6 +219,13 @@ function deleteSelect () {
   border-radius: 4px;
   overflow: hidden;
   margin: 0 auto 30px;
+
+  .empty {
+    font-size: 18px;
+    font-weight: bold;
+    justify-content: center;
+    padding: 50px 0;
+  }
 
   li {
     display: flex;

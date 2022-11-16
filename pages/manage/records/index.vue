@@ -2,20 +2,19 @@
 import { RecordItem } from "~/utils/types";
 import ManageListTable from "~/comps/manage-list-table.vue";
 
-const searchFn = (item: RecordItem, s:string) => item.images.some(img => img.alt.includes(s));
+const searchFn = (item: RecordItem, s:string) => !item.images.length || item.images.some(img => img.alt.includes(s));
 </script>
 
 <template>
   <div class="manage-record">
     <manage-list-table
-      :show-filter="false"
       col-prefix="record-"
       :search-fn="searchFn"
     >
       <template #images="{ data: images, dataUrl }">
         <nuxt-link :to="dataUrl">
           <the-lazy-img
-            v-for="img,idx in images"
+            v-for="img,idx in (images.length ? images : [{alt: '', src: ''}])"
             :key="idx"
             :container-size="[50, 50]"
             :alt="img.alt"
