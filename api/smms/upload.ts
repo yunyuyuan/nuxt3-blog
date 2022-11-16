@@ -2,6 +2,7 @@ import fs from "fs";
 import axios from "axios";
 import FormData from "form-data";
 import multiparty from "multiparty";
+import tinify from "tinify";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 export default async function (req: VercelRequest, res: VercelResponse) {
@@ -15,10 +16,19 @@ export default async function (req: VercelRequest, res: VercelResponse) {
         });
       });
       const token = data.fields.token[0];
+      const tinyPngToken = data.fields.tinyPngToken[0];
       const file = data.files.file[0];
-      const formData = new FormData();
 
-      formData.append("smfile", fs.createReadStream(file.path), {
+      const formData = new FormData();
+      let fp;
+      // tinypng
+      if (tinyPngToken) {
+        tinify.key = tinyPngToken;
+        fp = tinify.fromFile(file.path).toBuffer();
+      } else {
+        fp = fs.createReadStream(file.path);
+      }
+      formData.append("smfile", fp, {
         knownLength: file.size,
         filepath: file.path,
         filename: file.originalFilename

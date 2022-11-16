@@ -18,7 +18,8 @@ const emit = defineEmits(["confirm", "cancel", "update:modelValue"]);
 const dragIn = ref(false);
 const img = ref<File>();
 const imgUrl = ref();
-const token = ref(getLocalStorage("smms-token"));
+const smmsToken = ref(getLocalStorage("smms-token") || "");
+const tinyPngToken = ref(getLocalStorage("tinypng-token") || "");
 const resultUrl = ref("");
 const uploading = ref(false);
 
@@ -70,7 +71,8 @@ watch(img, (img) => {
 const doUpload = async () => {
   uploading.value = true;
   const formData = new FormData();
-  formData.append("token", token.value);
+  formData.append("token", smmsToken.value);
+  formData.append("tinyPngToken", tinyPngToken.value);
   formData.append("file", img.value);
   try {
     const res = await axios({
@@ -84,7 +86,10 @@ const doUpload = async () => {
         title: "上传成功",
         description: "请手动复制图片链接"
       });
-      setLocalStorage("smms-token", token.value);
+      setLocalStorage("smms-token", smmsToken.value);
+      if (tinyPngToken.value) {
+        setLocalStorage("tinypng-token", tinyPngToken.value);
+      }
     } else {
       throw new Error(res.data.message);
     }
@@ -129,8 +134,11 @@ onUnmounted(() => {
     @update:model-value="emit('update:modelValue', $event)"
   >
     <template #title>
-      上传图片
-      <a style="font-size: 14px;" target="_blank" href="https://doc.sm.ms/">Support by sm.ms</a>
+      上传图片&nbsp;Support by
+      <a style="font-size: 14px;" target="_blank" href="https://doc.sm.ms/">sm.ms</a>
+      <svg-icon name="question" />
+      &
+      <a style="font-size: 14px;" target="_blank" href="https://tinypng.com/developers">tinypng</a>
       <svg-icon name="question" />
     </template>
     <template #body>
@@ -155,9 +163,10 @@ onUnmounted(() => {
           </div>
           <img v-else class="s100" :src="imgUrl">
         </label>
-        <div class="flex footer">
-          <input v-model="token" placeholder="请输入Authentication(API token)">
-          <common-button icon="upload" :loading="uploading" :disabled="!img || !token" @click="doUpload">
+        <div class="flexc footer">
+          <input v-model="smmsToken" placeholder="请输入smms API token">
+          <input v-model="tinyPngToken" placeholder="(可选)请输入tinyPng API token">
+          <common-button icon="upload" :loading="uploading" :disabled="!img || !smmsToken" @click="doUpload">
             上传
           </common-button>
         </div>
@@ -246,9 +255,10 @@ onUnmounted(() => {
     .footer {
       input {
         font-size: 13px;
-        width: 200px;
+        width: 300px;
         padding: 6px;
         margin-right: 5px;
+        margin-bottom: 8px;
       }
     }
   }
