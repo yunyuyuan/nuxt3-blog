@@ -87,6 +87,9 @@ export default defineNuxtConfig({
       ignore: ["/manage"]
     }
   },
+  experimental: {
+    payloadExtraction: false
+  },
   hooks: {
     // why this don't work?
     // "generate:done": () => {

@@ -97,7 +97,7 @@ export default function useContentPage<T extends CommonItem> () {
           htmlContent.value = res;
         });
       }
-      if (item.id && config.MongoDb.enabled) {
+      if (!isPrerender && item.id && config.MongoDb.enabled) {
         const setVisitors = (data) => {
           try {
             item.visitors = data;

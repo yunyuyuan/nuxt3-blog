@@ -34,7 +34,7 @@ export default function useListPage<T extends CommonItem> () {
         }) as T;
       }));
       const query = { type: targetTab.url };
-      if (config.MongoDb.enabled) {
+      if (!isPrerender && config.MongoDb.enabled) {
         // visitors
         const setVisitors = (data) => {
           try {
