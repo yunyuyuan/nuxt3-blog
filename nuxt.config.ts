@@ -92,10 +92,12 @@ export default defineNuxtConfig({
     // "generate:done": () => {
     close: () => {
       // TODO move to gulp
-      const distDir = "./.output/public";
-      fs.writeFileSync(path.resolve(__dirname, `${distDir}/sitemap.xml`),
-        genRss(JSON.parse(fs.readFileSync(path.resolve(__dirname, "./public/rebuild/json/articles.json")).toString())));
-      fs.writeFileSync(path.resolve(__dirname, `${distDir}/timestamp.txt`), getNowDayjs().format("YYYY-MM-DD HH:mm:ss"));
+      if (!isDev) {
+        const distDir = "./.output/public";
+        fs.writeFileSync(path.resolve(__dirname, `${distDir}/sitemap.xml`),
+          genRss(JSON.parse(fs.readFileSync(path.resolve(__dirname, "./public/rebuild/json/articles.json")).toString())));
+        fs.writeFileSync(path.resolve(__dirname, `${distDir}/timestamp.txt`), getNowDayjs().format("YYYY-MM-DD HH:mm:ss"));
+      }
     }
   },
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
