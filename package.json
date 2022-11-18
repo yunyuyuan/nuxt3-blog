@@ -37,6 +37,7 @@
     "husky": "^7.0.0",
     "lint-staged": "^12.4.1",
     "lodash": "^4.17.21",
+    "mongodb": "^4.12.0",
     "multiparty": "^4.2.3",
     "nuxt": "3.0.0-rc.11",
     "postcss-html": "^1.4.1",

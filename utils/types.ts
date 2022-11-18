@@ -7,6 +7,7 @@ export type NeedsItem = {
     start: number;
     end: number;
   }[] | null;
+  visitors?: number;
   _show?: boolean;
 };
 

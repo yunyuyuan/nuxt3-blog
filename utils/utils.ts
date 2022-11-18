@@ -1,6 +1,6 @@
 import fs from "fs";
 import { AllKeys, CommonItem, HeaderTabs, HeaderTabUrl, NeedsItem } from "./types";
-import { githubRepoUrl, inBrowser, isPrerender } from "./constants";
+import { githubRepoUrl, inBrowser, isDev, isPrerender } from "./constants";
 import config from "~/config";
 
 const timestamp = () => useRuntimeConfig().public.timestamp;
@@ -198,7 +198,7 @@ export function deepClone<T extends object> (item: T): T {
 }
 
 /**
- * 给item赋值
+ * 给item赋值, deepClone
  */
 export function assignItem (dest: CommonItem, src: CommonItem) {
   for (const k of (Object.keys(src) as AllKeys[])) {
@@ -214,5 +214,18 @@ export function assignItem (dest: CommonItem, src: CommonItem) {
     } else {
       dest[k] = src[k];
     }
+  }
+}
+
+/**
+ * dev热更新
+ */
+export function devHotListen (event: string, callback: (_: any) => unknown) {
+  if (isDev) {
+    const listener = (e: CustomEvent) => {
+      callback(e.detail);
+      window.removeEventListener(event, listener);
+    };
+    window.addEventListener(event, listener);
   }
 }

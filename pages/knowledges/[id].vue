@@ -65,9 +65,15 @@ initViewer(root);
       <div class="article-container">
         <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
       </div>
-      <span class="modify">
-        更新于：
-        <time>{{ modifyTime }}</time>
+      <span class="foot flex">
+        <span v-if="item.visitors >= 0" class="visitors flex" :title="`被浏览${item.visitors}次`">
+          <svg-icon name="view" />
+          {{ item.visitors }}
+        </span>
+        <span class="modify">
+          更新于：
+          <time>{{ modifyTime }}</time>
+        </span>
       </span>
     </div>
   </div>
@@ -359,11 +365,29 @@ initViewer(root);
       width: 800px;
     }
 
-    > .modify {
-      font-size: 12px;
+    > .foot {
       margin-left: auto;
       margin-top: 40px;
-      color: #f80;
+
+      .modify {
+        font-size: 12px;
+        color: #f80;
+      }
+
+      .visitors {
+        padding-right: 15px;
+        margin-right: 15px;
+        font-size: 13px;
+        color: rgb(54 54 54);
+        border-right: 1px solid rgb(172 172 172);
+
+        svg {
+          margin-right: 5px;
+          fill: rgb(54 54 54);
+
+          @include square(15px);
+        }
+      }
     }
   }
 }

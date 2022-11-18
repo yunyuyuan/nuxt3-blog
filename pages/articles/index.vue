@@ -69,6 +69,10 @@ const toggleTags = (tag: string) => {
               }}</span>
               <b />
               <span>{{ item.len }}字</span>
+              <span v-if="item.visitors >= 0" class="visitors flex" :title="`被浏览${item.visitors}次`">
+                <svg-icon name="view" />
+                {{ item.visitors }}
+              </span>
             </div>
           </nuxt-link>
         </li>
@@ -146,6 +150,12 @@ $space: 13px;
             .foot {
               color: $footer-hover;
 
+              .visitors {
+                svg {
+                  fill: $footer-hover;
+                }
+              }
+
               @include dark-mode {
                 color: $footer-hover-dark;
 
@@ -211,6 +221,21 @@ $space: 13px;
               margin: 0 8px;
               width: 1px;
               background: $footer-color;
+            }
+
+            .visitors {
+              margin: 0 0 0 auto;
+
+              svg {
+                @include square(15px);
+
+                @include dark-mode {
+                  fill: rgb(226 226 226);
+                }
+
+                fill: $footer-color;
+                margin-right: 4px;
+              }
             }
           }
         }

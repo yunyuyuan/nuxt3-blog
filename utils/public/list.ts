@@ -1,8 +1,10 @@
+import axios from "axios";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { deepClone, fetchList, registerCancelWatchEncryptor } from "../utils";
-import { isPrerender } from "./../constants";
+import { deepClone, devHotListen, fetchList, registerCancelWatchEncryptor } from "../utils";
+import { InitialVisitors, isDev, isPrerender } from "./../constants";
 import config from "~/config";
+import { getVisitorsEvent } from "~/dev-server/types";
 
 /**
  * 列表页面通用功能
@@ -27,9 +29,28 @@ export default function useListPage<T extends CommonItem> () {
       resultList.splice(0, 0, ...list.value.map((item) => {
         return deepClone({
           ...item,
-          _show: true
+          _show: true,
+          visitors: InitialVisitors
         }) as T;
       }));
+      const query = { type: targetTab.url };
+      if (config.MongoDb.enabled) {
+        // visitors
+        const setVisitors = (data) => {
+          try {
+            resultList.forEach((item) => {
+              item.visitors = data.find(i => i.nid === item.id)?.nvisitors || 0;
+            });
+          } catch {}
+        };
+
+        if (isDev) {
+          import.meta.hot.send("get-visitors", query);
+          devHotListen(getVisitorsEvent, setVisitors);
+        } else {
+          axios.post("/api/db/get-visitors", query).then(res => setVisitors(res.data));
+        }
+      }
 
       // 有token或者密码正确，显示加密的item
       watch([githubToken, encryptor.passwdCorrect], ([hasToken, hasPwd]) => {

@@ -1,10 +1,13 @@
+import axios from "axios";
 import showdown from "showdown";
 import { parseMarkdown, afterInsertHtml, parseMarkdownSync } from "../markdown";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList, fetchMd } from "../utils";
+import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList, fetchMd, devHotListen } from "../utils";
 import { formatTime } from "../_dayjs";
-import { isPrerender } from "./../constants";
+import { InitialVisitors, isDev, isPrerender } from "./../constants";
+import { incVisitorsEvent } from "~/dev-server/types";
+import config from "~/config";
 
 /**
  * 详情页面通用功能
@@ -30,9 +33,10 @@ export default function useContentPage<T extends CommonItem> () {
     if (!pend || isPrerender) {
       const foundItem = list.value.find(item => item.id === Number(id));
       if (!foundItem) {
-        showError({ statusCode: 404 });
+        showError({ statusCode: 404, fatal: true });
       } else {
         assignItem(item, foundItem);
+        item.visitors = InitialVisitors;
       }
       if (item.encrypt) {
         cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
@@ -92,6 +96,23 @@ export default function useContentPage<T extends CommonItem> () {
         parseMarkdown(mdContent.value).then((res) => {
           htmlContent.value = res;
         });
+      }
+      if (item.id && config.MongoDb.enabled) {
+        const setVisitors = (data) => {
+          try {
+            item.visitors = data;
+          } catch {}
+        };
+        const query = {
+          id: item.id,
+          type: targetTab.url
+        };
+        if (isDev) {
+          import.meta.hot.send("increase-visitors", query);
+          devHotListen(incVisitorsEvent, setVisitors);
+        } else {
+          axios.post("/api/db/inc-visitors", query).then(res => setVisitors(res.data));
+        }
       }
     }
   }, { immediate: true });

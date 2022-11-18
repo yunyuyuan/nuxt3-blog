@@ -1,12 +1,12 @@
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
-import { Plugin } from "vite";
+import type { Plugin } from "vite";
 import { dataToEsm } from "rollup-pluginutils";
 import config from "./config";
 import { getNowDayjs } from "./utils/_dayjs";
 import genRss from "./rss";
-import localServer from "./local-server";
+import devServerPlugins from "./dev-server";
 
 const rawLoaderPlugin: Plugin = {
   name: "raw-file-loader",
@@ -101,7 +101,7 @@ export default defineNuxtConfig({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   vite: {
-    plugins: [rawLoaderPlugin, localServer],
+    plugins: [rawLoaderPlugin, ...devServerPlugins],
     build: {
       rollupOptions: {
         output: {

@@ -2,7 +2,9 @@
 import axios from "axios";
 import FormData from "form-data";
 import { notify } from "~/utils/notify/notify";
-import { getLocalStorage, setLocalStorage } from "~/utils/utils";
+import { devHotListen, getLocalStorage, setLocalStorage } from "~/utils/utils";
+import { isDev } from "~/utils/constants";
+import { uploadImageEvent } from "~/dev-server/types";
 
 const props = defineProps({
   modelValue: Boolean
@@ -68,18 +70,11 @@ watch(img, (img) => {
   }
 });
 
-const doUpload = async () => {
-  uploading.value = true;
-  const formData = new FormData();
-  formData.append("token", smmsToken.value);
-  formData.append("tinyPngToken", tinyPngToken.value);
-  formData.append("file", img.value);
+const afterUpload = (res: any) => {
   try {
-    const res = await axios({
-      url: `https://${window.location.host}/api/smms/upload`,
-      method: "post",
-      data: formData
-    });
+    if (typeof res === "string") {
+      throw new TypeError(res);
+    }
     if (res.data.success) {
       resultUrl.value = res.data.data.url;
       notify({
@@ -103,6 +98,34 @@ const doUpload = async () => {
     uploading.value = false;
   }
 };
+
+const doUpload = () => {
+  uploading.value = true;
+  if (!isDev) {
+    const formData = new FormData();
+    formData.append("token", smmsToken.value);
+    formData.append("tinyPngToken", tinyPngToken.value);
+    formData.append("file", img.value);
+    axios({
+      url: `https://${window.location.host}/api/smms/upload`,
+      method: "post",
+      data: formData
+    }).then(res => afterUpload(res)).catch(err => afterUpload(err));
+  } else {
+    const reader = new FileReader();
+    reader.readAsDataURL(img.value);
+    reader.onload = (event) => {
+      import.meta.hot.send("upload-image", {
+        token: smmsToken.value,
+        tinyPngToken: tinyPngToken.value,
+        file: event.target.result,
+        filename: img.value.name
+      });
+    };
+  }
+};
+
+devHotListen(uploadImageEvent, afterUpload);
 
 const resultInput = ref<HTMLInputElement>();
 let clipboard = null;
@@ -135,10 +158,10 @@ onUnmounted(() => {
   >
     <template #title>
       上传图片&nbsp;Support by
-      <a style="font-size: 14px;" target="_blank" href="https://doc.sm.ms/">sm.ms</a>
+      <a target="_blank" href="https://doc.sm.ms/">sm.ms</a>
       <svg-icon name="question" />
       &
-      <a style="font-size: 14px;" target="_blank" href="https://tinypng.com/developers">tinypng</a>
+      <a target="_blank" href="https://tinypng.com/developers">tinypng</a>
       <svg-icon name="question" />
     </template>
     <template #body>
@@ -149,7 +172,7 @@ onUnmounted(() => {
         </div>
         <label
           class="flex"
-          :class="{dragin: dragIn}"
+          :class="{ dragin: dragIn }"
           @dragleave="dragIn = false"
           @dragenter.prevent
           @dragover.prevent="!dragIn && (dragIn = true)"
@@ -182,6 +205,7 @@ onUnmounted(() => {
   .modal-title {
     a {
       color: $theme-color;
+      font-size: 16px;
     }
 
     svg {

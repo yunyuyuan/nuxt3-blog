@@ -91,7 +91,7 @@ initViewer(root);
           />
         </div>
         <div class="more-info flex">
-          <div class="tag flex">
+          <div class="tags flex">
             <span>标签:</span>
             <the-tag
               v-for="tag in item.tags"
@@ -104,6 +104,10 @@ initViewer(root);
           <span class="time">
             更新于:
             <span>{{ modifyTime }}</span>
+          </span>
+          <span v-if="item.visitors >= 0" class="visitors flex" :title="`被浏览${item.visitors}次`">
+            <svg-icon name="view" />
+            {{ item.visitors }}
           </span>
         </div>
       </div>
@@ -169,6 +173,7 @@ initViewer(root);
       }
 
       >.more-info {
+        position: relative;
         margin-top: 30px;
         border-top: 1px solid #c7c7c7;
 
@@ -180,7 +185,7 @@ initViewer(root);
         text-align: center;
         font-size: 12px;
 
-        div {
+        .tags {
           flex-wrap: wrap;
 
           span {
@@ -197,11 +202,27 @@ initViewer(root);
           }
         }
 
-        > span {
+        > .time {
           margin-left: auto;
 
           span {
             color: #ff6a00;
+          }
+        }
+
+        .visitors {
+          position: absolute;
+          right: 0;
+          top: 0;
+          background: $background;
+          padding: 0 10px;
+          transform: translateY(-50%);
+          margin-right: 8px;
+
+          svg {
+            margin-right: 5px;
+
+            @include square(15px);
           }
         }
       }
@@ -427,14 +448,14 @@ initViewer(root);
     }
 
     .more-info {
-      width: calc(100% - 120px);
+      width: 100%;
       padding: 8px 60px 10px;
 
-      div {
+      .tags {
         margin-left: 8px;
       }
 
-      > span {
+      .time {
         margin-right: 8px;
       }
     }
@@ -470,11 +491,11 @@ initViewer(root);
       width: 100%;
       padding: 8px 0 10px;
 
-      div {
+      .tags {
         margin-left: 8px;
       }
 
-      > span {
+      .time {
         margin-right: 8px;
       }
     }

@@ -7,6 +7,8 @@ export const ModalContainerId = "_MODAL_CONTAINER_";
 export const ViewerAttr = "data-viewer";
 export const GithubTokenKey = "github-token";
 
+export const InitialVisitors = config.MongoDb.enabled ? (Math.max(0, Math.floor(config.MongoDb.initialVisitors) || 0)) : -1;
+
 export const githubRepoUrl = `https://github.com/${config.githubName}/${config.githubRepo}`;
 
 export const inBrowser = process.client;

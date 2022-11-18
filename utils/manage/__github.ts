@@ -1,6 +1,8 @@
 import { CommonItem } from "../types";
 import { notify } from "../notify/notify";
-import { UpdateRebuild } from "~/local-server";
+import { devHotListen } from "../utils";
+import { UpdateRebuild } from "~/dev-server/rebuild";
+import { rebuildEvent } from "~/dev-server/types";
 
 export function isAuthor (): never {
   throw new Error("Can't do that");
@@ -37,7 +39,7 @@ export function deleteList (
 
 function listenServer (): Promise<boolean> {
   return new Promise((resolve, reject) => {
-    import.meta.hot.on("rebuild:result", (data) => {
+    devHotListen(rebuildEvent, (data) => {
       if (typeof data === "boolean") {
         resolve(data);
         if (data) {

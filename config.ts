@@ -17,5 +17,9 @@ export default {
     records: false,
     knowledges: false
   }, // 是否开启评论
+  MongoDb: {
+    enabled: true, // 是否开启mongodb(浏览量统计)
+    initialVisitors: 0 // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
+  },
   CloudflareAnalyze: "89460884e1e44e02a7320077f16d620f" // cloudflare的webanalyze
 };

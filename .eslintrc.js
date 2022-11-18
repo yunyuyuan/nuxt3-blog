@@ -1,3 +1,7 @@
+/**
+* @type {import("eslint").Linter.Config}
+*/
+
 module.exports = {
   env: {
     browser: true,
@@ -27,11 +31,14 @@ module.exports = {
         vars: "all",
         args: "after-used",
         ignoreRestSiblings: false,
-        argsIgnorePattern: "^_"
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_"
       }
     ],
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "typescript-config/strict": "off",
     "vue/no-multiple-template-root": "off",
     "vue/no-v-model-argument": "off",
     "vue/no-v-html": "off"

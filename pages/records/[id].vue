@@ -4,7 +4,7 @@ import useContentPage from "~/utils/public/detail";
 import { RecordItem } from "~/utils/types";
 import { useComment } from "~/utils/utils";
 import config from "~/config";
-import { initViewer } from "~~/utils/viewer";
+import { initViewer } from "~/utils/viewer";
 
 const { item, tabUrl, publishTime, modifyTime, htmlContent, markdownRef, mdPending } = useContentPage<RecordItem>();
 
@@ -29,9 +29,13 @@ initViewer(root);
       />
     </div>
     <div class="text" :class="{'has-comment': hasComment}">
-      <p :title="'作成于 ' + publishTime + '，更新于 ' + modifyTime">
+      <p class="flex" :title="'作成于 ' + publishTime + '，更新于 ' + modifyTime">
         <svg-icon name="write" />
         <time>{{ literalTime(item.time) }}</time>
+        <span v-if="item.visitors >= 0" class="visitors flex" :title="`被浏览${item.visitors}次`">
+          <svg-icon name="view" />
+          {{ item.visitors }}
+        </span>
       </p>
       <common-loading v-show="mdPending" :show-in-first="false" />
       <div class="article-container">
@@ -84,6 +88,19 @@ initViewer(root);
           color: rgb(221 221 221);
         }
       }
+
+      .visitors {
+        margin-left: auto;
+        font-size: 13px;
+        color: rgb(54 54 54);
+
+        svg {
+          margin-right: 5px;
+          fill: rgb(54 54 54);
+
+          @include square(15px);
+        }
+      }
     }
 
     >.article-container {
@@ -94,7 +111,9 @@ initViewer(root);
 
 @include mobile {
   .record-detail {
-    min-width: unset;
+    width: 96%;
+    margin-left: 2%;
+    margin-right: 2%;
   }
 }
 </style>
