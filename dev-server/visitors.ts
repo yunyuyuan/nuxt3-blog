@@ -5,7 +5,7 @@ import { getVisitorsEvent, incVisitorsEvent } from "./types";
 export default {
   name: "nb-visitors-plugin",
   configureServer (server) {
-    server.ws.on("get-visitors", async (data, client) => {
+    server.ws.on(getVisitorsEvent, async (data, client) => {
       try {
         const result = await getVisitors(data.type);
         client.send(getVisitorsEvent, result);
@@ -13,7 +13,7 @@ export default {
         client.send(getVisitorsEvent, e.toString());
       }
     });
-    server.ws.on("increase-visitors", async (data, client) => {
+    server.ws.on(incVisitorsEvent, async (data, client) => {
       try {
         client.send(incVisitorsEvent, await increaseVisitors(data));
       } catch (e) {

@@ -8,6 +8,8 @@ import { getNowDayjs } from "./utils/_dayjs";
 import genRss from "./rss";
 import devServerPlugins from "./dev-server";
 
+const isDev = process.env.NODE_ENV === "development";
+
 const rawLoaderPlugin: Plugin = {
   name: "raw-file-loader",
   transform (_: string, filepath: string) {
@@ -32,17 +34,17 @@ fs.readdirSync("./public/sticker").forEach((dir) => {
 });
 
 const scripts = [];
-if (config.CloudflareAnalyze) {
+const analyzeId = config.CloudflareAnalyze || process.env.CloudflareAnalyze;
+if (analyzeId && !isDev) {
   scripts.push({
     src: "https://static.cloudflareinsights.com/beacon.min.js",
     async: false,
     defer: true,
-    "data-cf-beacon": `{"token": "${config.CloudflareAnalyze}"}`
+    "data-cf-beacon": `{"token": "${analyzeId}"}`
   });
 }
 
 const timestamp = Date.now();
-const isDev = process.env.NODE_ENV === "development";
 
 // const prefix = "monaco-editor/esm/vs";
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
@@ -74,11 +76,13 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       stickers,
-      timestamp,
-      dev: isDev
+      timestamp
     },
     app: {
-      NUXT_ENV_CURRENT_GIT_SHA: execSync("git rev-parse HEAD").toString().trim()
+      NUXT_ENV_CURRENT_GIT_SHA: execSync("git rev-parse HEAD").toString().trim(),
+      mongoDBEnabled: !!process.env.MONGODB_URI,
+      cmtRepId: config.CommentRepoId || process.env.CommentRepoId,
+      cmtRepCateId: config.CommentDiscussionCategoryId || process.env.CommentDiscussionCategoryId
     }
   },
   nitro: {

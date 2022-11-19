@@ -24,7 +24,7 @@ function removeFile (file: FileItem): void {
 export default {
   name: "nb-rebuild-plugin",
   configureServer (server) {
-    server.ws.on("rebuild:update", (data: UpdateRebuild, client) => {
+    server.ws.on(rebuildEvent, (data: UpdateRebuild, client) => {
       try {
         data.additions.forEach(writeFile);
         data.deletions.forEach(removeFile);

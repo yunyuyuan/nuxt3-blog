@@ -1,13 +1,12 @@
-import axios from "axios";
 import showdown from "showdown";
 import { parseMarkdown, afterInsertHtml, parseMarkdownSync } from "../markdown";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList, fetchMd, devHotListen } from "../utils";
+import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList, fetchMd } from "../utils";
 import { formatTime } from "../_dayjs";
-import { InitialVisitors, isDev, isPrerender } from "./../constants";
+import { InitialVisitors, isPrerender } from "./../constants";
+import { DBOperate } from ".";
 import { incVisitorsEvent } from "~/dev-server/types";
-import config from "~/config";
 
 /**
  * 详情页面通用功能
@@ -97,22 +96,18 @@ export default function useContentPage<T extends CommonItem> () {
           htmlContent.value = res;
         });
       }
-      if (!isPrerender && item.id && config.MongoDb.enabled) {
-        const setVisitors = (data) => {
-          try {
+      if (item.id) {
+        DBOperate({
+          hotEvent: incVisitorsEvent,
+          apiPath: "/db/inc-visitors",
+          query: {
+            id: item.id,
+            type: targetTab.url
+          },
+          callback: (data) => {
             item.visitors = data;
-          } catch {}
-        };
-        const query = {
-          id: item.id,
-          type: targetTab.url
-        };
-        if (isDev) {
-          import.meta.hot.send("increase-visitors", query);
-          devHotListen(incVisitorsEvent, setVisitors);
-        } else {
-          axios.post("/api/db/inc-visitors", query).then(res => setVisitors(res.data));
-        }
+          }
+        });
       }
     }
   }, { immediate: true });

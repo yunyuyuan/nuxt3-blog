@@ -13,7 +13,7 @@ export function createCommit (
   additions: { path: string; content: string }[] = [],
   deletions: { path: string }[] = []
 ): Promise<boolean> {
-  import.meta.hot.send("rebuild:update", {
+  import.meta.hot.send(rebuildEvent, {
     additions,
     deletions
   } as UpdateRebuild);
@@ -25,7 +25,7 @@ export function deleteList (
   dels: CommonItem[]
 ): Promise<boolean | void> {
   const folder = useCurrentTab().value.url;
-  import.meta.hot.send("rebuild:update", {
+  import.meta.hot.send(rebuildEvent, {
     additions: [{
       path: `public/rebuild/json${folder}.json`,
       content: JSON.stringify(newList, null, 2)

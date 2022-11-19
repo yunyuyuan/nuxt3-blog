@@ -101,42 +101,45 @@ export function getUniqueId (): typeof uniqueId {
  */
 export function useComment (key: HeaderTabUrl) {
   const tab = key.substring(1);
-  const hasComment = config.Comment[tab];
+  const { cmtRepCateId, cmtRepId } = useRuntimeConfig().app;
+  const hasComment = config.Comment[tab] && cmtRepCateId && cmtRepId;
   const root = ref<HTMLElement>();
   onMounted(() => {
     if (hasComment) {
-      const { themeMode } = useThemeMode();
-      const getTheme = () => {
-        return themeMode.value === "light" ? "light" : "dark_dimmed";
-      };
+      if (cmtRepId && cmtRepCateId) {
+        const { themeMode } = useThemeMode();
+        const getTheme = () => {
+          return themeMode.value === "light" ? "light" : "dark_dimmed";
+        };
 
-      const script = document.createElement("script");
-      script.src = "https://giscus.app/client.js";
-      script.setAttribute("data-repo", `${config.githubName}/${config.githubRepo}`);
-      script.setAttribute("data-repo-id", config.CommentRepoId);
-      script.setAttribute("data-category", "Announcements");
-      script.setAttribute("data-category-id", config.CommentDiscussionCategoryId);
-      script.setAttribute("data-mapping", "pathname");
-      script.setAttribute("data-strict", "0");
-      script.setAttribute("data-reactions-enabled", "1");
-      script.setAttribute("data-emit-metadata", "0");
-      script.setAttribute("data-input-position", "top");
-      script.setAttribute("data-theme", getTheme());
-      script.setAttribute("data-lang", "zh-CN");
-      script.setAttribute("crossorigin", "anonymous");
-      script.setAttribute("async", "");
-      root.value.appendChild(script);
-      watch(themeMode, () => {
-        const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
-        if (!iframe) { return; }
-        iframe.contentWindow.postMessage({
-          giscus: {
-            setConfig: {
-              theme: getTheme()
+        const script = document.createElement("script");
+        script.src = "https://giscus.app/client.js";
+        script.setAttribute("data-repo", `${config.githubName}/${config.githubRepo}`);
+        script.setAttribute("data-repo-id", cmtRepId);
+        script.setAttribute("data-category", "Announcements");
+        script.setAttribute("data-category-id", cmtRepCateId);
+        script.setAttribute("data-mapping", "pathname");
+        script.setAttribute("data-strict", "0");
+        script.setAttribute("data-reactions-enabled", "1");
+        script.setAttribute("data-emit-metadata", "0");
+        script.setAttribute("data-input-position", "top");
+        script.setAttribute("data-theme", getTheme());
+        script.setAttribute("data-lang", "zh-CN");
+        script.setAttribute("crossorigin", "anonymous");
+        script.setAttribute("async", "");
+        root.value.appendChild(script);
+        watch(themeMode, () => {
+          const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+          if (!iframe) { return; }
+          iframe.contentWindow.postMessage({
+            giscus: {
+              setConfig: {
+                theme: getTheme()
+              }
             }
-          }
-        }, "https://giscus.app");
-      });
+          }, "https://giscus.app");
+        });
+      }
     }
   });
   return { root, hasComment };

@@ -1,10 +1,10 @@
-import { inBrowser, GithubTokenKey } from "~/utils/constants";
+import { isDev, inBrowser, GithubTokenKey } from "~/utils/constants";
 import { getLocalStorage } from "~/utils/utils";
 import { isAuthor } from "~/utils/manage/github";
 import { notify } from "~/utils/notify/notify";
 
 export default defineNuxtPlugin(() => {
-  if (useRuntimeConfig().public.dev) {
+  if (isDev) {
     useGithubToken().value = "LocalServer";
     return;
   }

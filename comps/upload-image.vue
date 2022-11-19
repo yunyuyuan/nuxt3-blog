@@ -115,7 +115,7 @@ const doUpload = () => {
     const reader = new FileReader();
     reader.readAsDataURL(img.value);
     reader.onload = (event) => {
-      import.meta.hot.send("upload-image", {
+      import.meta.hot.send(uploadImageEvent, {
         token: smmsToken.value,
         tinyPngToken: tinyPngToken.value,
         file: event.target.result,

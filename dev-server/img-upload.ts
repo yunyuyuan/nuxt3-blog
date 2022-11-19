@@ -5,7 +5,7 @@ import { uploadImageEvent } from "./types";
 export default {
   name: "nb-img-upload-plugin",
   configureServer (server) {
-    server.ws.on("upload-image", async (data: {
+    server.ws.on(uploadImageEvent, async (data: {
       token: string,
       tinyPngToken: string,
       file: string,

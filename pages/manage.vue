@@ -4,10 +4,8 @@ import { HeaderTabs } from "~/utils/types";
 import { isAuthor } from "~/utils/manage/github";
 import { notify } from "~/utils/notify/notify";
 import { calcRocketUrl, rmLocalStorage, setLocalStorage } from "~/utils/utils";
-import { GithubTokenKey } from "~/utils/constants";
+import { isDev, GithubTokenKey } from "~/utils/constants";
 import UploadImage from "~/comps/upload-image.vue";
-
-const isDev = useRuntimeConfig().public.dev;
 
 const pageLoading = useLoading();
 

@@ -1,8 +1,8 @@
-import axios from "axios";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { deepClone, devHotListen, fetchList, registerCancelWatchEncryptor } from "../utils";
-import { InitialVisitors, isDev, isPrerender } from "./../constants";
+import { deepClone, fetchList, registerCancelWatchEncryptor } from "../utils";
+import { InitialVisitors, isPrerender } from "./../constants";
+import { DBOperate } from ".";
 import config from "~/config";
 import { getVisitorsEvent } from "~/dev-server/types";
 
@@ -33,24 +33,16 @@ export default function useListPage<T extends CommonItem> () {
           visitors: InitialVisitors
         }) as T;
       }));
-      const query = { type: targetTab.url };
-      if (!isPrerender && config.MongoDb.enabled) {
-        // visitors
-        const setVisitors = (data) => {
-          try {
-            resultList.forEach((item) => {
-              item.visitors = data.find(i => i.nid === item.id)?.nvisitors || 0;
-            });
-          } catch {}
-        };
-
-        if (isDev) {
-          import.meta.hot.send("get-visitors", query);
-          devHotListen(getVisitorsEvent, setVisitors);
-        } else {
-          axios.post("/api/db/get-visitors", query).then(res => setVisitors(res.data));
+      DBOperate({
+        hotEvent: getVisitorsEvent,
+        apiPath: "/db/get-visitors",
+        query: { type: targetTab.url },
+        callback: (data) => {
+          resultList.forEach((item) => {
+            item.visitors = data.find(i => i.nid === item.id)?.nvisitors || 0;
+          });
         }
-      }
+      });
 
       // 有token或者密码正确，显示加密的item
       watch([githubToken, encryptor.passwdCorrect], ([hasToken, hasPwd]) => {
