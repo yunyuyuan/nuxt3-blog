@@ -30,6 +30,7 @@ Feature
 - [ ] pagination
 - [x] database integration(visitors)
 - [ ] SSR, for self-host
+- [ ] algolia searching
 - [ ] images migration
 
 Appearance

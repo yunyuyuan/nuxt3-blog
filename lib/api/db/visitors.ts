@@ -32,7 +32,7 @@ export async function increaseVisitors ({ id, type }: {id: number, type: HeaderT
     }
   }, sqlOptions);
   if (result.value) {
-    return result.value.nvisitors + 1;
+    return result.value.nvisitors! + 1;
   } else {
     await collection.insertOne({
       ...preset,

@@ -20,7 +20,7 @@ function generateSiteMap () {
 function generateTimestamp () {
   nbLog("inject timestamp");
   const timestamp = getNowDayjs().format("YYYY-MM-DD HH:mm:ss");
-  // fs.writeFileSync(resolve(__dirname, `${distDir}/timestamp.txt`), timestamp);
+  fs.writeFileSync(resolve(distPath, "timestamp.txt"), timestamp);
   const aboutHtmlPath = resolve(distPath, "about/index.html");
   if (fs.existsSync(aboutHtmlPath)) {
     fs.writeFileSync(

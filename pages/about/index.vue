@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { themeBackground, isDev } from "~/utils/constants";
+import { isDev, isPrerender, themeBackground } from "~/utils/constants";
 import config from "~/config";
 
 const commitSha = computed(() => useRuntimeConfig().app.NUXT_ENV_CURRENT_GIT_SHA);
@@ -13,9 +13,10 @@ const paragraphs = [
   "光坠之地，吾之忧祈",
   "——2021.12.4"
 ];
-onMounted(() => {
-  if (isDev) {
-    buildTime.value = "xxxx-xx-xx";
+
+onBeforeMount(async () => {
+  if (!isPrerender) {
+    buildTime.value = (!isDev ? (await (await fetch("/timestamp.txt")).text()) : "xxxx-xx-xx");
   }
 });
 </script>

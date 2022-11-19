@@ -1,12 +1,12 @@
-import multiparty from "multiparty";
+import { Form } from "multiparty";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import upload from "../../lib/api/smms/upload";
 
 export default async function (req: VercelRequest, res: VercelResponse) {
-  if (req.method.toUpperCase() === "POST") {
+  if (req.method?.toUpperCase() === "POST") {
     try {
-      const form = new multiparty.Form();
-      const data = await new Promise<{fields, files}>((resolve, reject) => {
+      const form = new Form();
+      const data = await new Promise<{fields: any, files: any}>((resolve, reject) => {
         form.parse(req, function (err, fields, files) {
           if (err) { reject(err); }
           resolve({ fields, files });
@@ -19,7 +19,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
       const response = await upload({ token, tinyPngToken, file });
 
       res.status(response.status).send(response.data);
-    } catch (e) {
+    } catch (e: any) {
       res.status(503).send(e.toString());
     }
   } else {

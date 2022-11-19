@@ -27,6 +27,7 @@
     "@types/gulp": "^4.0.9",
     "@types/headroom.js": "^0.12.2",
     "@types/lodash": "^4.14.182",
+    "@types/multiparty": "^0.0.33",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "@vercel/node": "^2.5.8",

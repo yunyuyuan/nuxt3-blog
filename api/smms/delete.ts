@@ -2,7 +2,7 @@ import axios from "axios";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 export default async function (req: VercelRequest, res: VercelResponse) {
-  if (req.method.toUpperCase() === "POST") {
+  if (req.method?.toUpperCase() === "POST") {
     try {
       const response = await axios({
         url: `https://sm.ms/api/v2/delete/${req.body.hash}`,
@@ -12,7 +12,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
         }
       });
       res.send(response.data);
-    } catch (e) {
+    } catch (e: any) {
       res.send(e.response.data);
     }
   } else {

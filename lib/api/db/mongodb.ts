@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { MongoClient } from "mongodb";
+import { MongoClient, Document } from "mongodb";
 
 const uri = process.env.MONGODB_URI as string; // your mongodb connection string
 const options = {};
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === "development") {
 // separate module, the client can be shared across functions.
 export default clientPromise;
 
-export async function getCollection<T>() {
+export async function getCollection<T extends Document>() {
   const client = await clientPromise;
   return client.db("nuxt3-blog").collection<T>("visitors");
 }

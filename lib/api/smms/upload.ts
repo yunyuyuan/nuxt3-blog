@@ -3,7 +3,10 @@ import axios from "axios";
 import FormData from "form-data";
 import tinify from "tinify";
 
-export default async function ({ token, tinyPngToken, file }) {
+export default async function (
+  { token, tinyPngToken, file }:
+  {token: string, tinyPngToken: string, file: any}
+) {
   const isBuffer = file.path instanceof Buffer;
 
   const formData = new FormData();
@@ -24,7 +27,7 @@ export default async function ({ token, tinyPngToken, file }) {
       const buffer = await source.toBuffer();
       fp = buffer;
       size = Buffer.byteLength(buffer);
-    } catch (e) {
+    } catch (e: any) {
       throw new Error(`Error from tinypng: ${e.toString()}`);
     }
   }
@@ -34,7 +37,7 @@ export default async function ({ token, tinyPngToken, file }) {
     filepath: isBuffer ? file.originalFilename : file.path,
     filename: file.originalFilename
   });
-  const len = await new Promise((resolve, reject) => {
+  const len = await new Promise<number>((resolve, reject) => {
     formData.getLength((err, len) => {
       if (err) {
         reject(err);
