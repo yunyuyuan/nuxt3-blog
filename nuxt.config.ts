@@ -1,11 +1,8 @@
 import fs from "fs";
-import path from "path";
 import { execSync } from "child_process";
 import type { Plugin } from "vite";
 import { dataToEsm } from "rollup-pluginutils";
 import config from "./config";
-import { getNowDayjs } from "./utils/_dayjs";
-import genRss from "./rss";
 import devServerPlugins from "./dev-server";
 
 const isDev = process.env.NODE_ENV === "development";
@@ -28,7 +25,7 @@ const rawLoaderPlugin: Plugin = {
 fs.writeFileSync("./assets/style/_theme.scss", `$theme: ${config.themeColor};`);
 
 // stickers
-const stickers = {};
+const stickers: Record<string, any> = {};
 fs.readdirSync("./public/sticker").forEach((dir) => {
   stickers[dir] = fs.readdirSync(`./public/sticker/${dir}`).length;
 });
@@ -93,19 +90,6 @@ export default defineNuxtConfig({
   },
   experimental: {
     payloadExtraction: false
-  },
-  hooks: {
-    // why this don't work?
-    // "generate:done": () => {
-    close: () => {
-      // TODO move to gulp
-      if (!isDev) {
-        const distDir = "./.output/public";
-        fs.writeFileSync(path.resolve(__dirname, `${distDir}/sitemap.xml`),
-          genRss(JSON.parse(fs.readFileSync(path.resolve(__dirname, "./public/rebuild/json/articles.json")).toString())));
-        fs.writeFileSync(path.resolve(__dirname, `${distDir}/timestamp.txt`), getNowDayjs().format("YYYY-MM-DD HH:mm:ss"));
-      }
-    }
   },
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

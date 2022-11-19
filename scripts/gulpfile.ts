@@ -1,8 +1,13 @@
-// eslint-disable-next-line import/named
-import { task } from "gulp";
+import gulp from "gulp";
 import chpwd from "./change-pwd";
+import generate from "./generate";
 
-task("chpwd", (cb) => {
+gulp.task("chpwd", (cb) => {
   chpwd();
+  cb();
+});
+
+gulp.task("generate", async (cb) => {
+  await generate();
   cb();
 });

@@ -3,7 +3,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
+    "generate": "gulp generate",
     "chpwd": "gulp chpwd",
     "lint": "eslint --fix --ext .ts,vue --ignore-path .gitignore .",
     "preview": "vite preview",
@@ -30,6 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "@vercel/node": "^2.5.8",
+    "colors": "^1.4.0",
     "eslint": "^8.15.0",
     "eslint-plugin-vue": "^8.7.1",
     "form-data": "^4.0.0",

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { isDev, isPrerender, themeBackground } from "~/utils/constants";
+import { themeBackground, isDev } from "~/utils/constants";
 import config from "~/config";
 
 const commitSha = computed(() => useRuntimeConfig().app.NUXT_ENV_CURRENT_GIT_SHA);
 const commitUrl = computed(() => `https://github.com/${config.githubName}/${config.githubRepo}/commit/${commitSha.value}`);
-const buildTime = ref<string>("Unknown");
+const buildTime = ref<string>("$(inject:timestamp)");
 
 const paragraphs = [
   "幽深宇宙已岁逾百亿，惟闪烁星光点缀生机",
@@ -13,9 +13,10 @@ const paragraphs = [
   "光坠之地，吾之忧祈",
   "——2021.12.4"
 ];
-
-onBeforeMount(async () => {
-  buildTime.value = ((!isPrerender && !isDev) ? (await (await fetch("/timestamp.txt")).text()) : "xxxx-xx-xx");
+onMounted(() => {
+  if (isDev) {
+    buildTime.value = "xxxx-xx-xx";
+  }
 });
 </script>
 

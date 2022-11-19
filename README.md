@@ -29,6 +29,8 @@ Feature
 - [x] partial encrypting
 - [ ] pagination
 - [x] database integration(visitors)
+- [ ] SSR, for self-host
+- [ ] images migration
 
 Appearance
 - [x] global theme color
