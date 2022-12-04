@@ -90,7 +90,7 @@ const isFirst = ref(true);
       </div>
       <sub />
       <nuxt-link class="about" to="/about" title="关于">
-        <img class="s100" src="/favicon.jpg" alt="头像">
+        <img class="s100" src="/favicon.png" alt="头像">
       </nuxt-link>
       <span v-show="!!pageLoading.loadingState.value" class="loading" :style="{width: `${pageLoading.loadingState.value}%`}" />
     </nav>

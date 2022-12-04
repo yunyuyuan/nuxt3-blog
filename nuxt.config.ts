@@ -63,7 +63,7 @@ export default defineNuxtConfig({
         { name: "keywords", content: config.SEO_keywords }
       ],
       link: [
-        { rel: "shortcut icon", href: "/favicon.jpg" }
+        { rel: "shortcut icon", href: "/favicon.png" }
       ],
       script: scripts,
       title: config.title
