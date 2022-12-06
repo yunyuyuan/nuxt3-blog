@@ -46,3 +46,4 @@ Appearance
 ### Others
 * 技术解答/交流qq群：745105612
 * 邮箱：me@yunyuyuan.net
+* discord: https://discord.gg/HtSehSMYXa
