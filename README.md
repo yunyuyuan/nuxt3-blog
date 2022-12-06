@@ -1,5 +1,5 @@
 <p align="center">
-<img width="50%" src="public/favicon.png" />
+<img width="200px" src="public/favicon.png" />
 </p>
 <h1 align="center">💎Nuxt3-Blog</h1>
 
