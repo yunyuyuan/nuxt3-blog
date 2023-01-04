@@ -6,7 +6,8 @@ export default async function (req: VercelRequest, res: VercelResponse) {
     try {
       res.status(200).send(await increaseVisitors({
         id: req.body.id,
-        type: req.body.type
+        type: req.body.type,
+        inc: req.body.inc
       }));
     } catch (e: any) {
       res.status(503).send(e.toString());

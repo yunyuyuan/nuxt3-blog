@@ -1,3 +1,4 @@
+import config from "../../../config";
 import { HeaderTabUrl } from "./../../../utils/types";
 import { getCollection } from "./mongodb";
 
@@ -20,24 +21,25 @@ export async function getVisitors (type: HeaderTabUrl) {
   return await results.toArray();
 }
 
-export async function increaseVisitors ({ id, type }: {id: number, type: HeaderTabUrl}) {
+export async function increaseVisitors ({ id, type, inc }: {id: number, type: HeaderTabUrl, inc?: boolean}) {
   const collection = await getCollection<VisitorsDb>();
   const preset: VisitorsDb = {
     nid: id,
     ntype: type
   };
+  const incN = inc ? 1 : 0;
   const result = await collection.findOneAndUpdate(preset, {
     $inc: {
-      nvisitors: 1
+      nvisitors: incN
     }
   }, sqlOptions);
   if (result.value) {
-    return result.value.nvisitors! + 1;
+    return result.value.nvisitors! + incN;
   } else {
     await collection.insertOne({
       ...preset,
-      nvisitors: 1
+      nvisitors: config.MongoDb.initialVisitors
     });
-    return 1;
+    return config.MongoDb.initialVisitors;
   }
 }

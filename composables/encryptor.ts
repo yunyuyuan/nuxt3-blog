@@ -71,7 +71,7 @@ export const useEncryptor = () => {
    */
   const decryptOrWatchToDecrypt = async (
     callback: (_decrypt: DecryptFunction) => Promise<void>,
-    firstIsFailed = () => undefined
+    firstIsFailed: () => any = () => undefined
   ): Promise<() => void> => {
     try {
       if (!usePasswd.value) {

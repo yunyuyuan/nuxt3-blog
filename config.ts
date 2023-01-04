@@ -24,7 +24,8 @@ export default {
   }, // 是否开启评论，请先设置上面的 CommentRepoId 和 CommentDiscussionCategoryId
   MongoDb: {
     enabled: true, // 是否开启mongodb(浏览量统计)，请先设置 https://vercel.com/integrations/mongodbatlas
-    initialVisitors: 0 // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
+    initialVisitors: 1, // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
+    visitFromOwner: false // 网站拥有者访问时，是否增加浏览量
   },
   // --- 下面是可改可不改的 ----
   themeColor: "#2aa0bb", // 主题色

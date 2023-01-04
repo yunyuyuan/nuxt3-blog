@@ -1,7 +1,7 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
 import { deepClone, fetchList, registerCancelWatchEncryptor } from "../utils";
-import { InitialVisitors, isPrerender } from "./../constants";
+import { isPrerender } from "./../constants";
 import { DBOperate } from ".";
 import config from "~/config";
 import { getVisitorsEvent } from "~/dev-server/types";
@@ -30,7 +30,7 @@ export default function useListPage<T extends CommonItem> () {
         return deepClone({
           ...item,
           _show: true,
-          visitors: InitialVisitors
+          visitors: 0
         }) as T;
       }));
       DBOperate({

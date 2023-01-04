@@ -4,8 +4,9 @@ import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
 import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList, fetchMd } from "../utils";
 import { formatTime } from "../_dayjs";
-import { InitialVisitors, isPrerender } from "./../constants";
+import { isPrerender } from "./../constants";
 import { DBOperate } from ".";
+import config from "~/config";
 import { incVisitorsEvent } from "~/dev-server/types";
 
 /**
@@ -35,7 +36,7 @@ export default function useContentPage<T extends CommonItem> () {
         showError({ statusCode: 404, fatal: true });
       } else {
         assignItem(item, foundItem);
-        item.visitors = InitialVisitors;
+        item.visitors = 0;
       }
       if (item.encrypt) {
         cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
@@ -102,7 +103,8 @@ export default function useContentPage<T extends CommonItem> () {
           apiPath: "/db/inc-visitors",
           query: {
             id: item.id,
-            type: targetTab.url
+            type: targetTab.url,
+            inc: config.MongoDb.visitFromOwner || !githubToken.value
           },
           callback: (data) => {
             item.visitors = data;

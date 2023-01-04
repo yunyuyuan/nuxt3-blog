@@ -112,7 +112,7 @@ const getUploadInfo = async () => {
     if (!encryptor.usePasswd.value) {
       return notify({
         type: "error",
-        title: "请先解密"
+        title: "请先正确输入密码"
       });
     }
     await processEncryptDescrypt(newItem, encryptor.encrypt, targetTab.url);
