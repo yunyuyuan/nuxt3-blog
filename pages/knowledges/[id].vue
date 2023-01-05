@@ -381,6 +381,14 @@ initViewer(root);
         color: rgb(54 54 54);
         border-right: 1px solid rgb(172 172 172);
 
+        @include dark-mode {
+          color: rgb(221 221 221);
+
+          svg {
+            fill: rgb(221 221 221);
+          }
+        }
+
         svg {
           margin-right: 5px;
           fill: rgb(54 54 54);

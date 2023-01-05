@@ -219,6 +219,14 @@ initViewer(root);
           transform: translateY(-50%);
           margin-right: 8px;
 
+          @include dark-mode {
+            background: $background-dark;
+
+            svg {
+              fill: white;
+            }
+          }
+
           svg {
             margin-right: 5px;
 

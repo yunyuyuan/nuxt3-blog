@@ -94,6 +94,10 @@ initViewer(root);
         font-size: 13px;
         color: rgb(54 54 54);
 
+        @include dark-mode {
+          color: rgb(221 221 221);
+        }
+
         svg {
           margin-right: 5px;
           fill: rgb(54 54 54);
