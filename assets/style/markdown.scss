@@ -33,9 +33,9 @@
     h#{$size} {
       cursor: pointer;
 
-      $base: ($size % 4) * 0.3;
+      $base: math.div(8rem - $size, 10rem);
 
-      margin: ($base + 1rem) 0 ($base + 0.5rem);
+      margin: ($base + 0.3rem) 0 ($base + 0.2rem);
       display: block;
       position: relative;
 
@@ -55,13 +55,13 @@
           color: $theme-color-lighten;
         }
 
-        font-size: math.div(1rem, $size) + 0.9rem;
+        font-size: math.div(8rem - $size, 12rem) + 1rem;
         display: flex;
 
-        &::before {
+        &:hover::before {
           content: "#";
           position: absolute;
-          font-size: math.div(1rem, $size) + 0.6rem;
+          font-size: math.div(8rem - $size, 10rem) + 0.5rem;
           left: -5px;
           transform: translateX(-100%);
         }
@@ -184,10 +184,10 @@
   }
 
   span.image-container {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
-    margin: 1rem auto;
+    margin: 1rem 5%;
     width: 90%;
 
     .--lazy-img {
