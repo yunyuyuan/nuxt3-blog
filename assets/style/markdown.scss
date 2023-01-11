@@ -9,16 +9,17 @@
 }
 
 .--markdown {
-  $line-height: 1.8rem;
+  $line-height: 2.1rem;
 
   width: 100%;
   display: block;
   word-break: break-word;
   line-height: $line-height;
   font-family: $font-source-han-sans;
-  font-size: 0.98rem;
+  font-size: 1.1rem;
   font-weight: 400;
   color: rgb(15 15 15);
+  word-spacing: 1px;
 
   @include dark-mode {
     color: #ededed;
@@ -33,9 +34,9 @@
     h#{$size} {
       cursor: pointer;
 
-      $base: math.div(8rem - $size, 10rem);
+      $base: math.div(8rem - $size, 11rem);
 
-      margin: ($base + 0.3rem) 0 ($base + 0.2rem);
+      margin: ($base + 0.2rem) 0 ($base + 0.1rem);
       display: block;
       position: relative;
 
@@ -49,13 +50,12 @@
         text-decoration: none;
         position: relative;
         color: $theme-color-darken;
-        text-shadow: 0 0 1px rgba($theme-color, 3000%);
 
         @include dark-mode {
           color: $theme-color-lighten;
         }
 
-        font-size: math.div(8rem - $size, 12rem) + 1rem;
+        font-size: math.div(8rem - $size, 13rem) + 1rem;
         display: flex;
 
         &:hover::before {
@@ -116,12 +116,12 @@
     &::after {
       width: 100%;
       content: "";
-      height: 1px;
+      height: 0.7px;
       position: absolute;
-      background: gray;
+      background: rgb(175 175 175);
 
       @include dark-mode {
-        background: rgb(202 202 202);
+        background: rgb(136 136 136);
       }
 
       transition: $common-transition;
@@ -192,7 +192,7 @@
 
     .--lazy-img {
       max-width: 100%;
-      box-shadow: 0 0 16px rgb(0 0 0 / 20%);
+      box-shadow: 0 0 16px rgb(0 0 0 / 10%);
 
       &.loading,
       &.err {
@@ -287,9 +287,9 @@
 
     &:not(.hljs) {
       border-radius: 3px;
-      border: 1px solid rgb(0 0 0 / 15%);
-      color: #f00;
-      font-size: 0.85em;
+      border: 1px solid rgb(0 0 0 / 5%);
+      color: #e61010;
+      font-size: 0.84em;
       font-weight: 400;
       margin: 0 0.25rem;
       padding: 0.22rem 0.48em;
@@ -336,13 +336,13 @@
   pre {
     margin: 1.3rem 0;
     border-radius: 8px;
-    border: 1px solid #dadada;
+    border: 1px solid #e3e3e3;
 
     @include dark-mode {
-      border-color: rgb(73 73 73);
+      border-color: rgb(56 56 56);
     }
 
-    box-shadow: 0 0 8px rgb(0 0 0 / 20%);
+    box-shadow: 0 0 6px rgb(0 0 0 / 10%);
     position: relative;
     background: #f3f3f3;
 
@@ -437,9 +437,9 @@
       border-radius: 0 0 8px 8px;
       max-height: 90vh;
       background: white;
-      font-size: 0.87rem;
+      font-size: 0.88rem;
       font-weight: 400;
-      line-height: 1.3rem;
+      line-height: 1.4rem;
       position: relative;
       overflow: auto;
     }
@@ -501,7 +501,7 @@
     >iframe {
       width: 100%;
       flex-grow: 1;
-      box-shadow: 0 0 1rem rgb(0 0 0 / 70%);
+      box-shadow: 0 0 1rem rgb(0 0 0 / 50%);
     }
   }
 
