@@ -52,8 +52,6 @@ const years = computed(() => {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 $space: 16px;
 
 .record-list {
@@ -138,7 +136,7 @@ $space: 16px;
           b {
             transform: translateY(-50%);
             padding: 0 5px;
-            font-size: 16px;
+            font-size: f-size(0.9);
             background: $background;
 
             @include dark-mode {

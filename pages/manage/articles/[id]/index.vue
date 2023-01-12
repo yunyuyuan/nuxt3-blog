@@ -115,8 +115,6 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .manage-article-detail {
   .input-tags {
     position: relative;
@@ -155,7 +153,7 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
 
       >.text {
         color: rgb(157 157 157);
-        font-size: 14px;
+        font-size: f-size(0.8);
         padding-left: 5px;
       }
 
@@ -168,7 +166,7 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
       width: 100%;
 
       > p {
-        font-size: 13px;
+        font-size: f-size(0.75);
         margin: 8px 0 0 8px;
       }
 

@@ -339,15 +339,13 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .manage-content {
   &-header {
     padding: 20px 0 10px;
     border-bottom: 1px solid rgb(220 220 220);
 
     .status {
-      font-size: 13px;
+      font-size: f-size(0.75);
       margin: 0 15px 0 auto;
       color: #b80000;
 
@@ -405,7 +403,7 @@ onMounted(() => {
       position: absolute;
       top: 1px;
       left: 0;
-      font-size: 15px;
+      font-size: f-size(0.85);
       border-radius: 3px 3px 0 0;
       border: 1px solid $border;
 
@@ -472,7 +470,7 @@ onMounted(() => {
 
         > span {
           height: 30px;
-          font-size: 14px;
+          font-size: f-size(0.8);
           font-weight: 600;
           margin: 0 24px 0 8px;
           flex-shrink: 0;
@@ -489,7 +487,7 @@ onMounted(() => {
           &.invalid::before {
             content: "*";
             color: red;
-            font-size: 16px;
+            font-size: f-size(0.9);
             left: 0;
             position: absolute;
             top: 8px;
@@ -511,7 +509,7 @@ onMounted(() => {
         input,
         textarea,
         select {
-          font-size: 15px;
+          font-size: f-size(0.88);
           padding: 5px;
           flex-grow: 1;
           max-width: 500px;
@@ -559,7 +557,7 @@ onMounted(() => {
     > p {
       background: $theme-color;
       color: white;
-      font-size: 18px;
+      font-size: f-size();
       padding: 6px;
       text-align: center;
     }

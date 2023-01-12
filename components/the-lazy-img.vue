@@ -162,8 +162,6 @@ const attr = ViewerAttr;
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .--lazy-img {
   overflow: hidden;
   position: relative;
@@ -186,8 +184,8 @@ const attr = ViewerAttr;
   }
 
   .tips {
-    font-size: 12px;
-    height: 12px;
+    font-size: f-size(0.65);
+    height: f-size(0.65);
     color: #f44;
   }
 }

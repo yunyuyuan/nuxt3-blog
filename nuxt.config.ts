@@ -95,6 +95,13 @@ export default defineNuxtConfig({
   // @ts-ignore
   vite: {
     plugins: [rawLoaderPlugin, ...devServerPlugins],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: "@use 'sass:math';@import 'assets/style/var';"
+        }
+      }
+    },
     build: {
       rollupOptions: {
         output: {

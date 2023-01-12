@@ -53,13 +53,11 @@ const searchFn = (item: KnowledgeItem, s: string) => item.title.includes(s);
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .manage-knowledge {
   .knowledge-title {
     flex-basis: 45%;
     font-weight: bold;
-    font-size: 15px;
+    font-size: f-size();
   }
 
   .knowledge-type {

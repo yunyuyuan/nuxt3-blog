@@ -64,8 +64,6 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 $space: 16px;
 
 .knowledge-list {
@@ -82,7 +80,7 @@ $space: 16px;
       cursor: pointer;
       transition: $common-transition;
       border-radius: 6px 6px 0 0;
-      font-size: 15px;
+      font-size: f-size(0.85);
       padding: 5px 10px;
       display: flex;
       align-items: center;
@@ -109,7 +107,7 @@ $space: 16px;
       }
 
       b {
-        font-size: 12px;
+        font-size: f-size(0.75);
         width: 25px;
         height: 17px;
         line-height: 17px;
@@ -168,7 +166,7 @@ $space: 16px;
 
       span {
         position: relative;
-        font-size: 10px;
+        font-size: f-size(0.7);
         display: flex;
         align-items: center;
         overflow: hidden;
@@ -191,7 +189,7 @@ $space: 16px;
         }
 
         b {
-          font-size: 18px;
+          font-size: f-size();
           color: $theme-color-darken;
 
           @include dark-mode {
@@ -206,7 +204,7 @@ $space: 16px;
       }
 
       time {
-        font-size: 12px;
+        font-size: f-size(0.72);
         color: #696969;
 
         @include dark-mode {

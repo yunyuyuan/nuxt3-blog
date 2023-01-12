@@ -247,8 +247,6 @@ initViewer(markdownRef);
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .manage-md-editor {
   background: white;
 
@@ -377,7 +375,7 @@ initViewer(markdownRef);
         height: 100%;
 
         span {
-          font-size: 13px;
+          font-size: f-size(0.75);
           padding: 0 5px;
           word-break: break-all;
           height: 50%;
@@ -522,7 +520,7 @@ initViewer(markdownRef);
 
 .markdown-tips {
   p {
-    font-size: 16px;
+    font-size: f-size(0.9);
     margin-bottom: 20px;
     text-align: center;
 
@@ -544,7 +542,7 @@ initViewer(markdownRef);
       padding: 16px;
 
       b {
-        font-size: 13px;
+        font-size: f-size(0.75);
         color: $theme-color-darken;
 
         @include dark-mode {
@@ -557,7 +555,7 @@ initViewer(markdownRef);
       }
 
       span {
-        font-size: 14px;
+        font-size: f-size(0.78);
       }
     }
   }

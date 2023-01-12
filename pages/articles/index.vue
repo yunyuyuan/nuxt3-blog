@@ -82,9 +82,6 @@ const toggleTags = (tag: string) => {
 </template>
 
 <style lang="scss">
-@use "sass:math";
-@import "assets/style/var";
-
 $space: 13px;
 
 .article-list {
@@ -105,7 +102,7 @@ $space: 13px;
     }
 
     .num {
-      font-size: 12px;
+      font-size: f-size(0.77);
       margin-left: auto;
 
       b {
@@ -189,7 +186,7 @@ $space: 13px;
 
           b {
             color: $theme-color-darken;
-            font-size: 17px;
+            font-size: f-size(1.02);
             min-height: 20px;
             line-height: 20px;
             display: block;
@@ -204,7 +201,7 @@ $space: 13px;
 
           .foot {
             margin-top: math.div($space, 1.5);
-            font-size: 13px;
+            font-size: f-size(0.75);
             color: $footer-color;
             transition: $common-transition;
             height: 18px;

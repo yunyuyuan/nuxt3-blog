@@ -45,8 +45,6 @@ const afterOpen = () => {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .common-dropdown {
   background: white;
   box-shadow: 0 0 16px rgb(0 0 0 / 30%);

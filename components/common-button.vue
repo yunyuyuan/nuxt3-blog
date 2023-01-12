@@ -38,8 +38,6 @@ const hasSlot = computed(() => typeof useSlots().default === "function");
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 button.common-button {
   display: inline-flex;
   align-items: center;
@@ -121,7 +119,8 @@ button.common-button {
   }
 
   span {
-    font-size: 14px;
+    font-size: f-size(0.8);
+    line-height: f-size(0.8);
     word-break: keep-all;
   }
 
@@ -134,8 +133,8 @@ button.common-button {
     }
 
     span {
-      font-size: 12px;
-      line-height: 12px;
+      font-size: f-size(0.66);
+      line-height: f-size(0.66);
     }
   }
 }

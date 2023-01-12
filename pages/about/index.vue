@@ -37,8 +37,6 @@ onBeforeMount(async () => {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 #default-layout.in-about {
   #header {
     background: rgb(255 255 255 / 5%);
@@ -72,7 +70,7 @@ onBeforeMount(async () => {
         justify-content: center;
 
         p {
-          font-size: 16px;
+          font-size: f-size();
           letter-spacing: 0.8px;
           color: white;
           font-weight: 300;
@@ -86,7 +84,7 @@ onBeforeMount(async () => {
       .status {
         color: #eee;
         opacity: 0.5;
-        font-size: 13px;
+        font-size: f-size(0.75);
         position: absolute;
         bottom: 10px;
         right: 10px;

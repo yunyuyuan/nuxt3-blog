@@ -46,8 +46,6 @@ initViewer(root);
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .record-detail {
   margin: 30px 20px 80px;
   width: 1000px;
@@ -81,8 +79,8 @@ initViewer(root);
 
       time {
         color: black;
-        font-size: 12px;
-        line-height: 16px;
+        font-size: f-size(0.75);
+        line-height: f-size(1);
 
         @include dark-mode {
           color: rgb(221 221 221);
@@ -91,7 +89,7 @@ initViewer(root);
 
       .visitors {
         margin-left: auto;
-        font-size: 13px;
+        font-size: f-size(0.75);
         color: rgb(54 54 54);
 
         @include dark-mode {

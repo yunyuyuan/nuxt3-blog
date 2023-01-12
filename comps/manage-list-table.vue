@@ -160,7 +160,7 @@ function deleteSelect () {
     </template>
     <template #body>
       <p>
-        已选择<b style="margin: 0 8px; font-size: 1.1em;">{{
+        已选择<b style="margin: 0 8px; font-size: 1rem;">{{
           selectedList.length
         }}</b>项
       </p>
@@ -169,8 +169,6 @@ function deleteSelect () {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .manage-list-head,
 .manage-list-table {
   max-width: 1200px;
@@ -182,13 +180,13 @@ function deleteSelect () {
 
   input {
     padding: 7px;
-    font-size: 15px;
+    font-size: f-size(0.8);
     width: 288px;
   }
 
   > .filter {
     margin-left: 8px;
-    font-size: 13px;
+    font-size: f-size(0.75);
     flex-wrap: wrap;
 
     &::before {
@@ -197,7 +195,7 @@ function deleteSelect () {
   }
 
   > span {
-    font-size: 13px;
+    font-size: f-size(0.75);
     margin: 0 15px 0 0;
     color: #b80000;
   }
@@ -221,7 +219,7 @@ function deleteSelect () {
   margin: 0 auto 30px;
 
   .empty {
-    font-size: 18px;
+    font-size: f-size(1);
     font-weight: bold;
     justify-content: center;
     padding: 50px 0;
@@ -254,7 +252,7 @@ function deleteSelect () {
       padding-bottom: 20px;
 
       .col {
-        font-size: 15px !important;
+        font-size: f-size(0.85) !important;
         font-weight: bold !important;
         font-style: italic;
         color: #4c4c4c;
@@ -293,7 +291,7 @@ function deleteSelect () {
 
       &-id {
         flex-basis: 6%;
-        font-size: 14px;
+        font-size: f-size(0.75);
         font-family: $font-code;
         font-weight: 600;
       }
@@ -308,7 +306,7 @@ function deleteSelect () {
         flex-basis: 14%;
 
         span {
-          font-size: 12px;
+          font-size: f-size(0.7);
           text-align: center;
         }
       }

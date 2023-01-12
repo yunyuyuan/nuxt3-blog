@@ -199,13 +199,11 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .upload-image {
   .modal-title {
     a {
       color: $theme-color;
-      font-size: 16px;
+      font-size: f-size();
     }
 
     svg {
@@ -221,7 +219,7 @@ onUnmounted(() => {
 
     .result {
       span {
-        font-size: 13px;
+        font-size: f-size(0.75);
       }
 
       input {
@@ -271,14 +269,14 @@ onUnmounted(() => {
 
       span {
         margin-top: 10px;
-        font-size: 13px;
+        font-size: f-size(0.75);
         color: grey;
       }
     }
 
     .footer {
       input {
-        font-size: 13px;
+        font-size: f-size(0.75);
         width: 300px;
         padding: 6px;
         margin-right: 5px;

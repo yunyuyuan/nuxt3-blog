@@ -21,10 +21,8 @@ const emit = defineEmits(["click"]);
 </template>
 
 <style scoped lang="scss">
-@use "sass:math";
-@import "assets/style/var";
 
-$size: 1.6rem;
+$size: 1.7rem;
 $color: #eaeaea;
 $color-dark: #1e1e1e;
 

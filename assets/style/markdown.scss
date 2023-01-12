@@ -9,17 +9,16 @@
 }
 
 .--markdown {
-  $line-height: 2.1rem;
+  $line-height: f-size(1.85);
 
   width: 100%;
   display: block;
   word-break: break-word;
   line-height: $line-height;
   font-family: $font-source-han-sans;
-  font-size: 1.1rem;
+  font-size: f-size(0.92);
   font-weight: 400;
   color: rgb(15 15 15);
-  word-spacing: 1px;
 
   @include dark-mode {
     color: #ededed;
@@ -228,8 +227,8 @@
         color: rgb(214 214 214);
       }
 
-      font-size: 0.8rem;
-      line-height: 0.8rem;
+      font-size: f-size(0.8);
+      line-height: f-size(0.8);
       margin-top: 16px;
       order: 1;
     }
@@ -289,7 +288,7 @@
       border-radius: 3px;
       border: 1px solid rgb(0 0 0 / 5%);
       color: #e61010;
-      font-size: 0.84em;
+      font-size: f-size(0.75);
       font-weight: 400;
       margin: 0 0.25rem;
       padding: 0.22rem 0.48em;
@@ -385,7 +384,7 @@
       font-family: $font-code;
       transform: translateX(-50%);
       top: 6px;
-      font-size: 0.65rem;
+      font-size: f-size(0.65);
       color: #9c9c9c;
       line-height: 20px;
     }
@@ -437,7 +436,7 @@
       border-radius: 0 0 8px 8px;
       max-height: 90vh;
       background: white;
-      font-size: 0.88rem;
+      font-size: f-size(0.8);
       font-weight: 400;
       line-height: 1.4rem;
       position: relative;
@@ -468,8 +467,8 @@
 
     >legend {
       position: absolute;
-      font-size: 0.88rem;
-      line-height: 0.88rem;
+      font-size: f-size(0.8);
+      line-height: f-size(0.8);
       height: 1.4rem;
       top: -0.9rem;
       left: 1rem;
@@ -509,7 +508,7 @@
     pre {
       >code.hljs {
         padding: 0.5rem 0.8rem;
-        font-size: 0.8rem;
+        font-size: f-size(0.78);
         line-height: 1.3rem;
       }
     }

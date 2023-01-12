@@ -36,6 +36,12 @@ $font-code: "Fira Code", serif;
   height: $size;
 }
 
+$font-size: 18px;
+
+@function f-size($size: 1) {
+  @return $font-size * $size;
+}
+
 @mixin textoverflow($line: 1) {
   overflow: hidden;
   text-overflow: ellipsis;

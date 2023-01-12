@@ -18,8 +18,6 @@ const emit = defineEmits(["change"]);
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .common-checkbox {
   background: rgb(227 227 227);
   position: relative;

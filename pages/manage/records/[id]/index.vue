@@ -80,8 +80,6 @@ const processImages = (_, _2, item: RecordItem) => {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .manage-record-detail {
   .input-images {
     align-items: flex-start;
@@ -98,12 +96,12 @@ const processImages = (_, _2, item: RecordItem) => {
 
         .input-src {
           width: 360px;
-          font-size: 14px;
+          font-size: f-size(0.8);
         }
 
         .input-alt {
           width: 100px;
-          font-size: 13px;
+          font-size: f-size(0.8);
           margin: 0 10px;
         }
 

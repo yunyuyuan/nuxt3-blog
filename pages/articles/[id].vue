@@ -132,8 +132,6 @@ initViewer(root);
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .article-detail {
   margin-bottom: 60px;
 
@@ -156,6 +154,7 @@ initViewer(root);
         color: #1d1d1d;
         word-break: break-word;
         letter-spacing: 0.5px;
+        font-size: f-size(1.4);
 
         @include dark-mode {
           color: white;
@@ -183,7 +182,7 @@ initViewer(root);
 
         padding: 20px 0 0;
         text-align: center;
-        font-size: 12px;
+        font-size: f-size(0.75);
 
         .tags {
           flex-wrap: wrap;
@@ -308,8 +307,8 @@ initViewer(root);
 
         a {
           text-decoration: none;
-          font-size: 13px;
-          line-height: 18px;
+          font-size: f-size(0.77);
+          line-height: f-size(0.77);
           padding: 5px 5px 5px 18px;
           display: flex;
           align-items: center;
@@ -322,7 +321,7 @@ initViewer(root);
           }
 
           border-radius: 4px;
-          word-break: break-word;
+          word-break: break-all;
           margin-bottom: 9px;
 
           &::before {
@@ -344,7 +343,7 @@ initViewer(root);
           }
 
           &.small {
-            font-size: 0.8em;
+            font-size: 0.85em;
             padding-left: 32px;
 
             &::before {

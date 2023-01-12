@@ -73,7 +73,7 @@ const searchFn = (item: ArticleItem, s: string) => item.title.includes(s);
   .article-title {
     flex-basis: 40%;
     font-weight: bold;
-    font-size: 15px;
+    font-size: f-size();
   }
 
   .article-tags {

@@ -17,8 +17,6 @@ const isFirstLoad = useFirstLoad();
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .common-loading {
   &.hide {
     display: none;
@@ -31,7 +29,7 @@ const isFirstLoad = useFirstLoad();
   }
 
   > span {
-    font-size: 14px;
+    font-size: f-size(0.7);
     margin-top: 10px;
   }
 }

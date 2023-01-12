@@ -44,6 +44,7 @@
     "nuxt": "^3.0.0",
     "postcss-html": "^1.4.1",
     "prompt": "^1.3.0",
+    "rollup-pluginutils": "^2.8.2",
     "sass": "^1.43.4",
     "stylelint": "^14.8.2",
     "stylelint-config-recommended-scss": "^6.0.0",

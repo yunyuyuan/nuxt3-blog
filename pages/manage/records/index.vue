@@ -28,8 +28,6 @@ const searchFn = (item: RecordItem, s:string) => !item.images.length || item.ima
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .manage-record {
   .record-images {
     flex-basis: 60%;

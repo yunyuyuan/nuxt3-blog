@@ -174,8 +174,6 @@ const modalOk = () => {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 $menu-width: 100px;
 
 .manage-container {
@@ -215,7 +213,7 @@ $menu-width: 100px;
             display: block;
             text-align: center;
             padding: 10px 0;
-            font-size: 16px;
+            font-size: f-size(1);
             text-decoration: none;
             color: rgb(255 255 255);
             transition: $common-transition;
@@ -346,7 +344,7 @@ $menu-width: 100px;
 
   b {
     margin-bottom: 10px;
-    font-size: 13px;
+    font-size: f-size(0.75);
     display: flex;
     align-items: center;
 
@@ -359,7 +357,7 @@ $menu-width: 100px;
   }
 
   input {
-    font-size: 15px;
+    font-size: f-size(0.85);
     padding: 6px;
   }
 }

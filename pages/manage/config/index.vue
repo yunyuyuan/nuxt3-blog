@@ -79,7 +79,7 @@ onBeforeUnmount(() => {
     margin: 20px 0;
 
     > span {
-      font-size: 13px;
+      font-size: f-size(0.75);
       margin: 0 15px 0 auto;
       color: #b80000;
     }

@@ -80,9 +80,6 @@ initViewer(root);
 </template>
 
 <style lang="scss">
-@use "sass:math";
-@import "assets/style/var";
-
 .knowledges-detail {
   margin: 0 15px 80px;
 
@@ -148,7 +145,7 @@ initViewer(root);
         }
 
         p {
-          font-size: 13.5px;
+          font-size: f-size(0.77);
           line-height: 24px;
           letter-spacing: 0.15px;
           padding-left: 20px;
@@ -370,14 +367,14 @@ initViewer(root);
       margin-top: 40px;
 
       .modify {
-        font-size: 12px;
+        font-size: f-size(0.75);
         color: #f80;
       }
 
       .visitors {
         padding-right: 15px;
         margin-right: 15px;
-        font-size: 13px;
+        font-size: f-size(0.75);
         color: rgb(54 54 54);
         border-right: 1px solid rgb(172 172 172);
 

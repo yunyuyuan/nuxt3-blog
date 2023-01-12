@@ -69,8 +69,6 @@ const typeSelectHided = ref(true);
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .manage-knowledge-detail {
   .base-info-summary {
     align-items: flex-start;
@@ -164,7 +162,7 @@ const typeSelectHided = ref(true);
         }
 
         span {
-          font-size: 14px;
+          font-size: f-size(0.8);
           word-break: keep-all;
         }
 

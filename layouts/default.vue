@@ -115,9 +115,6 @@ const isFirst = ref(true);
 </template>
 
 <style lang="scss">
-@use "sass:math";
-@import "assets/style/var";
-
 #body {
   min-height: calc(100vh - #{$header-height + $footer-height});
   padding-top: $header-height;
@@ -220,7 +217,7 @@ const isFirst = ref(true);
       padding: 2px 5px;
       word-break: keep-all;
       cursor: pointer;
-      font-size: 20px;
+      font-size: f-size(1.3);
 
       span {
         position: absolute;
@@ -440,7 +437,7 @@ const isFirst = ref(true);
   z-index: $z-index-footer;
 
   .middle {
-    font-size: 13px;
+    font-size: f-size(0.75);
     color: #7c7c7c;
 
     @include dark-mode {

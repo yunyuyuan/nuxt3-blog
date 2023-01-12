@@ -38,8 +38,6 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 #_NOTIFICATION_CONTAINER_ {
   position: fixed;
   z-index: $z-index-notify;
@@ -104,7 +102,7 @@ onMounted(() => {
 
     b {
       display: block;
-      font-size: 14px;
+      font-size: f-size(0.85);
       word-break: keep-all;
       margin-bottom: 6px;
 
@@ -115,7 +113,7 @@ onMounted(() => {
 
     span {
       white-space: break-spaces;
-      font-size: 12px;
+      font-size: f-size(0.75);
     }
 
     del {

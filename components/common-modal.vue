@@ -123,8 +123,6 @@ const close = () => {
 </template>
 
 <style lang="scss">
-@import "assets/style/var";
-
 .common-modal {
   position: fixed;
   top: 0;
