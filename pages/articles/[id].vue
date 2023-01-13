@@ -307,22 +307,28 @@ initViewer(root);
 
         a {
           text-decoration: none;
-          font-size: f-size(0.77);
-          line-height: f-size(0.77);
           padding: 5px 5px 5px 18px;
           display: flex;
           align-items: center;
           transition: $common-transition;
           position: relative;
           color: $mouse-out-color;
+          border-radius: 4px;
+          word-break: break-all;
+          margin-bottom: 9px;
+
+          span {
+            @include textoverflow(1);
+
+            white-space: nowrap;
+            line-height: f-size(0.9);
+            font-weight: bold;
+            font-size: f-size(0.77);
+          }
 
           @include dark-mode {
             color: $mouse-out-color-dark;
           }
-
-          border-radius: 4px;
-          word-break: break-all;
-          margin-bottom: 9px;
 
           &::before {
             position: absolute;
@@ -343,7 +349,11 @@ initViewer(root);
           }
 
           &.small {
-            font-size: 0.85em;
+            span {
+              font-size: 0.82em;
+              font-weight: normal;
+            }
+
             padding-left: 32px;
 
             &::before {
