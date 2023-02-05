@@ -6,6 +6,7 @@ import { notify } from "~/utils/notify/notify";
 export default defineNuxtPlugin(() => {
   if (isDev) {
     useGithubToken().value = "LocalServer";
+    useIsAuthor().value = true;
     return;
   }
 
@@ -18,6 +19,7 @@ export default defineNuxtPlugin(() => {
           title: res ? "Token验证成功!" : "Token错误!",
           type: res ? "success" : "error"
         });
+        useIsAuthor().value = res;
       })
       .catch((e) => {
         notify({
@@ -25,6 +27,9 @@ export default defineNuxtPlugin(() => {
           type: "error",
           description: e
         });
+        useIsAuthor().value = false;
       });
+  } else {
+    useIsAuthor().value = false;
   }
 });

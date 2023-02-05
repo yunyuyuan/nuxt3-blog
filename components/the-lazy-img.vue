@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { StyleValue, CSSProperties } from "vue";
 import { ViewerAttr, isPrerender } from "~/utils/constants";
 import { addScrollListener, rmScrollListener } from "~/utils/scroll-event";
 
@@ -28,7 +29,7 @@ const isShowImg = computed(
   () => imgState.value === "loading" || imgState.value === "loaded"
 );
 const isEncryptedImg = computed(() => !props.src.includes("."));
-const containerStyle = computed<string | object>(() => {
+const containerStyle = computed<StyleValue>(() => {
   // 只要有compStyle，则无论什么情况都使用compStyle
   if (props.compStyle) {
     return props.compStyle;
@@ -42,7 +43,7 @@ const containerStyle = computed<string | object>(() => {
     ? {
       width: props.containerSize[0],
       height: props.containerSize[1]
-    }
+    } as CSSProperties
     : "";
 });
 
@@ -59,7 +60,7 @@ function loadFinish (error: boolean) {
   }
   imgState.value = error ? "error" : "loaded";
 }
-let watchEncrypt = null;
+let watchEncrypt: ReturnType<typeof watch> | null = null;
 function refreshView () {
   if (isEncryptedImg.value) {
     imgState.value = "loaded";
@@ -85,8 +86,8 @@ function refreshView () {
   }
   const winHeight = window.innerHeight;
   const winWidth = window.innerWidth;
-  const contractY = root.value.getBoundingClientRect().y - winHeight;
-  const contractX = root.value.getBoundingClientRect().x - winWidth;
+  const contractY = root.value!.getBoundingClientRect().y - winHeight;
+  const contractX = root.value!.getBoundingClientRect().x - winWidth;
   if (
     contractY < 0 &&
     contractY > -winHeight - height.value &&

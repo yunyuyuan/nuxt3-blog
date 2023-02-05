@@ -31,7 +31,7 @@ export default function useContentPage<T extends CommonItem> () {
 
   watch(listPending, async (pend) => {
     if (!pend || isPrerender) {
-      const foundItem = list.value.find(item => item.id === Number(id));
+      const foundItem = list.value!.find(item => item.id === Number(id));
       if (!foundItem) {
         showError({ statusCode: 404, fatal: true });
       } else {
@@ -82,7 +82,7 @@ export default function useContentPage<T extends CommonItem> () {
         }
         encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
           let newMarkdownContent = mdContent.value;
-          for (const block of item.encryptBlocks) {
+          for (const block of item.encryptBlocks!) {
             const { start, end } = block;
             newMarkdownContent = newMarkdownContent.slice(0, start) + await decrypt(newMarkdownContent.slice(start, end)) + newMarkdownContent.slice(end);
           }
@@ -98,18 +98,20 @@ export default function useContentPage<T extends CommonItem> () {
         });
       }
       if (item.id) {
-        DBOperate({
-          hotEvent: incVisitorsEvent,
-          apiPath: "/db/inc-visitors",
-          query: {
-            id: item.id,
-            type: targetTab.url,
-            inc: config.MongoDb.visitFromOwner || !githubToken.value
-          },
-          callback: (data) => {
-            item.visitors = data;
-          }
-        });
+        watchUntil(useIsAuthor(), () => {
+          DBOperate({
+            hotEvent: incVisitorsEvent,
+            apiPath: "/db/inc-visitors",
+            query: {
+              id: item.id,
+              type: targetTab.url,
+              inc: config.MongoDb.visitFromOwner || !githubToken.value
+            },
+            callback: (data) => {
+              item.visitors = data;
+            }
+          });
+        }, { immediate: true }, isAuthor => isAuthor !== null, true);
       }
     }
   }, { immediate: true });

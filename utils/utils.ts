@@ -1,4 +1,5 @@
 import fs from "fs";
+import type { WatchOptions } from "vue";
 import { AllKeys, CommonItem, HeaderTabs, HeaderTabUrl, NeedsItem } from "./types";
 import { githubRepoUrl, inBrowser, isDev, isPrerender } from "./constants";
 import config from "~/config";
@@ -68,7 +69,7 @@ export function calcRocketUrl () {
 /**
  * localStorage 操作
  */
-export function getLocalStorage<T extends string> (key: string): T {
+export function getLocalStorage<T extends string> (key: string): T | null {
   if (inBrowser) {
     const item = localStorage.getItem(key);
     return item as T;
@@ -94,6 +95,26 @@ export function rmLocalStorage (key: string) {
 let uniqueId = 0;
 export function getUniqueId (): typeof uniqueId {
   return uniqueId++;
+}
+
+export function watchUntil (
+  source: any,
+  cb: (_: any, _old: any, _cleanup: any) => void,
+  options: WatchOptions,
+  until: (_: any) => boolean = _ => true,
+  once = false
+) {
+  let watcher: ReturnType<typeof watch> = () => undefined;
+  const callback = (value: any, old: any, cleanup: any) => {
+    if (!once) {
+      cb(value, old, cleanup);
+    } else if (until(value)) {
+      cb(value, old, cleanup);
+      watcher();
+    }
+  };
+  watcher = watch(source, callback, options);
+  return watcher;
 }
 
 /**
@@ -127,11 +148,11 @@ export function useComment (key: HeaderTabUrl) {
         script.setAttribute("data-lang", "zh-CN");
         script.setAttribute("crossorigin", "anonymous");
         script.setAttribute("async", "");
-        root.value.appendChild(script);
+        root.value!.appendChild(script);
         watch(themeMode, () => {
           const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
           if (!iframe) { return; }
-          iframe.contentWindow.postMessage({
+          iframe.contentWindow!.postMessage({
             giscus: {
               setConfig: {
                 theme: getTheme()
@@ -225,8 +246,8 @@ export function assignItem (dest: CommonItem, src: CommonItem) {
  */
 export function devHotListen (event: string, callback: (_: any) => unknown) {
   if (isDev) {
-    const listener = (e: CustomEvent) => {
-      callback(e.detail);
+    const listener = (e: Event) => {
+      callback((e as CustomEvent).detail);
       window.removeEventListener(event, listener);
     };
     window.addEventListener(event, listener);

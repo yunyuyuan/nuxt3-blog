@@ -1,4 +1,5 @@
 import { createApp, createVNode, render } from "vue";
+import type { Ref } from "vue";
 import { inBrowser, isPrerender, ViewerAttr } from "./constants";
 import { notify } from "./notify/notify";
 import initHljs from "./hljs";
@@ -221,7 +222,7 @@ function parseMarkdown_ (text: string, showdown) {
   return converter.makeHtml(text);
 }
 
-export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserted = null) {
+export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserted?: Ref<boolean>) {
   const destroyFns: (()=>void)[] = [];
   nextTick(async () => {
     if (inBrowser) {
@@ -250,8 +251,8 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
       }
       // lazy-img
       mdEl
-        .querySelectorAll(".image-container > img")
-        .forEach((el: HTMLImageElement) => {
+        .querySelectorAll<HTMLImageElement>(".image-container > img")
+        .forEach((el) => {
           const style = el.getAttribute("style");
           const title = (el.nextElementSibling as HTMLElement).innerText;
           const vm = createApp(lazyImgVue, {
@@ -259,14 +260,14 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
             alt: title,
             viewer: true,
             compStyle: style,
-            imgStyle: el.parentElement.classList.contains("just-height")
+            imgStyle: el.parentElement!.classList.contains("just-height")
               ? style
               : "",
             title
           });
-          const alt = el.nextElementSibling;
-          vm.mount(el.parentElement);
-          vm._container.appendChild(alt);
+          const alt = el.nextElementSibling!;
+          vm.mount(el.parentElement!);
+          vm._container!.appendChild(alt);
           destroyFns.push(() => {
             vm.unmount();
           });
@@ -296,7 +297,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
         const ClipboardJS = (await import("clipboard")).default;
         const clipboard = new ClipboardJS(copyBtn, {
           target: function (trigger) {
-            return trigger.parentElement.parentElement.querySelector("code");
+            return trigger.parentElement!.parentElement!.querySelector("code")!;
           }
         }).on("success", (e) => {
           e.clearSelection();

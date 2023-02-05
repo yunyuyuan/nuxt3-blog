@@ -71,7 +71,7 @@ export function keysOfCommonItem (): AllKeys[] {
  */
 export function loadOrDumpDraft (key: string, type: "load" | "dump", item: CommonItem, inputContent?: string): string | void {
   if (type === "load") {
-    const draft = JSON.parse(getLocalStorage(key));
+    const draft = JSON.parse(getLocalStorage(key)!);
     const content = draft.content ?? "";
     delete draft.content;
     assignItem(item, draft);

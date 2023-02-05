@@ -7,6 +7,7 @@ const ThemeModeKey = "theme-mode";
 export const useFirstLoad = () => useState("first-loaded", () => true);
 
 export const useGithubToken = () => useState(GithubTokenKey, () => "");
+export const useIsAuthor = () => useState<null | boolean>("is-author", () => null);
 export const useCorrectSha = () => useState("correct-sha", () => "");
 export const useUnsavedContent = () => useState("unsaved-content", () => false);
 export const useThemeMode = () => {

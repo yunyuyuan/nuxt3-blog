@@ -350,7 +350,7 @@ initViewer(root);
 
           &.small {
             span {
-              font-size: 0.82em;
+              font-size: 0.92em;
               font-weight: normal;
             }
 
