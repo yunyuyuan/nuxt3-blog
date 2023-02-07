@@ -9,7 +9,7 @@
 }
 
 .--markdown {
-  $line-height: f-size(1.85);
+  $line-height: f-size(1.9);
 
   width: 100%;
   display: block;
@@ -438,7 +438,7 @@
       background: white;
       font-size: f-size(0.8);
       font-weight: 400;
-      line-height: 1.4rem;
+      line-height: 1.3rem;
       position: relative;
       overflow: auto;
     }

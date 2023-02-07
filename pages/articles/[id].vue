@@ -323,7 +323,7 @@ initViewer(root);
             white-space: nowrap;
             line-height: f-size(0.9);
             font-weight: bold;
-            font-size: f-size(0.77);
+            font-size: f-size(0.85);
           }
 
           @include dark-mode {
@@ -350,7 +350,7 @@ initViewer(root);
 
           &.small {
             span {
-              font-size: 0.92em;
+              font-size: f-size(0.8);
               font-weight: normal;
             }
 
