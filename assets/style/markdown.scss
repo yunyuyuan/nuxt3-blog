@@ -100,7 +100,7 @@
     position: relative;
     text-decoration: none;
     transition: $common-transition;
-    color: $theme-color;
+    color: $theme-color-darken;
 
     @include dark-mode {
       color: $theme-color-lighten;
@@ -130,7 +130,7 @@
 
     &:hover {
       &::after {
-        background: $theme-color;
+        background: $theme-color-darken;
 
         @include dark-mode {
           background: white;
@@ -151,10 +151,10 @@
     }
 
     &:active {
-      color: $theme-color-darken;
+      color: $theme-color;
 
       &::after {
-        background: $theme-color-darken;
+        background: $theme-color;
       }
     }
 
@@ -436,7 +436,7 @@
       border-radius: 0 0 8px 8px;
       max-height: 90vh;
       background: white;
-      font-size: f-size(0.8);
+      font-size: f-size(0.85);
       font-weight: 400;
       line-height: 1.3rem;
       position: relative;

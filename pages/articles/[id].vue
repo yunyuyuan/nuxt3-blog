@@ -321,7 +321,7 @@ initViewer(root);
             @include textoverflow(1);
 
             white-space: nowrap;
-            line-height: f-size(0.9);
+            line-height: f-size(1.2);
             font-weight: bold;
             font-size: f-size(0.85);
           }
