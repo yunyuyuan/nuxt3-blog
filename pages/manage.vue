@@ -24,7 +24,7 @@ const showUploadImage = ref(false);
 const activeRoute = computed(() => {
   return useRoute().path.replace(/^\/manage\//, "/");
 });
-const travle = computed(() => {
+const travel = computed(() => {
   return calcRocketUrl();
 });
 
@@ -75,7 +75,7 @@ const modalOk = () => {
       notify({
         title: res ? "验证Token成功!" : "Token错误!",
         type: res ? "success" : "error",
-        description: res ? "已将Github Token保存在本地" : null
+        description: res ? "已将Github Token保存在本地" : undefined
       });
       if (res) {
         setLocalStorage(GithubTokenKey, inputToken.value);
@@ -126,13 +126,13 @@ const modalOk = () => {
             </nuxt-link>
           </li>
         </ul>
-        <div :title="allPassed ? '全部验证通过!':'token与密码'" @click="showModal = true">
+        <div :title="$sameSha.value ? (allPassed ? '全部验证通过!':'token与密码') : '当前commit-id与远程不一致，请稍等部署，再尝试刷新页面'" :class="{warning: !$sameSha.value}" @click="showModal = true">
           <svg-icon
             :class="{invalid: !githubToken, active: allPassed }"
             name="password"
           />
         </div>
-        <nuxt-link title="🚀" :to="travle">
+        <nuxt-link title="🚀" :to="travel">
           <svg-icon name="rocket" />
         </nuxt-link>
         <span v-show="pageLoading.loadingState.value" class="loading">
@@ -265,6 +265,10 @@ $menu-width: 100px;
 
         &:hover {
           transform: scale(1.1);
+        }
+
+        &.warning {
+          background: rgb(255 255 153);
         }
 
         > svg {

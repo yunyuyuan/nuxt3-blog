@@ -1,10 +1,11 @@
+import type { Axios } from "axios";
 import { CommonItem } from "../types";
 import { createCommitModal } from ".";
 import { getNowDayjs } from "~/utils/_dayjs";
 import config from "~/config";
 import { notify } from "~/utils/notify/notify";
 
-let axios = null;
+let axios: Axios | null = null;
 
 async function post (data: string, token_?: string) {
   const token = token_ || useGithubToken().value;
@@ -78,7 +79,7 @@ export async function createCommit (
   deletions: { path: string }[] = []
 ): Promise<boolean> {
   const correctSha = useCorrectSha().value;
-  if (useRuntimeConfig().app.NUXT_ENV_CURRENT_GIT_SHA !== correctSha && !(await createCommitModal())) {
+  if (!useNuxtApp().$sameSha.value && !(await createCommitModal())) {
     throw new Error("Interrupt by user");
   }
   let add = "";
@@ -138,7 +139,7 @@ export async function createCommit (
       window.location.reload();
     }, 1000);
     return true;
-  } catch (e) {
+  } catch (e: any) {
     notify({
       title: "Error!",
       type: "error",

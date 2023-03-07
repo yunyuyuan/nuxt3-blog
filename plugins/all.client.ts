@@ -11,6 +11,10 @@ export default defineNuxtPlugin((app: NuxtApp) => {
     return { left: 0, top: 0 };
   };
 
+  app.provide("sameSha", computed(() => {
+    return useCorrectSha().value === useRuntimeConfig().app.NUXT_ENV_CURRENT_GIT_SHA;
+  }));
+
   initScrollTrigger();
   // init theme
   document.body.setAttribute(

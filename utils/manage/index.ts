@@ -120,7 +120,7 @@ export function createCommitModal () {
     const vm = createVNode(CommonModal, {
       modelValue: true,
       modalTitle: "警告",
-      modalContent: "commit id 与最新版本不一致，确认提交？可能会覆盖新版本"
+      modalContent: "commit-id 与最新版本不一致，确认提交？可能会覆盖新版本"
     });
     vm.props.onOk = () => {
       render(null, container);
