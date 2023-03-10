@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { createCommit } from "ls:~/utils/manage/github";
-import config from "~/config.ts?raw";
-import config_ from "~/config";
+import configString from "~/config.ts?raw";
+import config from "~/config";
 import { inBrowser } from "~/utils/constants";
 import { useStatusText } from "~/utils/manage";
 
 useHead({
-  title: `配置管理${config_.SEO_title}`
+  title: `配置管理${config.SEO_title}`
 });
 
 let editor = null;
 const editorRef = ref<HTMLElement>();
-const inputText = ref<string>(config);
+const inputText = ref<string>(configString);
+const modified = computed(() => inputText.value !== configString);
 
 const { statusText, canCommit, processing, toggleProcessing } = useStatusText();
 
@@ -59,8 +60,8 @@ onBeforeUnmount(() => {
 <template>
   <div class="manage-config w100 flexc">
     <div class="header flex">
-      <span>{{ statusText }}</span>
-      <common-button icon="upload" :disabled="!canCommit" :loading="processing" @click="doUpload">
+      <span>{{ !modified ? '未修改' : statusText }}</span>
+      <common-button icon="upload" :disabled="!canCommit || !modified" :loading="processing" @click="doUpload">
         更新
       </common-button>
     </div>
