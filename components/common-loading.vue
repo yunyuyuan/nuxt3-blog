@@ -12,7 +12,7 @@ const isFirstLoad = useFirstLoad();
 <template>
   <div :class="{hide: !showInFirst && isFirstLoad}" class="common-loading flexc">
     <svg-icon name="loading" />
-    <span>Loading...</span>
+    <span>{{ $T('loading') }}...</span>
   </div>
 </template>
 

@@ -1,6 +1,7 @@
 import { CommonItem } from "../types";
 import { notify } from "../notify/notify";
 import { devHotListen } from "../utils";
+import { translate } from "../i18n";
 import { UpdateRebuild } from "~/dev-server/rebuild";
 import { rebuildEvent } from "~/dev-server/types";
 
@@ -44,8 +45,8 @@ function listenServer (): Promise<boolean> {
         resolve(data);
         if (data) {
           notify({
-            title: "更新成功",
-            description: "1秒后将自动刷新页面"
+            title: translate("update-success"),
+            description: translate("refresh-after-sec", [1])
           });
           setTimeout(() => {
             import.meta.hot.invalidate();

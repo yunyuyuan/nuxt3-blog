@@ -101,7 +101,7 @@ export function watchUntil (
   source: any,
   cb: (_: any, _old: any, _cleanup: any) => void,
   options: WatchOptions,
-  until: (_: any) => boolean = _ => true,
+  until: (_: any) => boolean = () => true,
   once = false
 ) {
   let watcher: ReturnType<typeof watch> = () => undefined;

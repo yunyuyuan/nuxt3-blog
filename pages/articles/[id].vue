@@ -92,7 +92,7 @@ initViewer(root);
         </div>
         <div class="more-info flex">
           <div class="tags flex">
-            <span>标签:</span>
+            <span>{{ $t('tags') }}:</span>
             <the-tag
               v-for="tag in item.tags"
               :key="tag"
@@ -102,17 +102,17 @@ initViewer(root);
             </the-tag>
           </div>
           <span class="time">
-            更新于:
+            {{ $t('updated-at') }}:
             <span>{{ modifyTime }}</span>
           </span>
-          <span v-if="item.visitors >= 0" class="visitors flex" :title="`被浏览${item.visitors}次`">
+          <span v-if="item.visitors >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
             <svg-icon name="view" />
             {{ item.visitors }}
           </span>
         </div>
       </div>
       <div v-if="item.menu.length" class="menu flexc" :class="{compact: hideMenu}">
-        <span class="toggle flex" :title="(hideMenu ? '展开':'压缩')+'目录'" @click="hideMenu = !hideMenu">
+        <span class="toggle flex" :title="$t((hideMenu ? 'unfold':'fold')+'-menu')" @click="hideMenu = !hideMenu">
           <svg-icon name="up" />
         </span>
         <ol>
@@ -242,9 +242,9 @@ initViewer(root);
       padding: 15px 0 55px;
       margin-left: 36px;
 
-      @at-root #default-layout #header:not(.headroom--pinned).headroom--not-top + #body & {
-        top: 0;
-      }
+      // @at-root #default-layout #header:not(.headroom--pinned).headroom--not-top + #body & {
+      //   top: 0;
+      // }
 
       >.toggle {
         cursor: pointer;
@@ -322,7 +322,6 @@ initViewer(root);
 
             white-space: nowrap;
             line-height: f-size(1.2);
-            font-weight: bold;
             font-size: f-size(0.85);
           }
 
@@ -351,7 +350,6 @@ initViewer(root);
           &.small {
             span {
               font-size: f-size(0.8);
-              font-weight: normal;
             }
 
             padding-left: 32px;

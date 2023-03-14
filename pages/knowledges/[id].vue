@@ -16,7 +16,7 @@ initViewer(root);
 </script>
 
 <template>
-  <div ref="root" class="knowledges-detail">
+  <div ref="root" class="knowledge-detail">
     <div class="captain flexc w100" :class="{'has-comment': hasComment}">
       <div class="info">
         <div class="cover">
@@ -34,7 +34,7 @@ initViewer(root);
               v-if="item.link"
               target="_blank"
               :href="item.link"
-              title="链接"
+              :title="$t('link')"
             >
               <svg-icon name="open-link" />
             </a>
@@ -66,12 +66,12 @@ initViewer(root);
         <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
       </div>
       <span class="foot flex">
-        <span v-if="item.visitors >= 0" class="visitors flex" :title="`被浏览${item.visitors}次`">
+        <span v-if="item.visitors >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
           <svg-icon name="view" />
           {{ item.visitors }}
         </span>
         <span class="modify">
-          更新于：
+          {{ $t('updated-at') }}:
           <time>{{ modifyTime }}</time>
         </span>
       </span>
@@ -80,7 +80,7 @@ initViewer(root);
 </template>
 
 <style lang="scss">
-.knowledges-detail {
+.knowledge-detail {
   margin: 0 15px 80px;
 
   .captain {
@@ -398,7 +398,7 @@ initViewer(root);
 }
 
 @include mobile {
-  .knowledges-detail {
+  .knowledge-detail {
     width: 100%;
     margin: 0 0 80px;
 

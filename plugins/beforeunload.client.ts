@@ -1,13 +1,15 @@
+import { translateT } from "~/utils/i18n";
+
 export default defineNuxtPlugin(() => {
   const unSavedContent = useUnsavedContent();
   window.onbeforeunload = () => {
     if (unSavedContent.value) {
-      return "你的内容尚未保存，确定要离开吗？";
+      return translateT("confirm-leave");
     }
   };
   addRouteMiddleware("unload", () => {
     if (unSavedContent.value) {
-      if (!confirm("你的内容尚未保存，确定要离开吗？")) {
+      if (!confirm(translateT("confirm-leave"))) {
         return abortNavigation();
       }
       unSavedContent.value = false;

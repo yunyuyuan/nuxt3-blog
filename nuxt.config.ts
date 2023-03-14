@@ -88,6 +88,27 @@ export default defineNuxtConfig({
       ignore: ["/manage"]
     }
   },
+  modules: [
+    "@nuxtjs/i18n"
+  ],
+  i18n: {
+    strategy: "no_prefix",
+    locales: [
+      {
+        code: "en",
+        file: "en.json"
+      },
+      {
+        code: "zh",
+        file: "zh.json"
+      }],
+    lazy: true,
+    langDir: "i18n",
+    defaultLocale: config.defaultLang,
+    vueI18n: {
+      fallbackLocale: config.defaultLang
+    }
+  },
   experimental: {
     payloadExtraction: false
   },

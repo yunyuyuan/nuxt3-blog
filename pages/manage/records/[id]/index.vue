@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { RecordItem, Translation } from "~/utils/types";
-import ManageContentEdit from "~/comps/manage-content-edit.vue";
+import ManageContentEdit from "../../comps/manage-content-edit.vue";
+import { RecordItem } from "~/utils/types";
 import { getUniqueId } from "~/utils/utils";
 
 const moveUpImg = (idx: number, item: RecordItem) => {
@@ -26,7 +26,7 @@ const processImages = (_, _2, item: RecordItem) => {
     <manage-content-edit :process-with-content="processImages">
       <template #images="{ disabled, item }">
         <div class="input-images">
-          <span :class="{invalid: item.images.some(img => !img.src)}">{{ Translation.images }}
+          <span :class="{invalid: item.images.some(img => !img.src)}">{{ $T('images') }}
             <svg-icon name="images" />
           </span>
           <div class="flexc">

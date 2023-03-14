@@ -3,6 +3,7 @@ import type { Ref } from "vue";
 import { inBrowser, isPrerender, ViewerAttr } from "./constants";
 import { notify } from "./notify/notify";
 import initHljs from "./hljs";
+import { translate } from "./i18n";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
 
@@ -302,7 +303,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
         }).on("success", (e) => {
           e.clearSelection();
           notify({
-            title: "复制成功！"
+            title: translate("copy successful")
           });
         });
         destroyFns.push(() => {

@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear.js";
 import utc from "dayjs/plugin/utc.js";
 import isToday from "dayjs/plugin/isToday.js";
+import { translate } from "./i18n";
 
 /* eslint-disable import/no-named-as-default-member */
 dayjs.extend(weekOfYear);
@@ -26,18 +27,18 @@ export function literalTime (stamp: number) {
   const subMonth = dayNew.diff(dayOld, "month");
   const subYear = dayNew.diff(dayOld, "year");
   if (dayOld.isToday()) {
-    return "今天";
+    return translate("today");
   }
   if (subWeek < 1) {
-    return `${subDay + 1}天前`;
+    return translate("days-ago", [subDay + 1]);
   }
   if (subMonth < 1) {
-    return `${subWeek}周前`;
+    return translate("weeks-ago", [subWeek + 1]);
   }
   if (subYear < 1) {
-    return `${subMonth}个月前`;
+    return translate("months-ago", [subMonth + 1]);
   }
-  return `${subYear}年前`;
+  return translate("years-ago", [subYear + 1]);
 }
 
 export function formatTime (stamp: number, format = "YYYY-MM-DD HH:mm:ss") {

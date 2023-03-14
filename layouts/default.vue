@@ -1,13 +1,21 @@
 <script setup lang="ts">
 import { githubRepoUrl, inBrowser, isPrerender } from "~/utils/constants";
 import { HeaderTabs } from "~/utils/types";
-import { calcRocketUrl } from "~/utils/utils";
+import { calcRocketUrl, setLocalStorage } from "~/utils/utils";
 import config from "~/config";
 
 const { themeMode, toggleThemeMode } = useThemeMode();
 const pageLoading = useLoading();
 const route = useRoute();
 const footerDomain = inBrowser ? window.location.hostname : "";
+
+const i18nHided = ref<boolean>(true);
+const showI18n = ref<boolean>(false);
+const setLocale = (locale) => {
+  setLocalStorage("locale-lang", locale);
+  useNuxtApp().$i18n.setLocale(getLocalStorage("locale-lang"));
+  showI18n.value = false;
+};
 
 const activeRoute = computed(() => {
   const path = route.path.split("/")[1];
@@ -57,14 +65,33 @@ const isFirst = ref(true);
         :class="{ active: activeRoute === item.url.substring(1) }"
         :to="item.url"
       >
-        {{ item.name }}
+        {{ $T(item.name) }}
         <span />
         <span />
         <span />
         <span />
       </nuxt-link>
       <del />
-      <a v-if="!isPrerender" class="mode" :class="themeMode" :title="`切换到${themeMode === 'light' ? '夜间' : '日间'}模式`" @click="toggleTheme">
+      <a class="i18n" @click="i18nHided && (showI18n = true)">
+        <svg-icon name="i18n" />
+        <common-dropdown
+          v-model:show="showI18n"
+          v-model:hided="i18nHided"
+        >
+          <div class="i18n-select">
+            <div :class="{ active: $i18n.locale==='zh'}" @click="setLocale('zh')">中文</div>
+            <div :class="{ active: $i18n.locale==='en'}" @click="setLocale('en')">English</div>
+          </div>
+        </common-dropdown>
+      </a>
+      <sub />
+      <a
+        v-if="!isPrerender"
+        class="mode"
+        :class="themeMode"
+        :title="$t('switch-mode', [$t(`mode-${themeMode}`)])"
+        @click="toggleTheme"
+      >
         <span>
           <svg-icon name="mode-dark" />
           <svg-icon name="mode-light" />
@@ -84,13 +111,13 @@ const isFirst = ref(true);
         <nuxt-link :to="openEdit" title="🚀">
           <svg-icon name="rocket" />
         </nuxt-link>
-        <div class="pwd flex" :class="{valid: encryptor.passwdCorrect.value}" title="密码" @click="showPwdModal = true">
+        <div class="pwd flex" :class="{valid: encryptor.passwdCorrect.value}" :title="$t('passwd')" @click="showPwdModal = true">
           <svg-icon name="password" />
         </div>
       </div>
       <sub />
-      <nuxt-link class="about" to="/about" title="关于">
-        <img class="s100" src="/icon.png" alt="头像">
+      <nuxt-link class="about" to="/about" :title="$t('about')">
+        <img class="s100" src="/icon.png" :alt="$t('avatar')">
       </nuxt-link>
       <span v-show="!!pageLoading.loadingState.value" class="loading" :style="{width: `${pageLoading.loadingState.value}%`}" />
     </nav>
@@ -105,10 +132,10 @@ const isFirst = ref(true);
     </footer>
     <common-modal v-model="showPwdModal" @confirm="encryptor.usePasswd.value = inputPwd;showPwdModal = false">
       <template #title>
-        密码
+        {{ $T('passwd') }}
       </template>
       <template #body>
-        <input v-model="inputPwd" placeholder="请输入密码" style="font-size: 16px;padding: 5px;width: calc(100% - 12px);">
+        <input v-model="inputPwd" :placeholder="$t('input-passwd')" style="font-size: 16px;padding: 5px;width: calc(100% - 12px);">
       </template>
     </common-modal>
   </div>
@@ -294,6 +321,7 @@ const isFirst = ref(true);
       margin: auto;
     }
 
+    .i18n,
     .mode,
     .home,
     .about {
@@ -302,8 +330,10 @@ const isFirst = ref(true);
       transition: $common-transition;
     }
 
+    .i18n,
     .mode,
     .home {
+      cursor: pointer;
       height: $header-height;
 
       &:hover {
@@ -313,8 +343,25 @@ const isFirst = ref(true);
       }
     }
 
+    .i18n {
+      display: flex;
+      justify-content: center;
+
+      .i18n-select {
+        div {
+          padding: 8px 16px;
+          cursor: pointer;
+          font-size: f-size(0.85);
+
+          &:hover,
+          &.active {
+            color: $theme-color-darken;
+          }
+        }
+      }
+    }
+
     .mode {
-      cursor: pointer;
       overflow: hidden;
 
       > span {

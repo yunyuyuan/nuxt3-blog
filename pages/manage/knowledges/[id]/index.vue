@@ -1,10 +1,9 @@
 <script setup lang="ts">
+import ManageContentEdit from "../../comps/manage-content-edit.vue";
 import {
   KnowledgeTabs,
-  KnowledgeTabsList,
-  Translation
+  KnowledgeTabsList
 } from "~/utils/types";
-import ManageContentEdit from "~/comps/manage-content-edit.vue";
 
 const typeSelectShow = ref(false);
 const typeSelectHided = ref(true);
@@ -15,7 +14,7 @@ const typeSelectHided = ref(true);
     <manage-content-edit>
       <template #title="{ disabled, item }">
         <div>
-          <span :class="{ invalid: !item.title }">{{ Translation.title }}
+          <span :class="{ invalid: !item.title }">{{ $T('title') }}
             <svg-icon name="title" />
           </span>
           <input v-model="item.title" :disabled="disabled">
@@ -23,17 +22,17 @@ const typeSelectHided = ref(true);
       </template>
       <template #type="{ disabled, item }">
         <div>
-          <span>{{ Translation.type }}
+          <span>{{ $T('type') }}
             <svg-icon name="type" />
           </span>
           <div class="select" @click="!disabled && typeSelectHided && (typeSelectShow = true)">
             <a tabindex="1" class="flex" :class="{active: !typeSelectHided, disabled: disabled}">
-              {{ KnowledgeTabsList.find((i) => i.key === item.type).name }}
+              {{ $T(KnowledgeTabsList.find((i) => i.key === item.type).name) }}
               <svg-icon :name="item.type" />
             </a>
             <common-dropdown v-model:show="typeSelectShow" v-model:hided="typeSelectHided" class="flexc">
               <div v-for="tp in KnowledgeTabs" :key="tp" class="flex" :class="{active: item.type===tp}" @click="item.type=tp;typeSelectShow=false">
-                <span>{{ KnowledgeTabsList.find((i) => i.key === tp).name }}</span>
+                <span>{{ $T(KnowledgeTabsList.find((i) => i.key === tp).name) }}</span>
                 <svg-icon :name="tp" />
               </div>
             </common-dropdown>
@@ -42,7 +41,7 @@ const typeSelectHided = ref(true);
       </template>
       <template #link="{ disabled, item }">
         <div>
-          <span :class="{ invalid: !item.link }">{{ Translation.link }}
+          <span :class="{ invalid: !item.link }">{{ $T('link') }}
             <svg-icon name="link" />
           </span>
           <input v-model="item.link" :disabled="disabled">
@@ -50,7 +49,7 @@ const typeSelectHided = ref(true);
       </template>
       <template #cover="{ disabled, item }">
         <div>
-          <span :class="{ invalid: !item.cover }">{{ Translation.cover }}
+          <span :class="{ invalid: !item.cover }">{{ $T('cover') }}
             <svg-icon name="images" />
           </span>
           <input v-model="item.cover" :disabled="disabled">
@@ -58,7 +57,7 @@ const typeSelectHided = ref(true);
       </template>
       <template #summary="{ disabled, item }">
         <div class="base-info-summary">
-          <span :class="{ invalid: !item.summary }">{{ Translation.summary }}
+          <span :class="{ invalid: !item.summary }">{{ $T('summary') }}
             <svg-icon name="summary" />
           </span>
           <textarea v-model="item.summary" :disabled="disabled" />

@@ -1,4 +1,5 @@
 import { notify } from "~/utils/notify/notify";
+import { translate } from "~/utils/i18n";
 
 type DecryptFunction = (_s: string) => Promise<string>;
 
@@ -26,7 +27,7 @@ export const useEncryptor = () => {
     } catch (e) {
       notify({
         type: "error",
-        title: "加密失败",
+        title: translate("encryption-failed"),
         description: e.toString()
       });
       throw e;
@@ -44,14 +45,14 @@ export const useEncryptor = () => {
         passwdCorrect.value = true;
         return result;
       }
-      throw new Error("密码错误");
+      throw new Error(translate("passwd-incorrect"));
     } catch (e) {
       passwdCorrect.value = false;
       if (incorrectPwd.value !== usePasswd.value) {
         incorrectPwd.value = usePasswd.value;
         notify({
           type: "error",
-          title: "解密失败: " + usePasswd.value,
+          title: translate("decryption-failed") + ": " + usePasswd.value,
           description: e.toString()
         });
       }
@@ -75,7 +76,7 @@ export const useEncryptor = () => {
   ): Promise<() => void> => {
     try {
       if (!usePasswd.value) {
-        throw new Error("需要密码");
+        throw new Error(translate("need-passwd"));
       }
       await callback(decrypt);
       return () => undefined;

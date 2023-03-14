@@ -3,13 +3,14 @@ import { formatTime, literalTime } from "~/utils/_dayjs";
 import useContentPage from "~/utils/public/detail";
 import { RecordItem } from "~/utils/types";
 import { useComment } from "~/utils/utils";
+import { translate } from "~/utils/i18n";
 import config from "~/config";
 import { initViewer } from "~/utils/viewer";
 
 const { item, tabUrl, publishTime, modifyTime, htmlContent, markdownRef, mdPending } = useContentPage<RecordItem>();
 
 useHead({
-  title: computed(() => `记录: ${formatTime(item.time, "YYYY-MM-DD")}${config.SEO_title}`)
+  title: computed(() => `${translate("records")}: ${formatTime(item.time, "YYYY-MM-DD")}${config.SEO_title}`)
 });
 const { root, hasComment } = useComment(tabUrl);
 initViewer(root);
@@ -29,10 +30,10 @@ initViewer(root);
       />
     </div>
     <div class="text" :class="{'has-comment': hasComment}">
-      <p class="flex" :title="'作成于 ' + publishTime + '，更新于 ' + modifyTime">
+      <p class="flex" :title="$t('created-at') + ' ' + publishTime + ', ' + $t('updated-at') + ' ' + modifyTime">
         <svg-icon name="write" />
         <time>{{ literalTime(item.time) }}</time>
-        <span v-if="item.visitors >= 0" class="visitors flex" :title="`被浏览${item.visitors}次`">
+        <span v-if="item.visitors >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
           <svg-icon name="view" />
           {{ item.visitors }}
         </span>

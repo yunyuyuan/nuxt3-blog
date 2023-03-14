@@ -1,6 +1,7 @@
 import type { Axios } from "axios";
 import { CommonItem } from "../types";
 import { createCommitModal } from ".";
+import { translate } from "~/utils/i18n";
 import { getNowDayjs } from "~/utils/_dayjs";
 import config from "~/config";
 import { notify } from "~/utils/notify/notify";
@@ -10,7 +11,7 @@ let axios: Axios | null = null;
 async function post (data: string, token_?: string) {
   const token = token_ || useGithubToken().value;
   if (!token) {
-    throw new Error("缺少token");
+    throw new Error(translate("need-token"));
   }
   axios = axios || (await import("axios")).default;
   return await axios.post(
@@ -131,8 +132,8 @@ export async function createCommit (
       return false;
     }
     notify({
-      title: "更新成功",
-      description: "请等待编译，1秒后将自动刷新页面"
+      title: translate("update-success"),
+      description: translate("refresh-after-sec", [1])
     });
     // 更新成功必刷新页面，防止后续操作commit id不正确。若存在草稿，此操作依旧会被beforeUnload拦截
     setTimeout(() => {

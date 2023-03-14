@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import ManageListTable from "../comps/manage-list-table.vue";
 import { KnowledgeItem, KnowledgeTab, KnowledgeTabsList } from "~/utils/types";
-import ManageListTable from "~/comps/manage-list-table.vue";
 
 const filterType = ref<KnowledgeTab>();
 const registryFilter = (customFilter) => {
@@ -28,7 +28,7 @@ const searchFn = (item: KnowledgeItem, s: string) => item.title.includes(s);
       <template v-if="!!filterType" #filter>
         <span
           class="filter-type flex"
-          :title="KnowledgeTabsList.find((i) => i.key === filterType).name"
+          :title="$t(KnowledgeTabsList.find((i) => i.key === filterType).name)"
           @click="toggleFilterType(filterType)"
         >
           <svg-icon :name="filterType" />
@@ -42,7 +42,7 @@ const searchFn = (item: KnowledgeItem, s: string) => item.title.includes(s);
       <template #type="{ data: type }">
         <span
           class="filter-type"
-          :title="KnowledgeTabsList.find((i) => i.key === type).name"
+          :title="$t(KnowledgeTabsList.find((i) => i.key === type).name)"
           @click="toggleFilterType(type)"
         >
           <svg-icon :name="type" />

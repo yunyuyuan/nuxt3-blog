@@ -27,9 +27,9 @@ export type RecordItem = NeedsItem & {
 };
 
 export const KnowledgeTabsList = [
-  { key: "book", name: "书籍" },
-  { key: "film", name: "影视" },
-  { key: "game", name: "游戏" }
+  { key: "book", name: "book" },
+  { key: "film", name: "film" },
+  { key: "game", name: "game" }
 ] as const;
 export const KnowledgeTabs = KnowledgeTabsList.map(item => item.key);
 export type KnowledgeTab = typeof KnowledgeTabs[number];
@@ -48,17 +48,17 @@ export type AllKeys = (keyof ArticleItem) | (keyof RecordItem) | (keyof Knowledg
 
 export const HeaderTabs = [
   {
-    name: "文章",
+    name: "articles",
     url: "/articles",
     show: true
   },
   {
-    name: "记录",
+    name: "records",
     url: "/records",
     show: true
   },
   {
-    name: "文化",
+    name: "knowledges",
     url: "/knowledges",
     show: true
   }
@@ -68,15 +68,6 @@ export type HeaderTab = typeof HeaderTabs[number];
 
 export const HeaderTabUrls = HeaderTabs.map(tab => tab.url);
 export type HeaderTabUrl = typeof HeaderTabUrls[number];
-export const Translation = {
-  title: "标题",
-  tags: "标签",
-  type: "类型",
-  images: "图片",
-  cover: "封面",
-  link: "链接",
-  summary: "简介"
-};
 export const Order = [
   "title",
   "tags",

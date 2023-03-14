@@ -35,7 +35,7 @@
 
       $base: math.div(8rem - $size, 11rem);
 
-      margin: ($base + 0.2rem) 0 ($base + 0.1rem);
+      margin: ($base + 0.4rem) 0 ($base + 0.1rem);
       display: block;
       position: relative;
 
@@ -54,7 +54,7 @@
           color: $theme-color-lighten;
         }
 
-        font-size: math.div(8rem - $size, 13rem) + 1rem;
+        font-size: math.div(8rem - $size, 14rem) + 1rem;
         display: flex;
 
         &:hover::before {

@@ -21,42 +21,42 @@ export const markdownTips: {
 }[] = [
   {
     regx: "<<>>",
-    description: "段落缩进"
+    description: "p-indent"
   },
   {
     regx: "#[text](https://github.com)",
-    description: "target=_blank的链接"
+    description: "blank-link"
   },
   {
     regx: "![sticker](aru/32)",
-    description: "阿鲁第32号表情"
+    description: "alu-sticker"
   },
   {
-    regx: "![我是描述[80% x ]](https://img.com)",
-    description: "宽度80%高度未设的图片"
+    regx: "![some image description[80% x ]](https://img.com)",
+    description: "image-example"
   },
   {
-    regx: "-(red: 文字)-",
-    description: "红色的文字"
+    regx: "-(red: some text)-",
+    description: "red text"
   },
   {
-    regx: "_(文字)_",
-    description: "带下划线的文字"
+    regx: "_(some text)_",
+    description: "underline-text"
   },
   {
     regx: "[html][/html]",
-    description: "直接插入HTML"
+    description: "insert-html"
   },
   {
-    regx: "[youtube][描述](https://xxx.com)[/youtube]",
-    description: "youtube视频"
+    regx: "[youtube][description](https://xxx.com)[/youtube]",
+    description: "youtube-video"
   },
   {
-    regx: "[bili][描述](https://xxx.com)[/bili]",
-    description: "bilibili视频"
+    regx: "[bili][description](https://xxx.com)[/bili]",
+    description: "bili-video"
   },
   {
-    regx: "--标题--\n内容\n-- --",
-    description: "field元素"
+    regx: "--title--\ncontent\n-- --",
+    description: "field-el"
   }
 ];

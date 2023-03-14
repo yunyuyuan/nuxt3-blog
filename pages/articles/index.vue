@@ -54,7 +54,7 @@ const toggleTags = (tag: string) => {
         </the-tag>
       </div>
       <span class="num">
-        <b>{{ filteredList.filter((i) => i._show).length }}</b>篇
+        <b>{{ filteredList.filter((i) => i._show).length }}</b>{{ $t('articles-num') }}
       </span>
     </div>
     <div class="body flexc">
@@ -68,8 +68,8 @@ const toggleTags = (tag: string) => {
                 literalTime(item.time)
               }}</span>
               <b />
-              <span>{{ item.len }}字</span>
-              <span v-if="item.visitors >= 0" class="visitors flex" :title="`被浏览${item.visitors}次`">
+              <span>{{ item.len }} {{ $t('words-num') }}</span>
+              <span v-if="item.visitors >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
                 <svg-icon name="view" />
                 {{ item.visitors }}
               </span>

@@ -147,7 +147,7 @@ initViewer(markdownRef);
       <svg-icon name="loading" />
     </div>
     <div class="editor-head flex">
-      <a title="添加表情" @click="stickerHided && (showStickers = true)">
+      <a :title="$t('add-sticker')" @click="stickerHided && (showStickers = true)">
         <img src="/sticker/yellow-face/18.png">
         <common-dropdown
           v-model:show="showStickers"
@@ -187,13 +187,13 @@ initViewer(markdownRef);
           </div>
         </common-dropdown>
       </a>
-      <a title="markdown参考" @click="showMarkdownReference = true">
+      <a :title="$t('markdown-ref')" @click="showMarkdownReference = true">
         <svg-icon name="markdown" />
       </a>
-      <a class="preview" title="提交预览" @click="emit('preview')"><svg-icon name="preview" /></a>
+      <a class="preview" :title="$t('preview')" @click="emit('preview')"><svg-icon name="preview" /></a>
       <a
         class="split"
-        title="调整视图"
+        :title="$t('toggle-view-mode')"
         @click="
           currentView =
             currentView == 'both'
@@ -225,12 +225,12 @@ initViewer(markdownRef);
   </div>
   <common-modal v-model="showMarkdownReference" :show-ok="false" :show-cancel="false">
     <template #title>
-      Markdown参考
+      {{ $t('markdown-ref') }}
     </template>
     <template #body>
       <div class="markdown-tips">
         <p>
-          基本语法参考：<a
+          {{ $t('base-grammar') }}:<a
             target="_blank"
             href="https://github.github.com/gfm"
           >gfm</a>
@@ -238,7 +238,7 @@ initViewer(markdownRef);
         <ul>
           <li v-for="tip in markdownTips" :key="tip.regx">
             <b>{{ tip.regx }}</b>
-            <span>{{ tip.description }}</span>
+            <span>{{ $t(tip.description) }}</span>
           </li>
         </ul>
       </div>

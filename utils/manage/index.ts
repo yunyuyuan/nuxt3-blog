@@ -3,6 +3,7 @@ import { ModalContainerId } from "../constants";
 import { notify } from "../notify/notify";
 import { CommonItem, AllKeys, HeaderTabUrl } from "../types";
 import { getLocalStorage, assignItem, setLocalStorage } from "../utils";
+import { translate, translateT } from "../i18n";
 import CommonModal from "~/components/common-modal.vue";
 
 export function randomId (exist: CommonItem[] = [], len = 4) {
@@ -27,14 +28,14 @@ export function randomId (exist: CommonItem[] = [], len = 4) {
 export function useStatusText () {
   const status = ref<string>("");
   const toggleProcessing = () => {
-    status.value = status.value ? "" : "正在发送请求...";
+    status.value = status.value ? "" : translate("performing-request");
   };
   const processing = computed(() => !!status.value);
 
   const githubToken = useGithubToken();
   const statusText = computed<string>((): string => {
     if (!useGithubToken().value) {
-      return "请先正确输入token，再进行操作";
+      return translate("please-input-token-first");
     }
     return status.value;
   });
@@ -76,7 +77,7 @@ export function loadOrDumpDraft (key: string, type: "load" | "dump", item: Commo
     delete draft.content;
     assignItem(item, draft);
     notify({
-      title: "加载草稿成功"
+      title: translate("draft-loaded")
     });
     return content;
   } else {
@@ -88,7 +89,7 @@ export function loadOrDumpDraft (key: string, type: "load" | "dump", item: Commo
     }
     setLocalStorage(key, JSON.stringify(result));
     notify({
-      title: "保存草稿成功"
+      title: translate("draft-saved")
     });
   }
 }
@@ -119,8 +120,8 @@ export function createCommitModal () {
     const container = document.createElement("div");
     const vm = createVNode(CommonModal, {
       modelValue: true,
-      modalTitle: "警告",
-      modalContent: "commit-id 与最新版本不一致，确认提交？可能会覆盖新版本"
+      modalTitle: translateT("warning"),
+      modalContent: translate("commit-id-not-correct-confirm")
     });
     vm.props.onOk = () => {
       render(null, container);

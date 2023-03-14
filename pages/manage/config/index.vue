@@ -4,9 +4,10 @@ import configString from "~/config.ts?raw";
 import config from "~/config";
 import { inBrowser } from "~/utils/constants";
 import { useStatusText } from "~/utils/manage";
+import { translate } from "~/utils/i18n";
 
 useHead({
-  title: `配置管理${config.SEO_title}`
+  title: translate("config-manage") + config.SEO_title
 });
 
 let editor = null;
@@ -60,9 +61,9 @@ onBeforeUnmount(() => {
 <template>
   <div class="manage-config w100 flexc">
     <div class="header flex">
-      <span>{{ !modified ? '未修改' : statusText }}</span>
+      <span>{{ !modified ? $t('not-modified') : statusText }}</span>
       <common-button icon="upload" :disabled="!canCommit || !modified" :loading="processing" @click="doUpload">
-        更新
+        {{ $t('update') }}
       </common-button>
     </div>
     <div class="editor-container w100">

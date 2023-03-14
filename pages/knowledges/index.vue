@@ -7,7 +7,7 @@ import {
 } from "~/utils/types";
 import useListPage from "~/utils/public/list";
 
-const { list: knowledgesList, pending } = useListPage<KnowledgeItem>();
+const { list: knowledgeList, pending } = useListPage<KnowledgeItem>();
 
 const currentTab = computed(() => (useRoute().query.type as string) || "");
 const isAll = computed(
@@ -15,18 +15,18 @@ const isAll = computed(
 );
 
 const tabs = computed(() => [
-  { name: "全部", key: "", active: isAll.value },
+  { name: "all", key: "", active: isAll.value },
   ...KnowledgeTabsList.map(item => ({ ...item, active: currentTab.value === item.key }))
 ]);
 
 const filteredList = computed(() => {
   if (!isAll.value) {
-    return knowledgesList.filter(item => item.type === currentTab.value);
+    return knowledgeList.filter(item => item.type === currentTab.value);
   }
-  return knowledgesList;
+  return knowledgeList;
 });
 function getFilteredListLength (tab?: string) {
-  return knowledgesList.filter(item => item._show && (!tab || item.type === tab)).length;
+  return knowledgeList.filter(item => item._show && (!tab || item.type === tab)).length;
 }
 function goTo (tab?: string) {
   navigateTo({ query: { type: tab } }, { replace: true });
@@ -43,7 +43,7 @@ onMounted(() => {
   <div class="knowledge-list">
     <nav class="flex">
       <span v-for="tab in tabs" :key="tab.key + un" :class="{ active: tab.key === currentTab }" @click="goTo(tab.key)">
-        {{ tab.name }}
+        {{ $T(tab.name) }}
         <b>{{ getFilteredListLength(tab.key) }}</b>
       </span>
     </nav>

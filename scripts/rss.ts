@@ -1,6 +1,9 @@
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
 import type { ArticleItem } from "../utils/types";
 import config from "../config";
-import dayjs from "../utils/_dayjs";
+
+dayjs.extend(utc);
 
 export function escapeHtml (s: string) {
   return s.toString()

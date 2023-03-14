@@ -9,53 +9,66 @@
 
 > 🚀[https://blog.yunyuyuan.net](https://blog.yunyuyuan.net)
 
-## 博客特性
-* 💻 **5分钟完成搭建**。完全免费，不用写一行代码。
-* 🤝 **方便使用**。全能的后台管理界面，只需一个token，就可**在网页端更新配置，新增/修改/删除博客内容**，不用`notepad`，更不用`git push`。
-* 📷 **集成图床**。集成smms图床和tinypng图片压缩，网页端一键上传博客图片。
-* 🌐 **纯静态**。打包为纯静态网站，无需后端。
-* 🔍 **SEO友好**。每个HTML页面都是已经渲染完毕的，搜索引擎可收录。
-* 🔒 **可加密**。可以对任意单篇**文章/记录/文化**加密，也可以对某些内容单独加密，只有输入密码才可查看。
-  * 🚪整篇加密：<img height="300px" src="https://s2.loli.net/2023/03/09/6loknpQFATqSOMB.png"/>
-  * 🚪部分加密：<img height="300px" src="https://s2.loli.net/2023/03/09/9UQurkTGaOSY3j4.png"/>
+English Readme | [中文说明](/README.zh.md)
 
-## 教我搭建
-#### 一键部署 (注意：请取消勾选`Create private Git Repository`)
+## Features
+* 💻 **Build in 5 minutes**. Completely free, no need to write any code.
+* 🤝 **Convenient to use**. An all-in-one admin interface where you only need a token to **update configurations, add/edit/delete blog content on the web page**. no `notepad`, no `git push`.
+* 📷 **Integrated image hosting service**. Integrated with `smms` image hosting service and `tinypng` image compression, one-click upload of blog images on the web page.
+* 🌐 **Full static**. Packaged as a full static website, no backend required.
+* 🔍 **SEO-friendly**. Each HTML page is pre-rendered and can be indexed by search engines.
+* 🔒 **Can be encrypted**. Any single **article/record/knowledge** can be encrypted, and content can be encrypted in block-level. Only by entering the password can it be viewed.
+  * 🚪Full encryption:  
+      <img height="300px" src="https://s2.loli.net/2023/03/09/6loknpQFATqSOMB.png"/>
+  * 🚪Block-level encryption:  
+      <img height="300px" src="https://s2.loli.net/2023/03/09/9UQurkTGaOSY3j4.png"/>
+
+## How to use
+#### One-click deployment (note：uncheck `Create private Git Repository`)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyunyuyuan%2Fnuxt3-blog&repository-name=nuxt3-blog)
 
-#### 额外事项
-* 若要使用浏览量统计功能，则需要[注册MongoDB账号](https://www.mongodb.com/cloud/atlas/register)，并开启[MongoDB整合](https://vercel.com/integrations/mongodbatlas)
-* 若要使用评论功能，则需要为Github安装[giscus](https://github.com/apps/giscus)，并开启[discussion](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository)，然后填写`config.ts`中的`CommentRepoId`和`CommentDiscussionCategoryId`  
-  参考giscus.app，[填写](https://giscus.app/zh-CN#:~:text=%E4%BB%93%E5%BA%93%EF%BC%9A,%E8%BF%9E%E6%8E%A5%E5%88%B0%E6%AD%A4%E4%BB%93%E5%BA%93%E3%80%82) **你的仓库** 的地址后，复制`data-repo-id`和`data-category-id`，分别对应`CommentRepoId`和`CommentDiscussionCategoryId`，位置在[data-repo-id和data-category-id](https://giscus.app/zh-CN#:~:text=%E5%9C%A8%E4%BD%A0%E6%83%B3%E8%AE%A9%E8%AF%84%E8%AE%BA%E5%87%BA%E7%8E%B0%E7%9A%84%E4%BD%8D%E7%BD%AE%E6%B7%BB%E5%8A%A0%E4%BB%A5%E4%B8%8B%20%3Cscript%3E%20%E6%A0%87%E7%AD%BE%E3%80%82%E4%BD%86%E5%A6%82%E6%9E%9C%E5%B7%B2%E7%BB%8F%E5%AD%98%E5%9C%A8%E5%B8%A6%E6%9C%89%20giscus%20%E7%B1%BB%E7%9A%84%E5%85%83%E7%B4%A0%EF%BC%8C%E5%88%99%E8%AF%84%E8%AE%BA%E4%BC%9A%E8%A2%AB%E6%94%BE%E5%9C%A8%E9%82%A3%E9%87%8C%E3%80%82)
+#### Changing user
+Change `githubName` in `config.ts` to your current Github account.
 
-## 待开发
-#### 特性
-- [ ] 404页面
-- [x] 在本地`npm run dev`下更新数据
-- [ ] 自动化测试
-- [x] 纯静态网站生成(SSG)
-- [ ] 插件系统
-- [x] 支持serverless function上传图片
-- [x] 数据库集成(浏览量统计)
-- [ ] algolia全站搜索
-- [ ] 博客图片备份与迁移
-- [x] 密码修改(目前仅支持在`npm run dev`下修改)
+#### get a new token
+Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `Generate token`.
+
+#### Addons
+* If you want to use the views analyze feature, you need to [register a MongoDB account](https://www.mongodb.com/cloud/atlas/register), and enable [MongoDB integration](https://vercel.com/integrations/mongodbatlas)
+* If you want to use the commenting feature, you need to install [giscus](https://github.com/apps/giscus) for your Github, and enable [discussion](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository). Changing `CommentRepoId` and `CommentDiscussionCategoryId` in `config.ts`. Please goto [giscus.app](giscus.app) to get more information.
+
+## Todo
+#### Features
+- [ ] 404 page
+- [x] work with `npm run dev`
+- [ ] testing
+- [x] full-static site generate(SSG)
+- [ ] plugin system
+- [x] serverless function to upload images
+- [x] mongodb integration(views analyze)
+- [ ] algolia searching
+- [ ] images migration
+- [x] changing password(only available while using `npm run dev`)
 
 
-#### 外观
-- [x] 夜间模式
-- [ ] 国际化
-- [ ] 多种布局主题(缺少UI设计)
-- [x] 自定义主题色
-##### 低优先级特性
-- [ ] 不同加密页面可使用不同的密码
-- [ ] 让monaco editor支持额外的markdown语法高亮
-- [ ] 一键拉取上游github仓库更新 
+#### Appearance
+- [x] dark mode
+- [x] i18n
+- [ ] themes(need UI)
+- [x] custom primary color
+##### Low priority features
+- [ ] different password for every content
+- [ ] custom-syntax highlight for monaco editor
+- [ ] pulling update of upsteam github repo
 - [ ] IV for AES encryption
-- [x] 块级加密
-- [ ] SSR, 用于服务端渲染
+- [x] block level encryption
+- [ ] SSR for self-hosting
 
-## 其他
-* 技术解答/交流qq群：745105612
-* 邮箱：me@yunyuyuan.net
+## Changelog
+
+[CHANGELOG.md](/CHANGELOG.md)
+
+## Others
+* QQ group：745105612
+* email：me@yunyuyuan.net
 * discord: https://discord.gg/HtSehSMYXa

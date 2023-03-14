@@ -29,6 +29,7 @@ export default {
     visitFromOwner: false                                      // 网站拥有者访问时，是否增加浏览量
   },
   themeColor: "#2aa0bb",                                       // 主题色
+  defaultLang: "zh",                                           // default language, "zh" and "en" are supported currently
 
 
 

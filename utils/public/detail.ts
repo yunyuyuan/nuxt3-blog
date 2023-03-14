@@ -3,6 +3,7 @@ import { parseMarkdown, afterInsertHtml, parseMarkdownSync } from "../markdown";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
 import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList, fetchMd } from "../utils";
+import { translate } from "../i18n";
 import { formatTime } from "../_dayjs";
 import { isPrerender } from "./../constants";
 import { DBOperate } from ".";
@@ -70,7 +71,7 @@ export default function useContentPage<T extends CommonItem> () {
         for (const block of item.encryptBlocks) {
           const { start, end } = block;
           newMarkdownContent = githubToken.value
-            ? newMarkdownContent.slice(0, start) + "加密内容![sticker](aru/59)" + newMarkdownContent.slice(end)
+            ? newMarkdownContent.slice(0, start) + translate("encrypted-content") + "![sticker](aru/59)" + newMarkdownContent.slice(end)
             : newMarkdownContent.slice(0, start - 10) + newMarkdownContent.slice(end + 11);
         }
         if (isPrerender) {

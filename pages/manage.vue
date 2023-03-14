@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { RouteLocationNormalized } from "vue-router";
+import UploadImage from "./manage/comps/upload-image.vue";
 import { HeaderTabs } from "~/utils/types";
 import { isAuthor } from "~/utils/manage/github";
 import { notify } from "~/utils/notify/notify";
 import { calcRocketUrl, rmLocalStorage, setLocalStorage } from "~/utils/utils";
+import { translate } from "~/utils/i18n";
 import { isDev, GithubTokenKey } from "~/utils/constants";
-import UploadImage from "~/comps/upload-image.vue";
 
 const pageLoading = useLoading();
 
@@ -61,8 +62,8 @@ const modalOk = () => {
   // 输入为空，则删除本地token
   if (!inputToken.value && !!githubToken.value) {
     notify({
-      title: "删除Token成功",
-      description: "已删除本地Github Token"
+      title: translate("token-deleted"),
+      description: translate("token-deleted-from-local")
     });
     rmLocalStorage(GithubTokenKey);
     githubToken.value = inputToken.value;
@@ -73,9 +74,9 @@ const modalOk = () => {
   isAuthor(inputToken.value)
     .then((res) => {
       notify({
-        title: res ? "验证Token成功!" : "Token错误!",
+        title: res ? translate("token-verified") : translate("token-unverified"),
         type: res ? "success" : "error",
-        description: res ? "已将Github Token保存在本地" : undefined
+        description: res ? translate("token-saved") : undefined
       });
       if (res) {
         setLocalStorage(GithubTokenKey, inputToken.value);
@@ -84,7 +85,7 @@ const modalOk = () => {
     })
     .catch((e) => {
       notify({
-        title: "出错了",
+        title: translate("error"),
         type: "error",
         description: e
       });
@@ -106,7 +107,7 @@ const modalOk = () => {
         <ul>
           <li>
             <a class="upload-img-btn" @click="showUploadImage = true">
-              图片
+              {{ $T('images') }}
             </a>
           </li>
           <li>
@@ -114,7 +115,7 @@ const modalOk = () => {
               to="/manage/config"
               :class="{ active: activeRoute.startsWith('/config') }"
             >
-              配置
+              {{ $T('config') }}
             </nuxt-link>
           </li>
           <li v-for="tab in HeaderTabs" :key="tab.url">
@@ -122,11 +123,11 @@ const modalOk = () => {
               :to="'/manage' + tab.url"
               :class="{ active: activeRoute.startsWith(tab.url) }"
             >
-              <span>{{ tab.name }}</span>
+              <span>{{ $T(tab.name) }}</span>
             </nuxt-link>
           </li>
         </ul>
-        <div :title="$sameSha.value ? (allPassed ? '全部验证通过!':'token与密码') : '当前commit-id与远程不一致，请稍等部署，再尝试刷新页面'" :class="{warning: !$sameSha.value}" @click="showModal = true">
+        <div :title="$sameSha.value ? (allPassed ? $t('all-verified'):$t('token-and-passwd')) : $t('commit-id-not-correct')" :class="{warning: !$sameSha.value}" @click="showModal = true">
           <svg-icon
             :class="{invalid: !githubToken, active: allPassed }"
             name="password"
@@ -163,7 +164,8 @@ const modalOk = () => {
         <input v-model="inputToken" :disabled="isDev">
       </label>
       <label class="manage-input-pwd">
-        <b>密码
+        <b>
+          {{ $T('passwd') }}
           <svg-icon v-if="encryptor.passwdCorrect.value" name="correct" />
         </b>
         <input v-model="inputPwd">
@@ -174,7 +176,7 @@ const modalOk = () => {
 </template>
 
 <style lang="scss">
-$menu-width: 100px;
+$menu-width: 120px;
 
 .manage-container {
   $padding-left: 20px;

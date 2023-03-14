@@ -3,6 +3,7 @@ import axios from "axios";
 import FormData from "form-data";
 import { notify } from "~/utils/notify/notify";
 import { devHotListen, getLocalStorage, setLocalStorage } from "~/utils/utils";
+import { translate } from "~/utils/i18n";
 import { isDev } from "~/utils/constants";
 import { uploadImageEvent } from "~/dev-server/types";
 
@@ -30,7 +31,7 @@ const setImage = (e: Event) => {
   if (!file.type.startsWith("image")) {
     return notify({
       type: "error",
-      title: "请选择图片文件"
+      title: translate("need-images-file")
     });
   }
   img.value = file;
@@ -49,13 +50,13 @@ const dropImg = (ev: DragEvent) => {
   if (!file) {
     return notify({
       type: "warn",
-      title: "未选择图片"
+      title: translate("no-image-selected")
     });
   }
   if (!file.type.startsWith("image")) {
     return notify({
       type: "error",
-      title: "请选择图片文件"
+      title: translate("need-images-file")
     });
   }
   img.value = file;
@@ -78,8 +79,8 @@ const afterUpload = (res: any) => {
     if (res.data.success) {
       resultUrl.value = res.data.data.url;
       notify({
-        title: "上传成功",
-        description: "请手动复制图片链接"
+        title: translate("upload-successful"),
+        description: translate("manually-copy-link")
       });
       setLocalStorage("smms-token", smmsToken.value);
       if (tinyPngToken.value) {
@@ -91,7 +92,7 @@ const afterUpload = (res: any) => {
   } catch (e) {
     notify({
       type: "error",
-      title: "上传失败",
+      title: translate("upload-failed"),
       description: e.toString()
     });
   } finally {
@@ -138,7 +139,7 @@ onMounted(async () => {
     }
   }).on("success", () => {
     notify({
-      title: "复制成功！"
+      title: translate("copy-successful")
     });
   });
 });
@@ -157,7 +158,7 @@ onUnmounted(() => {
     @update:model-value="emit('update:modelValue', $event)"
   >
     <template #title>
-      上传图片&nbsp;Support by
+      {{ $t('upload-image') }}&nbsp;Supported by
       <a target="_blank" href="https://doc.sm.ms/">sm.ms</a>
       <svg-icon name="question" />
       &
@@ -167,8 +168,8 @@ onUnmounted(() => {
     <template #body>
       <div class="flexc">
         <div class="result flex">
-          <span>上传结果：</span>
-          <input ref="resultInput" v-model="resultUrl" placeholder="暂无" readonly>
+          <span>{{ $t('upload-result') }}: </span>
+          <input ref="resultInput" v-model="resultUrl" :placeholder="$t('no-result')" readonly>
         </div>
         <label
           class="flex"
@@ -182,15 +183,15 @@ onUnmounted(() => {
           <div v-if="dragIn" class="cover" />
           <div v-if="!img" class="flexc">
             <svg-icon name="add" />
-            <span>选择文件/拖拽图片到此</span>
+            <span>{{ $t('select-image') }}</span>
           </div>
           <img v-else class="s100" :src="imgUrl">
         </label>
         <div class="flexc footer">
-          <input v-model="smmsToken" placeholder="请输入smms API token">
-          <input v-model="tinyPngToken" placeholder="(可选)请输入tinyPng API token">
+          <input v-model="smmsToken" :placeholder="$t('please-input') + ' smms API token'">
+          <input v-model="tinyPngToken" :placeholder="`(${$t('optional')})${$t('please-input')} tinyPng API token`">
           <common-button icon="upload" :loading="uploading" :disabled="!img || !smmsToken" @click="doUpload">
-            上传
+            {{ $t('upload') }}
           </common-button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { isDev, inBrowser, GithubTokenKey } from "~/utils/constants";
 import { getLocalStorage } from "~/utils/utils";
+import { translate } from "~/utils/i18n";
 import { isAuthor } from "~/utils/manage/github";
 import { notify } from "~/utils/notify/notify";
 
@@ -16,14 +17,14 @@ export default defineNuxtPlugin(() => {
     isAuthor(localToken)
       .then((res) => {
         notify({
-          title: res ? "Token验证成功!" : "Token错误!",
+          title: res ? translate("token-verified") : translate("token-unverified"),
           type: res ? "success" : "error"
         });
         useIsAuthor().value = res;
       })
       .catch((e) => {
         notify({
-          title: "Token验证出错了",
+          title: translate("token-unverified"),
           type: "error",
           description: e
         });

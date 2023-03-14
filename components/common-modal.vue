@@ -109,10 +109,10 @@ const close = () => {
                 :theme="confirmTheme"
                 @click="ok"
               >
-                确定
+                {{ $TT('ok') }}
               </common-button>
               <common-button v-if="showCancel" theme="default" @click="close">
-                取消
+                {{ $T('cancel') }}
               </common-button>
             </div>
           </div>

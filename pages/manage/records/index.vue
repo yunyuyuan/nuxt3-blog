@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import ManageListTable from "../comps/manage-list-table.vue";
 import { RecordItem } from "~/utils/types";
-import ManageListTable from "~/comps/manage-list-table.vue";
 
 const searchFn = (item: RecordItem, s:string) => !item.images.length || item.images.some(img => img.alt.includes(s));
 </script>

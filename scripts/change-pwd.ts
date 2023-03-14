@@ -18,7 +18,7 @@ const encrypt = async (s: string): Promise<string> => {
 const decrypt = async (s: string): Promise<string> => {
   const result = CryptoJS.AES.decrypt(s, oldPwd_).toString(CryptoJS.enc.Utf8);
   if (!result) {
-    console.error("密码错误");
+    console.error("Password incorrect");
     process.exit();
   }
   return result;
@@ -39,7 +39,7 @@ const processJson = async (file: HeaderTabUrl) => {
       fs.writeFileSync(mdPath, await encrypt(await decrypt(fs.readFileSync(mdPath).toString())));
     }
   }
-  console.log(file.substring(1) + `(共 ${count} 条) 处理完成`);
+  console.log(file.substring(1) + `(${count} in total) processing completed`);
 };
 
 export default function () {
@@ -47,11 +47,11 @@ export default function () {
   prompt.get({
     properties: {
       oldPwd: {
-        description: "旧密码",
+        description: "Old password",
         required: true
       },
       newPwd: {
-        description: "新密码",
+        description: "New password",
         required: true
       }
     }

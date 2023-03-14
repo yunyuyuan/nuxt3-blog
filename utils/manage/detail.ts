@@ -1,5 +1,6 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { registerCancelWatchEncryptor, createNewItem, deepClone, assignItem, fetchList, fetchMdManage } from "../utils";
+import { translate } from "../i18n";
 import { isPrerender } from "./../constants";
 import { useHasModified, useStatusText } from ".";
 
@@ -16,7 +17,7 @@ export function useManageContent () {
   const { pending: listPending, data: list } = fetchList(targetTab.url);
 
   useHead({
-    title: `${targetTab.name}详情管理${config.SEO_title}`
+    title: translate("detail-manage", [targetTab.name]) + config.SEO_title
   });
 
   const isNew = itemId === "new";
@@ -106,12 +107,12 @@ export function useManageContent () {
   const canUpload = computed(() => canCommit_.value && hasModified.value);
   const statusText = computed(() => {
     if (pending.value) {
-      return "加载中...";
+      return translate("loading") + "...";
     }
     if (item.encrypt && !decrypted.value) {
-      return "请先解密";
+      return translate("need-decrypt");
     }
-    return statusText_.value || (!hasModified.value ? "未修改" : "");
+    return statusText_.value || (!hasModified.value ? translate("not-modified") : "");
   });
 
   const { hasModified: hasModifiedForDraft, markdownModified: markdownModifiedForDraft } = useHasModified({ item, origin: draftItem });

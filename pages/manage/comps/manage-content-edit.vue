@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { createCommit, deleteList } from "ls:~/utils/manage/github";
 import type { Ref } from "vue";
-import MdEditor from "~/comps/md-editor.vue";
+import MdEditor from "./md-editor.vue";
 import { CommonItem, HeaderTabs } from "~/utils/types";
 import { notify } from "~/utils/notify/notify";
 import { getNowStamp } from "~/utils/_dayjs";
 import { deepClone, getLocalStorage, rmLocalStorage } from "~/utils/utils";
+import { translate } from "~/utils/i18n";
 import { loadOrDumpDraft, randomId } from "~/utils/manage";
 import { processEncryptDescrypt } from "~/utils/process-encrypt-descrypt";
 import { useManageContent } from "~/utils/manage/detail";
@@ -94,8 +95,8 @@ const getUploadInfo = async () => {
   if (invalidInfo.length) {
     return notify({
       type: "error",
-      title: "缺少必要信息",
-      description: `缺少：${Array.from(invalidInfo)
+      title: translate("missing-info"),
+      description: translate("missing") + `: ${Array.from(invalidInfo)
         .map((el: HTMLElement) => el.innerText)
         .join(", ")}`
     });
@@ -112,7 +113,7 @@ const getUploadInfo = async () => {
     if (!encryptor.usePasswd.value) {
       return notify({
         type: "error",
-        title: "请先正确输入密码"
+        title: translate("need-passwd")
       });
     }
     await processEncryptDescrypt(newItem, encryptor.encrypt, targetTab.url);
@@ -132,7 +133,7 @@ const getUploadInfo = async () => {
         if (!encryptor.usePasswd.value) {
           return notify({
             type: "error",
-            title: "请先解密"
+            title: translate("need-decrypt")
           });
         }
         const [start, end] = matcher.indices[2];
@@ -229,7 +230,7 @@ const dumpDraft = () => {
 const delDraft = () => {
   rmLocalStorage(draftPrefix());
   notify({
-    title: "删除草稿成功"
+    title: translate("draft-deleted")
   });
   hasDraft.value = false;
 };
@@ -248,13 +249,13 @@ onMounted(() => {
   <div class="manage-content-header flex">
     <div class="draft flex">
       <common-button theme="default" size="small" :disabled="pending || !hasDraft" @click="loadDraft">
-        加载草稿
+        {{ $t('load-draft') }}
       </common-button>
       <common-button theme="default" size="small" class="load-draft" :disabled="pending" @click="dumpDraft">
-        保存草稿
+        {{ $t('save-draft') }}
       </common-button>
       <common-button theme="default" size="small" :disabled="pending || !hasDraft" @click="delDraft">
-        删除草稿
+        {{ $t('delete-draft') }}
       </common-button>
     </div>
     <span class="status">{{ statusText }}</span>
@@ -264,7 +265,7 @@ onMounted(() => {
       :loading="processing && currentOperate === 'upload'"
       @click="doUpload"
     >
-      {{ isNew ? "发布" : "更新" }}
+      {{ $T(isNew ? "publish" : "upload") }}
     </common-button>
     <common-button
       v-if="!isNew"
@@ -275,22 +276,23 @@ onMounted(() => {
       :loading="processing && currentOperate === 'delete'"
       @click="showDeleteModal = true"
     >
-      删除
+      {{ $T('delete') }}
     </common-button>
   </div>
-  <div class="manage-content-base-info flexc" :title="item.encrypt && !decrypted ? '请先解密' : ''" data-title="基础信息">
+  <div class="manage-content-base-info flexc" :title="item.encrypt && !decrypted ? $t('need-decrypt') : ''" :data-title="$TT('base-info')">
     <span v-if="isNew" class="new flex">
       <svg-icon name="new" />
     </span>
     <div ref="baseInfo" class="info detail">
       <div>
-        <span>加密
+        <span>
+          {{ $t('encrypt') }}
           <svg-icon name="encrypt" />
         </span>
         <common-checkbox
           :checked="item.encrypt"
           :disabled="!decrypted || !blockDecrypted"
-          :title="!blockDecrypted ? '请先解密blocks' : ''"
+          :title="!blockDecrypted ? $t('decrypt-blocks') : ''"
           @change="item.encrypt = $event"
         />
       </div>
@@ -298,7 +300,7 @@ onMounted(() => {
     </div>
     <common-loading v-show="listPending" :show-in-first="false" />
   </div>
-  <div class="manage-content-md-info" data-title="内容">
+  <div class="manage-content-md-info" :data-title="$TT('content')">
     <client-only>
       <md-editor
         v-model="inputMarkdown"
@@ -315,7 +317,7 @@ onMounted(() => {
     @confirm="doDelete"
   >
     <template #title>
-      确认删除?
+      {{ $T('confirm-delete') }}
     </template>
   </common-modal>
   <common-modal
@@ -327,12 +329,12 @@ onMounted(() => {
     @confirm="showPreviewModal = false"
   >
     <template #title>
-      提交预览
+      {{ $T('preview') }}
     </template>
     <template #body>
-      <p>基础信息</p>
+      <p>{{ $TT('base-info') }}</p>
       <span ref="previewInfoEl" class="language-json info">{{ previewInfo }}</span>
-      <p>内容</p>
+      <p>{{ $TT('content') }}</p>
       <span ref="previewMdEl" class="language-markdown md">{{ previewContent }}</span>
     </template>
   </common-modal>
@@ -470,6 +472,7 @@ onMounted(() => {
 
         > span {
           height: 30px;
+          width: 90px;
           font-size: f-size(0.8);
           font-weight: 600;
           margin: 0 24px 0 8px;
@@ -477,7 +480,7 @@ onMounted(() => {
           display: flex;
           align-items: center;
           color: #222;
-          justify-content: space-between;
+          justify-content: flex-end;
           position: relative;
 
           @include dark-mode {

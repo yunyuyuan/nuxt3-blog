@@ -1,6 +1,7 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
 import { registerCancelWatchEncryptor, deepClone, fetchList } from "../utils";
+import { translate } from "../i18n";
 import { isPrerender } from "./../constants";
 import config from "~/config";
 
@@ -14,7 +15,7 @@ export function useManageList () {
   const { pending, data: list } = fetchList(targetTab.url);
 
   useHead({
-    title: `${targetTab.name}列表管理${config.SEO_title}`
+    title: translate("list-manage", [targetTab.name]) + config.SEO_title
   });
 
   // cancelWatchPasswd

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from "vue";
-import { ArticleItem, Translation } from "~/utils/types";
-import ManageContentEdit from "~/comps/manage-content-edit.vue";
+import ManageContentEdit from "../../comps/manage-content-edit.vue";
+import { ArticleItem } from "~/utils/types";
 
 const allTags = reactive(new Set<string>());
 const showTagSelect = ref<boolean>(false);
@@ -69,7 +69,7 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
     <manage-content-edit :pre-process-item="preProcessItem" :process-with-content="processContent">
       <template #title="{ disabled, item }">
         <div>
-          <span :class="{ invalid: !item.title }">{{ Translation.title }}
+          <span :class="{ invalid: !item.title }">{{ $T('title') }}
             <svg-icon name="title" />
           </span>
           <input v-model="item.title" :disabled="disabled">
@@ -77,33 +77,29 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
       </template>
       <template #tags="{ disabled, item }">
         <div>
-          <span>{{ Translation.tags }}
+          <span>{{ $T('tags') }}
             <svg-icon name="tags" />
           </span>
           <div
             ref="tagParentRef"
-            :title="item.encrypt ? '加密文章不可输入tag' : null"
+            :title="item.encrypt ? $t('tags-not-allowed') : null"
             class="input-tags flex"
             :class="{ disabled: disabled || item.encrypt }"
           >
             <input v-model="inputTags" :disabled="disabled || item.encrypt" @focusin="showTagSelect = true">
             <div class="placeholder s100 flex">
-              <span v-if="!inputTagsList.length || item.encrypt" class="text">输入标签，用英文逗号分隔</span>
+              <span v-if="!inputTagsList.length || item.encrypt" class="text">{{ $t('input-tags') }}</span>
               <template v-if="!item.encrypt">
                 <the-tag v-for="tag in inputTagsList" :key="tag">
-                  {{
-                    tag
-                  }}
+                  {{ tag }}
                 </the-tag>
               </template>
             </div>
             <common-dropdown v-model:show="showTagSelect" :parent="tagParentRef">
-              <p>已有标签：</p>
+              <p>{{ $t('existed-tags') }}:</p>
               <div class="dropdown w100 flex">
                 <the-tag v-for="tag in allTags" :key="tag" :active="inputTagsList.includes(tag)" @click="toggleTag(tag)">
-                  {{
-                    tag
-                  }}
+                  {{ tag }}
                 </the-tag>
               </div>
             </common-dropdown>

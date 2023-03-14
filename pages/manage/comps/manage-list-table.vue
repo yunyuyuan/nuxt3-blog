@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { deleteList } from "ls:~/utils/manage/github";
-import { Translation, CommonItem } from "~/utils/types";
+import { CommonItem } from "~/utils/types";
 import { formatTime } from "~/utils/_dayjs";
 import { useStatusText } from "~/utils/manage";
 import { useManageList } from "~/utils/manage/list";
@@ -69,14 +69,14 @@ function deleteSelect () {
 
 <template>
   <div class="manage-list-head flex">
-    <input v-model="searchValue" placeholder="输入文字进行搜索">
+    <input v-model="searchValue" :placeholder="$T('input-text-to-search')">
     <div v-if="slots.filter" class="filter flex">
       <slot name="filter" />
     </div>
     <del style="margin: 0 auto;" />
     <span class="status">{{ statusText }}</span>
     <common-button class="add-item" icon="add" @click="newItem">
-      新建
+      {{ $T('new') }}
     </common-button>
     <common-button
       icon="delete"
@@ -85,7 +85,7 @@ function deleteSelect () {
       :loading="processing"
       @click="showConfirmModal = true"
     >
-      删除
+      {{ $T('del') }}
     </common-button>
   </div>
   <ul class="manage-list-table">
@@ -99,21 +99,21 @@ function deleteSelect () {
         class="col"
         :class="['col-' + head, colPrefix + head]"
       >
-        {{ Translation[head] }}
+        {{ $T(head) }}
       </div>
       <div class="col col-time">
-        日期
+        {{ $T('date') }}
       </div>
       <div class="col col-lock">
-        加密
+        {{ $T('encrypted') }}
       </div>
       <div class="col col-check">
-        选择
+        {{ $T('select') }}
       </div>
     </li>
     <common-loading v-show="pending" :show-in-first="false" />
     <div v-if="!searchedList.length && !pending" class="flex empty">
-      空空如也~
+      {{ $t('nothing-here') }}
     </div>
     <li
       v-for="item in searchedList"
@@ -139,7 +139,7 @@ function deleteSelect () {
       <div class="col col-time">
         <span>{{ formatTime(item.time) }}</span>
       </div>
-      <div class="col col-lock" :title="item.encrypt ? '已加密' : null">
+      <div class="col col-lock" :title="item.encrypt ? $t('has-encrypted') : null">
         <svg-icon v-if="item.encrypt" name="lock" />
       </div>
       <div class="col col-check">
@@ -156,13 +156,11 @@ function deleteSelect () {
     @confirm="deleteSelect"
   >
     <template #title>
-      确认删除
+      {{ $T('confirm-delete') }}
     </template>
     <template #body>
       <p>
-        已选择<b style="margin: 0 8px; font-size: 1rem;">{{
-          selectedList.length
-        }}</b>项
+        {{ $t('selected-items', [selectedList.length]) }}
       </p>
     </template>
   </common-modal>
