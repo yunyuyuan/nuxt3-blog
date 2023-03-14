@@ -120,6 +120,15 @@ export function watchUntil (
 /**
  * 展示评论
  */
+const updateGiscusConfig = (config) => {
+  const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+  if (!iframe) { return; }
+  iframe.contentWindow!.postMessage({
+    giscus: {
+      setConfig: config
+    }
+  }, "https://giscus.app");
+};
 export function useComment (key: HeaderTabUrl) {
   const tab = key.substring(1);
   const { cmtRepCateId, cmtRepId } = useRuntimeConfig().app;
@@ -131,6 +140,14 @@ export function useComment (key: HeaderTabUrl) {
         const { themeMode } = useThemeMode();
         const getTheme = () => {
           return themeMode.value === "light" ? "light" : "dark_dimmed";
+        };
+        const getLang = (locale: string) => {
+          switch (locale) {
+            case "en":
+              return "en";
+            default:
+              return "zh-CN";
+          }
         };
 
         const script = document.createElement("script");
@@ -145,20 +162,19 @@ export function useComment (key: HeaderTabUrl) {
         script.setAttribute("data-emit-metadata", "0");
         script.setAttribute("data-input-position", "top");
         script.setAttribute("data-theme", getTheme());
-        script.setAttribute("data-lang", "zh-CN");
+        script.setAttribute("data-lang", getLang(useNuxtApp().$i18n.locale.value));
         script.setAttribute("crossorigin", "anonymous");
         script.setAttribute("async", "");
         root.value!.appendChild(script);
+        watch(useNuxtApp().$i18n.locale, (locale) => {
+          updateGiscusConfig({
+            lang: getLang(locale)
+          });
+        });
         watch(themeMode, () => {
-          const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
-          if (!iframe) { return; }
-          iframe.contentWindow!.postMessage({
-            giscus: {
-              setConfig: {
-                theme: getTheme()
-              }
-            }
-          }, "https://giscus.app");
+          updateGiscusConfig({
+            theme: getTheme()
+          });
         });
       }
     }

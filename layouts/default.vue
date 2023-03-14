@@ -356,6 +356,10 @@ const isFirst = ref(true);
           &:hover,
           &.active {
             color: $theme-color-darken;
+
+            @include dark-mode {
+              color: $theme-color-lighten;
+            }
           }
         }
       }
