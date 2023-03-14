@@ -103,43 +103,45 @@ const modalOk = () => {
       <span class="mobile-menu-toggler" @click="toggleMenu()">
         <svg-icon :name="pageLoading.loadingState.value ? 'loading' : 'menu'" />
       </span>
-      <div class="w100 flexc" :class="{hide: !menuShow}">
-        <ul>
-          <li>
-            <a class="upload-img-btn" @click="showUploadImage = true">
-              {{ $T('images') }}
-            </a>
-          </li>
-          <li>
-            <nuxt-link
-              to="/manage/config"
-              :class="{ active: activeRoute.startsWith('/config') }"
-            >
-              {{ $T('config') }}
-            </nuxt-link>
-          </li>
-          <li v-for="tab in HeaderTabs" :key="tab.url">
-            <nuxt-link
-              :to="'/manage' + tab.url"
-              :class="{ active: activeRoute.startsWith(tab.url) }"
-            >
-              <span>{{ $T(tab.name) }}</span>
-            </nuxt-link>
-          </li>
-        </ul>
-        <div :title="$sameSha.value ? (allPassed ? $t('all-verified'):$t('token-and-passwd')) : $t('commit-id-not-correct')" :class="{warning: !$sameSha.value}" @click="showModal = true">
-          <svg-icon
-            :class="{invalid: !githubToken, active: allPassed }"
-            name="password"
-          />
+      <Transition>
+        <div v-if="menuShow" class="menu w100 flexc">
+          <ul>
+            <li>
+              <a class="upload-img-btn" @click="showUploadImage = true">
+                {{ $T('images') }}
+              </a>
+            </li>
+            <li>
+              <nuxt-link
+                to="/manage/config"
+                :class="{ active: activeRoute.startsWith('/config') }"
+              >
+                {{ $T('config') }}
+              </nuxt-link>
+            </li>
+            <li v-for="tab in HeaderTabs" :key="tab.url">
+              <nuxt-link
+                :to="'/manage' + tab.url"
+                :class="{ active: activeRoute.startsWith(tab.url) }"
+              >
+                <span>{{ $T(tab.name) }}</span>
+              </nuxt-link>
+            </li>
+          </ul>
+          <div :title="$sameSha.value ? (allPassed ? $t('all-verified'):$t('token-and-passwd')) : $t('commit-id-not-correct')" :class="{warning: !$sameSha.value}" @click="showModal = true">
+            <svg-icon
+              :class="{invalid: !githubToken, active: allPassed }"
+              name="password"
+            />
+          </div>
+          <nuxt-link title="🚀" :to="travel">
+            <svg-icon name="rocket" />
+          </nuxt-link>
+          <span v-show="pageLoading.loadingState.value" class="loading">
+            <svg-icon name="loading" />
+          </span>
         </div>
-        <nuxt-link title="🚀" :to="travel">
-          <svg-icon name="rocket" />
-        </nuxt-link>
-        <span v-show="pageLoading.loadingState.value" class="loading">
-          <svg-icon name="loading" />
-        </span>
-      </div>
+      </Transition>
     </nav>
     <section>
       <div>
@@ -192,7 +194,7 @@ $menu-width: 120px;
       display: none;
     }
 
-    >div {
+    >.menu {
       transition: $common-transition;
       transform-origin: top;
       opacity: 1;
@@ -374,10 +376,17 @@ $menu-width: 120px;
       top: 48px;
       left: 2%;
 
-      >div.hide {
-        transform: scaleY(0);
-        opacity: 0.3;
-        height: 0;
+      .menu {
+        &.v-enter-active,
+        &.v-leave-active {
+          transition: $common-transition;
+        }
+
+        &.v-enter-from,
+        &.v-leave-to {
+          opacity: 0;
+          transform: scaleY(30%);
+        }
       }
 
       >div > .loading {

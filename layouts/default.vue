@@ -9,6 +9,12 @@ const pageLoading = useLoading();
 const route = useRoute();
 const footerDomain = inBrowser ? window.location.hostname : "";
 
+// mobile menu
+const menuShow = ref<boolean>(true);
+const toggleMenu = () => {
+  menuShow.value = !menuShow.value;
+};
+
 const i18nHided = ref<boolean>(true);
 const showI18n = ref<boolean>(false);
 const setLocale = (locale) => {
@@ -58,19 +64,26 @@ const isFirst = ref(true);
   <div id="default-layout" :class="{'in-about': inAbout}">
     <div v-if="!isPrerender" class="mode-bg" :class="[themeMode, {active: !isFirst}]" />
     <nav id="header" ref="headerRef" class="flex w100">
-      <nuxt-link
-        v-for="item in HeaderTabs"
-        :key="item.url"
-        class="item"
-        :class="{ active: activeRoute === item.url.substring(1) }"
-        :to="item.url"
-      >
-        {{ $T(item.name) }}
-        <span />
-        <span />
-        <span />
-        <span />
-      </nuxt-link>
+      <span class="mobile-menu-toggler" :class="{active: menuShow}" @click="toggleMenu()">
+        <svg-icon name="menu" />
+      </span>
+      <Transition>
+        <div v-if="menuShow" class="menu flex">
+          <nuxt-link
+            v-for="item in HeaderTabs"
+            :key="item.url"
+            class="item"
+            :class="{ active: activeRoute === item.url.substring(1) }"
+            :to="item.url"
+          >
+            {{ $T(item.name) }}
+            <span />
+            <span />
+            <span />
+            <span />
+          </nuxt-link>
+        </div>
+      </Transition>
       <del />
       <a class="i18n" @click="i18nHided && (showI18n = true)">
         <svg-icon name="i18n" />
@@ -229,6 +242,73 @@ const isFirst = ref(true);
 
     @include dark-mode {
       box-shadow: 0 0 8px rgb(15 15 15 / 56%);
+    }
+
+    .mobile-menu-toggler {
+      display: none;
+    }
+
+    .menu {
+      box-shadow: 0 0 10px #3c3c3c8a;
+
+      @include dark-mode {
+        box-shadow: 0 0 10px #d0d0d08a;
+      }
+    }
+
+    @include mobile {
+      .mobile-menu-toggler {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        margin-left: 10px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+
+        &.active {
+          background: white;
+        }
+
+        svg {
+          fill: $theme-color-lighten;
+
+          @include square;
+        }
+      }
+
+      .menu {
+        position: absolute;
+        left: 10px;
+        top: $header-height + 10px;
+        flex-direction: column;
+        align-items: stretch;
+        background: #303947;
+        padding: 8px;
+        border-radius: 10px;
+        transform-origin: top;
+        transition: $common-transition;
+
+        &.v-enter-active,
+        &.v-leave-active {
+          transition: $common-transition;
+        }
+
+        &.v-enter-from,
+        &.v-leave-to {
+          opacity: 0;
+          transform: scaleY(30%);
+        }
+
+        .item {
+          margin: 0;
+          text-align: center;
+
+          &:not(:last-of-type) {
+            margin-bottom: 8px;
+          }
+        }
+      }
     }
 
     .item {
