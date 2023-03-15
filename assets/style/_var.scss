@@ -26,8 +26,8 @@ $font-source-han-sans: none;
 // $font-code: "Source Code Pro", serif;
 $font-code: "Fira Code", serif;
 
-@mixin mobile($is-self: false) {
-  @if $is-self {
+@mixin mobile {
+  @if & {
     @at-root body.is-mobile & {
       @content;
     }

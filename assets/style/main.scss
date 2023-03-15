@@ -75,7 +75,7 @@ body {
 #__nuxt {
   margin: auto;
 
-  @include mobile(true) {
+  @include mobile {
     width: 100%;
   }
 }

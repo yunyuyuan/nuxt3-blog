@@ -66,7 +66,7 @@
         }
 
         &::before {
-          @include mobile(true) {
+          @include mobile {
             content: none !important;
           }
         }
@@ -442,7 +442,7 @@
       position: relative;
       overflow: auto;
 
-      @include mobile(true) {
+      @include mobile {
         padding: 0.5rem 0.8rem;
         font-size: f-size(0.78);
         line-height: 1.3rem;
@@ -495,7 +495,6 @@
   }
 
   div.embed-video {
-    width: 100%;
     max-width: 50rem;
     height: 30rem;
     display: flex;
@@ -503,7 +502,7 @@
     align-items: center;
     margin: 1.2rem auto;
 
-    @include mobile(true) {
+    @include mobile {
       padding: 0.5rem 0.8rem;
       font-size: f-size(0.78);
       line-height: 1.3rem;

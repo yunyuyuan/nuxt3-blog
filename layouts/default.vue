@@ -11,9 +11,10 @@ const route = useRoute();
 const footerDomain = inBrowser ? window.location.hostname : "";
 
 // mobile menu
+const isMobile = useIsMobile();
 const menuShow = ref<boolean>(false);
 const menuHidden = ref<boolean>(true);
-watch(useIsMobile(), (isMobile) => {
+watch(isMobile, (isMobile) => {
   if (isMobile) {
     setTimeout(() => {
       menuShow.value = false;
@@ -76,7 +77,7 @@ const isFirst = ref(true);
         <svg-icon name="menu" />
       </span>
       <common-dropdown v-model:show="menuShow" v-model:hided="menuHidden" :only-mobile="true" wrap-class="menu-dropdown">
-        <div class="layout-menu flex">
+        <div class="layout-menu flex" :class="{'in-mobile': isMobile}">
           <nuxt-link
             v-for="item in HeaderTabs"
             :key="item.url"
@@ -244,10 +245,12 @@ const isFirst = ref(true);
   }
 
   .layout-menu {
-    box-shadow: 0 0 10px #3c3c3c8a;
+    &.in-mobile {
+      box-shadow: 0 0 10px #3c3c3c8a;
 
-    @include dark-mode {
-      box-shadow: 0 0 10px #d0d0d08a;
+      @include dark-mode {
+        box-shadow: 0 0 10px #b4b4b48a;
+      }
     }
 
     .item {
