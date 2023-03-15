@@ -143,9 +143,6 @@ const modalOk = () => {
           <nuxt-link title="🚀" :to="travel">
             <svg-icon name="rocket" />
           </nuxt-link>
-          <span v-show="pageLoading.loadingState.value" class="loading">
-            <svg-icon name="loading" />
-          </span>
         </div>
       </common-dropdown>
     </nav>
