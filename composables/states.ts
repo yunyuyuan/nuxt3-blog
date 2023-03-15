@@ -6,7 +6,7 @@ const ThemeModeKey = "theme-mode";
 // avoid loading during SSG
 export const useFirstLoad = () => useState("first-loaded", () => true);
 
-export const useIsMobile = () => useState("is-mobile", () => true);
+export const useIsMobile = () => useState("is-mobile", () => false);
 
 export const useGithubToken = () => useState(GithubTokenKey, () => "");
 export const useIsAuthor = () => useState<null | boolean>("is-author", () => null);

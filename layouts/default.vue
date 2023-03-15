@@ -11,10 +11,9 @@ const route = useRoute();
 const footerDomain = inBrowser ? window.location.hostname : "";
 
 // mobile menu
-const isMobile = useIsMobile();
 const menuShow = ref<boolean>(false);
 const menuHidden = ref<boolean>(true);
-watch(isMobile, (isMobile) => {
+watch(useIsMobile(), (isMobile) => {
   if (isMobile) {
     setTimeout(() => {
       menuShow.value = false;
@@ -66,26 +65,6 @@ const encryptor = useEncryptor();
 const showPwdModal = ref(false);
 const inputPwd = ref(encryptor.usePasswd.value);
 const isFirst = ref(true);
-
-const menuComp = () => (
-  <div class="layout-menu flex">
-    {
-      HeaderTabs.map(item => (
-        <nuxt-link
-          key={item.url}
-          class={{ item: true, active: activeRoute.value === item.url.substring(1) }}
-          to={item.url}
-        >
-          { translateT(item.name) }
-          <span />
-          <span />
-          <span />
-          <span />
-        </nuxt-link>
-      ))
-    }
-  </div>
-);
 </script>
 
 <template>
@@ -96,9 +75,21 @@ const menuComp = () => (
       <span class="mobile-menu-toggler" :class="{active: menuShow}" @click="menuHidden && (menuShow = true)">
         <svg-icon name="menu" />
       </span>
-      <menuComp v-if="!isMobile" />
-      <common-dropdown v-else v-model:show="menuShow" v-model:hided="menuHidden" wrap-class="menu-dropdown">
-        <menuComp />
+      <common-dropdown v-model:show="menuShow" v-model:hided="menuHidden" :only-mobile="true" wrap-class="menu-dropdown">
+        <div class="layout-menu flex">
+          <nuxt-link
+            v-for="item in HeaderTabs"
+            :key="item.url"
+            :class="{ item: true, active: activeRoute === item.url.substring(1) }"
+            :to="item.url"
+          >
+            {{ $T(item.name) }}
+            <span />
+            <span />
+            <span />
+            <span />
+          </nuxt-link>
+        </div>
       </common-dropdown>
       <del class="stretch" />
       <a class="i18n" @click="i18nHided && (showI18n = true)">

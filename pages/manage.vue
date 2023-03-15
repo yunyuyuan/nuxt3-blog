@@ -5,7 +5,7 @@ import { HeaderTabs } from "~/utils/types";
 import { isAuthor } from "~/utils/manage/github";
 import { notify } from "~/utils/notify/notify";
 import { calcRocketUrl, rmLocalStorage, setLocalStorage } from "~/utils/utils";
-import { translate, translateT } from "~/utils/i18n";
+import { translate } from "~/utils/i18n";
 import { isDev, GithubTokenKey } from "~/utils/constants";
 
 const pageLoading = useLoading();
@@ -30,10 +30,9 @@ const travel = computed(() => {
 });
 
 // mobile menu
-const isMobile = useIsMobile();
 const menuShow = ref<boolean>(false);
 const menuHidden = ref<boolean>(true);
-watch(isMobile, (isMobile) => {
+watch(useIsMobile(), (isMobile) => {
   if (isMobile) {
     setTimeout(() => {
       menuShow.value = false;
@@ -101,53 +100,6 @@ const modalOk = () => {
       checkingToken.value = false;
     });
 };
-
-const menuComp = () => (
-  <div class="manage-menu w100 flexc">
-    <ul>
-      <li>
-        <a class="upload-img-btn" onClick={() => { showUploadImage.value = true; }}>
-          { translateT("images") }
-        </a>
-      </li>
-      <li>
-        <nuxt-link
-          to="/manage/config"
-          class={{ active: activeRoute.value.startsWith("/config") }}
-        >
-          { translateT("config") }
-        </nuxt-link>
-      </li>
-      {
-        HeaderTabs.map(tab => (
-          <li key={tab.url}>
-            <nuxt-link
-              to={"/manage" + tab.url}
-              class={{ active: activeRoute.value.startsWith(tab.url) }}
-            >
-              <span>{ translateT(tab.name) }</span>
-            </nuxt-link>
-          </li>
-        ))
-      }
-    </ul>
-    <div
-      title={useNuxtApp().$sameSha.value ? (allPassed.value ? translate("all-verified") : translate("token-and-passwd")) : translate("commit-id-not-correct")}
-      class={{ warning: !useNuxtApp().$sameSha.value }}
-      onClick={() => { showModal.value = true; }}>
-      <svg-icon
-        class={{ invalid: !githubToken.value, active: allPassed.value }}
-        name="password"
-      />
-    </div>
-    <nuxt-link title="🚀" to={travel.value}>
-      <svg-icon name="rocket" />
-    </nuxt-link>
-    <span v-show={pageLoading.loadingState.value} class="loading">
-      <svg-icon name="loading" />
-    </span>
-  </div>
-);
 </script>
 
 <template>
@@ -157,9 +109,44 @@ const menuComp = () => (
       <span class="mobile-menu-toggler" @click="menuHidden && (menuShow = true)">
         <svg-icon :name="pageLoading.loadingState.value ? 'loading' : 'menu'" />
       </span>
-      <menuComp v-if="!isMobile" />
-      <common-dropdown v-else v-model:show="menuShow" v-model:hided="menuHidden">
-        <menuComp />
+      <common-dropdown v-model:show="menuShow" v-model:hided="menuHidden" :only-mobile="true">
+        <div class="manage-menu w100 flexc">
+          <ul>
+            <li>
+              <a class="upload-img-btn" @click="showUploadImage = true">
+                {{ $T('images') }}
+              </a>
+            </li>
+            <li>
+              <nuxt-link
+                to="/manage/config"
+                :class="{ active: activeRoute.startsWith('/config') }"
+              >
+                {{ $T('config') }}
+              </nuxt-link>
+            </li>
+            <li v-for="tab in HeaderTabs" :key="tab.url">
+              <nuxt-link
+                :to="'/manage' + tab.url"
+                :class="{ active: activeRoute.startsWith(tab.url) }"
+              >
+                <span>{{ $T(tab.name) }}</span>
+              </nuxt-link>
+            </li>
+          </ul>
+          <div :title="$sameSha.value ? (allPassed ? $t('all-verified'):$t('token-and-passwd')) : $t('commit-id-not-correct')" :class="{warning: !$sameSha.value}" @click="showModal = true">
+            <svg-icon
+              :class="{invalid: !githubToken, active: allPassed }"
+              name="password"
+            />
+          </div>
+          <nuxt-link title="🚀" :to="travel">
+            <svg-icon name="rocket" />
+          </nuxt-link>
+          <span v-show="pageLoading.loadingState.value" class="loading">
+            <svg-icon name="loading" />
+          </span>
+        </div>
       </common-dropdown>
     </nav>
     <section>

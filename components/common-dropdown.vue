@@ -2,9 +2,12 @@
 const props = defineProps({
   hided: Boolean,
   show: Boolean,
+  onlyMobile: Boolean,
   parent: { type: Object, default: null },
   wrapClass: { type: String, default: "" }
 });
+
+const isMobile = useIsMobile();
 
 const emit = defineEmits(["update:hided", "update:show", "open"]);
 
@@ -28,7 +31,11 @@ const afterOpen = () => {
 </script>
 
 <template>
+  <template v-if="onlyMobile && !isMobile">
+    <slot />
+  </template>
   <transition
+    v-else
     name="slide"
     @before-enter="emit('update:hided', false)"
     @after-enter="afterOpen"
