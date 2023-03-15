@@ -159,9 +159,7 @@ function deleteSelect () {
       {{ $T('confirm-delete') }}
     </template>
     <template #body>
-      <p>
-        {{ $t('selected-items', [selectedList.length]) }}
-      </p>
+      <p v-html="$t('selected-items', [selectedList.length])" />
     </template>
   </common-modal>
 </template>

@@ -71,6 +71,13 @@ watch(img, (img) => {
   }
 });
 
+const saveToken = (k: string, v: string) => {
+  setLocalStorage(k, v);
+  notify({
+    title: translate(v ? "token-saved" : "token-deleted-from-local")
+  });
+};
+
 const afterUpload = (res: any) => {
   try {
     if (typeof res === "string") {
@@ -82,10 +89,6 @@ const afterUpload = (res: any) => {
         title: translate("upload-successful"),
         description: translate("manually-copy-link")
       });
-      setLocalStorage("smms-token", smmsToken.value);
-      if (tinyPngToken.value) {
-        setLocalStorage("tinypng-token", tinyPngToken.value);
-      }
     } else {
       throw new Error(res.data.message);
     }
@@ -188,8 +191,18 @@ onUnmounted(() => {
           <img v-else class="s100" :src="imgUrl">
         </label>
         <div class="flexc footer">
-          <input v-model="smmsToken" :placeholder="$t('please-input') + ' smms API token'">
-          <input v-model="tinyPngToken" :placeholder="`(${$t('optional')})${$t('please-input')} tinyPng API token`">
+          <div class="flex">
+            <input v-model="smmsToken" :placeholder="$t('please-input') + ' smms API token'">
+            <span @click="saveToken('smms-token', smmsToken)">
+              <svg-icon name="yes" />
+            </span>
+          </div>
+          <div class="flex">
+            <input v-model="tinyPngToken" :placeholder="`(${$t('optional')})${$t('please-input')} tinyPng API token`">
+            <span @click="saveToken('tinypng-token', tinyPngToken)">
+              <svg-icon name="yes" />
+            </span>
+          </div>
           <common-button icon="upload" :loading="uploading" :disabled="!img || !smmsToken" @click="doUpload">
             {{ $t('upload') }}
           </common-button>
@@ -276,12 +289,27 @@ onUnmounted(() => {
     }
 
     .footer {
+      > div {
+        margin-bottom: 8px;
+
+        > span {
+          cursor: pointer;
+          width: 20px;
+          height: 20px;
+
+          svg {
+            @include square;
+
+            fill: $theme-color-darken;
+          }
+        }
+      }
+
       input {
         font-size: f-size(0.75);
         width: 300px;
         padding: 6px;
         margin-right: 5px;
-        margin-bottom: 8px;
       }
     }
   }
