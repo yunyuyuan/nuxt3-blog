@@ -1,11 +1,11 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { RouteLocationNormalized } from "vue-router";
 import UploadImage from "./manage/comps/upload-image.vue";
 import { HeaderTabs } from "~/utils/types";
 import { isAuthor } from "~/utils/manage/github";
 import { notify } from "~/utils/notify/notify";
 import { calcRocketUrl, rmLocalStorage, setLocalStorage } from "~/utils/utils";
-import { translate } from "~/utils/i18n";
+import { translate, translateT } from "~/utils/i18n";
 import { isDev, GithubTokenKey } from "~/utils/constants";
 
 const pageLoading = useLoading();
@@ -30,10 +30,17 @@ const travel = computed(() => {
 });
 
 // mobile menu
-const menuShow = ref<boolean>(true);
-const toggleMenu = () => {
-  menuShow.value = !menuShow.value;
-};
+const isMobile = useIsMobile();
+const menuShow = ref<boolean>(false);
+const menuHidden = ref<boolean>(true);
+watch(isMobile, (isMobile) => {
+  if (isMobile) {
+    setTimeout(() => {
+      menuShow.value = false;
+      menuHidden.value = true;
+    });
+  }
+});
 
 // token & password
 const githubToken = useGithubToken();
@@ -94,54 +101,66 @@ const modalOk = () => {
       checkingToken.value = false;
     });
 };
+
+const menuComp = () => (
+  <div class="manage-menu w100 flexc">
+    <ul>
+      <li>
+        <a class="upload-img-btn" onClick={() => { showUploadImage.value = true; }}>
+          { translateT("images") }
+        </a>
+      </li>
+      <li>
+        <nuxt-link
+          to="/manage/config"
+          class={{ active: activeRoute.value.startsWith("/config") }}
+        >
+          { translateT("config") }
+        </nuxt-link>
+      </li>
+      {
+        HeaderTabs.map(tab => (
+          <li key={tab.url}>
+            <nuxt-link
+              to={"/manage" + tab.url}
+              class={{ active: activeRoute.value.startsWith(tab.url) }}
+            >
+              <span>{ translateT(tab.name) }</span>
+            </nuxt-link>
+          </li>
+        ))
+      }
+    </ul>
+    <div
+      title={useNuxtApp().$sameSha.value ? (allPassed.value ? translate("all-verified") : translate("token-and-passwd")) : translate("commit-id-not-correct")}
+      class={{ warning: !useNuxtApp().$sameSha.value }}
+      onClick={() => { showModal.value = true; }}>
+      <svg-icon
+        class={{ invalid: !githubToken.value, active: allPassed.value }}
+        name="password"
+      />
+    </div>
+    <nuxt-link title="🚀" to={travel.value}>
+      <svg-icon name="rocket" />
+    </nuxt-link>
+    <span v-show={pageLoading.loadingState.value} class="loading">
+      <svg-icon name="loading" />
+    </span>
+  </div>
+);
 </script>
 
 <template>
   <div class="manage-background" />
   <div class="manage-container">
     <nav>
-      <span class="mobile-menu-toggler" @click="toggleMenu()">
+      <span class="mobile-menu-toggler" @click="menuHidden && (menuShow = true)">
         <svg-icon :name="pageLoading.loadingState.value ? 'loading' : 'menu'" />
       </span>
-      <Transition>
-        <div v-if="menuShow" class="menu w100 flexc">
-          <ul>
-            <li>
-              <a class="upload-img-btn" @click="showUploadImage = true">
-                {{ $T('images') }}
-              </a>
-            </li>
-            <li>
-              <nuxt-link
-                to="/manage/config"
-                :class="{ active: activeRoute.startsWith('/config') }"
-              >
-                {{ $T('config') }}
-              </nuxt-link>
-            </li>
-            <li v-for="tab in HeaderTabs" :key="tab.url">
-              <nuxt-link
-                :to="'/manage' + tab.url"
-                :class="{ active: activeRoute.startsWith(tab.url) }"
-              >
-                <span>{{ $T(tab.name) }}</span>
-              </nuxt-link>
-            </li>
-          </ul>
-          <div :title="$sameSha.value ? (allPassed ? $t('all-verified'):$t('token-and-passwd')) : $t('commit-id-not-correct')" :class="{warning: !$sameSha.value}" @click="showModal = true">
-            <svg-icon
-              :class="{invalid: !githubToken, active: allPassed }"
-              name="password"
-            />
-          </div>
-          <nuxt-link title="🚀" :to="travel">
-            <svg-icon name="rocket" />
-          </nuxt-link>
-          <span v-show="pageLoading.loadingState.value" class="loading">
-            <svg-icon name="loading" />
-          </span>
-        </div>
-      </Transition>
+      <menuComp v-if="!isMobile" />
+      <common-dropdown v-else v-model:show="menuShow" v-model:hided="menuHidden">
+        <menuComp />
+      </common-dropdown>
     </nav>
     <section>
       <div>
@@ -194,115 +213,11 @@ $menu-width: 120px;
       display: none;
     }
 
-    >.menu {
-      transition: $common-transition;
-      transform-origin: top;
-      opacity: 1;
-
-      ul {
-        padding: 10px 0;
-        width: 100%;
-        box-shadow: 0 0 14px rgb(0 0 0 / 36%);
-        list-style: none;
-        background: #525252;
-        overflow: hidden;
-        border-radius: 2px;
-
-        li {
-          .upload-img-btn {
-            cursor: cell;
-          }
-
-          a {
-            display: block;
-            text-align: center;
-            padding: 10px 0;
-            font-size: f-size(1);
-            text-decoration: none;
-            color: rgb(255 255 255);
-            transition: $common-transition;
-            position: relative;
-
-            &::before {
-              position: absolute;
-              z-index: 1;
-              content: "";
-              display: block;
-              height: 100%;
-              width: 2px;
-              background: white;
-              left: 0;
-              top: 0;
-              opacity: 0;
-              transition: $common-transition;
-            }
-
-            &:hover {
-              background: #6f6f6f;
-            }
-
-            &.active {
-              background: #828282;
-
-              &::before {
-                opacity: 1;
-              }
-            }
-          }
-        }
-      }
-
-      > div,
-      > a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        @include square(40px);
-
-        border-radius: 50%;
-        background: white;
-        box-shadow: 0 0 10px rgb(0 0 0 / 40%);
-        margin-top: 18px;
-        cursor: pointer;
-        transition: $common-transition;
-
-        &:hover {
-          transform: scale(1.1);
-        }
-
-        &.warning {
-          background: rgb(255 255 153);
-        }
-
-        > svg {
-          @include square(24px);
-
-          &.active {
-            fill: #00ad15;
-          }
-
-          &.invalid {
-            fill: red;
-          }
-        }
-
-        img {
-          border-radius: 50%;
-
-          @include square(80%);
-        }
-      }
-
-      >.loading {
-        margin-top: 20px;
-
-        >svg {
-          fill: $theme-color;
-
-          @include square(40px);
-        }
-      }
+    .common-dropdown {
+      background: transparent;
+      box-shadow: none;
+      border: none;
+      width: $menu-width - $padding-left;
     }
   }
 
@@ -342,6 +257,113 @@ $menu-width: 120px;
   }
 }
 
+.manage-menu {
+  ul {
+    padding: 10px 0;
+    width: 100%;
+    box-shadow: 0 0 14px rgb(0 0 0 / 36%);
+    list-style: none;
+    background: #525252;
+    overflow: hidden;
+    border-radius: 2px;
+
+    li {
+      .upload-img-btn {
+        cursor: cell;
+      }
+
+      a {
+        display: block;
+        text-align: center;
+        padding: 10px 0;
+        font-size: f-size(1);
+        text-decoration: none;
+        color: rgb(255 255 255);
+        transition: $common-transition;
+        position: relative;
+
+        &::before {
+          position: absolute;
+          z-index: 1;
+          content: "";
+          display: block;
+          height: 100%;
+          width: 2px;
+          background: white;
+          left: 0;
+          top: 0;
+          opacity: 0;
+          transition: $common-transition;
+        }
+
+        &:hover {
+          background: #6f6f6f;
+        }
+
+        &.active {
+          background: #828282;
+
+          &::before {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+  > div,
+  > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include square(40px);
+
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 10px rgb(0 0 0 / 40%);
+    margin-top: 18px;
+    cursor: pointer;
+    transition: $common-transition;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &.warning {
+      background: rgb(255 255 153);
+    }
+
+    > svg {
+      @include square(24px);
+
+      &.active {
+        fill: #00ad15;
+      }
+
+      &.invalid {
+        fill: red;
+      }
+    }
+
+    img {
+      border-radius: 50%;
+
+      @include square(80%);
+    }
+  }
+
+  >.loading {
+    margin-top: 20px;
+
+    >svg {
+      fill: $theme-color;
+
+      @include square(40px);
+    }
+  }
+}
+
 .manage-input-pwd {
   display: flex;
   flex-direction: column;
@@ -375,19 +397,6 @@ $menu-width: 120px;
     > nav {
       top: 48px;
       left: 2%;
-
-      .menu {
-        &.v-enter-active,
-        &.v-leave-active {
-          transition: $common-transition;
-        }
-
-        &.v-enter-from,
-        &.v-leave-to {
-          opacity: 0;
-          transform: scaleY(30%);
-        }
-      }
 
       >div > .loading {
         display: none;

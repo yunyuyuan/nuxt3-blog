@@ -492,8 +492,7 @@ onMounted(() => {
             color: red;
             font-size: f-size(0.9);
             left: 0;
-            position: absolute;
-            top: 8px;
+            position: relative;
             transform: translateX(-12px);
           }
 

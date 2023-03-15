@@ -1,4 +1,5 @@
-<script setup lang="ts">
+<script setup lang="tsx">
+import type Headroom from "headroom.js";
 import { githubRepoUrl, inBrowser, isPrerender } from "~/utils/constants";
 import { HeaderTabs } from "~/utils/types";
 import { calcRocketUrl, setLocalStorage } from "~/utils/utils";
@@ -10,16 +11,23 @@ const route = useRoute();
 const footerDomain = inBrowser ? window.location.hostname : "";
 
 // mobile menu
-const menuShow = ref<boolean>(true);
-const toggleMenu = () => {
-  menuShow.value = !menuShow.value;
-};
+const isMobile = useIsMobile();
+const menuShow = ref<boolean>(false);
+const menuHidden = ref<boolean>(true);
+watch(isMobile, (isMobile) => {
+  if (isMobile) {
+    setTimeout(() => {
+      menuShow.value = false;
+      menuHidden.value = true;
+    });
+  }
+});
 
 const i18nHided = ref<boolean>(true);
 const showI18n = ref<boolean>(false);
-const setLocale = (locale) => {
+const setLocale = (locale: string) => {
   setLocalStorage("locale-lang", locale);
-  useNuxtApp().$i18n.setLocale(getLocalStorage("locale-lang"));
+  useNuxtApp().$i18n.setLocale(locale);
   showI18n.value = false;
 };
 
@@ -41,7 +49,7 @@ const toggleTheme = () => {
   isFirst.value = false;
 };
 
-let headroom;
+let headroom: undefined | Headroom;
 const headerRef = ref();
 onMounted(async () => {
   const Headroom = (await import("headroom.js")).default;
@@ -58,33 +66,41 @@ const encryptor = useEncryptor();
 const showPwdModal = ref(false);
 const inputPwd = ref(encryptor.usePasswd.value);
 const isFirst = ref(true);
+
+const menuComp = () => (
+  <div class="layout-menu flex">
+    {
+      HeaderTabs.map(item => (
+        <nuxt-link
+          key={item.url}
+          class={{ item: true, active: activeRoute.value === item.url.substring(1) }}
+          to={item.url}
+        >
+          { translateT(item.name) }
+          <span />
+          <span />
+          <span />
+          <span />
+        </nuxt-link>
+      ))
+    }
+  </div>
+);
 </script>
 
 <template>
   <div id="default-layout" :class="{'in-about': inAbout}">
     <div v-if="!isPrerender" class="mode-bg" :class="[themeMode, {active: !isFirst}]" />
     <nav id="header" ref="headerRef" class="flex w100">
-      <span class="mobile-menu-toggler" :class="{active: menuShow}" @click="toggleMenu()">
+      <del class="space-left" />
+      <span class="mobile-menu-toggler" :class="{active: menuShow}" @click="menuHidden && (menuShow = true)">
         <svg-icon name="menu" />
       </span>
-      <Transition>
-        <div v-if="menuShow" class="menu flex">
-          <nuxt-link
-            v-for="item in HeaderTabs"
-            :key="item.url"
-            class="item"
-            :class="{ active: activeRoute === item.url.substring(1) }"
-            :to="item.url"
-          >
-            {{ $T(item.name) }}
-            <span />
-            <span />
-            <span />
-            <span />
-          </nuxt-link>
-        </div>
-      </Transition>
-      <del />
+      <menuComp v-if="!isMobile" />
+      <common-dropdown v-else v-model:show="menuShow" v-model:hided="menuHidden" wrap-class="menu-dropdown">
+        <menuComp />
+      </common-dropdown>
+      <del class="stretch" />
       <a class="i18n" @click="i18nHided && (showI18n = true)">
         <svg-icon name="i18n" />
         <common-dropdown
@@ -155,23 +171,6 @@ const isFirst = ref(true);
 </template>
 
 <style lang="scss">
-#body {
-  min-height: calc(100vh - #{$header-height + $footer-height});
-  padding-top: $header-height;
-  z-index: $z-index-body;
-  position: relative;
-}
-
-#__nuxt {
-  margin: auto;
-}
-
-@include mobile {
-  #__nuxt {
-    width: 100%;
-  }
-}
-
 #default-layout {
   $circle-w: calc(200vw * 1.5);
   $circle-h: calc(200vh * 1.5);
@@ -228,103 +227,54 @@ const isFirst = ref(true);
       }
     }
   }
+}
 
-  #header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: $header-height;
-    background: #303947;
-    box-shadow: 0 0 8px #4c4c4c8e;
-    z-index: $z-index-header;
-    transition: $common-transition;
+#header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $header-height;
+  background: #303947;
+  box-shadow: 0 0 8px #4c4c4c8e;
+  z-index: $z-index-header;
+  transition: $common-transition;
+
+  @include dark-mode {
+    box-shadow: 0 0 8px rgb(15 15 15 / 56%);
+  }
+
+  del.space-left {
+    margin-left: 12px;
+  }
+
+  .mobile-menu-toggler {
+    display: none;
+  }
+
+  .layout-menu {
+    box-shadow: 0 0 10px #3c3c3c8a;
 
     @include dark-mode {
-      box-shadow: 0 0 8px rgb(15 15 15 / 56%);
-    }
-
-    .mobile-menu-toggler {
-      display: none;
-    }
-
-    .menu {
-      box-shadow: 0 0 10px #3c3c3c8a;
-
-      @include dark-mode {
-        box-shadow: 0 0 10px #d0d0d08a;
-      }
-    }
-
-    @include mobile {
-      .mobile-menu-toggler {
-        width: 36px;
-        height: 36px;
-        display: flex;
-        margin-left: 10px;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-
-        &.active {
-          background: white;
-        }
-
-        svg {
-          fill: $theme-color-lighten;
-
-          @include square;
-        }
-      }
-
-      .menu {
-        position: absolute;
-        left: 10px;
-        top: $header-height + 10px;
-        flex-direction: column;
-        align-items: stretch;
-        background: #303947;
-        padding: 8px;
-        border-radius: 10px;
-        transform-origin: top;
-        transition: $common-transition;
-
-        &.v-enter-active,
-        &.v-leave-active {
-          transition: $common-transition;
-        }
-
-        &.v-enter-from,
-        &.v-leave-to {
-          opacity: 0;
-          transform: scaleY(30%);
-        }
-
-        .item {
-          margin: 0;
-          text-align: center;
-
-          &:not(:last-of-type) {
-            margin-bottom: 8px;
-          }
-        }
-      }
+      box-shadow: 0 0 10px #d0d0d08a;
     }
 
     .item {
-      color: white;
-      text-decoration: none;
-      margin-left: 16px;
-      transition: $common-transition;
-      position: relative;
-
       $padding: 2px;
 
+      color: white;
+      text-decoration: none;
+      transition: $common-transition;
+      position: relative;
       font-weight: bold;
       padding: 2px 5px;
       word-break: keep-all;
       cursor: pointer;
       font-size: f-size(1.3);
+
+      &:not(:first-of-type) {
+        margin-left: 16px;
+      }
 
       span {
         position: absolute;
@@ -396,169 +346,169 @@ const isFirst = ref(true);
         color: #303947;
       }
     }
+  }
 
-    del {
-      margin: auto;
+  del.stretch {
+    margin: auto;
+  }
+
+  .i18n,
+  .mode,
+  .home,
+  .about {
+    @include square(28px);
+
+    transition: $common-transition;
+  }
+
+  .i18n,
+  .mode,
+  .home {
+    cursor: pointer;
+    height: $header-height;
+
+    &:hover {
+      svg {
+        fill: white;
+      }
+    }
+  }
+
+  .i18n {
+    display: flex;
+    justify-content: center;
+
+    .i18n-select {
+      div {
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: f-size(0.85);
+
+        &:hover,
+        &.active {
+          color: $theme-color-darken;
+
+          @include dark-mode {
+            color: $theme-color-lighten;
+          }
+        }
+      }
+    }
+  }
+
+  .mode {
+    overflow: hidden;
+
+    > span {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: all $animation-duration cubic-bezier(0, -0.01, 0.23, 1.56);
+
+      svg {
+        flex-shrink: 0;
+      }
     }
 
-    .i18n,
-    .mode,
-    .home,
-    .about {
-      @include square(28px);
+    &.dark {
+      > span {
+        transform: translateY(-100%);
+      }
+    }
+  }
 
-      transition: $common-transition;
+  .go-manage {
+    position: relative;
+    display: flex;
+    justify-content: center;
+
+    >a {
+      height: 100%;
     }
 
-    .i18n,
-    .mode,
-    .home {
+    div.pwd {
       cursor: pointer;
-      height: $header-height;
+      overflow: hidden;
+      justify-content: center;
+      background: white;
+      box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+      border-radius: 8px;
+      padding: 8px 20px;
+      position: absolute;
+      bottom: 0;
+      transition: $common-transition;
+      transform-origin: top;
+      transform: translateY(100%) scaleY(0);
 
-      &:hover {
+      @include dark-mode {
+        background: #636363;
+
         svg {
           fill: white;
         }
       }
-    }
 
-    .i18n {
-      display: flex;
-      justify-content: center;
+      svg {
+        fill: rgb(0 0 0);
 
-      .i18n-select {
-        div {
-          padding: 8px 16px;
-          cursor: pointer;
-          font-size: f-size(0.85);
-
-          &:hover,
-          &.active {
-            color: $theme-color-darken;
-
-            @include dark-mode {
-              color: $theme-color-lighten;
-            }
-          }
-        }
+        @include square(20px);
       }
-    }
 
-    .mode {
-      overflow: hidden;
-
-      > span {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        transition: all $animation-duration cubic-bezier(0, -0.01, 0.23, 1.56);
-
+      &.valid {
         svg {
-          flex-shrink: 0;
-        }
-      }
-
-      &.dark {
-        > span {
-          transform: translateY(-100%);
+          fill: $theme-color-darken;
         }
       }
     }
 
-    .go-manage {
-      position: relative;
-      display: flex;
-      justify-content: center;
-
-      >a {
-        height: 100%;
-      }
-
+    &:hover {
       div.pwd {
-        cursor: pointer;
-        overflow: hidden;
-        justify-content: center;
-        background: white;
-        box-shadow: 0 0 10px rgb(0 0 0 / 20%);
-        border-radius: 8px;
-        padding: 8px 20px;
-        position: absolute;
-        bottom: 0;
-        transition: $common-transition;
-        transform-origin: top;
-        transform: translateY(100%) scaleY(0);
-
-        @include dark-mode {
-          background: #636363;
-
-          svg {
-            fill: white;
-          }
-        }
-
-        svg {
-          fill: rgb(0 0 0);
-
-          @include square(20px);
-        }
-
-        &.valid {
-          svg {
-            fill: $theme-color-darken;
-          }
-        }
-      }
-
-      &:hover {
-        div.pwd {
-          transform: translateY(100%) scaleY(100%);
-        }
+        transform: translateY(100%) scaleY(100%);
       }
     }
+  }
 
-    svg {
-      fill: #d3d3d3;
+  svg {
+    fill: #d3d3d3;
 
-      @include square;
-    }
+    @include square;
+  }
 
-    sub {
-      width: 1px;
-      height: 50%;
-      background: white;
-      margin: 0 12px;
-    }
+  sub {
+    width: 1px;
+    height: 50%;
+    background: white;
+    margin: 0 12px;
+  }
 
-    .about {
-      margin-right: 10px;
+  .about {
+    margin-right: 10px;
+    position: relative;
+    opacity: 0.85;
+
+    img {
       position: relative;
-      opacity: 0.85;
-
-      img {
-        position: relative;
-        border-radius: 2px;
-      }
-
-      &:hover {
-        opacity: 1;
-      }
+      border-radius: 2px;
     }
 
-    >.loading {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      height: 3px;
-      z-index: 2;
-      background: $theme-color;
-      transition: width 0.1s linear;
+    &:hover {
+      opacity: 1;
     }
+  }
 
-    &:not(.headroom--pinned).headroom--not-top {
-      transform: translateY(-100%);
-      box-shadow: none;
-    }
+  >.loading {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    z-index: 2;
+    background: $theme-color;
+    transition: width 0.1s linear;
+  }
+
+  &:not(.headroom--pinned).headroom--not-top {
+    transform: translateY(-100%);
+    box-shadow: none;
   }
 }
 
@@ -633,4 +583,53 @@ const isFirst = ref(true);
     }
   }
 }
+
+@include mobile {
+  #header {
+    .mobile-menu-toggler {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+
+      &.active {
+        background: white;
+      }
+
+      svg {
+        fill: $theme-color-lighten;
+
+        @include square;
+      }
+    }
+
+    .common-dropdown.menu-dropdown {
+      background: none;
+      border: none;
+      left: 12px;
+    }
+
+    .layout-menu {
+      flex-direction: column;
+      align-items: stretch;
+      background: #303947;
+      padding: 8px;
+      border-radius: 10px;
+      transform-origin: top;
+      transition: $common-transition;
+
+      .item {
+        margin: 0;
+        text-align: center;
+
+        &:not(:last-of-type) {
+          margin-bottom: 8px;
+        }
+      }
+    }
+  }
+}
+
 </style>

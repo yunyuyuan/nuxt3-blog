@@ -8,7 +8,7 @@ $theme-color-lighten: color.adjust($theme-color, $lightness: 20%);
 $theme-color-darken: color.adjust($theme-color, $lightness: -10%);
 $header-height: 48px;
 $footer-height: 64px;
-$animation-duration: 0.25s;
+$animation-duration: 0.2s;
 $animation-function: cubic-bezier(0, 0, 0, 1);
 $common-transition: all $animation-duration $animation-function;
 $z-index-mode-bg: 10;
@@ -26,9 +26,15 @@ $font-source-han-sans: none;
 // $font-code: "Source Code Pro", serif;
 $font-code: "Fira Code", serif;
 
-@mixin mobile {
-  @media screen and (max-width: 768px) {
-    @content;
+@mixin mobile($is-self: false) {
+  @if $is-self {
+    @at-root body.is-mobile & {
+      @content;
+    }
+  } @else {
+    @at-root body.is-mobile {
+      @content;
+    }
   }
 }
 

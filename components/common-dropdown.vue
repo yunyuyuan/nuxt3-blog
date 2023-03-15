@@ -2,7 +2,8 @@
 const props = defineProps({
   hided: Boolean,
   show: Boolean,
-  parent: Object
+  parent: { type: Object, default: null },
+  wrapClass: { type: String, default: "" }
 });
 
 const emit = defineEmits(["update:hided", "update:show", "open"]);
@@ -12,7 +13,7 @@ const afterOpen = () => {
   emit("open");
   const el = props.parent || innerRef.value;
   const fn = (e: MouseEvent) => {
-    let curr = e.target as HTMLElement;
+    let curr = e.target as (HTMLElement | null);
     while (curr) {
       if (curr === el) {
         return;
@@ -37,7 +38,7 @@ const afterOpen = () => {
       v-show="show"
       ref="innerRef"
       class="common-dropdown"
-      @focusout="emit('update:show', false)"
+      :class="wrapClass"
     >
       <slot />
     </div>

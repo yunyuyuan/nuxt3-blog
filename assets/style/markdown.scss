@@ -65,8 +65,8 @@
           transform: translateX(-100%);
         }
 
-        @include mobile {
-          &::before {
+        &::before {
+          @include mobile(true) {
             content: none !important;
           }
         }
@@ -441,6 +441,12 @@
       line-height: 1.3rem;
       position: relative;
       overflow: auto;
+
+      @include mobile(true) {
+        padding: 0.5rem 0.8rem;
+        font-size: f-size(0.78);
+        line-height: 1.3rem;
+      }
     }
 
     &.theme-dark {
@@ -497,24 +503,16 @@
     align-items: center;
     margin: 1.2rem auto;
 
+    @include mobile(true) {
+      padding: 0.5rem 0.8rem;
+      font-size: f-size(0.78);
+      line-height: 1.3rem;
+    }
+
     >iframe {
       width: 100%;
       flex-grow: 1;
       box-shadow: 0 0 1rem rgb(0 0 0 / 50%);
-    }
-  }
-
-  @include mobile {
-    pre {
-      >code.hljs {
-        padding: 0.5rem 0.8rem;
-        font-size: f-size(0.78);
-        line-height: 1.3rem;
-      }
-    }
-
-    div.embed-video {
-      height: 20rem;
     }
   }
 }

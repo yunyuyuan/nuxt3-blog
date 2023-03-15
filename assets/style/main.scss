@@ -68,14 +68,14 @@ body {
 #body {
   min-height: calc(100vh - #{$header-height + $footer-height});
   padding-top: $header-height;
+  z-index: $z-index-body;
+  position: relative;
 }
 
 #__nuxt {
   margin: auto;
-}
 
-@include mobile {
-  #__nuxt {
+  @include mobile(true) {
     width: 100%;
   }
 }

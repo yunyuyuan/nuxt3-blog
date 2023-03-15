@@ -367,7 +367,7 @@ initViewer(markdownRef);
       height: 200px;
       cursor: initial;
 
-      @include mobile {
+      @include mobile(true) {
         width: calc(100% - 20px);
       }
 

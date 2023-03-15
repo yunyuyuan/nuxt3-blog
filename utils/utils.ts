@@ -120,7 +120,7 @@ export function watchUntil (
 /**
  * 展示评论
  */
-const updateGiscusConfig = (config) => {
+const updateGiscusConfig = (config: object) => {
   const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
   if (!iframe) { return; }
   iframe.contentWindow!.postMessage({
