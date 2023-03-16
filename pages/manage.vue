@@ -101,9 +101,11 @@ const modalOk = () => {
         <svg-icon :name="pageLoading.loadingState.value ? 'loading' : 'menu'" />
       </span>
       <manage-menu v-show="!isMobile" @upload-image="showUploadImage = true" @show-verify="showModal = true" />
-      <common-dropdown v-show="isMobile" v-model:show="menuShow" v-model:hided="menuHidden">
-        <manage-menu @upload-image="showUploadImage = true" @show-verify="showModal = true" />
-      </common-dropdown>
+      <div v-show="isMobile">
+        <common-dropdown v-model:show="menuShow" v-model:hided="menuHidden">
+          <manage-menu @upload-image="showUploadImage = true" @show-verify="showModal = true" />
+        </common-dropdown>
+      </div>
     </nav>
     <section>
       <div>

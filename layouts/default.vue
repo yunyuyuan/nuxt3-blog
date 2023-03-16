@@ -70,9 +70,11 @@ const isFirst = ref(true);
         <svg-icon name="menu" />
       </span>
       <layout-menu v-show="!isMobile" />
-      <common-dropdown v-show="isMobile" v-model:show="menuShow" v-model:hided="menuHidden" wrap-class="menu-dropdown">
-        <layout-menu />
-      </common-dropdown>
+      <div v-show="isMobile">
+        <common-dropdown v-model:show="menuShow" v-model:hided="menuHidden" wrap-class="menu-dropdown">
+          <layout-menu />
+        </common-dropdown>
+      </div>
       <del class="stretch" />
       <a class="i18n" @click="i18nHided && (showI18n = true)">
         <svg-icon name="i18n" />
@@ -590,13 +592,13 @@ const isFirst = ref(true);
       flex-direction: column;
       align-items: stretch;
       background: #303947;
-      padding: 8px;
+      padding: 10px;
       border-radius: 10px;
       transform-origin: top;
       transition: $common-transition;
 
       .item {
-        margin: 0;
+        margin-left: 0 !important;
         text-align: center;
 
         &:not(:last-of-type) {

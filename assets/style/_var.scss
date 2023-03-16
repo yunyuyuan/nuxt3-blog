@@ -27,14 +27,17 @@ $font-source-han-sans: none;
 $font-code: "Fira Code", serif;
 
 @mixin mobile {
-  @if & {
-    @at-root body.is-mobile & {
-      @content;
-    }
-  } @else {
-    @at-root body.is-mobile {
-      @content;
-    }
+  // @if & {
+  //   @at-root body.is-mobile & {
+  //     @content;
+  //   }
+  // } @else {
+  //   @at-root body.is-mobile {
+  //     @content;
+  //   }
+  // }
+  @media screen and (max-width: 768px) {
+    @content;
   }
 }
 
