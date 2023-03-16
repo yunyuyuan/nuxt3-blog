@@ -25,22 +25,19 @@ function useMutationObserver (
 /**
  * viewerjs
  */
-export function initViewer (el?: Ref<HTMLElement>): Ref<HTMLElement> | void {
+export function initViewer (el: Ref<HTMLElement | undefined>): Ref<HTMLElement> | void {
   if (!inBrowser) { return; }
   let viewerContainer;
   let viewer: Viewer;
-  let stop = () => null;
+  let stop: () => void = () => undefined;
 
   onMounted(() => {
-    if (!el) {
-      el = viewerContainer = ref<HTMLElement>(null);
-    }
-    viewer = new Viewer(el.value, {
+    viewer = new Viewer(el.value!, {
       filter (image: HTMLImageElement) {
         return image.hasAttribute(ViewerAttr);
       }
     });
-    stop = useMutationObserver(el.value, () => {
+    stop = useMutationObserver(el.value!, () => {
       nextTick(() => {
         viewer?.update();
       });

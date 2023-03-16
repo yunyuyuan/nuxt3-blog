@@ -2,6 +2,7 @@
 import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
 import type { Ref } from "vue";
+import type { editor as MonacoEditor } from "monaco-editor";
 import { afterInsertHtml, parseMarkdown } from "~/utils/markdown";
 import { markdownTips } from "~/utils/constants";
 import { initViewer } from "~/utils/viewer";
@@ -15,7 +16,7 @@ const props = defineProps<{
 
 const emit = defineEmits(["update:modelValue", "preview"]);
 
-let editor = null;
+let editor: MonacoEditor.IStandaloneCodeEditor;
 
 const currentView = ref<"edit" | "preview" | "both">("both");
 const currentText = ref<string>("");
@@ -47,19 +48,24 @@ const showMarkdownReference = ref<boolean>(false);
 // resize
 const root = ref<HTMLElement>();
 const leftSideWidth = ref<number>(0);
-const lisetenResize = throttle((e: MouseEvent) => {
-  const width = e.x - root.value.getBoundingClientRect().x;
+const lisetenResize = throttle((e: MouseEvent | TouchEvent) => {
+  const x = e instanceof MouseEvent ? e.x : e.touches[0].clientX;
+  const width = x - root.value!.getBoundingClientRect().x;
   leftSideWidth.value = width > 0 ? width : 1;
-}, 100);
+}, 50);
 
 const startResize = () => {
   window.addEventListener("mousemove", lisetenResize);
+  window.addEventListener("touchmove", lisetenResize);
   window.addEventListener("mouseup", stopResize);
+  window.addEventListener("touchend", stopResize);
   document.body.classList.add("resizing");
 };
 const stopResize = () => {
   window.removeEventListener("mouseup", stopResize);
+  window.removeEventListener("touchend", stopResize);
   window.removeEventListener("mousemove", lisetenResize);
+  window.removeEventListener("touchmove", lisetenResize);
   document.body.classList.remove("resizing");
 };
 
@@ -72,7 +78,7 @@ const initEditor = () => {
   }
   import("monaco-editor").then((module) => {
     currentText.value = props.modelValue;
-    editor = module.editor.create(editorContainer.value, {
+    editor = module.editor.create(editorContainer.value!, {
       value: props.modelValue,
       language: "markdown",
       theme: "vs",
@@ -92,7 +98,7 @@ const initEditor = () => {
     }, { immediate: true });
     editor.onDidChangeModelContent(
       debounce(() => {
-        const text = editor.getModel().getValue();
+        const text = editor.getModel()!.getValue();
         emit("update:modelValue", text);
         currentText.value = text;
       }, 500)
@@ -103,8 +109,8 @@ const initEditor = () => {
 watch(
   () => props.modelValue,
   (text) => {
-    if (editor && text !== editor.getModel().getValue()) {
-      editor.getModel().setValue(text);
+    if (editor && text !== editor.getModel()!.getValue()) {
+      editor.getModel()!.setValue(text);
     }
   }
 );
@@ -217,7 +223,7 @@ initViewer(markdownRef);
       >
         <div ref="editorContainer" />
       </div>
-      <div ref="resizeRef" class="resizer" @mousedown.left="startResize" />
+      <div ref="resizeRef" class="resizer" @touchstart="startResize" @mousedown.left="startResize" />
       <div class="righr-side">
         <article ref="markdownRef" class="--markdown" v-html="currentHtml" />
       </div>
