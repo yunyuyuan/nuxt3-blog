@@ -13,55 +13,50 @@ const typeSelectHided = ref(true);
   <div class="manage-knowledge-detail">
     <manage-content-edit>
       <template #title="{ disabled, item }">
-        <div>
-          <span :class="{ invalid: !item.title }">{{ $T('title') }}
-            <svg-icon name="title" />
-          </span>
-          <input v-model="item.title" :disabled="disabled">
-        </div>
+        <span :class="{ invalid: !item.title }">
+          <b>{{ $T('title') }}</b>
+          <svg-icon name="title" />
+        </span>
+        <input v-model="item.title" :disabled="disabled">
       </template>
       <template #type="{ disabled, item }">
-        <div>
-          <span>{{ $T('type') }}
-            <svg-icon name="type" />
-          </span>
-          <div class="select" @click="!disabled && typeSelectHided && (typeSelectShow = true)">
-            <a tabindex="1" class="flex" :class="{active: !typeSelectHided, disabled: disabled}">
-              {{ $T(KnowledgeTabsList.find((i) => i.key === item.type).name) }}
-              <svg-icon :name="item.type" />
-            </a>
-            <common-dropdown v-model:show="typeSelectShow" v-model:hided="typeSelectHided" class="flexc">
-              <div v-for="tp in KnowledgeTabs" :key="tp" class="flex" :class="{active: item.type===tp}" @click="item.type=tp;typeSelectShow=false">
-                <span>{{ $T(KnowledgeTabsList.find((i) => i.key === tp).name) }}</span>
-                <svg-icon :name="tp" />
-              </div>
-            </common-dropdown>
-          </div>
+        <span>
+          <b>{{ $T('type') }}</b>
+          <svg-icon name="type" />
+        </span>
+        <div class="select" @click="!disabled && typeSelectHided && (typeSelectShow = true)">
+          <a tabindex="1" class="flex" :class="{active: !typeSelectHided, disabled: disabled}">
+            <b>{{ $T(KnowledgeTabsList.find((i) => i.key === item.type).name) }}</b>
+            <svg-icon :name="item.type" />
+          </a>
+          <common-dropdown v-model:show="typeSelectShow" v-model:hided="typeSelectHided" class="flexc">
+            <div v-for="tp in KnowledgeTabs" :key="tp" class="flex" :class="{active: item.type===tp}" @click="item.type=tp;typeSelectShow=false">
+              <span>{{ $T(KnowledgeTabsList.find((i) => i.key === tp).name) }}</span>
+              <svg-icon :name="tp" />
+            </div>
+          </common-dropdown>
         </div>
       </template>
       <template #link="{ disabled, item }">
-        <div>
-          <span :class="{ invalid: !item.link }">{{ $T('link') }}
-            <svg-icon name="link" />
-          </span>
-          <input v-model="item.link" :disabled="disabled">
-        </div>
+        <span :class="{ invalid: !item.link }">
+          <b>{{ $T('link') }}</b>
+          <svg-icon name="link" />
+        </span>
+        <input v-model="item.link" :disabled="disabled">
       </template>
       <template #cover="{ disabled, item }">
-        <div>
-          <span :class="{ invalid: !item.cover }">{{ $T('cover') }}
-            <svg-icon name="images" />
-          </span>
-          <input v-model="item.cover" :disabled="disabled">
-        </div>
+        <span :class="{ invalid: !item.cover }">
+          <b>{{ $T('cover') }}</b>
+          <svg-icon name="images" />
+        </span>
+        <input v-model="item.cover" :disabled="disabled">
       </template>
       <template #summary="{ disabled, item }">
-        <div class="base-info-summary">
-          <span :class="{ invalid: !item.summary }">{{ $T('summary') }}
-            <svg-icon name="summary" />
-          </span>
-          <textarea v-model="item.summary" :disabled="disabled" />
-        </div>
+        <span :class="{ invalid: !item.summary }">
+          <b>{{ $T('summary') }}</b>
+          <svg-icon name="summary" />
+        </span>
+        <textarea v-model="item.summary" :disabled="disabled" />
       </template>
     </manage-content-edit>
   </div>
@@ -69,17 +64,15 @@ const typeSelectHided = ref(true);
 
 <style lang="scss">
 .manage-knowledge-detail {
-  .base-info-summary {
-    align-items: flex-start;
-  }
-
   .select {
     flex-direction: row !important;
     position: relative;
+    max-width: 100px;
+    min-width: unset;
 
     > a {
       padding: 0 8px;
-      border: 1px solid gray;
+      border: 1px solid #a1a1a1;
       transition: border $animation-duration $animation-function, box-shadow $animation-duration $animation-function;
       border-radius: 2px;
       background: #fff;

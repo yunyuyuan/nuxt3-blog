@@ -284,18 +284,16 @@ onMounted(() => {
       <svg-icon name="new" />
     </span>
     <div ref="baseInfo" class="info detail">
-      <div>
-        <span>
-          {{ $t('encrypt') }}
-          <svg-icon name="encrypt" />
-        </span>
-        <common-checkbox
-          :checked="item.encrypt"
-          :disabled="!decrypted || !blockDecrypted"
-          :title="!blockDecrypted ? $t('decrypt-blocks') : ''"
-          @change="item.encrypt = $event"
-        />
-      </div>
+      <span>
+        <b>{{ $t('encrypt') }}</b>
+        <svg-icon name="encrypt" />
+      </span>
+      <common-checkbox
+        :checked="item.encrypt"
+        :disabled="!decrypted || !blockDecrypted"
+        :title="!blockDecrypted ? $t('decrypt-blocks') : ''"
+        @change="item.encrypt = $event"
+      />
       <slot v-for="slot in slots" :name="slot" :item="item" :disabled="!decrypted" />
     </div>
     <common-loading v-show="listPending" :show-in-first="false" />
@@ -448,86 +446,68 @@ onMounted(() => {
         background: $bg-dark;
       }
 
-      padding: 28px 0;
-      align-items: flex-start;
+      padding: 24px 10px;
       box-sizing: border-box;
       z-index: 1;
+      display: grid;
+      align-items: center;
+      grid-template-columns: auto 1fr;
+      grid-auto-rows: auto;
+      grid-gap: 15px 0;
 
-      > div {
+      > span {
+        height: 30px;
+        margin: 0 12px 0 8px;
+        flex-shrink: 0;
         display: flex;
         align-items: center;
-        align-self: stretch;
-        padding: 0 18px;
+        justify-content: flex-end;
 
-        &:not(:last-of-type) {
-          border-bottom: 1px dotted rgb(226 226 226);
-
-          @include dark-mode {
-            border-color: rgb(129 129 129);
-          }
-
-          margin-bottom: 20px;
-          padding-bottom: 20px;
-        }
-
-        > span {
-          height: 30px;
-          width: 90px;
+        b {
+          position: relative;
           font-size: f-size(0.8);
           font-weight: 600;
-          margin: 0 24px 0 8px;
-          flex-shrink: 0;
-          display: flex;
-          align-items: center;
           color: #222;
-          justify-content: flex-end;
-          position: relative;
+        }
+
+        @include dark-mode {
+          color: white;
+        }
+
+        &.invalid b::before {
+          content: "*";
+          color: red;
+          font-size: f-size(0.9);
+          left: 0;
+          position: absolute;
+          transform: translateX(-100%);
+        }
+
+        svg {
+          @include square(18px);
+
+          fill: $theme-color;
+          margin-left: 8px;
 
           @include dark-mode {
-            color: white;
-          }
-
-          &.invalid::before {
-            content: "*";
-            color: red;
-            font-size: f-size(0.9);
-            left: 0;
-            position: relative;
-            transform: translateX(-12px);
-          }
-
-          svg {
-            @include square(18px);
-
-            fill: $theme-color;
-            margin-left: 8px;
-
-            @include dark-mode {
-              fill: $theme-color-lighten;
-            }
+            fill: $theme-color-lighten;
           }
         }
+      }
 
-        input,
-        textarea,
-        select {
-          font-size: f-size(0.88);
-          padding: 5px;
-          flex-grow: 1;
-          max-width: 500px;
-          min-width: 100px;
-        }
+      input,
+      textarea {
+        font-size: f-size(0.88);
+        padding: 6px;
+        flex-grow: 1;
+        max-width: 500px;
+        min-width: 100px;
+      }
 
-        select {
-          max-width: 100px;
-          min-width: unset;
-        }
-
-        textarea {
-          resize: vertical;
-          max-width: 800px;
-          height: 200px;
-        }
+      textarea {
+        resize: vertical;
+        max-width: 800px;
+        height: 200px;
       }
     }
 
@@ -600,39 +580,21 @@ onMounted(() => {
     }
 
     &-base-info > .detail {
-      > div {
-        padding: 0 8px;
+      >span {
+        margin: 0 12px 0 8px;
+      }
 
-        >span {
-          margin: 0 12px 0 8px;
-        }
+      input,
+      textarea,
+      select {
+        max-width: unset;
+        min-width: unset;
+        width: 100%;
+        box-sizing: border-box;
+      }
 
-        > div {
-          flex-direction: column;
-          align-items: flex-start;
-
-          &:not(:last-of-type) {
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-          }
-
-          > span {
-            margin-left: 0;
-          }
-
-          input,
-          textarea,
-          select {
-            max-width: unset;
-            min-width: unset;
-            width: 100%;
-            box-sizing: border-box;
-          }
-
-          select {
-            width: 100px;
-          }
-        }
+      select {
+        width: 100px;
       }
     }
   }

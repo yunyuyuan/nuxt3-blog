@@ -83,7 +83,7 @@ body {
 input,
 textarea,
 select {
-  border: 1px solid gray;
+  border: 1px solid #a1a1a1;
   transition: border $animation-duration $animation-function, box-shadow $animation-duration $animation-function;
   border-radius: 2px;
   background: #fff;
@@ -91,7 +91,7 @@ select {
   color: black;
 
   &:hover {
-    border-color: black;
+    border-color: rgb(87 87 87);
   }
 
   &:focus {

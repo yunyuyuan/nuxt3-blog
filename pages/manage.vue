@@ -357,8 +357,8 @@ $menu-width: 120px;
   }
 
   b {
-    margin-bottom: 10px;
-    font-size: f-size(0.75);
+    margin-bottom: 6px;
+    font-size: f-size(0.8);
     display: flex;
     align-items: center;
 

@@ -25,54 +25,53 @@ const processImages = (_, _2, item: RecordItem) => {
   <div class="manage-record-detail">
     <manage-content-edit :process-with-content="processImages">
       <template #images="{ disabled, item }">
-        <div class="input-images">
-          <span :class="{invalid: item.images.some(img => !img.src)}">{{ $T('images') }}
-            <svg-icon name="images" />
-          </span>
-          <div class="flexc">
-            <ul>
-              <li v-for="(img, idx) in item.images" :key="img.id" class="flex">
-                <input
-                  v-model="img.src"
-                  class="input-src"
+        <span :class="{invalid: item.images.some(img => !img.src)}">
+          <b>{{ $T('images') }}</b>
+          <svg-icon name="images" />
+        </span>
+        <div class="input-images flexc">
+          <ul>
+            <li v-for="(img, idx) in item.images" :key="img.id" class="flex">
+              <input
+                v-model="img.src"
+                class="input-src"
+                :disabled="disabled"
+                placeholder="src"
+              >
+              <input
+                v-model="img.alt"
+                class="input-alt"
+                :disabled="disabled"
+                placeholder="alt"
+              >
+              <div class="flex">
+                <common-button
+                  v-if="idx !== 0"
                   :disabled="disabled"
-                  placeholder="src"
-                >
-                <input
-                  v-model="img.alt"
-                  class="input-alt"
-                  :disabled="disabled"
-                  placeholder="alt"
-                >
-                <div class="flex">
-                  <common-button
-                    v-if="idx !== 0"
-                    :disabled="disabled"
-                    class="move-up"
-                    theme="default"
-                    size="small"
-                    icon="up"
-                    @click="moveUpImg(idx, item)"
-                  />
-                  <common-button
-                    :disabled="disabled"
-                    theme="danger"
-                    size="small"
-                    icon="delete"
-                    @click="rmImg(idx, item)"
-                  />
-                </div>
-              </li>
-              <li>
+                  class="move-up"
+                  theme="default"
+                  size="small"
+                  icon="up"
+                  @click="moveUpImg(idx, item)"
+                />
                 <common-button
                   :disabled="disabled"
-                  class="add-new"
-                  icon="add"
-                  @click="addImg(item)"
+                  theme="danger"
+                  size="small"
+                  icon="delete"
+                  @click="rmImg(idx, item)"
                 />
-              </li>
-            </ul>
-          </div>
+              </div>
+            </li>
+            <li>
+              <common-button
+                :disabled="disabled"
+                class="add-new"
+                icon="add"
+                @click="addImg(item)"
+              />
+            </li>
+          </ul>
         </div>
       </template>
     </manage-content-edit>

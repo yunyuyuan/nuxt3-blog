@@ -68,42 +68,40 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
   <div class="manage-article-detail">
     <manage-content-edit :pre-process-item="preProcessItem" :process-with-content="processContent">
       <template #title="{ disabled, item }">
-        <div>
-          <span :class="{ invalid: !item.title }">{{ $T('title') }}
-            <svg-icon name="title" />
-          </span>
-          <input v-model="item.title" :disabled="disabled">
-        </div>
+        <span :class="{ invalid: !item.title }">
+          <b>{{ $T('title') }}</b>
+          <svg-icon name="title" />
+        </span>
+        <input v-model="item.title" :disabled="disabled">
       </template>
       <template #tags="{ disabled, item }">
-        <div>
-          <span>{{ $T('tags') }}
-            <svg-icon name="tags" />
-          </span>
-          <div
-            ref="tagParentRef"
-            :title="item.encrypt ? $t('tags-not-allowed') : null"
-            class="input-tags flex"
-            :class="{ disabled: disabled || item.encrypt }"
-          >
-            <input v-model="inputTags" :disabled="disabled || item.encrypt" @focusin="showTagSelect = true">
-            <div class="placeholder s100 flex">
-              <span v-if="!inputTagsList.length || item.encrypt" class="text">{{ $t('input-tags') }}</span>
-              <template v-if="!item.encrypt">
-                <the-tag v-for="tag in inputTagsList" :key="tag">
-                  {{ tag }}
-                </the-tag>
-              </template>
-            </div>
-            <common-dropdown v-model:show="showTagSelect" :parent="tagParentRef">
-              <p>{{ $t('existed-tags') }}:</p>
-              <div class="dropdown w100 flex">
-                <the-tag v-for="tag in allTags" :key="tag" :active="inputTagsList.includes(tag)" @click="toggleTag(tag)">
-                  {{ tag }}
-                </the-tag>
-              </div>
-            </common-dropdown>
+        <span>
+          <b>{{ $T('tags') }}</b>
+          <svg-icon name="tags" />
+        </span>
+        <div
+          ref="tagParentRef"
+          :title="item.encrypt ? $t('tags-not-allowed') : null"
+          class="input-tags flex"
+          :class="{ disabled: disabled || item.encrypt }"
+        >
+          <input v-model="inputTags" :disabled="disabled || item.encrypt" @focusin="showTagSelect = true">
+          <div class="placeholder s100 flex">
+            <span v-if="!inputTagsList.length || item.encrypt" class="text">{{ $t('input-tags') }}</span>
+            <template v-if="!item.encrypt">
+              <the-tag v-for="tag in inputTagsList" :key="tag">
+                {{ tag }}
+              </the-tag>
+            </template>
           </div>
+          <common-dropdown v-model:show="showTagSelect" :parent="tagParentRef">
+            <p>{{ $t('existed-tags') }}:</p>
+            <div class="dropdown w100 flex">
+              <the-tag v-for="tag in allTags" :key="tag" :active="inputTagsList.includes(tag)" @click="toggleTag(tag)">
+                {{ tag }}
+              </the-tag>
+            </div>
+          </common-dropdown>
         </div>
       </template>
     </manage-content-edit>
@@ -114,7 +112,7 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
 .manage-article-detail {
   .input-tags {
     position: relative;
-    width: 512px;
+    width: 516px;
     min-width: 100px;
 
     input {

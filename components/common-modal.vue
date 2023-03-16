@@ -168,7 +168,7 @@ const close = () => {
 
     border-radius: 6px;
     margin: auto;
-    padding: 18px 32px 22px;
+    padding: 18px 32px;
     position: relative;
     margin-top: 128px;
     box-shadow: 0 0 20px rgb(0 0 0 / 30%);
