@@ -147,7 +147,7 @@ const attr = ViewerAttr;
     <img v-if="!isEncryptedImg && isPrerender" :src="props.src" :alt="alt">
     <span v-if="isImgErr || isImgLoading" class="svg flexc s100">
       <svg-icon :name="isImgErr ? 'img-error' : 'loading'" />
-      <span v-show="isImgErr" class="tips">{{ $t('click-to-retry') }}</span>
+      <span v-show="isImgErr" class="tips">{{ useNuxtApp().$i18n.t('click-to-retry') }}</span>
     </span>
     <img
       v-if="isShowImg"
