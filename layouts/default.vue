@@ -1,8 +1,8 @@
 <script setup lang="tsx">
 import type Headroom from "headroom.js";
 import { githubRepoUrl, inBrowser, isPrerender } from "~/utils/constants";
-import { HeaderTabs } from "~/utils/types";
 import { calcRocketUrl, setLocalStorage } from "~/utils/utils";
+import LayoutMenu from "~/pages/templates/layout-menu.vue";
 import config from "~/config";
 
 const { themeMode, toggleThemeMode } = useThemeMode();
@@ -14,13 +14,11 @@ const footerDomain = inBrowser ? window.location.hostname : "";
 const isMobile = useIsMobile();
 const menuShow = ref<boolean>(false);
 const menuHidden = ref<boolean>(true);
-watch(isMobile, (isMobile) => {
-  if (isMobile) {
-    setTimeout(() => {
-      menuShow.value = false;
-      menuHidden.value = true;
-    });
-  }
+watch(isMobile, () => {
+  setTimeout(() => {
+    menuShow.value = false;
+    menuHidden.value = true;
+  });
 });
 
 const i18nHided = ref<boolean>(true);
@@ -30,11 +28,6 @@ const setLocale = (locale: string) => {
   useNuxtApp().$i18n.setLocale(locale);
   showI18n.value = false;
 };
-
-const activeRoute = computed(() => {
-  const path = route.path.split("/")[1];
-  return path;
-});
 
 const inAbout = computed(() => {
   return route.path.startsWith("/about");
@@ -76,21 +69,9 @@ const isFirst = ref(true);
       <span class="mobile-menu-toggler" :class="{active: menuShow}" @click="menuHidden && (menuShow = true)">
         <svg-icon name="menu" />
       </span>
-      <common-dropdown v-model:show="menuShow" v-model:hided="menuHidden" :only-mobile="true" wrap-class="menu-dropdown">
-        <div class="layout-menu flex" :class="{'in-mobile': isMobile}">
-          <nuxt-link
-            v-for="item in HeaderTabs"
-            :key="item.url"
-            :class="{ item: true, active: activeRoute === item.url.substring(1) }"
-            :to="item.url"
-          >
-            {{ $T(item.name) }}
-            <span />
-            <span />
-            <span />
-            <span />
-          </nuxt-link>
-        </div>
+      <layout-menu v-show="!isMobile" />
+      <common-dropdown v-show="isMobile" v-model:show="menuShow" v-model:hided="menuHidden" wrap-class="menu-dropdown">
+        <layout-menu />
       </common-dropdown>
       <del class="stretch" />
       <a class="i18n" @click="i18nHided && (showI18n = true)">

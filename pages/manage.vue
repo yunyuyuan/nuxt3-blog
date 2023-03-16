@@ -1,10 +1,10 @@
 <script setup lang="tsx">
 import { RouteLocationNormalized } from "vue-router";
 import UploadImage from "./manage/comps/upload-image.vue";
-import { HeaderTabs } from "~/utils/types";
+import ManageMenu from "./templates/manage-menu.vue";
 import { isAuthor } from "~/utils/manage/github";
 import { notify } from "~/utils/notify/notify";
-import { calcRocketUrl, rmLocalStorage, setLocalStorage } from "~/utils/utils";
+import { rmLocalStorage, setLocalStorage } from "~/utils/utils";
 import { translate } from "~/utils/i18n";
 import { isDev, GithubTokenKey } from "~/utils/constants";
 
@@ -22,23 +22,15 @@ definePageMeta({
 // 上传图片
 const showUploadImage = ref(false);
 
-const activeRoute = computed(() => {
-  return useRoute().path.replace(/^\/manage\//, "/");
-});
-const travel = computed(() => {
-  return calcRocketUrl();
-});
-
 // mobile menu
+const isMobile = useIsMobile();
 const menuShow = ref<boolean>(false);
 const menuHidden = ref<boolean>(true);
-watch(useIsMobile(), (isMobile) => {
-  if (isMobile) {
-    setTimeout(() => {
-      menuShow.value = false;
-      menuHidden.value = true;
-    });
-  }
+watch(isMobile, () => {
+  setTimeout(() => {
+    menuShow.value = false;
+    menuHidden.value = true;
+  });
 });
 
 // token & password
@@ -46,7 +38,6 @@ const githubToken = useGithubToken();
 const encryptor = useEncryptor();
 // 进入manage界面后，大概率会用到encrypt，所以这里先异步加载，尚未遇到bug
 encryptor.init();
-const allPassed = computed(() => !!githubToken && encryptor.passwdCorrect.value);
 
 const inputToken = ref<string>(githubToken.value);
 // 随时和githubToken保持一致，因为只有正确的值才会被赋给githubToken
@@ -109,41 +100,9 @@ const modalOk = () => {
       <span class="mobile-menu-toggler" @click="menuHidden && (menuShow = true)">
         <svg-icon :name="pageLoading.loadingState.value ? 'loading' : 'menu'" />
       </span>
-      <common-dropdown v-model:show="menuShow" v-model:hided="menuHidden" :only-mobile="true">
-        <div class="manage-menu w100 flexc">
-          <ul>
-            <li>
-              <a class="upload-img-btn" @click="showUploadImage = true">
-                {{ $T('images') }}
-              </a>
-            </li>
-            <li>
-              <nuxt-link
-                to="/manage/config"
-                :class="{ active: activeRoute.startsWith('/config') }"
-              >
-                {{ $T('config') }}
-              </nuxt-link>
-            </li>
-            <li v-for="tab in HeaderTabs" :key="tab.url">
-              <nuxt-link
-                :to="'/manage' + tab.url"
-                :class="{ active: activeRoute.startsWith(tab.url) }"
-              >
-                <span>{{ $T(tab.name) }}</span>
-              </nuxt-link>
-            </li>
-          </ul>
-          <div :title="$sameSha.value ? (allPassed ? $t('all-verified'):$t('token-and-passwd')) : $t('commit-id-not-correct')" :class="{warning: !$sameSha.value}" @click="showModal = true">
-            <svg-icon
-              :class="{invalid: !githubToken, active: allPassed }"
-              name="password"
-            />
-          </div>
-          <nuxt-link title="🚀" :to="travel">
-            <svg-icon name="rocket" />
-          </nuxt-link>
-        </div>
+      <manage-menu v-show="!isMobile" @upload-image="showUploadImage = true" @show-verify="showModal = true" />
+      <common-dropdown v-show="isMobile" v-model:show="menuShow" v-model:hided="menuHidden">
+        <manage-menu @upload-image="showUploadImage = true" @show-verify="showModal = true" />
       </common-dropdown>
     </nav>
     <section>
