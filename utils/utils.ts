@@ -234,7 +234,7 @@ export function createNewItem (url: HeaderTabUrl): CommonItem {
  * 简化版deepClone
  */
 export function deepClone<T extends object> (item: T): T {
-  return JSON.parse(JSON.stringify(item)) as T;
+  return JSON.parse(JSON.stringify(toRaw(item))) as T;
 }
 
 /**

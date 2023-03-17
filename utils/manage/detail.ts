@@ -1,3 +1,4 @@
+import type { Ref } from "vue";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { registerCancelWatchEncryptor, createNewItem, deepClone, assignItem, fetchList, fetchMdManage } from "../utils";
 import { translate } from "../i18n";
@@ -28,65 +29,73 @@ export function useManageContent () {
 
   const originItem = reactive(createNewItem(targetTab.url));
   const draftItem = reactive(createNewItem(targetTab.url));
-  const item = reactive(deepClone(toRaw(originItem)));
+  const item = reactive(deepClone(originItem));
 
   const markdownContent = ref<string>("");
   const draftMarkdownContent = ref<string>("");
   // 解密完成 or 上传完成(表面工作)，用来比较是否发生改变的originItem需要更新
-  const resetOriginItem = (md: string = undefined) => {
-    Object.assign(originItem, deepClone(toRaw(item)));
+  const resetOriginItem = (md?: string) => {
+    Object.assign(originItem, deepClone(item));
     if (typeof md !== "undefined") {
       markdownContent.value = md;
     }
   };
   // 保存草稿 or 加载草稿
-  const resetDraftItem = (md: string = undefined) => {
-    Object.assign(draftItem, deepClone(toRaw(item)));
+  const resetDraftItem = (md?: string) => {
+    Object.assign(draftItem, deepClone(item));
     if (typeof md !== "undefined") {
       draftMarkdownContent.value = md;
     }
   };
 
-  const decrypted = ref<boolean>(false);
-  const blockDecrypted = ref<boolean>(false);
+  const itemDecrypted = ref(false);
+  const mdDecrypted = ref(false);
+  const decrypted = computed(() => itemDecrypted.value && mdDecrypted.value);
+  const blockDecrypted = ref(false);
   watch(listPending, async (pend) => {
     if (!pend || isPrerender) {
       if (!isNew) {
         assignItem(originItem, deepClone(list.value.find(item => item.id === Number(itemId))));
-        assignItem(item, deepClone(toRaw(originItem)));
-        decrypted.value = !item.encrypt;
+        assignItem(item, deepClone(originItem));
         // item的内容可以马上解密
         if (item.encrypt) {
           cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
             await processEncryptDescrypt(item, decrypt, targetTab.url);
-            decrypted.value = true;
+            itemDecrypted.value = true;
             resetOriginItem();
           }));
+        } else {
+          itemDecrypted.value = true;
         }
       } else {
-        decrypted.value = true;
+        itemDecrypted.value = true;
         blockDecrypted.value = true;
       }
     }
   }, { immediate: true });
 
-  let mdPending = null;
+  let mdPending: Ref<boolean> | null = null;
   if (!isNew) {
     const { pending, data: content } = fetchMdManage(targetTab.url, itemId);
     mdPending = pending;
-    watch([listPending, content], async ([listPend, markdown]) => {
+    watch([listPending, content, itemDecrypted], async ([listPend, markdown, itemDecrypted]) => {
       if ((!listPend && markdown) || isPrerender) {
-        markdownContent.value = markdown.trim();
+        markdownContent.value = markdown?.trim() || "";
+        if (!itemDecrypted) {
+          return;
+        }
         // 取到结果后，处理解密
         if (item.encrypt) {
           blockDecrypted.value = true;
           cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
             markdownContent.value = (await decrypt(markdownContent.value)).trim();
+            mdDecrypted.value = true;
           }));
         } else if (item.encryptBlocks) {
+          mdDecrypted.value = true;
           cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
             let newMarkdownContent = markdownContent.value;
-            for (const block of item.encryptBlocks) {
+            for (const block of item.encryptBlocks!) {
               const { start, end } = block;
               newMarkdownContent = newMarkdownContent.slice(0, start) + await decrypt(newMarkdownContent.slice(start, end)) + newMarkdownContent.slice(end);
             }
@@ -94,10 +103,13 @@ export function useManageContent () {
             blockDecrypted.value = true;
           }));
         } else {
+          mdDecrypted.value = true;
           blockDecrypted.value = true;
         }
       }
     }, { immediate: true });
+  } else {
+    mdDecrypted.value = true;
   }
 
   const { hasModified, markdownModified } = useHasModified({ item, origin: originItem });

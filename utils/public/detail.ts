@@ -30,6 +30,7 @@ export default function useContentPage<T extends CommonItem> () {
   const cancelFnList = registerCancelWatchEncryptor();
   let destroyFns: ReturnType<typeof afterInsertHtml> = [];
 
+  const itemDecrypted = ref(false);
   watch(listPending, async (pend) => {
     if (!pend || isPrerender) {
       const foundItem = list.value!.find(item => item.id === Number(id));
@@ -42,7 +43,10 @@ export default function useContentPage<T extends CommonItem> () {
       if (item.encrypt) {
         cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
           await processEncryptDescrypt(item, decrypt, targetTab.url);
+          itemDecrypted.value = true;
         }));
+      } else {
+        itemDecrypted.value = true;
       }
     }
   }, { immediate: true });
@@ -52,9 +56,12 @@ export default function useContentPage<T extends CommonItem> () {
   const htmlContent = ref<string>("");
   const { pending, data: content } = fetchMd(targetTab.url, id);
 
-  watch([listPending, pending], ([listPend, pend]) => {
+  watch([listPending, pending, itemDecrypted], ([listPend, pend, itemDecrypted]) => {
     if ((!listPend && !pend) || isPrerender) {
       mdContent.value = content.value as string;
+      if (!itemDecrypted) {
+        return;
+      }
       if (item.encrypt) {
         encryptor.decryptOrWatchToDecrypt(
           async (decrypt) => {
