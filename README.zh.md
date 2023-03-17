@@ -64,6 +64,7 @@
 - [ ] IV for AES encryption
 - [x] 块级加密
 - [ ] SSR, 用于服务端渲染
+- [ ] 支持 cloudflare page,netlify 以及其他服务
 
 ## Changelog
 

@@ -270,6 +270,10 @@ $menu-width: 120px;
     margin-top: 18px;
     cursor: pointer;
     transition: $common-transition;
+    text-decoration: none;
+    font-size: f-size(0.8);
+    color: $theme-color-darken;
+    font-weight: bold;
 
     &:hover {
       transform: scale(1.1);

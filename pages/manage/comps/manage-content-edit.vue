@@ -132,7 +132,7 @@ const getUploadInfo = async () => {
         if (!encryptor.usePasswd.value) {
           return notify({
             type: "error",
-            title: translate("need-decrypt")
+            title: translate("need-passwd")
           });
         }
         const [start, end] = matcher.indices[2];

@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
-import type { Ref } from "vue";
+import type { Ref, PropType } from "vue";
 import type { editor as MonacoEditor } from "monaco-editor";
 import { afterInsertHtml, parseMarkdown } from "~/utils/markdown";
-import { markdownTips } from "~/utils/constants";
 import { initViewer } from "~/utils/viewer";
 
-const props = defineProps<{
-  modelValue: string;
-  disabled: boolean;
-  loading: boolean;
-  getHtml:(_ref: Ref) => void;
-}>();
+const props = defineProps({
+  modelValue: { type: String, default: "" },
+  disabled: { type: Boolean, default: false },
+  loading: { type: Boolean, default: false },
+  single: { type: Boolean, default: false },
+  getHtml: { type: Function as PropType<(_ref: Ref) => void>, default: () => null }
+});
 
 const emit = defineEmits(["update:modelValue", "preview"]);
 
@@ -41,9 +41,6 @@ const insertSticker = (text: string) => {
     editor.trigger("keyboard", "type", { text });
   }
 };
-
-// markdown参考
-const showMarkdownReference = ref<boolean>(false);
 
 // resize
 const root = ref<HTMLElement>();
@@ -193,10 +190,10 @@ initViewer(markdownRef);
           </div>
         </common-dropdown>
       </a>
-      <a :title="$t('markdown-ref')" @click="showMarkdownReference = true">
+      <nuxt-link v-if="!single" :title="$t('markdown-ref')" to="/manage/md-ref" target="_blank">
         <svg-icon name="markdown" />
-      </a>
-      <a class="preview" :title="$t('preview')" @click="emit('preview')"><svg-icon name="preview" /></a>
+      </nuxt-link>
+      <a v-if="!single" class="preview" :title="$t('preview')" @click="emit('preview')"><svg-icon name="preview" /></a>
       <a
         class="split"
         :title="$t('toggle-view-mode')"
@@ -229,27 +226,6 @@ initViewer(markdownRef);
       </div>
     </div>
   </div>
-  <common-modal v-model="showMarkdownReference" :show-ok="false" :show-cancel="false">
-    <template #title>
-      {{ $t('markdown-ref') }}
-    </template>
-    <template #body>
-      <div class="markdown-tips">
-        <p>
-          {{ $t('base-grammar') }}:<a
-            target="_blank"
-            href="https://github.github.com/gfm"
-          >gfm</a>
-        </p>
-        <ul>
-          <li v-for="tip in markdownTips" :key="tip.regx">
-            <b>{{ tip.regx }}</b>
-            <span>{{ $t(tip.description) }}</span>
-          </li>
-        </ul>
-      </div>
-    </template>
-  </common-modal>
 </template>
 
 <style lang="scss">
@@ -520,6 +496,7 @@ initViewer(markdownRef);
   > .righr-side {
     overflow: auto;
     flex-grow: 1;
+    padding: 0 8px;
     min-width: 100px;
   }
 }
@@ -535,33 +512,6 @@ initViewer(markdownRef);
 
       @include dark-mode {
         color: $theme-color-lighten;
-      }
-    }
-  }
-
-  ul {
-    list-style: none;
-    border-top: 1px dotted rgb(212 212 212);
-
-    li {
-      border-bottom: 1px dotted rgb(212 212 212);
-      padding: 16px;
-
-      b {
-        font-size: f-size(0.75);
-        color: $theme-color-darken;
-
-        @include dark-mode {
-          color: $theme-color-lighten;
-        }
-
-        display: inline-block;
-        width: 300px;
-        white-space: pre;
-      }
-
-      span {
-        font-size: f-size(0.78);
       }
     }
   }

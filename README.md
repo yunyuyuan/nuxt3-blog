@@ -63,6 +63,7 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 - [ ] IV for AES encryption
 - [x] block level encryption
 - [ ] SSR for self-hosting
+- [ ] support cloudflare page,netlify and others
 
 ## Changelog
 

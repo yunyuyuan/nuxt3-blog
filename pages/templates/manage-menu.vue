@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { HeaderTabs } from "~/utils/types";
 import { calcRocketUrl } from "~/utils/utils";
+import { isDev } from "~/utils/constants";
 
 const emit = defineEmits(["upload-image", "show-verify"]);
 
@@ -50,6 +51,9 @@ const travel = computed(() => {
     </div>
     <nuxt-link title="🚀" :to="travel">
       <svg-icon name="rocket" />
+    </nuxt-link>
+    <nuxt-link v-if="isDev" title="svgs" to="/manage/all-svg" target="_blank">
+      SVG
     </nuxt-link>
   </div>
 </template>

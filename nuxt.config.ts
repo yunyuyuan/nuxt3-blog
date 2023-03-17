@@ -30,6 +30,9 @@ fs.readdirSync("./public/sticker").forEach((dir) => {
   stickers[dir] = fs.readdirSync(`./public/sticker/${dir}`).length;
 });
 
+// svgs
+const svgs = fs.readdirSync("./assets/svg").map(file => file.replace(/\.svg$/, ""));
+
 const scripts = [];
 const analyzeId = config.CloudflareAnalyze || process.env.CloudflareAnalyze;
 if (analyzeId && !isDev) {
@@ -73,6 +76,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       stickers,
+      svgs: isDev ? svgs : [],
       timestamp
     },
     app: {
