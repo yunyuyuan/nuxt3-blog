@@ -1,4 +1,4 @@
-import showdown from "showdown";
+import { marked } from "marked";
 import { parseMarkdown, afterInsertHtml, parseMarkdownSync } from "../markdown";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
@@ -82,7 +82,7 @@ export default function useContentPage<T extends CommonItem> () {
             : newMarkdownContent.slice(0, start - 10) + newMarkdownContent.slice(end + 11);
         }
         if (isPrerender) {
-          htmlContent.value = parseMarkdownSync(newMarkdownContent, showdown);
+          htmlContent.value = parseMarkdownSync(newMarkdownContent, marked);
         } else {
           parseMarkdown(newMarkdownContent).then((res) => {
             htmlContent.value = res;
@@ -99,7 +99,7 @@ export default function useContentPage<T extends CommonItem> () {
           cancelFnList.push(cancelFn);
         });
       } else if (isPrerender) {
-        htmlContent.value = parseMarkdownSync(mdContent.value, showdown);
+        htmlContent.value = parseMarkdownSync(mdContent.value, marked);
       } else {
         parseMarkdown(mdContent.value).then((res) => {
           htmlContent.value = res;
