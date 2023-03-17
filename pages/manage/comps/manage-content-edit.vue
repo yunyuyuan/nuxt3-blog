@@ -10,7 +10,6 @@ import { translate } from "~/utils/i18n";
 import { loadOrDumpDraft, randomId } from "~/utils/manage";
 import { processEncryptDescrypt } from "~/utils/process-encrypt-descrypt";
 import { useManageContent } from "~/utils/manage/detail";
-import { encryptBlocksRegexp } from "~/utils/markdown";
 
 const props = defineProps<{
   preProcessItem?:(_item: CommonItem, _list?: Ref<CommonItem[]> | {value: CommonItem[]}) => void;
@@ -53,7 +52,7 @@ const currentOperate = ref<"upload" | "delete" | "">("");
 const showDeleteModal = ref(false);
 const showPreviewModal = ref(false);
 
-let markdownRef = null;
+let markdownRef: Ref | null = null;
 const getHtml = (ref: Ref) => {
   markdownRef = ref;
 };
@@ -91,22 +90,22 @@ const replaceOld = (newItem: CommonItem) => {
 };
 const getUploadInfo = async () => {
   // 检查是否invalid
-  const invalidInfo = baseInfo.value.querySelectorAll("span.invalid");
+  const invalidInfo = baseInfo.value!.querySelectorAll<HTMLElement>("span.invalid");
   if (invalidInfo.length) {
     return notify({
       type: "error",
       title: translate("missing-info"),
       description: translate("missing") + `: ${Array.from(invalidInfo)
-        .map((el: HTMLElement) => el.innerText)
+        .map(el => el.innerText)
         .join(", ")}`
     });
   }
   // 需要clone一份item，clone的item仅用于上传
-  const newItem = deepClone(toRaw(item));
+  const newItem = deepClone(item);
   let mdContent = inputMarkdown.value.replace("\r\n", "\n");
   // 处理item
   if (props.processWithContent) {
-    props.processWithContent(mdContent, markdownRef.value, newItem);
+    props.processWithContent(mdContent, markdownRef!.value, newItem);
   }
   if (newItem.encrypt) {
     // 处理加密
@@ -124,7 +123,7 @@ const getUploadInfo = async () => {
     // 未解密，不处理
   } else {
     // encryptBlocks
-    const reg = new RegExp(encryptBlocksRegexp, "gd");
+    const reg = /(^|\n)\[encrypt]\n([\s\S]+?)\n\[\/encrypt]/gd;
     let matcher;
     const encryptBlocks = [];
     while (true) {

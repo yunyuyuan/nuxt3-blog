@@ -461,10 +461,10 @@
     position: relative;
     transition: $common-transition;
     border-radius: 0.2rem;
-    border: 1px solid #aaa;
+    border: 1px solid #cfcfcf;
 
     &:hover {
-      border-color: #666;
+      border-color: #a3a3a3;
     }
 
     * {
@@ -492,6 +492,47 @@
     border-radius: 8px;
     padding: 8px;
     margin: 10px 0;
+  }
+
+  .container-block {
+    margin: 16px 0;
+    position: relative;
+    border-radius: 8px;
+    padding: 16px 16px 8px;
+    border-width: 1px;
+    border-style: solid;
+    background-color: rgb(249 249 250);
+
+    &.info,
+    &.details {
+      border-color: rgb(60 60 67 / 29%);
+      color: #3c3c43bf;
+    }
+
+    > .container-title {
+      font-weight: bold;
+    }
+
+    &.details {
+      summary {
+        cursor: pointer;
+      }
+    }
+
+    &.tip {
+      border-color: rgb(16 185 129);
+      color: rgb(5 150 105);
+    }
+
+    &.warning {
+      border-color: rgb(217 119 6);
+      color: rgb(217 119 6);
+    }
+
+    &.danger {
+      border-color: rgb(244 63 94);
+      color: rgb(244 63 94);
+    }
   }
 
   div.embed-video {

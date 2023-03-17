@@ -13,9 +13,9 @@ export const useEncryptor = () => {
   /** 密码本体 */
   const usePasswd = useState<string>("passwd", () => "");
   /** 密码是否正确 */
-  const passwdCorrect = useState<boolean>("passwdCurrect", () => false);
-  /** 同一个密码只会提示一次错误信息 */
-  const incorrectPwd = useState<string>("incorrectPasswd", () => "");
+  const passwdCorrect = useState<boolean>("passwd-correct", () => false);
+  /** 同一个错误密码只会提示一次错误信息 */
+  const incorrectPwd = useState<string>("incorrect-passwd", () => "");
 
   const encrypt: DecryptFunction = async (s: string) => {
     if (!s) {

@@ -16,9 +16,9 @@
     "dayjs": "^1.10.7",
     "headroom.js": "^0.12.0",
     "highlight.js": "^11.3.1",
+    "marked": "^4.2.12",
     "monaco-editor": "^0.33.0",
     "pangu": "^4.0.7",
-    "showdown": "^1.9.1",
     "viewerjs": "^1.10.5"
   },
   "devDependencies": {
@@ -28,7 +28,9 @@
     "@types/gulp": "^4.0.9",
     "@types/headroom.js": "^0.12.2",
     "@types/lodash": "^4.14.182",
+    "@types/marked": "^4.0.8",
     "@types/multiparty": "^0.0.33",
+    "@types/pangu": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "@vercel/node": "^2.5.8",
