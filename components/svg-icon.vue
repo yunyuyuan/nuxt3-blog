@@ -27,7 +27,7 @@ if (inBrowser) {
                 svgElement.removeAttribute(key);
               }
               svgElement.id = id;
-              container.appendChild(svgElement);
+              container!.appendChild(svgElement);
             }
           }).catch(() => svgIconList.delete(id));
         }

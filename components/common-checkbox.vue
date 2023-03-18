@@ -11,8 +11,8 @@ const emit = defineEmits(["change"]);
     <input
       type="checkbox"
       :checked="checked"
-      :disabled="disabled || null"
-      @change="emit('change', $event.target.checked)"
+      :disabled="disabled || undefined"
+      @change="emit('change', ($event.target as HTMLInputElement).checked)"
     >
   </label>
 </template>

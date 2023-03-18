@@ -3,7 +3,7 @@ import ManageListTable from "../comps/manage-list-table.vue";
 import { KnowledgeItem, KnowledgeTab, KnowledgeTabsList } from "~/utils/types";
 
 const filterType = ref<KnowledgeTab>();
-const registryFilter = (customFilter) => {
+const registryFilter = (customFilter: (_: (_item: KnowledgeItem) => boolean) => void) => {
   watch(filterType, () => {
     customFilter((item) => {
       return !filterType.value || item.type === filterType.value;
@@ -11,7 +11,7 @@ const registryFilter = (customFilter) => {
   });
 };
 
-const toggleFilterType = (type: KnowledgeTab) => {
+const toggleFilterType = (type?: KnowledgeTab) => {
   filterType.value = filterType.value === type ? undefined : type;
 };
 
@@ -28,10 +28,10 @@ const searchFn = (item: KnowledgeItem, s: string) => item.title.includes(s);
       <template v-if="!!filterType" #filter>
         <span
           class="filter-type flex"
-          :title="$t(KnowledgeTabsList.find((i) => i.key === filterType).name)"
+          :title="$t(KnowledgeTabsList.find((i) => i.key === filterType)!.name)"
           @click="toggleFilterType(filterType)"
         >
-          <svg-icon :name="filterType" />
+          <svg-icon :name="filterType!" />
         </span>
       </template>
       <template #title="{ data: title, dataUrl }">
@@ -42,7 +42,7 @@ const searchFn = (item: KnowledgeItem, s: string) => item.title.includes(s);
       <template #type="{ data: type }">
         <span
           class="filter-type"
-          :title="$t(KnowledgeTabsList.find((i) => i.key === type).name)"
+          :title="$t(KnowledgeTabsList.find((i) => i.key === type)!.name)"
           @click="toggleFilterType(type)"
         >
           <svg-icon :name="type" />

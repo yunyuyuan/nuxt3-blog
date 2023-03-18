@@ -9,7 +9,7 @@ const tagParentRef = ref<HTMLLabelElement>();
 
 // 输入的tag和实际上传的tag不同，上传的tag需要去重
 const inputTags = ref<string>("");
-const inputTagsList = ref<string[]>();
+const inputTagsList = ref<string[]>([]);
 const calcTagsList = () => {
   inputTagsList.value = !inputTags
     ? []
@@ -40,7 +40,7 @@ const preProcessItem = (item: ArticleItem, list: Ref<ArticleItem[]>) => {
     calcTagsList();
   }, { immediate: true });
   watch(inputTagsList, (tags) => {
-    if (!item.encrypt) {
+    if (tags && !item.encrypt) {
       item.tags.splice(0, item.tags.length, ...tags);
     }
   });
@@ -53,12 +53,12 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
   if (item.encrypt) {
     item.tags.splice(0, item.tags.length);
   }
-  html.querySelectorAll("h1, h2, h3, h4, h5, h6").forEach((el: HTMLElement) => {
+  html.querySelectorAll<HTMLHeadElement>("h1, h2, h3, h4, h5, h6").forEach((el) => {
     const size = ["H1", "H2", "H3"].includes(el.tagName) ? "big" : "small";
     item.menu.push({
       size,
       text: el.innerText,
-      url: el.querySelector("a").getAttribute("href")
+      url: el.querySelector("a")!.getAttribute("href")!
     });
   });
 };
@@ -81,7 +81,7 @@ const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
         </span>
         <div
           ref="tagParentRef"
-          :title="item.encrypt ? $t('tags-not-allowed') : null"
+          :title="item.encrypt ? $t('tags-not-allowed') : undefined"
           class="input-tags flex"
           :class="{ disabled: disabled || item.encrypt }"
         >

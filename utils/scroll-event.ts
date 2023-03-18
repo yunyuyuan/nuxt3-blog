@@ -1,7 +1,7 @@
 import throttle from "lodash/throttle.js";
 import { inBrowser } from "./constants";
 
-let scrollEvent = null;
+let scrollEvent: Event;
 const eventName = "scroll-event";
 
 export function initScrollTrigger () {

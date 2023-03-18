@@ -14,7 +14,7 @@ export type UpdateRebuild = {
 }
 
 function writeFile (file: FileItem): void {
-  fs.writeFileSync(path.resolve(__dirname, "../", file.path), file.content);
+  fs.writeFileSync(path.resolve(__dirname, "../", file.path), file.content!);
 }
 
 function removeFile (file: FileItem): void {
@@ -29,7 +29,7 @@ export default {
         data.additions.forEach(writeFile);
         data.deletions.forEach(removeFile);
         client.send(rebuildEvent, true);
-      } catch (e) {
+      } catch (e: any) {
         client.send(rebuildEvent, e.toString());
       }
     });

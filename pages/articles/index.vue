@@ -69,7 +69,7 @@ const toggleTags = (tag: string) => {
               }}</span>
               <b />
               <span>{{ item.len }} {{ $t('words-num') }}</span>
-              <span v-if="item.visitors >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
+              <span v-if="Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
                 <svg-icon name="view" />
                 {{ item.visitors }}
               </span>

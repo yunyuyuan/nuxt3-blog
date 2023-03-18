@@ -51,7 +51,7 @@ const root = ref<HTMLElement>();
 const emit = defineEmits(["confirm", "cancel", "update:modelValue"]);
 
 const setFocus = () => {
-  root.value.focus();
+  root.value?.focus();
 };
 const ok = () => {
   if (props.onOk) {

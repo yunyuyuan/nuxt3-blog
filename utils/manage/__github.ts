@@ -14,7 +14,7 @@ export function createCommit (
   additions: { path: string; content: string }[] = [],
   deletions: { path: string }[] = []
 ): Promise<boolean> {
-  import.meta.hot.send(rebuildEvent, {
+  import.meta.hot!.send(rebuildEvent, {
     additions,
     deletions
   } as UpdateRebuild);
@@ -26,7 +26,7 @@ export function deleteList (
   dels: CommonItem[]
 ): Promise<boolean | void> {
   const folder = useCurrentTab().value.url;
-  import.meta.hot.send(rebuildEvent, {
+  import.meta.hot!.send(rebuildEvent, {
     additions: [{
       path: `public/rebuild/json${folder}.json`,
       content: JSON.stringify(newList, null, 2)
@@ -49,7 +49,7 @@ function listenServer (): Promise<boolean> {
             description: translate("refresh-after-sec", [1])
           });
           setTimeout(() => {
-            import.meta.hot.invalidate();
+            import.meta.hot!.invalidate();
           }, 1000);
         }
       } else {

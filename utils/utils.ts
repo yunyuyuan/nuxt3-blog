@@ -1,28 +1,35 @@
 import fs from "fs";
-import type { WatchOptions } from "vue";
+import type { Ref, WatchOptions } from "vue";
 import { AllKeys, CommonItem, HeaderTabs, HeaderTabUrl, NeedsItem } from "./types";
 import { githubRepoUrl, inBrowser, isDev, isPrerender } from "./constants";
 import config from "~/config";
 
 const timestamp = () => useRuntimeConfig().public.timestamp;
 
-export const fetchList = (tab: HeaderTabUrl) => {
+type returnType<T> = {
+  data: {
+    value: T
+  },
+  pending: Ref<boolean>
+}
+
+export const fetchList = <T extends CommonItem>(tab: HeaderTabUrl) => {
   if (isPrerender) {
     return {
       data: {
-        value: JSON.parse(fs.readFileSync(`./public/rebuild/json${tab}.json`).toString()) as CommonItem[]
+        value: JSON.parse(fs.readFileSync(`./public/rebuild/json${tab}.json`).toString()) as T[]
       },
       pending: ref(true)
     };
   }
-  return fetchListManage(tab);
+  return fetchListManage<T>(tab);
 };
 
-export const fetchListManage = (tab: HeaderTabUrl) => {
-  return useFetch<CommonItem[]>(`/rebuild/json${tab}.json?s=${timestamp()}`, {
+export const fetchListManage = <T extends CommonItem>(tab: HeaderTabUrl) => {
+  return useFetch<T[]>(`/rebuild/json${tab}.json?s=${timestamp()}`, {
     key: process.env.NODE_ENV + tab,
     default: () => []
-  });
+  }) as returnType<T[]>;
 };
 
 export const fetchMd = (tab: HeaderTabUrl, id: string) => {
@@ -101,20 +108,30 @@ export function watchUntil (
   source: any,
   cb: (_: any, _old: any, _cleanup: any) => void,
   options: WatchOptions,
-  until: (_: any) => boolean = () => true,
-  once = false
+  until: ((_: any) => boolean) | "boolean" = () => true,
+  type: "once" | "cancelAfterUntil" | "normalWhenUntil" = "normalWhenUntil"
 ) {
-  let watcher: ReturnType<typeof watch> = () => undefined;
+  let cancel: ReturnType<typeof watch> = () => undefined;
   const callback = (value: any, old: any, cleanup: any) => {
-    if (!once) {
+    const fit = until === "boolean" ? !!value : until(value);
+    if (fit) {
       cb(value, old, cleanup);
-    } else if (until(value)) {
-      cb(value, old, cleanup);
-      watcher();
+    }
+    switch (type) {
+      case "once":
+        cancel();
+        break;
+      case "cancelAfterUntil":
+        if (fit) {
+          cancel();
+        }
+        break;
+      case "normalWhenUntil":
+        break;
     }
   };
-  watcher = watch(source, callback, options);
-  return watcher;
+  cancel = watch(source, callback, options);
+  return cancel;
 }
 
 /**
@@ -240,7 +257,7 @@ export function deepClone<T extends object> (item: T): T {
 /**
  * 给item赋值, deepClone
  */
-export function assignItem (dest: CommonItem, src: CommonItem) {
+export function assignItem<T extends CommonItem> (dest: T, src: T) {
   for (const k of (Object.keys(src) as AllKeys[])) {
     // deepClone一下
     if (["menu", "tags"].includes(k)) {
@@ -260,10 +277,10 @@ export function assignItem (dest: CommonItem, src: CommonItem) {
 /**
  * dev热更新
  */
-export function devHotListen (event: string, callback: (_: any) => unknown) {
+export function devHotListen<T> (event: string, callback: (_: T) => unknown) {
   if (isDev) {
     const listener = (e: Event) => {
-      callback((e as CustomEvent).detail);
+      callback((e as CustomEvent<T>).detail);
       window.removeEventListener(event, listener);
     };
     window.addEventListener(event, listener);

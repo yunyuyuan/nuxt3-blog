@@ -9,14 +9,14 @@ export default {
       try {
         const result = await getVisitors(data.type);
         client.send(getVisitorsEvent, result);
-      } catch (e) {
+      } catch (e: any) {
         client.send(getVisitorsEvent, e.toString());
       }
     });
     server.ws.on(incVisitorsEvent, async (data, client) => {
       try {
         client.send(incVisitorsEvent, await increaseVisitors(data));
-      } catch (e) {
+      } catch (e: any) {
         client.send(incVisitorsEvent, e.toString());
       }
     });

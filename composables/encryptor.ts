@@ -1,9 +1,10 @@
+import type cryptoJS from "crypto-js";
 import { notify } from "~/utils/notify/notify";
 import { translate } from "~/utils/i18n";
 
 type DecryptFunction = (_s: string) => Promise<string>;
 
-let CryptoJS = null;
+let CryptoJS: typeof cryptoJS;
 
 const init = async () => {
   CryptoJS = CryptoJS || (await import("crypto-js")).default;
@@ -24,7 +25,7 @@ export const useEncryptor = () => {
     try {
       await init();
       return CryptoJS.AES.encrypt(s, usePasswd.value).toString();
-    } catch (e) {
+    } catch (e: any) {
       notify({
         type: "error",
         title: translate("encryption-failed"),
@@ -46,7 +47,7 @@ export const useEncryptor = () => {
         return result;
       }
       throw new Error(translate("passwd-incorrect"));
-    } catch (e) {
+    } catch (e: any) {
       passwdCorrect.value = false;
       if (incorrectPwd.value !== usePasswd.value) {
         incorrectPwd.value = usePasswd.value;

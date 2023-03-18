@@ -15,6 +15,9 @@ export default {
         const regex = /^data:.+\/(.+);base64,(.*)$/;
 
         const matches = data.file.match(regex);
+        if (!matches) {
+          throw new Error("formatting error");
+        }
         const buffer = Buffer.from(matches[2], "base64");
         const ext = matches[1];
         const response = await upload({
@@ -26,7 +29,7 @@ export default {
           }
         });
         client.send(uploadImageEvent, { data: response.data });
-      } catch (e) {
+      } catch (e: any) {
         client.send(uploadImageEvent, e.toString());
       }
     });

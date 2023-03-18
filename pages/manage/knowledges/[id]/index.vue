@@ -26,12 +26,12 @@ const typeSelectHided = ref(true);
         </span>
         <div class="select" @click="!disabled && typeSelectHided && (typeSelectShow = true)">
           <a tabindex="1" class="flex" :class="{active: !typeSelectHided, disabled: disabled}">
-            <b>{{ $T(KnowledgeTabsList.find((i) => i.key === item.type).name) }}</b>
+            <b>{{ $T(KnowledgeTabsList.find((i) => i.key === item.type)!.name) }}</b>
             <svg-icon :name="item.type" />
           </a>
           <common-dropdown v-model:show="typeSelectShow" v-model:hided="typeSelectHided" class="flexc">
             <div v-for="tp in KnowledgeTabs" :key="tp" class="flex" :class="{active: item.type===tp}" @click="item.type=tp;typeSelectShow=false">
-              <span>{{ $T(KnowledgeTabsList.find((i) => i.key === tp).name) }}</span>
+              <span>{{ $T(KnowledgeTabsList.find((i) => i.key === tp)!.name) }}</span>
               <svg-icon :name="tp" />
             </div>
           </common-dropdown>

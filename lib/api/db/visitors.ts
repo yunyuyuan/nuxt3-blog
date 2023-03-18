@@ -2,7 +2,7 @@ import config from "../../../config";
 import { HeaderTabUrl } from "./../../../utils/types";
 import { getCollection } from "./mongodb";
 
-type VisitorsDb = {
+export type VisitorsDb = {
   nid: number,
   ntype: HeaderTabUrl,
   nvisitors?: number,

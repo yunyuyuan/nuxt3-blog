@@ -2,7 +2,7 @@ import { marked } from "marked";
 import { parseMarkdown, afterInsertHtml, parseMarkdownSync } from "../markdown";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList, fetchMd } from "../utils";
+import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList, fetchMd, watchUntil } from "../utils";
 import { translate } from "../i18n";
 import { formatTime } from "../_dayjs";
 import { isPrerender } from "./../constants";
@@ -31,25 +31,23 @@ export default function useContentPage<T extends CommonItem> () {
   let destroyFns: ReturnType<typeof afterInsertHtml> = [];
 
   const itemDecrypted = ref(false);
-  watch(listPending, async (pend) => {
-    if (!pend || isPrerender) {
-      const foundItem = list.value!.find(item => item.id === Number(id));
-      if (!foundItem) {
-        showError({ statusCode: 404, fatal: true });
-      } else {
-        assignItem(item, foundItem);
-        item.visitors = 0;
-      }
-      if (item.encrypt) {
-        cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
-          await processEncryptDescrypt(item, decrypt, targetTab.url);
-          itemDecrypted.value = true;
-        }));
-      } else {
-        itemDecrypted.value = true;
-      }
+  watchUntil(listPending, async () => {
+    const foundItem = list.value!.find(item => item.id === Number(id));
+    if (!foundItem) {
+      showError({ statusCode: 404, fatal: true });
+    } else {
+      assignItem(item, foundItem);
+      item.visitors = 0;
     }
-  }, { immediate: true });
+    if (item.encrypt) {
+      cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
+        await processEncryptDescrypt(item, decrypt, targetTab.url);
+        itemDecrypted.value = true;
+      }));
+    } else {
+      itemDecrypted.value = true;
+    }
+  }, { immediate: true }, pending => !pending || isPrerender, "once");
 
   // 所有页面都有markdown
   const mdContent = ref<string>("");
@@ -119,7 +117,7 @@ export default function useContentPage<T extends CommonItem> () {
               item.visitors = data;
             }
           });
-        }, { immediate: true }, isAuthor => isAuthor !== null, true);
+        }, { immediate: true }, isAuthor => isAuthor !== null, "once");
       }
     }
   }, { immediate: true });

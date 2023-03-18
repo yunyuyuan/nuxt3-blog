@@ -18,6 +18,6 @@ export function notify (options: NotifyOption) {
   };
   render(vm, container);
   document
-    .getElementById(NotificationContainerId)
-    .appendChild(container.firstElementChild);
+    .getElementById(NotificationContainerId)!
+    .appendChild(container.firstElementChild!);
 }

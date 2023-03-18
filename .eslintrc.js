@@ -39,6 +39,7 @@ module.exports = {
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-unused-vars": "off",
     "typescript-config/strict": "off",
     "vue/no-multiple-template-root": "off",
     "vue/no-v-model-argument": "off",

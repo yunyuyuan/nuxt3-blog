@@ -97,7 +97,7 @@ export function loadOrDumpDraft (key: string, type: "load" | "dump", item: Commo
 /**
  * 是否有改动
  */
-export function useHasModified ({ item, origin }: { item: CommonItem, origin: CommonItem, }) {
+export function useHasModified<T extends CommonItem> ({ item, origin }: { item: T, origin: T, }) {
   const markdownModified = ref<boolean>(false);
   // 目前只有menu,tag和images这几种简单数据，可以直接进行比较
   const hasModified = computed(() => markdownModified.value || keysOfCommonItem()
@@ -133,7 +133,7 @@ export function createCommitModal () {
     };
     render(vm, container);
     document
-      .getElementById(ModalContainerId)
-      .appendChild(container.firstElementChild);
+      .getElementById(ModalContainerId)!
+      .appendChild(container.firstElementChild!);
   });
 }

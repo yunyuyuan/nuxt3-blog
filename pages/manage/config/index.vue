@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { createCommit } from "ls:~/utils/manage/github";
+import type { editor as Editor } from "monaco-editor";
 import configString from "~/config.ts?raw";
 import config from "~/config";
 import { inBrowser } from "~/utils/constants";
@@ -10,7 +11,7 @@ useHead({
   title: translate("config-manage") + config.SEO_title
 });
 
-let editor = null;
+let editor: Editor.IStandaloneCodeEditor;
 const editorRef = ref<HTMLElement>();
 const inputText = ref<string>(configString);
 const modified = computed(() => inputText.value !== configString);
@@ -21,7 +22,7 @@ const { themeMode } = useThemeMode();
 if (inBrowser) {
   onMounted(() => {
     import("monaco-editor").then((module) => {
-      editor = module.editor.create(editorRef.value, {
+      editor = module.editor.create(editorRef.value!, {
         value: inputText.value,
         language: "javascript",
         theme: "vs",
@@ -36,7 +37,7 @@ if (inBrowser) {
         });
       }, { immediate: true });
       editor.onDidChangeModelContent(() => {
-        const text = editor.getModel().getValue();
+        const text = editor.getModel()!.getValue();
         inputText.value = text;
       });
     });

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import ClipboardJS from "clipboard";
 import { notify } from "~/utils/notify/notify";
 import { translateT } from "~/utils/i18n";
 
 const svgs = useRuntimeConfig().public.svgs;
 
-const copySvg = (name: string) => {
+const copySvg = async (name: string) => {
+  const ClipboardJS = (await import("clipboard")).default;
   ClipboardJS.copy(`<svg-icon name="${name}" />`);
   notify({
     title: translateT("copy-successful")

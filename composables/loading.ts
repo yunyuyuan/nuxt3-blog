@@ -1,4 +1,4 @@
-let handle: NodeJS.Timer = null;
+let handle: NodeJS.Timer;
 
 export const useLoading = () => {
   const loadingState = useState<number>("loading", () => 0);

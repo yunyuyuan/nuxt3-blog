@@ -1,3 +1,6 @@
+## 2023.03.18
+* Fix some type errors.
+
 ## 2023.03.17
 * Use `marked.js` instead of `showdown.js` as markdown parser.
 * Fix block-encryption bug.

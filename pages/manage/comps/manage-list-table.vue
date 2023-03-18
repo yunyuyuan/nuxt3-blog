@@ -1,17 +1,16 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends CommonItem">
 import { deleteList } from "ls:~/utils/manage/github";
 import { CommonItem } from "~/utils/types";
 import { formatTime } from "~/utils/_dayjs";
 import { useStatusText } from "~/utils/manage";
 import { useManageList } from "~/utils/manage/list";
 
-const { targetTab, list, pending, customFilter } = useManageList();
+const { targetTab, list, pending, customFilter } = useManageList<T>();
 
 const props = defineProps<{
   colPrefix: string;
-  registryFilter?:(_: typeof customFilter) => void;
-  // FIXME how to use Generic here?
-  searchFn:(_item: object, _search: string) => boolean;
+  registryFilter?:(_: (_: (_: T) => boolean) => void) => void,
+  searchFn:(_item: T, _search: string) => boolean;
 }>();
 
 if (props.registryFilter) {
@@ -139,7 +138,7 @@ function deleteSelect () {
       <div class="col col-time">
         <span>{{ formatTime(item.time) }}</span>
       </div>
-      <div class="col col-lock" :title="item.encrypt ? $t('has-encrypted') : null">
+      <div class="col col-lock" :title="item.encrypt ? $t('has-encrypted') : undefined">
         <svg-icon v-if="item.encrypt" name="lock" />
       </div>
       <div class="col col-check">

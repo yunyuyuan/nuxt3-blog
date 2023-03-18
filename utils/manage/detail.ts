@@ -1,7 +1,8 @@
 import type { Ref } from "vue";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
-import { registerCancelWatchEncryptor, createNewItem, deepClone, assignItem, fetchList, fetchMdManage } from "../utils";
+import { registerCancelWatchEncryptor, createNewItem, deepClone, watchUntil, assignItem, fetchList, fetchMdManage } from "../utils";
 import { translate } from "../i18n";
+import { CommonItem } from "../types";
 import { isPrerender } from "./../constants";
 import { useHasModified, useStatusText } from ".";
 
@@ -10,29 +11,29 @@ import config from "~/config";
 /**
  * 管理页面详情编辑通用功能
  */
-export function useManageContent () {
+export function useManageContent<T extends CommonItem> () {
   const encryptor = useEncryptor();
   const itemId = useRoute().params.id as string;
 
   const targetTab = useCurrentTab().value;
-  const { pending: listPending, data: list } = fetchList(targetTab.url);
+  const { pending: listPending, data: list } = fetchList<T>(targetTab.url);
 
   useHead({
     title: translate("detail-manage", [targetTab.name]) + config.SEO_title
   });
 
   const isNew = itemId === "new";
-  const hasDraft = ref<boolean>(false);
+  const hasDraft = ref(false);
 
   // cancelWatchPasswd
   const cancelFnList = registerCancelWatchEncryptor();
 
-  const originItem = reactive(createNewItem(targetTab.url));
-  const draftItem = reactive(createNewItem(targetTab.url));
-  const item = reactive(deepClone(originItem));
+  const originItem = reactive(createNewItem(targetTab.url)) as T;
+  const draftItem = reactive(createNewItem(targetTab.url)) as T;
+  const item = reactive(deepClone(originItem)) as T;
 
-  const markdownContent = ref<string>("");
-  const draftMarkdownContent = ref<string>("");
+  const markdownContent = ref("");
+  const draftMarkdownContent = ref("");
   // 解密完成 or 上传完成(表面工作)，用来比较是否发生改变的originItem需要更新
   const resetOriginItem = (md?: string) => {
     Object.assign(originItem, deepClone(item));
@@ -52,27 +53,25 @@ export function useManageContent () {
   const mdDecrypted = ref(false);
   const decrypted = computed(() => itemDecrypted.value && mdDecrypted.value);
   const blockDecrypted = ref(false);
-  watch(listPending, async (pend) => {
-    if (!pend || isPrerender) {
-      if (!isNew) {
-        assignItem(originItem, deepClone(list.value.find(item => item.id === Number(itemId))));
-        assignItem(item, deepClone(originItem));
-        // item的内容可以马上解密
-        if (item.encrypt) {
-          cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
-            await processEncryptDescrypt(item, decrypt, targetTab.url);
-            itemDecrypted.value = true;
-            resetOriginItem();
-          }));
-        } else {
+  watchUntil(listPending, async () => {
+    if (!isNew) {
+      assignItem<T>(originItem, deepClone(list.value!.find(item => item.id === Number(itemId))!));
+      assignItem<T>(item, deepClone(originItem));
+      // item的内容可以马上解密
+      if (item.encrypt) {
+        cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
+          await processEncryptDescrypt(item, decrypt, targetTab.url);
           itemDecrypted.value = true;
-        }
+          resetOriginItem();
+        }));
       } else {
         itemDecrypted.value = true;
-        blockDecrypted.value = true;
       }
+    } else {
+      itemDecrypted.value = true;
+      blockDecrypted.value = true;
     }
-  }, { immediate: true });
+  }, { immediate: true }, pending => !pending || isPrerender, "once");
 
   let mdPending: Ref<boolean> | null = null;
   if (!isNew) {
@@ -112,7 +111,7 @@ export function useManageContent () {
     mdDecrypted.value = true;
   }
 
-  const { hasModified, markdownModified } = useHasModified({ item, origin: originItem });
+  const { hasModified, markdownModified } = useHasModified<T>({ item, origin: originItem });
   // 额外加上是否修改提示
   const pending = computed(() => listPending.value || (mdPending && mdPending.value));
   const { statusText: statusText_, canCommit: canCommit_, processing, toggleProcessing } = useStatusText();
@@ -127,7 +126,7 @@ export function useManageContent () {
     return statusText_.value || (!hasModified.value ? translate("not-modified") : "");
   });
 
-  const { hasModified: hasModifiedForDraft, markdownModified: markdownModifiedForDraft } = useHasModified({ item, origin: draftItem });
+  const { hasModified: hasModifiedForDraft, markdownModified: markdownModifiedForDraft } = useHasModified<T>({ item, origin: draftItem });
   // 提示未保存内容
   watch([hasModified, hasDraft, hasModifiedForDraft], ([modified, hasDraft, draftModified]) => {
     // 和origin，草稿对得上一个就行了

@@ -2,7 +2,7 @@
 import useContentPage from "~/utils/public/detail";
 import { ArticleItem } from "~/utils/types";
 import { addScrollListener, rmScrollListener } from "~/utils/scroll-event";
-import { getLocalStorage, rmLocalStorage, setLocalStorage, useComment } from "~/utils/utils";
+import { getLocalStorage, rmLocalStorage, setLocalStorage, useComment, watchUntil } from "~/utils/utils";
 import { isPrerender } from "~/utils/constants";
 import config from "~/config";
 import { initViewer } from "~/utils/viewer";
@@ -15,7 +15,7 @@ useHead({
 
 const activeAnchor = ref<string>();
 
-const hideMenu = ref<boolean>(!!getLocalStorage("hideMenu"));
+const hideMenu = ref(!!getLocalStorage("hideMenu"));
 watch(hideMenu, (hide) => {
   if (hide) {
     setLocalStorage("hideMenu", "true");
@@ -26,13 +26,11 @@ watch(hideMenu, (hide) => {
 
 const listenAnchor = () => {
   try {
-    const links = Array.from(
-      markdownRef.value?.querySelectorAll("h1>a, h2>a, h3>a, h4>a, h5>a, h6>a")
-    ).reverse();
+    const links = Array.from(markdownRef.value!.querySelectorAll<HTMLLinkElement>("h1>a, h2>a, h3>a, h4>a, h5>a, h6>a")).reverse();
     for (const link of links) {
       if (link.getBoundingClientRect().y <= 52) {
         const hash = link.getAttribute("href");
-        activeAnchor.value = item.menu.find(anchor => anchor.url === hash).url;
+        activeAnchor.value = item.menu.find(anchor => anchor.url === hash)?.url;
         return;
       }
     }
@@ -43,29 +41,25 @@ const listenAnchor = () => {
 
 if (!isPrerender) {
   onMounted(() => {
-    watch(mdPending, (pend) => {
-      if (!pend) {
-        const hash = useRoute().hash;
-        nextTick(() => {
-          if (hash) {
-            watch(htmlInserted, (inserted) => {
-              if (inserted) {
-                window.scrollTo({
-                  top: document
-                    .getElementById(
-                      encodeURIComponent(decodeURIComponent(hash.slice(1)))
-                    )
-                    ?.getBoundingClientRect().y
-                });
-              }
-            }, { immediate: true });
-          } else {
-            listenAnchor();
-          }
-          addScrollListener(listenAnchor);
-        });
-      }
-    }, { immediate: true });
+    watchUntil(mdPending, () => {
+      const hash = useRoute().hash;
+      nextTick(() => {
+        if (hash) {
+          watchUntil(htmlInserted, () => {
+            window.scrollTo({
+              top: document
+                .getElementById(
+                  encodeURIComponent(decodeURIComponent(hash.slice(1)))
+                )
+                ?.getBoundingClientRect().y
+            });
+          }, { immediate: true }, "boolean", "cancelAfterUntil");
+        } else {
+          listenAnchor();
+        }
+        addScrollListener(listenAnchor);
+      });
+    }, { immediate: true }, "boolean", "cancelAfterUntil");
   });
 }
 
@@ -105,7 +99,7 @@ initViewer(root);
             {{ $t('updated-at') }}:
             <span>{{ modifyTime }}</span>
           </span>
-          <span v-if="item.visitors >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
+          <span v-if="Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
             <svg-icon name="view" />
             {{ item.visitors }}
           </span>

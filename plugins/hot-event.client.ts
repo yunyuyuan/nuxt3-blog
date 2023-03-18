@@ -5,7 +5,7 @@ import { allHotEvent } from "~/dev-server/types";
 export default defineNuxtPlugin(() => {
   if (isDev) {
     for (const e of allHotEvent) {
-      import.meta.hot.on(e, (data) => {
+      import.meta.hot!.on(e, (data) => {
         window.dispatchEvent(new CustomEvent(e, {
           detail: data
         }));

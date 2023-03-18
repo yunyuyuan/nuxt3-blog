@@ -21,7 +21,6 @@ const emit = defineEmits(["click"]);
 </template>
 
 <style scoped lang="scss">
-
 $size: 1.7rem;
 $color: #eaeaea;
 $color-dark: #1e1e1e;

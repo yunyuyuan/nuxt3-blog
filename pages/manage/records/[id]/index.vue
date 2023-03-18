@@ -13,7 +13,7 @@ const addImg = (item: RecordItem) => {
   item.images.push({ src: "", alt: "", id: getUniqueId() });
 };
 
-const processImages = (_, _2, item: RecordItem) => {
+const processImages = (_: any, _2: any, item: RecordItem) => {
   // 删除id
   item.images.forEach((img) => {
     delete img.id;

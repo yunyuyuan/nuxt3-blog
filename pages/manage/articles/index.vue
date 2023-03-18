@@ -10,10 +10,10 @@ const toggleTag = (tag: string) => {
     searchTag.add(tag);
   }
 };
-const registryFilter = (customFilter) => {
+const registryFilter = (customFilter: (_: (_item: ArticleItem) => boolean) => void) => {
   watch(searchTag, () =>
-    customFilter((item: ArticleItem) => {
-      return (
+    customFilter((item) => {
+      return !!(
         !searchTag.size || (item.tags.length && Array.from(searchTag).every(tag => item.tags.includes(tag)))
       );
     })

@@ -1,7 +1,8 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends CommonItem">
 import { createCommit, deleteList } from "ls:~/utils/manage/github";
 import type { Ref } from "vue";
 import MdEditor from "./md-editor.vue";
+// eslint-disable-next-line no-unused-vars
 import { CommonItem, HeaderTabs } from "~/utils/types";
 import { notify } from "~/utils/notify/notify";
 import { getNowStamp } from "~/utils/_dayjs";
@@ -12,9 +13,9 @@ import { processEncryptDescrypt } from "~/utils/process-encrypt-descrypt";
 import { useManageContent } from "~/utils/manage/detail";
 
 const props = defineProps<{
-  preProcessItem?:(_item: CommonItem, _list?: Ref<CommonItem[]> | {value: CommonItem[]}) => void;
+  preProcessItem?:(_item: T, _list?: Ref<T[]> | {value: T[]}) => void;
   /** 更新之前处理item，附带markdown信息 */
-  processWithContent?:(_md: string, _html: HTMLElement, _item: CommonItem) => void;
+  processWithContent?:(_md: string, _html: HTMLElement, _item: T) => void;
 }>();
 
 const slots = Object.keys(useSlots()).filter(key => !key.startsWith("_"));
@@ -39,7 +40,7 @@ const {
   pending,
   mdPending,
   listPending
-} = useManageContent();
+} = useManageContent<T>();
 
 const activeRoute = targetTab.url;
 const encryptor = useEncryptor();
@@ -72,7 +73,7 @@ const previewInfo = ref("");
 const previewContent = ref("");
 
 /** 更新list */
-const replaceOld = (newItem: CommonItem) => {
+const replaceOld = (newItem?: T) => {
   const cloneList = list.value.map(item => deepClone(item));
   if (!!newItem && isNew) {
     // 更新item且是新增
@@ -101,7 +102,7 @@ const getUploadInfo = async () => {
     });
   }
   // 需要clone一份item，clone的item仅用于上传
-  const newItem = deepClone(item);
+  const newItem = deepClone(item) as T;
   let mdContent = inputMarkdown.value.replace("\r\n", "\n");
   // 处理item
   if (props.processWithContent) {
@@ -187,7 +188,7 @@ const doUpload = async () => {
   const { item: newItem, md } = info;
   currentOperate.value = "upload";
   toggleProcessing();
-  createCommit(`Update ${HeaderTabs.find(i => i.url === activeRoute).name}-${newItem.id}`, [
+  createCommit(`Update ${HeaderTabs.find(i => i.url === activeRoute)!.name}-${newItem.id}`, [
     {
       path: `public/rebuild/json${activeRoute}.json`,
       content: JSON.stringify(replaceOld(newItem), null, 2)
@@ -210,7 +211,7 @@ const doDelete = () => {
   showDeleteModal.value = false;
   currentOperate.value = "delete";
   toggleProcessing();
-  deleteList(replaceOld(null), [item]).finally(() => {
+  deleteList(replaceOld(), [item]).finally(() => {
     currentOperate.value = "";
     toggleProcessing();
   });
@@ -250,7 +251,7 @@ onMounted(() => {
       <common-button theme="default" size="small" :disabled="pending || !hasDraft" @click="loadDraft">
         {{ $t('load-draft') }}
       </common-button>
-      <common-button theme="default" size="small" class="load-draft" :disabled="pending" @click="dumpDraft">
+      <common-button theme="default" size="small" class="load-draft" :disabled="pending || undefined" @click="dumpDraft">
         {{ $t('save-draft') }}
       </common-button>
       <common-button theme="default" size="small" :disabled="pending || !hasDraft" @click="delDraft">
@@ -303,7 +304,7 @@ onMounted(() => {
         v-model="inputMarkdown"
         :get-html="getHtml"
         :disabled="!decrypted || !blockDecrypted"
-        :loading="mdPending"
+        :loading="mdPending?.value || false"
         @preview="setPreviewInfo()"
       />
     </client-only>

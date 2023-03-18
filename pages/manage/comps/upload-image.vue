@@ -27,7 +27,7 @@ const resultUrl = ref("");
 const uploading = ref(false);
 
 const setImage = (e: Event) => {
-  const file = (e.target as HTMLInputElement).files[0];
+  const file = (e.target as HTMLInputElement).files![0];
   if (!file.type.startsWith("image")) {
     return notify({
       type: "error",
@@ -37,15 +37,17 @@ const setImage = (e: Event) => {
   img.value = file;
 };
 const dropImg = (ev: DragEvent) => {
-  let file: File;
+  let file: File | null;
 
-  if (ev.dataTransfer.items) {
+  if (ev.dataTransfer?.items) {
     const item = ev.dataTransfer.items[0];
     if (item.kind === "file") {
-      file = item.getAsFile();
+      file = item.getAsFile()!;
+    } else {
+      file = null;
     }
   } else {
-    file = ev.dataTransfer.files[0];
+    file = ev.dataTransfer!.files[0];
   }
   if (!file) {
     return notify({
@@ -66,7 +68,7 @@ watch(img, (img) => {
     const reader = new FileReader();
     reader.readAsDataURL(img);
     reader.onloadend = (e) => {
-      imgUrl.value = e.target.result;
+      imgUrl.value = e.target?.result;
     };
   }
 });
@@ -92,7 +94,7 @@ const afterUpload = (res: any) => {
     } else {
       throw new Error(res.data.message);
     }
-  } catch (e) {
+  } catch (e: any) {
     notify({
       type: "error",
       title: translate("upload-failed"),
@@ -117,13 +119,13 @@ const doUpload = () => {
     }).then(res => afterUpload(res)).catch(err => afterUpload(err));
   } else {
     const reader = new FileReader();
-    reader.readAsDataURL(img.value);
+    reader.readAsDataURL(img.value!);
     reader.onload = (event) => {
-      import.meta.hot.send(uploadImageEvent, {
+      import.meta.hot!.send(uploadImageEvent, {
         token: smmsToken.value,
         tinyPngToken: tinyPngToken.value,
-        file: event.target.result,
-        filename: img.value.name
+        file: event.target!.result,
+        filename: img.value!.name
       });
     };
   }
@@ -132,12 +134,12 @@ const doUpload = () => {
 devHotListen(uploadImageEvent, afterUpload);
 
 const resultInput = ref<HTMLInputElement>();
-let clipboard = null;
+let clipboard: any;
 
 onMounted(async () => {
   const ClipboardJS = clipboard || (await import("clipboard")).default;
-  clipboard = new ClipboardJS(resultInput.value, {
-    target: function (trigger) {
+  clipboard = new ClipboardJS(resultInput.value!, {
+    target: function (trigger: HTMLElement) {
       return trigger;
     }
   }).on("success", () => {
