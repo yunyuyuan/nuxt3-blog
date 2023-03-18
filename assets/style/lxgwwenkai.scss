@@ -6,6 +6,7 @@
   src:
     url("https://cdn.jsdelivr.net/npm/lxgwwenkai@1.0.1/woff2/LXGWWenKai-Light.woff2") format("woff2"),
     url("https://cdn.jsdelivr.net/npm/lxgwwenkai@1.0.1/ttf/LXGWWenKai-Light.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -16,6 +17,7 @@
   src:
     url("https://cdn.jsdelivr.net/npm/lxgwwenkai@1.0.1/woff2/LXGWWenKai-Regular.woff2") format("woff2"),
     url("https://cdn.jsdelivr.net/npm/lxgwwenkai@1.0.1/ttf/LXGWWenKai-Regular.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -26,4 +28,5 @@
   src:
     url("https://cdn.jsdelivr.net/npm/lxgwwenkai@1.0.1/woff2/LXGWWenKai-Bold.woff2") format("woff2"),
     url("https://cdn.jsdelivr.net/npm/lxgwwenkai@1.0.1/ttf/LXGWWenKai-Bold.ttf") format("truetype");
+  font-display: swap;
 }

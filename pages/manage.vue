@@ -246,7 +246,7 @@ $menu-width: 120px;
         }
 
         &.active {
-          background: #828282;
+          background: $theme-color;
 
           &::before {
             opacity: 1;

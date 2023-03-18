@@ -54,7 +54,7 @@ const copySvg = async (name: string) => {
     }
 
     >span {
-      font-size: f-size(0.8);
+      font-size: f-size(0.75);
       margin-top: 8px;
     }
   }

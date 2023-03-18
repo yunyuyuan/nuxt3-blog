@@ -8,7 +8,7 @@ import { notify } from "~/utils/notify/notify";
 import { getNowStamp } from "~/utils/_dayjs";
 import { deepClone, getLocalStorage, rmLocalStorage } from "~/utils/utils";
 import { translate } from "~/utils/i18n";
-import { loadOrDumpDraft, randomId } from "~/utils/manage";
+import { compareMd, loadOrDumpDraft, randomId } from "~/utils/manage";
 import { processEncryptDescrypt } from "~/utils/process-encrypt-descrypt";
 import { useManageContent } from "~/utils/manage/detail";
 
@@ -62,10 +62,10 @@ watch(markdownContent, (text) => {
   inputMarkdown.value = text;
 }, { immediate: true });
 watch([inputMarkdown, markdownContent], ([text, text1]) => {
-  markdownModified.value = text !== text1;
+  markdownModified.value = !compareMd(text, text1);
 });
 watch([inputMarkdown, draftMarkdownContent], ([text, text1]) => {
-  markdownModifiedForDraft.value = text !== text1;
+  markdownModifiedForDraft.value = !compareMd(text, text1);
 });
 
 const baseInfo = ref<HTMLElement>();

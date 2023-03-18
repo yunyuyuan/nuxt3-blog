@@ -98,7 +98,7 @@ export function loadOrDumpDraft (key: string, type: "load" | "dump", item: Commo
  * 是否有改动
  */
 export function useHasModified<T extends CommonItem> ({ item, origin }: { item: T, origin: T, }) {
-  const markdownModified = ref<boolean>(false);
+  const markdownModified = ref(false);
   // 目前只有menu,tag和images这几种简单数据，可以直接进行比较
   const hasModified = computed(() => markdownModified.value || keysOfCommonItem()
     .filter(k => typeof item[k] !== "undefined")
@@ -112,6 +112,14 @@ export function useHasModified<T extends CommonItem> ({ item, origin }: { item: 
     }));
   return { hasModified, markdownModified };
 }
+
+/**
+ * 比较markdown
+ */
+export function compareMd (s1: string, s2: string) {
+  return s1.replaceAll("\r\n", "\n") === s2.replaceAll("\r\n", "\n");
+}
+
 /**
  * commit id 不一致
  */
@@ -123,11 +131,11 @@ export function createCommitModal () {
       modalTitle: translateT("warning"),
       modalContent: translate("commit-id-not-correct-confirm")
     });
-    vm.props.onOk = () => {
+    vm.props!.onOk = () => {
       render(null, container);
       resolve(true);
     };
-    vm.props.onCancel_ = () => {
+    vm.props!.onCancel_ = () => {
       render(null, container);
       resolve(false);
     };
