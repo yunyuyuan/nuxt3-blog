@@ -236,7 +236,7 @@ function parseMarkdown_ (text: string, marked: typeof Marked) {
           level: "block",
           start (src: string) { return src.match(/:::/)?.index; },
           tokenizer (src: string) {
-            const match = /^^:::\s+(info|tip|warning|danger|details)\s*?(?:(.+)\n|\n)([\s\S]+?)\n:::/.exec(src);
+            const match = /^^:::\s+(info|tip|warning|danger|details)(?:([ \t\r\f\v]+.+)\n|\s*?\n)([\s\S]+?)\n:::/.exec(src);
             if (match) {
               return {
                 type: "container-block",
