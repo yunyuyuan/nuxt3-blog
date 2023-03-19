@@ -152,7 +152,7 @@ const close = () => {
     background: rgb(0 0 0 / 35%);
 
     @include dark-mode {
-      background: rgb(255 255 255 / 10%);
+      background: rgb(0 0 0 / 50%);
     }
 
     z-index: 1;
@@ -175,6 +175,10 @@ const close = () => {
     transition: $common-transition;
     max-width: calc(100% - 64px);
     align-items: stretch;
+
+    @include dark-mode {
+      box-shadow: 0 0 20px rgb(0 0 0 / 60%);
+    }
 
     > .modal-title {
       padding: 0 0 14px;

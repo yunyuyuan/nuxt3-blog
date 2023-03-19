@@ -44,11 +44,21 @@ const copySvg = async (name: string) => {
 
       >span {
         color: $theme-color-darken;
+
+        @include dark-mode {
+          color: $theme-color-lighten;
+        }
       }
     }
 
     svg {
       @include square(40px);
+
+      fill: dark;
+
+      @include dark-mode {
+        fill: rgb(196 196 196);
+      }
 
       transition: $common-transition;
     }

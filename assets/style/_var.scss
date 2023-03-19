@@ -20,8 +20,9 @@ $z-index-modal: 999;
 $z-index-dropdown: 999;
 
 // $font-source-han-sans: unset;
-// $font-source-han-sans: "lxgwwenkai", system-ui, monospace;
-$font-source-han-sans: none;
+$font-source-han-sans: "lxgwwenkai", system-ui, monospace;
+
+// $font-source-han-sans: none;
 
 // $font-code: "Source Code Pro", serif;
 $font-code: "Fira Code", serif;
@@ -46,7 +47,7 @@ $font-code: "Fira Code", serif;
   height: $size;
 }
 
-$font-size: 16.8px;
+$font-size: 18px;
 
 @function f-size($size: 1) {
   @return $font-size * $size;
@@ -65,7 +66,7 @@ $font-size: 16.8px;
       @content;
     }
   } @else {
-    @at-root body.dark-mode & {
+    @at-root html.dark-mode & {
       @content;
     }
   }

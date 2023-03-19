@@ -1,6 +1,6 @@
 // @import "source-code-pro";
 // @import "source-han-sans";
-// @import "lxgwwenkai";
+@import "lxgwwenkai";
 @import "fira-code";
 @import "markdown";
 @import "code-style";
@@ -25,7 +25,7 @@ body {
   transition: background 0s $animation-function $animation-duration * 2;
   color: black;
 
-  @include dark-mode(true) {
+  @include dark-mode {
     color: white;
     background: $background-dark;
   }

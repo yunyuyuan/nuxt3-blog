@@ -21,7 +21,7 @@ export default defineNuxtPlugin((app: NuxtApp) => {
     "code-theme",
     localStorage.getItem("code-theme") || "light"
   );
-  document.body.classList.add(`${useThemeMode().themeMode.value}-mode`);
+  document.documentElement.classList.add(`${useThemeMode().themeMode.value}-mode`);
 
   const fragment = new DocumentFragment();
 

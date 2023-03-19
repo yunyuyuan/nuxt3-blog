@@ -74,6 +74,11 @@
 
       &:hover {
         text-decoration: underline;
+        text-decoration-color: $theme-color-darken;
+
+        @include dark-mode {
+          text-decoration-color: $theme-color-lighten;
+        }
       }
     }
   }
@@ -501,12 +506,21 @@
     padding: 16px 16px 8px;
     border-width: 1px;
     border-style: solid;
-    background-color: rgb(249 249 250);
+    background: rgb(249 249 250);
+
+    @include dark-mode {
+      background: rgb(47 47 47);
+    }
 
     &.info,
     &.details {
       border-color: rgb(60 60 67 / 29%);
       color: #3c3c43bf;
+
+      @include dark-mode {
+        border-color: rgb(168 168 186 / 29%);
+        color: #d3d3e8bf;
+      }
     }
 
     > .container-title {

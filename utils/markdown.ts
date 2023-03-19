@@ -298,6 +298,7 @@ export function afterInsertHtml (mdEl: HTMLElement, _forEdit = false, htmlInsert
           alt: title,
           viewer: true,
           compStyle: style,
+          noLazy: true,
           imgStyle: el.parentElement!.classList.contains("just-height")
             ? style
             : "",

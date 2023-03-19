@@ -416,9 +416,12 @@ const isFirst = ref(true);
       transition: $common-transition;
       transform-origin: top;
       transform: translateY(100%) scaleY(0);
+      border: 1px solid transparent;
 
       @include dark-mode {
-        background: #636363;
+        background: $background-dark;
+        border-color: rgb(186 186 186);
+        box-shadow: 0 0 16px rgb(0 0 0 / 30%);
 
         svg {
           fill: white;

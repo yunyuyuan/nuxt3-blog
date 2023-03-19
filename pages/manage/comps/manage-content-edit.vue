@@ -276,7 +276,7 @@ onMounted(() => {
       :loading="processing && currentOperate === 'delete'"
       @click="showDeleteModal = true"
     >
-      {{ $T('delete') }}
+      {{ $T('del') }}
     </common-button>
   </div>
   <div class="manage-content-base-info flexc" :title="item.encrypt && !decrypted ? $t('need-decrypt') : ''" :data-title="$TT('base-info')">
@@ -370,7 +370,7 @@ onMounted(() => {
   }
 
   $border: rgb(216 216 216);
-  $border-dark: rgb(116 116 116);
+  $border-dark: rgb(53 53 53);
   $bg-dark: rgb(73 73 73);
 
   &-base-info > .detail,
@@ -471,7 +471,9 @@ onMounted(() => {
         }
 
         @include dark-mode {
-          color: white;
+          b {
+            color: white;
+          }
         }
 
         &.invalid b::before {

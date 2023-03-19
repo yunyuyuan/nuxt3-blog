@@ -2,12 +2,14 @@
 import type { StyleValue, CSSProperties } from "vue";
 import { ViewerAttr, isPrerender } from "~/utils/constants";
 import { addScrollListener, rmScrollListener } from "~/utils/scroll-event";
+import { watchUntil } from "~/utils/utils";
 
 const props = defineProps({
   src: { type: String, required: true },
   alt: { type: String, default: "" },
   containerSize: { type: Array, default: () => null },
   viewer: Boolean,
+  noLazy: { type: Boolean, default: false },
   /** container绝对覆盖样式 */
   compStyle: { type: String, default: "" },
   /** 内部图片样式 */
@@ -17,7 +19,8 @@ const props = defineProps({
 
 type ImgState = "outerView" | "loading" | "loaded" | "error";
 
-const /** 组件状态 */ imgState = ref<ImgState>("outerView");
+/** 组件状态 */
+const imgState = ref<ImgState>(props.noLazy ? "loaded" : "outerView");
 /** container元素的高度 */
 const height = ref(0);
 /** container元素的宽度 */
@@ -62,64 +65,57 @@ function loadFinish (error: boolean) {
 }
 let watchEncrypt: ReturnType<typeof watch> | null = null;
 function refreshView () {
-  if (isEncryptedImg.value) {
+  if (isEncryptedImg.value || props.noLazy) {
     imgState.value = "loaded";
     return;
   }
-  if (imgState.value !== "outerView") {
-    return;
-  }
-  if (!watchEncrypt) {
+  if (imgState.value === "outerView") {
+    if (!watchEncrypt) {
     // 第一次调用，此watch必须放在imgState.value !== "outerView"判断之后
     // 如果把watch放在setup顶层，则在图片加密且已有密码的情况下，watch被immediate执行，加密图片被置为loaded
     // 而后又被解密，走refreshView()，上面的判断就直接return了，执行不到下面的代码，导致无loading显示
-    watchEncrypt = watch(
-      isEncryptedImg,
-      (isEncryptedImg) => {
-        if (isEncryptedImg) {
-          // 如果是加密图片，则直接置为loaded
-          imgState.value = "loaded";
-        }
-      },
-      { immediate: true }
-    );
-  }
-  const winHeight = window.innerHeight;
-  const winWidth = window.innerWidth;
-  const contractY = root.value!.getBoundingClientRect().y - winHeight;
-  const contractX = root.value!.getBoundingClientRect().x - winWidth;
-  if (
-    contractY < 0 &&
+      watchEncrypt = watchUntil(isEncryptedImg, () => {
+      // 如果是加密图片，则直接置为loaded
+        imgState.value = "loaded";
+      }, { immediate: true }, "boolean", "normalWhenUntil");
+    }
+    const winHeight = window.innerHeight;
+    const winWidth = window.innerWidth;
+    const contractY = root.value!.getBoundingClientRect().y - winHeight;
+    const contractX = root.value!.getBoundingClientRect().x - winWidth;
+    if (
+      contractY < 0 &&
     contractY > -winHeight - height.value &&
     contractX < 0 &&
     contractX > -winWidth - width.value
-  ) {
+    ) {
     // outerView -> loading
-    imgState.value = "loading";
-    // 取消监听
-    rmScrollListener(refreshView);
+      imgState.value = "loading";
+      // 取消监听
+      rmScrollListener(refreshView);
+    }
   }
 }
 
 /** 完全初始化所有操作，在onMounted和src改变时调用 */
 const init = () => {
-  if (!root.value) {
-    return;
+  if (root.value) {
+    height.value = root.value.scrollHeight;
+    width.value = root.value.scrollWidth;
+    refreshView();
+    // 如果不在视窗内，则监听
+    if (imgState.value === "outerView") {
+      addScrollListener(refreshView);
+    }
   }
-  height.value = root.value.scrollHeight;
-  width.value = root.value.scrollWidth;
-  refreshView();
-  // 如果发现已经在视窗内，则不再监听
-  if (imgState.value !== "outerView") {
-    return;
-  }
-  addScrollListener(refreshView);
 };
 
 watch(
   () => props.src,
   () => {
-    imgState.value = "outerView";
+    if (!isEncryptedImg.value || !props.noLazy) {
+      imgState.value = "outerView";
+    }
     nextTick(init);
   }
 );
@@ -144,7 +140,7 @@ const attr = ViewerAttr;
     :title="title"
     @click="containerClick"
   >
-    <img v-if="!isEncryptedImg && isPrerender" :src="props.src" :alt="alt">
+    <img v-if="isPrerender && !isEncryptedImg" :src="props.src" :alt="alt">
     <span v-if="isImgErr || isImgLoading" class="svg flexc s100">
       <svg-icon :name="isImgErr ? 'img-error' : 'loading'" />
       <span v-show="isImgErr" class="tips">{{ useNuxtApp().$i18n.t('click-to-retry') }}</span>

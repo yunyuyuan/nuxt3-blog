@@ -18,9 +18,9 @@ export const useThemeMode = () => {
   return {
     themeMode,
     toggleThemeMode: () => {
-      document.body.classList.remove(`${themeMode.value}-mode`);
+      document.documentElement.classList.remove(`${themeMode.value}-mode`);
       themeMode.value = themeMode.value === "light" ? "dark" : "light";
-      document.body.classList.add(`${themeMode.value}-mode`);
+      document.documentElement.classList.add(`${themeMode.value}-mode`);
       setLocalStorage(ThemeModeKey, themeMode.value);
     }
   };

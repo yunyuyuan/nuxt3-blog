@@ -501,22 +501,6 @@ initViewer(markdownRef);
   }
 }
 
-.markdown-tips {
-  p {
-    font-size: f-size(0.9);
-    margin-bottom: 20px;
-    text-align: center;
-
-    a {
-      color: $theme-color-darken;
-
-      @include dark-mode {
-        color: $theme-color-lighten;
-      }
-    }
-  }
-}
-
 @include mobile {
   .manage-md-editor {
     min-width: unset;
