@@ -85,6 +85,10 @@ onBeforeUnmount(() => {
       font-size: f-size(0.75);
       margin: 0 15px 0 auto;
       color: #b80000;
+
+      @include dark-mode {
+        color: #ffa6a6;
+      }
     }
   }
 

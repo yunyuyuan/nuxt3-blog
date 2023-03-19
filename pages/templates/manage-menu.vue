@@ -43,7 +43,7 @@ const travel = computed(() => {
         </nuxt-link>
       </li>
     </ul>
-    <div :title="$sameSha.value ? (allPassed ? $t('all-verified'):$t('token-and-passwd')) : $t('commit-id-not-correct')" :class="{warning: !$sameSha.value}" @click="emit('show-verify')">
+    <div :title="(!useCorrectSha().value || $sameSha.value) ? (allPassed ? $t('all-verified'):$t('token-and-passwd')) : $t('commit-id-not-correct')" :class="{warning: !$sameSha.value}" @click="emit('show-verify')">
       <svg-icon
         :class="{invalid: !githubToken, active: allPassed }"
         name="password"

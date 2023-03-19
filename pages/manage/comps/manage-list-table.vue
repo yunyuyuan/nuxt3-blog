@@ -193,6 +193,10 @@ function deleteSelect () {
     font-size: f-size(0.75);
     margin: 0 15px 0 0;
     color: #b80000;
+
+    @include dark-mode {
+      color: #ffa6a6;
+    }
   }
 
   > .add-item {
