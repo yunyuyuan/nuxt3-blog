@@ -224,7 +224,7 @@
   }
 
   span.image-container,
-  div.embed-video {
+  div.embed-media {
     >small {
       color: gray;
 
@@ -549,7 +549,7 @@
     }
   }
 
-  div.embed-video {
+  div.embed-media {
     max-width: 50rem;
     height: 30rem;
     display: flex;
@@ -567,6 +567,24 @@
       width: 100%;
       flex-grow: 1;
       box-shadow: 0 0 1rem rgb(0 0 0 / 50%);
+    }
+
+    &.vanilla-video {
+      video {
+        width: 100%;
+        height: 0;
+        object-fit: contain;
+        flex-grow: 1;
+        box-shadow: 0 0 1rem rgb(0 0 0 / 50%);
+      }
+    }
+
+    &.vanilla-audio {
+      height: unset;
+
+      audio {
+        width: 100%;
+      }
     }
   }
 }

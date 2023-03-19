@@ -1,3 +1,6 @@
+## 2023.03.19
+* Add **video/audio** markdown syntax.
+
 ## 2023.03.18
 * Fix some type errors.
 

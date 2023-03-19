@@ -20,5 +20,6 @@ useHead({
 .manage-md-editor {
   height: 99vh;
   padding-bottom: 0 !important;
+  box-shadow: 0 0 10px rgb(214 214 214);
 }
 </style>

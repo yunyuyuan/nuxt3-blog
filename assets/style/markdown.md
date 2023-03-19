@@ -69,5 +69,10 @@ will be encrypted during uploading
 [/encrypt]
 :::
 
+## 13. embed video/audio
+[video][big buck bunny](https://sw-oss.yunyuyuan.net/bigbuckbunny.mp4)[/video]
+[video][with poster](https://sw-oss.yunyuyuan.net/bigbuckbunny.jpg|https://sw-oss.yunyuyuan.net/bigbuckbunny.mp4)[/video]
+[audio][奥里给](https://sw-oss.yunyuyuan.net/aoligei.mp3)[/audio]
+
 # More
 coming...

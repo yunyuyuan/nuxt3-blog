@@ -146,7 +146,7 @@ function parseMarkdown_ (text: string, marked: typeof Marked) {
           },
           renderer ({ text, href }) {
             text = this.parser.parseInline(text);
-            return `<div class="embed-video youtube">
+            return `<div class="embed-media youtube">
                       <iframe src="${href}" title="${text}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                       <small class="desc">${text}</small>
                   </div>`;
@@ -169,8 +169,55 @@ function parseMarkdown_ (text: string, marked: typeof Marked) {
           },
           renderer ({ text, href }) {
             text = this.parser.parseInline(text);
-            return `<div class="embed-video bili">
+            return `<div class="embed-media bili">
                       <iframe src="${href}" title="${text}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      <small class="desc">${text}</small>
+                  </div>`;
+          }
+        },
+        {
+          name: "embed-media",
+          level: "inline",
+          start (src: string) { return src.match(/\[video]/)?.index; },
+          tokenizer (src: string) {
+            const match = /^\[video]\[(.+?)]\((?:(https?:\/\/.+?)\|)?(https?:\/\/.+?)\)\[\/video]/.exec(src);
+            if (match) {
+              return {
+                type: "embed-media",
+                raw: match[0],
+                text: this.lexer.inlineTokens(match[1]),
+                poster: match[2],
+                href: match[3]
+              };
+            }
+          },
+          renderer ({ text, poster, href }) {
+            text = this.parser.parseInline(text);
+            return `<div class="embed-media vanilla-video">
+                      <video src="${href}" controls${poster ? ` poster="${poster}"` : ""}></video>
+                      <small class="desc">${text}</small>
+                  </div>`;
+          }
+        },
+        {
+          name: "embed-audio",
+          level: "inline",
+          start (src: string) { return src.match(/\[video]/)?.index; },
+          tokenizer (src: string) {
+            const match = /^\[audio]\[(.+?)]\((https?:\/\/.+?)\)\[\/audio]/.exec(src);
+            if (match) {
+              return {
+                type: "embed-audio",
+                raw: match[0],
+                text: this.lexer.inlineTokens(match[1]),
+                href: match[2]
+              };
+            }
+          },
+          renderer ({ text, href }) {
+            text = this.parser.parseInline(text);
+            return `<div class="embed-media vanilla-audio">
+                      <audio src="${href}" controls></audio>
                       <small class="desc">${text}</small>
                   </div>`;
           }
