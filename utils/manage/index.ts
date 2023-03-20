@@ -2,7 +2,7 @@ import { createVNode, render } from "vue";
 import { ModalContainerId } from "../constants";
 import { notify } from "../notify/notify";
 import { CommonItem, AllKeys, HeaderTabUrl } from "../types";
-import { getLocalStorage, assignItem, setLocalStorage } from "../utils";
+import { getLocalStorage, assignItem, setLocalStorage, useCurrentTab } from "../utils";
 import { translate, translateT } from "../i18n";
 import CommonModal from "~/components/common-modal.vue";
 
@@ -50,7 +50,7 @@ export function keysOfCommonItem (): AllKeys[] {
   let keys: AllKeys[] = [];
   try {
     // 在跳转路由时，触发了监听，但是已经找不到target了
-    switch (useCurrentTab().value.url as HeaderTabUrl) {
+    switch (useCurrentTab().url as HeaderTabUrl) {
       case "/articles":
         keys = ["title", "tags"];
         break;

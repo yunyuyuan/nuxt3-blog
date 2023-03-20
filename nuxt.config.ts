@@ -4,6 +4,7 @@ import type { Plugin } from "vite";
 import { dataToEsm } from "rollup-pluginutils";
 import config from "./config";
 import devServerPlugins from "./dev-server";
+import i18nLocales from "./i18n/locales";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -54,7 +55,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        lang: "zh-cn"
+        lang: i18nLocales.find(item => item.code === config.defaultLang)?.iso
       },
       meta: [
         { charset: "utf-8" },
@@ -96,16 +97,13 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n"
   ],
   i18n: {
-    strategy: "no_prefix",
-    locales: [
-      {
-        code: "en",
-        file: "en.json"
-      },
-      {
-        code: "zh",
-        file: "zh.json"
-      }],
+    strategy: "prefix_except_default",
+    baseUrl: config.domain,
+    locales: i18nLocales.map(item => ({
+      code: item.code,
+      file: item.file,
+      iso: item.iso
+    })),
     lazy: true,
     langDir: "i18n",
     defaultLocale: config.defaultLang,

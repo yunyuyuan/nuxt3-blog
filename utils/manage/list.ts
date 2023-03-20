@@ -1,6 +1,6 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { registerCancelWatchEncryptor, deepClone, fetchList, watchUntil } from "../utils";
+import { registerCancelWatchEncryptor, deepClone, useCurrentTab, fetchList, watchUntil } from "../utils";
 import { translate } from "../i18n";
 import { isPrerender } from "./../constants";
 import config from "~/config";
@@ -11,7 +11,7 @@ import config from "~/config";
 export function useManageList<T extends CommonItem> () {
   const encryptor = useEncryptor();
 
-  const targetTab = useCurrentTab().value;
+  const targetTab = useCurrentTab();
   const { pending, data: list } = fetchList<T>(targetTab.url);
 
   useHead({

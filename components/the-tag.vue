@@ -3,6 +3,7 @@ defineProps({
   href: { type: String, default: "" },
   active: Boolean
 });
+const localePath = useLocalePath();
 const emit = defineEmits(["click"]);
 </script>
 
@@ -15,7 +16,7 @@ const emit = defineEmits(["click"]);
   >
     <slot />
   </span>
-  <nuxt-link v-else class="common-tag" :to="href">
+  <nuxt-link v-else class="common-tag" :to="localePath(href)">
     <slot />
   </nuxt-link>
 </template>

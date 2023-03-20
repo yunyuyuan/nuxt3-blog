@@ -1,6 +1,6 @@
 import type { Ref } from "vue";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
-import { registerCancelWatchEncryptor, createNewItem, deepClone, watchUntil, assignItem, fetchList, fetchMdManage } from "../utils";
+import { registerCancelWatchEncryptor, createNewItem, useCurrentTab, deepClone, watchUntil, assignItem, fetchList, fetchMdManage } from "../utils";
 import { translate } from "../i18n";
 import { CommonItem } from "../types";
 import { isPrerender } from "./../constants";
@@ -15,7 +15,7 @@ export function useManageContent<T extends CommonItem> () {
   const encryptor = useEncryptor();
   const itemId = useRoute().params.id as string;
 
-  const targetTab = useCurrentTab().value;
+  const targetTab = useCurrentTab();
   const { pending: listPending, data: list } = fetchList<T>(targetTab.url);
 
   useHead({

@@ -2,6 +2,7 @@
 import ManageListTable from "../comps/manage-list-table.vue";
 import { KnowledgeItem, KnowledgeTab, KnowledgeTabsList } from "~/utils/types";
 
+const localePath = useLocalePath();
 const filterType = ref<KnowledgeTab>();
 const registryFilter = (customFilter: (_: (_item: KnowledgeItem) => boolean) => void) => {
   watch(filterType, () => {
@@ -35,7 +36,7 @@ const searchFn = (item: KnowledgeItem, s: string) => item.title.includes(s);
         </span>
       </template>
       <template #title="{ data: title, dataUrl }">
-        <nuxt-link :to="dataUrl">
+        <nuxt-link :to="localePath(dataUrl)">
           {{ title }}
         </nuxt-link>
       </template>

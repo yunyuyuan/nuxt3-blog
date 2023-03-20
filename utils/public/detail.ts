@@ -2,7 +2,7 @@ import { marked } from "marked";
 import { parseMarkdown, afterInsertHtml, parseMarkdownSync } from "../markdown";
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { createNewItem, registerCancelWatchEncryptor, assignItem, fetchList, fetchMd, watchUntil } from "../utils";
+import { createNewItem, registerCancelWatchEncryptor, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "../utils";
 import { translate } from "../i18n";
 import { formatTime } from "../_dayjs";
 import { isPrerender } from "./../constants";
@@ -21,7 +21,7 @@ export default function useContentPage<T extends CommonItem> () {
 
   const id = route.params.id as string;
 
-  const targetTab = useCurrentTab().value;
+  const targetTab = useCurrentTab();
   const { pending: listPending, data: list } = fetchList(targetTab.url);
 
   const item = reactive(createNewItem(targetTab.url)) as T;

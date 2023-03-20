@@ -1,6 +1,6 @@
 import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
-import { deepClone, fetchList, registerCancelWatchEncryptor, watchUntil } from "../utils";
+import { deepClone, fetchList, registerCancelWatchEncryptor, useCurrentTab, watchUntil } from "../utils";
 import { isPrerender } from "./../constants";
 import { DBOperate } from ".";
 import config from "~/config";
@@ -14,7 +14,7 @@ export default function useListPage<T extends CommonItem> () {
   const githubToken = useGithubToken();
   const encryptor = useEncryptor();
 
-  const targetTab = useCurrentTab().value;
+  const targetTab = useCurrentTab();
   const { pending, data: list } = fetchList(targetTab.url);
 
   useHead({

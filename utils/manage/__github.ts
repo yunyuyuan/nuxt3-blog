@@ -1,6 +1,6 @@
 import { CommonItem } from "../types";
 import { notify } from "../notify/notify";
-import { devHotListen } from "../utils";
+import { devHotListen, useCurrentTab } from "../utils";
 import { translate } from "../i18n";
 import { UpdateRebuild } from "~/dev-server/rebuild";
 import { rebuildEvent } from "~/dev-server/types";
@@ -25,7 +25,7 @@ export function deleteList (
   newList: CommonItem[],
   dels: CommonItem[]
 ): Promise<boolean | void> {
-  const folder = useCurrentTab().value.url;
+  const folder = useCurrentTab().url;
   import.meta.hot!.send(rebuildEvent, {
     additions: [{
       path: `public/rebuild/json${folder}.json`,

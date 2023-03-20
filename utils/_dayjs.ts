@@ -11,6 +11,7 @@ dayjs.extend(isToday);
 
 export default dayjs;
 
+// TODO support different local
 export function getNowDayjs () {
   return dayjs.utc().add(8, "hour");
 }
@@ -41,6 +42,29 @@ export function literalTime (stamp: number) {
   return translate("years-ago", [subYear + 1]);
 }
 
-export function formatTime (stamp: number, format = "YYYY-MM-DD HH:mm:ss") {
-  return dayjs.utc(stamp).format(format);
+export function formatTime (stamp: number, type: "full" | "date" | "month" = "full") {
+  return computed(() => {
+    let formatDate = "YYYY-MM-DD";
+    let formatMonth = "MM.DD";
+    switch (useNuxtApp().$i18n.locale.value) {
+      case "zh":
+        break;
+      case "en":
+        formatDate = "MM/DD/YYYY";
+        formatMonth = "MM/DD";
+        break;
+    }
+    let format = "";
+    switch (type) {
+      case "full":
+        format = formatDate + " HH:mm:ss";
+        break;
+      case "date":
+        break;
+      case "month":
+        format = formatMonth;
+        break;
+    }
+    return dayjs.utc(stamp).format(format);
+  }).value;
 }

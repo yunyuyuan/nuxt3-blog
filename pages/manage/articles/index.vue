@@ -2,6 +2,7 @@
 import ManageListTable from "../comps/manage-list-table.vue";
 import { ArticleItem } from "~/utils/types";
 
+const localePath = useLocalePath();
 const searchTag = reactive(new Set<string>());
 const toggleTag = (tag: string) => {
   if (searchTag.has(tag)) {
@@ -42,7 +43,7 @@ const searchFn = (item: ArticleItem, s: string) => item.title.includes(s);
         </div>
       </template>
       <template #title="{ data: title, dataUrl }">
-        <nuxt-link :to="dataUrl">
+        <nuxt-link :to="localePath(dataUrl)">
           {{ title }}
         </nuxt-link>
       </template>

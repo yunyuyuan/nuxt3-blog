@@ -3,7 +3,9 @@ import type { Ref, WatchOptions } from "vue";
 import { AllKeys, CommonItem, HeaderTabs, HeaderTabUrl, NeedsItem } from "./types";
 import { githubRepoUrl, inBrowser, isDev, isPrerender } from "./constants";
 import config from "~/config";
+import i18nLocales from "~/i18n/locales";
 
+const allLocales = i18nLocales.map(item => item.code);
 const timestamp = () => useRuntimeConfig().public.timestamp;
 
 type returnType<T> = {
@@ -51,11 +53,26 @@ export const fetchMdManage = (tab: HeaderTabUrl, id: string) => {
   });
 };
 
+export function useCurrentTab () {
+  return HeaderTabs.find(tab => useUnlocalePath(useRoute().path).includes(tab.url))!;
+}
+
+export function useUnlocalePath (s?: string) {
+  const path = typeof s === "undefined" ? useRoute().path : s;
+  for (const locale of allLocales) {
+    const prefix = "/" + locale;
+    if (path.startsWith(prefix)) {
+      return path.slice(prefix.length);
+    }
+  }
+  return path;
+}
+
 /**
  * 计算rocket的url
  */
-export function calcRocketUrl () {
-  const path = useRoute().path;
+function calcRocketUrlSuffix () {
+  const path = useUnlocalePath();
   const fromManage = path.startsWith("/manage");
   const paths = (fromManage ? path.replace(/^\/manage/, "") : path)
     .split("/")
@@ -71,6 +88,9 @@ export function calcRocketUrl () {
     return (fromManage ? "" : "/manage") + `/${paths[0]}/${paths[1]}`;
   }
   return "/";
+}
+export function calcRocketUrl () {
+  return useLocalePath()(calcRocketUrlSuffix());
 }
 
 /**

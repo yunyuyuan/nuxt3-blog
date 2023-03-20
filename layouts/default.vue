@@ -1,11 +1,13 @@
 <script setup lang="tsx">
 import type Headroom from "headroom.js";
 import { githubRepoUrl, inBrowser, isPrerender } from "~/utils/constants";
-import { calcRocketUrl, setLocalStorage } from "~/utils/utils";
+import { calcRocketUrl } from "~/utils/utils";
 import LayoutMenu from "~/pages/templates/layout-menu.vue";
 import config from "~/config";
+import i18nLocales from "~/i18n/locales";
 
 const { themeMode, toggleThemeMode } = useThemeMode();
+const localePath = useLocalePath();
 const pageLoading = useLoading();
 const route = useRoute();
 const footerDomain = inBrowser ? window.location.hostname : "";
@@ -24,13 +26,12 @@ watch(isMobile, () => {
 const i18nHided = ref<boolean>(true);
 const showI18n = ref<boolean>(false);
 const setLocale = (locale: string) => {
-  setLocalStorage("locale-lang", locale);
   useNuxtApp().$i18n.setLocale(locale);
   showI18n.value = false;
 };
 
 const inAbout = computed(() => {
-  return route.path.startsWith("/about");
+  return route.path.startsWith(localePath("/about"));
 });
 
 const openEdit = computed(() => {
@@ -83,8 +84,14 @@ const isFirst = ref(true);
           v-model:hided="i18nHided"
         >
           <div class="i18n-select">
-            <div :class="{ active: $i18n.locale==='zh'}" @click="setLocale('zh')">中文</div>
-            <div :class="{ active: $i18n.locale==='en'}" @click="setLocale('en')">English</div>
+            <div
+              v-for="locale of i18nLocales"
+              :key="locale.code"
+              :class="{ active: $i18n.locale===locale.code}"
+              @click="setLocale(locale.code)"
+            >
+              {{ locale.name }}
+            </div>
           </div>
         </common-dropdown>
       </a>
@@ -112,7 +119,7 @@ const isFirst = ref(true);
         <svg-icon name="github" />
       </a>
       <div v-else class="home go-manage flex">
-        <nuxt-link :to="openEdit" title="🚀">
+        <nuxt-link :to="localePath(openEdit)" title="🚀">
           <svg-icon name="rocket" />
         </nuxt-link>
         <div class="pwd flex" :class="{valid: encryptor.passwdCorrect.value}" :title="$t('passwd')" @click="showPwdModal = true">
@@ -120,7 +127,7 @@ const isFirst = ref(true);
         </div>
       </div>
       <sub />
-      <nuxt-link class="about" to="/about" :title="$t('about')">
+      <nuxt-link class="about" :to="localePath('/about')" :title="$t('about')">
         <img class="s100" src="/icon.png" :alt="$t('avatar')">
       </nuxt-link>
       <span v-show="!!pageLoading.loadingState.value" class="loading" :style="{width: `${pageLoading.loadingState.value}%`}" />

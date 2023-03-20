@@ -31,7 +31,7 @@ const searchedList = computed(() => {
 
 // 新建
 const newItem = () => {
-  navigateTo(`/manage${targetTab.url}/new`);
+  navigateTo(useLocalePath()(`/manage${targetTab.url}/new`));
 };
 
 // 删除

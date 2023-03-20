@@ -36,7 +36,7 @@ const years = computed(() => {
         <div class="contain flex">
           <div v-for="item in year.items" v-show="item._show" :key="item.id" class="item flexc">
             <b :title="formatTime(item.time)">{{
-              formatTime(item.time, "MM.DD")
+              formatTime(item.time, 'month')
             }}</b>
             <NuxtLink
               :class="{ multiple: item.images.length > 1 }"

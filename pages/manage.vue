@@ -14,7 +14,7 @@ definePageMeta({
   layout: "blank",
   middleware (to: RouteLocationNormalized) {
     if (to.name === "manage") {
-      return navigateTo("/manage/config");
+      return navigateTo(useLocalePath()("/manage/config"));
     }
   }
 });

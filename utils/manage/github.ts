@@ -1,5 +1,6 @@
 import type { Axios } from "axios";
 import { CommonItem } from "../types";
+import { useCurrentTab } from "../utils";
 import { createCommitModal } from ".";
 import { translate } from "~/utils/i18n";
 import { getNowDayjs } from "~/utils/_dayjs";
@@ -162,7 +163,7 @@ export function deleteList (
 ): Promise<boolean | void> {
   const commitInfo =
     dels.length === 1 ? `'${dels[0].id}'` : `${dels.length} items`;
-  const folder = useCurrentTab().value.url;
+  const folder = useCurrentTab().url;
   return createCommit(
     `Delete ${commitInfo} from ${folder}`,
     [

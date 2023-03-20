@@ -10,7 +10,7 @@ import { initViewer } from "~/utils/viewer";
 const { item, tabUrl, publishTime, modifyTime, htmlContent, markdownRef, mdPending } = useContentPage<RecordItem>();
 
 useHead({
-  title: computed(() => `${translate("records")}: ${formatTime(item.time, "YYYY-MM-DD")}${config.SEO_title}`)
+  title: computed(() => `${translate("records")}: ${formatTime(item.time, "date")}${config.SEO_title}`)
 });
 const { root, hasComment } = useComment(tabUrl);
 initViewer(root);

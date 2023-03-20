@@ -7,6 +7,7 @@ import {
 } from "~/utils/types";
 import useListPage from "~/utils/public/list";
 
+const localePath = useLocalePath();
 const { list: knowledgeList, pending } = useListPage<KnowledgeItem>();
 
 const currentTab = computed(() => (useRoute().query.type as string) || "");
@@ -53,7 +54,7 @@ onMounted(() => {
         v-for="item in filteredList"
         v-show="item._show"
         :key="item.id"
-        :to="'/knowledges/' + item.id"
+        :to="localePath('/knowledges/' + item.id)"
       >
         <svg-icon :name="item.type" />
         <span>《<b>{{ item.title }}</b>》</span>
