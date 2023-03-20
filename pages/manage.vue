@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { RouteLocationNormalized } from "vue-router";
 import UploadImage from "./manage/comps/upload-image.vue";
 import ManageMenu from "./templates/manage-menu.vue";
@@ -25,11 +25,9 @@ const showUploadImage = ref(false);
 // mobile menu
 const isMobile = useIsMobile();
 const menuShow = ref<boolean>(false);
-const menuHidden = ref<boolean>(true);
 watch(isMobile, () => {
   setTimeout(() => {
     menuShow.value = false;
-    menuHidden.value = true;
   });
 });
 
@@ -97,12 +95,12 @@ const modalOk = () => {
   <div class="manage-background" />
   <div class="manage-container">
     <nav>
-      <span class="mobile-menu-toggler" @click="menuHidden && (menuShow = true)">
+      <span class="mobile-menu-toggler" @click="menuShow = true">
         <svg-icon :name="pageLoading.loadingState.value ? 'loading' : 'menu'" />
       </span>
       <manage-menu v-show="!isMobile" @upload-image="showUploadImage = true" @show-verify="showModal = true" />
       <div v-show="isMobile">
-        <common-dropdown v-model:show="menuShow" v-model:hided="menuHidden">
+        <common-dropdown v-model:show="menuShow">
           <manage-menu @upload-image="showUploadImage = true" @show-verify="showModal = true" />
         </common-dropdown>
       </div>

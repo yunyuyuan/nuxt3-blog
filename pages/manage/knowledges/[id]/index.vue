@@ -6,7 +6,6 @@ import {
 } from "~/utils/types";
 
 const typeSelectShow = ref(false);
-const typeSelectHided = ref(true);
 </script>
 
 <template>
@@ -24,12 +23,12 @@ const typeSelectHided = ref(true);
           <b>{{ $T('type') }}</b>
           <svg-icon name="type" />
         </span>
-        <div class="select" @click="!disabled && typeSelectHided && (typeSelectShow = true)">
-          <a tabindex="1" class="flex" :class="{active: !typeSelectHided, disabled: disabled}">
+        <div class="select" @click="!disabled && (typeSelectShow = true)">
+          <a tabindex="1" class="flex" :class="{active: typeSelectShow, disabled: disabled}">
             <b>{{ $T(KnowledgeTabsList.find((i) => i.key === item.type)!.name) }}</b>
             <svg-icon :name="item.type" />
           </a>
-          <common-dropdown v-model:show="typeSelectShow" v-model:hided="typeSelectHided" class="flexc">
+          <common-dropdown v-model:show="typeSelectShow" class="flexc">
             <div v-for="tp in KnowledgeTabs" :key="tp" class="flex" :class="{active: item.type===tp}" @click="item.type=tp;typeSelectShow=false">
               <span>{{ $T(KnowledgeTabsList.find((i) => i.key === tp)!.name) }}</span>
               <svg-icon :name="tp" />

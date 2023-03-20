@@ -1,5 +1,7 @@
 ## 2023.03.20
 * Url prefix for i18n.
+* Enhance common-dropdown animation handling.
+* Bump to Nuxt@3.3.1 (for `useSeoMeta`)
 
 ## 2023.03.19
 * Add **video/audio** markdown syntax.

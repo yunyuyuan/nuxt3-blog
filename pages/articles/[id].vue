@@ -12,6 +12,9 @@ const { item, tabUrl, modifyTime, htmlContent, markdownRef, mdPending, htmlInser
 useHead({
   title: computed(() => item.title + config.SEO_title)
 });
+useSeoMeta({
+  ogTitle: item.title
+});
 
 const activeAnchor = ref<string>();
 

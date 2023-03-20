@@ -11,6 +11,9 @@ const { item, tabUrl, modifyTime, markdownRef, htmlContent, mdPending } =
 useHead({
   title: computed(() => `《${item.title}》${config.SEO_title}`)
 });
+useSeoMeta({
+  ogTitle: computed(() => `《${item.title}》`)
+});
 const { root, hasComment } = useComment(tabUrl);
 initViewer(root);
 </script>

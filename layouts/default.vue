@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import type Headroom from "headroom.js";
 import { githubRepoUrl, inBrowser, isPrerender } from "~/utils/constants";
 import { calcRocketUrl } from "~/utils/utils";
@@ -6,6 +6,7 @@ import LayoutMenu from "~/pages/templates/layout-menu.vue";
 import config from "~/config";
 import i18nLocales from "~/i18n/locales";
 
+const i18n = useI18n();
 const { themeMode, toggleThemeMode } = useThemeMode();
 const localePath = useLocalePath();
 const pageLoading = useLoading();
@@ -15,18 +16,15 @@ const footerDomain = inBrowser ? window.location.hostname : "";
 // mobile menu
 const isMobile = useIsMobile();
 const menuShow = ref<boolean>(false);
-const menuHidden = ref<boolean>(true);
 watch(isMobile, () => {
   setTimeout(() => {
     menuShow.value = false;
-    menuHidden.value = true;
   });
 });
 
-const i18nHided = ref<boolean>(true);
 const showI18n = ref<boolean>(false);
 const setLocale = (locale: string) => {
-  useNuxtApp().$i18n.setLocale(locale);
+  i18n.setLocale(locale);
   showI18n.value = false;
 };
 
@@ -67,27 +65,24 @@ const isFirst = ref(true);
     <div v-if="!isPrerender" class="mode-bg" :class="[themeMode, {active: !isFirst}]" />
     <nav id="header" ref="headerRef" class="flex w100">
       <del class="space-left" />
-      <span class="mobile-menu-toggler" :class="{active: menuShow}" @click="menuHidden && (menuShow = true)">
+      <span class="mobile-menu-toggler" :class="{active: menuShow}" @click="menuShow = true">
         <svg-icon name="menu" />
       </span>
       <layout-menu v-show="!isMobile" />
       <div v-show="isMobile">
-        <common-dropdown v-model:show="menuShow" v-model:hided="menuHidden" wrap-class="menu-dropdown">
+        <common-dropdown v-model:show="menuShow" wrap-class="menu-dropdown">
           <layout-menu />
         </common-dropdown>
       </div>
       <del class="stretch" />
-      <a class="i18n" @click="i18nHided && (showI18n = true)">
+      <a class="i18n" @click="showI18n = true">
         <svg-icon name="i18n" />
-        <common-dropdown
-          v-model:show="showI18n"
-          v-model:hided="i18nHided"
-        >
+        <common-dropdown v-model:show="showI18n">
           <div class="i18n-select">
             <div
               v-for="locale of i18nLocales"
               :key="locale.code"
-              :class="{ active: $i18n.locale===locale.code}"
+              :class="{ active: i18n.locale.value===locale.code}"
               @click="setLocale(locale.code)"
             >
               {{ locale.name }}

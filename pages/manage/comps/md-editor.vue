@@ -35,7 +35,6 @@ const stickerTranslateY = computed<string>(() => {
     (stickersTab.indexOf(currentStickerTab.value) * 100) / stickersTab.length
   }%)`;
 });
-const stickerHided = ref<boolean>(true); // sticker面板是否隐藏，即动画结束
 const showStickers = ref<boolean>(false);
 const insertSticker = (text: string) => {
   if (editor) {
@@ -151,12 +150,9 @@ initViewer(markdownRef);
       <svg-icon name="loading" />
     </div>
     <div class="editor-head flex">
-      <a :title="$t('add-sticker')" @click="stickerHided && (showStickers = true)">
+      <a :title="$t('add-sticker')" @click="showStickers = true">
         <img src="/sticker/yellow-face/18.png">
-        <common-dropdown
-          v-model:show="showStickers"
-          v-model:hided="stickerHided"
-        >
+        <common-dropdown v-model:show="showStickers">
           <div class="s100 flex">
             <div class="stickers-title flexc">
               <span

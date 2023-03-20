@@ -12,6 +12,9 @@ const { item, tabUrl, publishTime, modifyTime, htmlContent, markdownRef, mdPendi
 useHead({
   title: computed(() => `${translate("records")}: ${formatTime(item.time, "date")}${config.SEO_title}`)
 });
+useSeoMeta({
+  ogTitle: computed(() => `${translate("records")}: ${formatTime(item.time, "date")}${config.SEO_title}`)
+});
 const { root, hasComment } = useComment(tabUrl);
 initViewer(root);
 </script>

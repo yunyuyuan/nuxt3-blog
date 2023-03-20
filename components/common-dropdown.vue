@@ -1,12 +1,18 @@
 <script setup lang="ts">
 const props = defineProps({
-  hided: Boolean,
   show: Boolean,
   parent: { type: Object, default: null },
   wrapClass: { type: String, default: "" }
 });
 
-const emit = defineEmits(["update:hided", "update:show", "open"]);
+const emit = defineEmits(["update:show", "open"]);
+
+const animating = ref(false);
+watch(() => props.show, (show) => {
+  if (show && animating.value) {
+    emit("update:show", false);
+  }
+});
 
 const innerRef = ref<HTMLElement>();
 const afterOpen = () => {
@@ -30,12 +36,12 @@ const afterOpen = () => {
 <template>
   <transition
     name="slide"
-    @before-enter="emit('update:hided', false)"
-    @after-enter="afterOpen"
-    @after-leave="emit('update:hided', true)"
+    @after-enter="afterOpen()"
+    @before-leave="animating = true"
+    @after-leave="animating = false"
   >
     <div
-      v-show="show"
+      v-show="show && !animating"
       ref="innerRef"
       class="common-dropdown"
       :class="wrapClass"
