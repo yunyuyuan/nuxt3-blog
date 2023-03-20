@@ -3,7 +3,9 @@ import colors from "colors";
 
 export async function runCmd (command: string) {
   return await new Promise<void>((resolve, reject) => {
-    cmd.exec(command, (err) => {
+    cmd.exec(command, {
+      maxBuffer: 1024 * 1024 * 5
+    }, (err) => {
       if (err) {
         reject(err);
       } else {
