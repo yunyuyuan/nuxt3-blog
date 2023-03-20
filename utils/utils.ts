@@ -71,14 +71,14 @@ export function useUnlocalePath (s?: string) {
 /**
  * 计算rocket的url
  */
-function calcRocketUrlSuffix () {
+function calcRocketUrlSuffix (): boolean | string {
   const path = useUnlocalePath();
   const fromManage = path.startsWith("/manage");
   const paths = (fromManage ? path.replace(/^\/manage/, "") : path)
     .split("/")
     .slice(1);
   if (paths[0] === "about") {
-    return githubRepoUrl;
+    return false;
   }
   const item = HeaderTabs.find(tab => tab.url.substring(1) === paths[0]);
   if (item) {
@@ -90,7 +90,11 @@ function calcRocketUrlSuffix () {
   return "/";
 }
 export function calcRocketUrl () {
-  return useLocalePath()(calcRocketUrlSuffix());
+  const url = calcRocketUrlSuffix();
+  if (typeof url === "boolean") {
+    return githubRepoUrl;
+  }
+  return useLocalePath()(url);
 }
 
 /**

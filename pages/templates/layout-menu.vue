@@ -4,8 +4,7 @@ import { useUnlocalePath } from "~/utils/utils";
 
 const localePath = useLocalePath();
 const activeRoute = computed(() => {
-  const path = useUnlocalePath()?.split("/")[1];
-  return path;
+  return useUnlocalePath()?.split("/")[1];
 });
 const isMobile = useIsMobile();
 </script>
