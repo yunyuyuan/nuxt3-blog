@@ -30,7 +30,7 @@ function parseMarkdown_ (text: string, marked: typeof Marked) {
           return `<h${level}><sup class="fake-head" ${!isPrerender ? `id="${anchor}"` : ""}></sup><a class="header-link" href="#${anchor}">${text}</a></h${level}>`;
         },
         image (href, _, text) {
-        // sticker
+          // sticker
           if (text === "sticker") {
             const matcher = href?.match(/^(.*?)\/(\d*)$/);
             if (matcher) {
@@ -52,6 +52,9 @@ function parseMarkdown_ (text: string, marked: typeof Marked) {
           }${
             h ? `height: ${h} !important;` : ""
           }" src="${href}"/><small class="desc">${marked.parseInline(alt_)}</small></span>`;
+        },
+        code (code, language, _) {
+          return `<pre><div></div><small></small><code class="language-${language}">${code}</code></pre>`;
         }
       },
       extensions: [
@@ -316,20 +319,17 @@ function parseMarkdown_ (text: string, marked: typeof Marked) {
   return marked(text);
 }
 
-export function afterInsertHtml (mdEl: HTMLElement, _forEdit = false, htmlInserted?: Ref<boolean>) {
+export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserted?: Ref<boolean>) {
   const destroyFns: (()=>void)[] = [];
   nextTick(async () => {
     if (inBrowser) {
       // hljs
-      mdEl.querySelectorAll("pre>code:not(.hljs)").forEach(async (el: Element) => {
-        const dotes = document.createElement("div");
-        const lang = document.createElement("small");
+      mdEl.querySelectorAll<HTMLElement>("pre>code:not(.hljs)").forEach(async (el) => {
+        const lang = el.parentElement!.querySelector<HTMLElement>(":scope > small")!;
         const language = el.className.replace(/^.*?language-([^ ]+).*?$/, "$1");
         const hljs = await initHljs();
         lang.innerText = (hljs.getLanguage(language) || { name: language }).name!;
-          el.parentElement!.insertBefore(dotes, el);
-          el.parentElement!.insertBefore(lang, dotes);
-          hljs.highlightElement(el as HTMLElement);
+        hljs.highlightElement(el);
       });
     }
     // 方便起见，edit下不会创建svg-icon，**只有**游客界面才会创建
@@ -345,7 +345,7 @@ export function afterInsertHtml (mdEl: HTMLElement, _forEdit = false, htmlInsert
           alt: title,
           viewer: true,
           compStyle: style,
-          noLazy: true,
+          noLazy: forEdit,
           imgStyle: el.parentElement!.classList.contains("just-height")
             ? style
             : "",
