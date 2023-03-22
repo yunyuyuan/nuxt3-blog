@@ -7,6 +7,7 @@ import initHljs from "./hljs";
 import { translate } from "./i18n";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
+import { escapeHtml } from "~/scripts/rss";
 
 let inited = false;
 
@@ -53,7 +54,8 @@ function parseMarkdown_ (text: string, marked: typeof Marked) {
             h ? `height: ${h} !important;` : ""
           }" src="${href}"/><small class="desc">${marked.parseInline(alt_)}</small></span>`;
         },
-        code (code, language, _) {
+        code (code, language, escaped) {
+          code = escaped ? code : escapeHtml(code);
           return `<pre><div></div><small></small><code class="language-${language}">${code}</code></pre>`;
         }
       },
