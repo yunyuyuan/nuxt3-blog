@@ -3,7 +3,7 @@ import { CommonItem } from "../types";
 import { useCurrentTab } from "../utils";
 import { createCommitModal } from ".";
 import { translate } from "~/utils/i18n";
-import { getNowDayjs } from "~/utils/_dayjs";
+import { formatTime } from "~/utils/format-time";
 import config from "~/config";
 import { notify } from "~/utils/notify/notify";
 
@@ -109,9 +109,7 @@ export async function createCommit (
           repositoryNameWithOwner: "${config.githubName}/${config.githubRepo}"
         },
         message: {
-          headline: "[🤖${getNowDayjs().format(
-    "YYYY-MM-DD HH:mm:ss"
-  )}]${commit}"
+          headline: "[🤖${formatTime()}]${commit}"
         },
         expectedHeadOid: "${correctSha}",
         fileChanges: {

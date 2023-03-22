@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatTime, literalTime } from "~/utils/_dayjs";
+import { formatTime, literalTime } from "~/utils/format-time";
 import {
   KnowledgeItem,
   KnowledgeTabs,

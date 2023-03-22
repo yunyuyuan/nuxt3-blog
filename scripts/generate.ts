@@ -1,12 +1,9 @@
 import fs from "fs";
 import { resolve } from "path";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc.js";
+import { getNowDayjsString } from "../utils/_dayjs";
 import genRss from "./rss";
 import { distPath } from "./constants";
 import { nbLog, runCmd } from ".";
-
-dayjs.extend(utc);
 
 export default async function () {
   await runCmd("nuxt generate");
@@ -22,7 +19,7 @@ function generateSiteMap () {
 
 function generateTimestamp () {
   nbLog("inject timestamp");
-  const timestamp = dayjs.utc().add(8, "hour").format("YYYY-MM-DD HH:mm:ss");
+  const timestamp = getNowDayjsString();
   fs.writeFileSync(resolve(distPath, "timestamp.txt"), timestamp);
   const aboutHtmlPath = resolve(distPath, "about/index.html");
   if (fs.existsSync(aboutHtmlPath)) {

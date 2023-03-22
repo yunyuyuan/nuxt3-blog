@@ -5,7 +5,7 @@ import { isPrerender } from "./../constants";
 import { DBOperate } from ".";
 import config from "~/config";
 import { getVisitorsEvent } from "~/dev-server/types";
-import { VisitorsDb } from "~~/lib/api/db/visitors";
+import { VisitorsDb } from "~/lib/api/db/visitors";
 
 /**
  * 列表页面通用功能

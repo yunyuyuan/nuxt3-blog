@@ -1,3 +1,6 @@
+## 2023.03.22
+* Add timezone property in `config.ts`(Problem caused: The time of old content will be formatted as 8 hours later than really time).
+
 ## 2023.03.20
 * Url prefix for i18n.
 * Enhance common-dropdown animation handling.

@@ -16,7 +16,7 @@ const paragraphs = [
 
 onBeforeMount(async () => {
   if (!isPrerender) {
-    buildTime.value = (!isDev ? (await (await fetch("/timestamp.txt")).text()) : "xxxx-xx-xx");
+    buildTime.value = (!isDev ? (await (await fetch("/timestamp.txt")).text()) : "-");
   }
 });
 </script>

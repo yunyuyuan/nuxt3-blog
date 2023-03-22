@@ -38,12 +38,12 @@ function parseMarkdown_ (text: string, marked: typeof Marked) {
               return `<img src="/sticker/${name}/${tone}.png?ran=${useRuntimeConfig().public.timestamp}" alt="${text}"/>`;
             }
           }
-          const mather = text?.match(/^(.*?)\[(.*?) x (.*?)]$/);
-          if (!mather) {
+          const matcher = text?.match(/^(.*?)\[(.*?) x (.*?)]$/);
+          if (!matcher) {
             return `<span class="image-container"><img ${ViewerAttr} alt="${text}" title="${text}" src="${href}"/><small class="desc">${marked.parseInline(text)}</small></span>`;
           }
           // with dimension
-          const [, alt_, w, h] = mather;
+          const [, alt_, w, h] = matcher;
           const justHeight = !w;
           return `<span class="image-container${
             justHeight ? " just-height" : ""

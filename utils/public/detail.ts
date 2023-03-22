@@ -4,7 +4,7 @@ import { processEncryptDescrypt } from "../process-encrypt-descrypt";
 import { CommonItem } from "../types";
 import { createNewItem, registerCancelWatchEncryptor, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "../utils";
 import { translate } from "../i18n";
-import { formatTime } from "../_dayjs";
+import { formatTime } from "../format-time";
 import { isPrerender } from "./../constants";
 import { DBOperate } from ".";
 import config from "~/config";

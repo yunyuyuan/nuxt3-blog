@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ArticleItem } from "~/utils/types";
-import { literalTime, formatTime } from "~/utils/_dayjs";
+import { formatTime, literalTime } from "~/utils/format-time";
 import useListPage from "~/utils/public/list";
 
 const localePath = useLocalePath();

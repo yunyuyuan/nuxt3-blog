@@ -1,9 +1,6 @@
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc.js";
+import { getNowDayjsString } from "../utils/_dayjs";
 import type { ArticleItem } from "../utils/types";
 import config from "../config";
-
-dayjs.extend(utc);
 
 export function escapeHtml (s: string) {
   return s.toString()
@@ -60,7 +57,7 @@ export default function genRss (json: ArticleItem[]) {
     item.addChild(new Node("author", config.githubName));
     item.addChild(new Node("title", i.title));
     item.addChild(new Node("link", origin + "/articles/" + i.id));
-    item.addChild(new Node("pubDate", dayjs.utc(i.time).toString()));
+    item.addChild(new Node("pubDate", getNowDayjsString(i.time)));
     item.addChild(new Node("guid", String(i.id)));
 
     channel.addChild(item);

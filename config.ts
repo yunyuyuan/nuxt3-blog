@@ -28,6 +28,7 @@ export default {
   },
   themeColor: "#2aa0bb",                                       // 主题色
   defaultLang: "zh",                                           // default language, "zh" and "en" are supported currently
+  timezone: "Asia/Shanghai",                                   // timezone, please refer to https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
 
 
 

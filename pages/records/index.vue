@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RecordItem } from "~/utils/types";
-import dayjs, { formatTime } from "~/utils/_dayjs";
+import { getNowDayjs } from "~/utils/_dayjs";
+import { formatTime } from "~/utils/format-time";
 import useListPage from "~/utils/public/list";
 
 const { list: recordList, pending } = useListPage<RecordItem>();
@@ -12,7 +13,7 @@ const years = computed(() => {
   }[] = [];
   recordList
     .forEach((item) => {
-      const year = dayjs.utc(item.time).year();
+      const year = getNowDayjs(item.time).year();
       const exist = result.find(v => v.year === year);
       if (!exist) {
         result.push({
