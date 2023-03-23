@@ -1,7 +1,7 @@
 import { createApp, createVNode, render } from "vue";
 import type { Ref } from "vue";
 import { marked as Marked } from "marked";
-import { translate, notify, inBrowser, isPrerender } from "~/utils/nuxt";
+import { translate, notify, isPrerender } from "~/utils/nuxt";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
 import { escapeHtml, initHljs, ViewerAttr } from "~/utils/common";
@@ -321,19 +321,14 @@ function parseMarkdown_ (text: string, marked: typeof Marked) {
 export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserted?: Ref<boolean>) {
   const destroyFns: (()=>void)[] = [];
   nextTick(async () => {
-    if (inBrowser) {
-      // hljs
-      mdEl.querySelectorAll<HTMLElement>("pre>code:not(.hljs)").forEach(async (el) => {
-        const lang = el.parentElement!.querySelector<HTMLElement>(":scope > small")!;
-        const language = el.className.replace(/^.*?language-([^ ]+).*?$/, "$1");
-        const hljs = await initHljs();
-        lang.innerText = (hljs.getLanguage(language) || { name: language }).name!;
-        hljs.highlightElement(el);
-      });
-    }
-    // 方便起见，edit下不会创建svg-icon，**只有**游客界面才会创建
-    // if (!forEdit) {
-    // lazy-img
+    // hljs
+    mdEl.querySelectorAll<HTMLElement>("pre>code:not(.hljs)").forEach(async (el) => {
+      const lang = el.parentElement!.querySelector<HTMLElement>(":scope > small")!;
+      const language = el.className.replace(/^.*?language-([^ ]+).*?$/, "$1");
+      const hljs = await initHljs();
+      lang.innerText = (hljs.getLanguage(language) || { name: language }).name!;
+      hljs.highlightElement(el);
+    });
     mdEl
       .querySelectorAll<HTMLImageElement>(".image-container > img")
       .forEach((el) => {
