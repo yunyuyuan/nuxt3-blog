@@ -1,6 +1,5 @@
 import type cryptoJS from "crypto-js";
-import { notify } from "~/utils/notify/notify";
-import { translate } from "~/utils/i18n";
+import { notify, translate } from "~/utils/nuxt";
 
 type DecryptFunction = (_s: string) => Promise<string>;
 

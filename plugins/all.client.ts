@@ -1,12 +1,6 @@
-import { NuxtApp } from "#app";
-import { initScrollTrigger } from "~/utils/scroll-event";
-import {
-  SvgContainerId,
-  NotificationContainerId,
-  ModalContainerId
-} from "~/utils/constants";
+import { initScrollTrigger, SvgContainerId, NotificationContainerId, ModalContainerId } from "~/utils/common";
 
-export default defineNuxtPlugin((app: NuxtApp) => {
+export default defineNuxtPlugin((app: any) => {
   app.$router.options.scrollBehavior = () => {
     return { left: 0, top: 0 };
   };

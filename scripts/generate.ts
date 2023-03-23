@@ -1,6 +1,6 @@
 import fs from "fs";
 import { resolve } from "path";
-import { getNowDayjsString } from "../utils/_dayjs";
+import { getNowDayjsString } from "../utils/common";
 import genRss from "./rss";
 import { distPath } from "./constants";
 import { nbLog, runCmd } from ".";

@@ -1,19 +1,13 @@
 import { marked } from "marked";
-import { parseMarkdown, afterInsertHtml, parseMarkdownSync } from "../markdown";
-import { processEncryptDescrypt } from "../process-encrypt-descrypt";
-import { CommonItem } from "../types";
-import { createNewItem, registerCancelWatchEncryptor, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "../utils";
-import { translate } from "../i18n";
-import { formatTime } from "../format-time";
-import { isPrerender } from "./../constants";
-import { DBOperate } from ".";
+import { CommonItem, createNewItem, processEncryptDescrypt } from "~/utils/common";
+import { parseMarkdown, formatTime, DBOperate, isPrerender, translate, afterInsertHtml, parseMarkdownSync, registerCancelWatchEncryptor, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "~/utils/nuxt";
 import config from "~/config";
-import { incVisitorsEvent } from "~/dev-server/types";
+import { incVisitorsEvent } from "~/vite-plugins/types";
 
 /**
  * 详情页面通用功能
  */
-export default function useContentPage<T extends CommonItem> () {
+export function useContentPage<T extends CommonItem> () {
   const route = useRoute();
   const encryptor = useEncryptor();
   const markdownRef = ref<HTMLElement>();

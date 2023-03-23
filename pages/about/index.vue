@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { isDev, isPrerender, themeBackground } from "~/utils/constants";
+import { isDev, isPrerender } from "~/utils/nuxt";
+import bg from "~/assets/image/outerwilds.jpg";
 import config from "~/config";
 
 const commitSha = computed(() => useRuntimeConfig().app.NUXT_ENV_CURRENT_GIT_SHA);
@@ -23,7 +24,7 @@ onBeforeMount(async () => {
 
 <template>
   <div class="about flexc">
-    <img :src="themeBackground" alt="bg">
+    <img :src="bg" alt="bg">
     <div class="flexc paragraphs">
       <p v-for="p,idx in paragraphs" :key="idx">
         {{ p }}

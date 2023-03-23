@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { createCommit } from "ls:~/utils/manage/github";
+import { createCommit } from "ls:~/utils/nuxt/manage/github";
 import type { editor as Editor } from "monaco-editor";
 import configString from "~/config.ts?raw";
 import config from "~/config";
-import { inBrowser } from "~/utils/constants";
-import { useStatusText } from "~/utils/manage";
-import { translate } from "~/utils/i18n";
+import { inBrowser, useStatusText, translate } from "~/utils/nuxt";
 
 useHead({
   title: translate("config-manage") + config.SEO_title

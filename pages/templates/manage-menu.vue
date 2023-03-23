@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { HeaderTabs } from "~/utils/types";
-import { calcRocketUrl, useUnlocalePath } from "~/utils/utils";
-import { isDev } from "~/utils/constants";
+import { HeaderTabs } from "~/utils/common";
+import { calcRocketUrl, useUnlocalePath, isDev } from "~/utils/nuxt";
 
 const emit = defineEmits(["upload-image", "show-verify"]);
 

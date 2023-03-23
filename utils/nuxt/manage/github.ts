@@ -1,11 +1,7 @@
 import type { Axios } from "axios";
-import { CommonItem } from "../types";
-import { useCurrentTab } from "../utils";
-import { createCommitModal } from ".";
-import { translate } from "~/utils/i18n";
-import { formatTime } from "~/utils/format-time";
+import { CommonItem } from "~/utils/common";
+import { useCurrentTab, translate, formatTime, notify, createCommitModal } from "~/utils/nuxt";
 import config from "~/config";
-import { notify } from "~/utils/notify/notify";
 
 let axios: Axios | null = null;
 

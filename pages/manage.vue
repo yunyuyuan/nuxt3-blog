@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { RouteLocationNormalized } from "vue-router";
-import UploadImage from "./manage/comps/upload-image.vue";
-import ManageMenu from "./templates/manage-menu.vue";
-import { isAuthor } from "~/utils/manage/github";
-import { notify } from "~/utils/notify/notify";
-import { rmLocalStorage, setLocalStorage } from "~/utils/utils";
-import { translate } from "~/utils/i18n";
-import { isDev, GithubTokenKey } from "~/utils/constants";
+import UploadImage from "~/pages/manage/comps/upload-image.vue";
+import ManageMenu from "~/pages/templates/manage-menu.vue";
+import { rmLocalStorage, setLocalStorage, isAuthor, notify, translate, isDev } from "~/utils/nuxt";
+import { GithubTokenKey } from "~/utils/common";
 
 const pageLoading = useLoading();
 

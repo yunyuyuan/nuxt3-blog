@@ -1,8 +1,5 @@
-import { processEncryptDescrypt } from "../process-encrypt-descrypt";
-import { CommonItem } from "../types";
-import { registerCancelWatchEncryptor, deepClone, useCurrentTab, fetchList, watchUntil } from "../utils";
-import { translate } from "../i18n";
-import { isPrerender } from "./../constants";
+import { CommonItem, processEncryptDescrypt } from "~/utils/common";
+import { registerCancelWatchEncryptor, deepClone, useCurrentTab, fetchList, watchUntil, translate, isPrerender } from "~/utils/nuxt";
 import config from "~/config";
 
 /**

@@ -1,6 +1,5 @@
-import i18nLocales from "../i18n/locales";
-import { getNowDayjs } from "./_dayjs";
-import { translate } from "./i18n";
+import { translate } from "~/utils/nuxt";
+import { i18nLocales, getNowDayjs } from "~/utils/common";
 
 export function formatTime (stamp?: number, type: "full" | "date" | "month" = "full") {
   return computed(() => {

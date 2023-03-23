@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from "vue";
-import { ModalContainerId } from "~/utils/constants";
+import { ModalContainerId } from "~/utils/common";
 
 const props = defineProps({
   confirmTheme: {

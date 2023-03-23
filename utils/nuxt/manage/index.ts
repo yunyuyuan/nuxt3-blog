@@ -1,9 +1,6 @@
 import { createVNode, render } from "vue";
-import { ModalContainerId } from "../constants";
-import { notify } from "../notify/notify";
-import { CommonItem, AllKeys, HeaderTabUrl } from "../types";
-import { getLocalStorage, assignItem, setLocalStorage, useCurrentTab } from "../utils";
-import { translate, translateT } from "../i18n";
+import { CommonItem, AllKeys, HeaderTabUrl, ModalContainerId } from "~/utils/common";
+import { getLocalStorage, setLocalStorage, assignItem, translate, translateT, useCurrentTab, notify } from "~/utils/nuxt";
 import CommonModal from "~/components/common-modal.vue";
 
 export function randomId (exist: CommonItem[] = [], len = 4) {
@@ -145,3 +142,7 @@ export function createCommitModal () {
       .appendChild(container.firstElementChild!);
   });
 }
+
+export * from "./detail";
+export * from "./list";
+export * from "./github";

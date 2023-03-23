@@ -1,10 +1,6 @@
 import type { Ref } from "vue";
-import { processEncryptDescrypt } from "../process-encrypt-descrypt";
-import { registerCancelWatchEncryptor, createNewItem, useCurrentTab, deepClone, watchUntil, assignItem, fetchList, fetchMdManage } from "../utils";
-import { translate } from "../i18n";
-import { CommonItem } from "../types";
-import { isPrerender } from "./../constants";
-import { useHasModified, useStatusText } from ".";
+import { createNewItem, CommonItem, processEncryptDescrypt } from "~/utils/common";
+import { registerCancelWatchEncryptor, isPrerender, useHasModified, translate, useStatusText, useCurrentTab, deepClone, watchUntil, assignItem, fetchList, fetchMdManage } from "~/utils/nuxt";
 
 import config from "~/config";
 

@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import axios from "axios";
 import FormData from "form-data";
-import { notify } from "~/utils/notify/notify";
-import { devHotListen, getLocalStorage, setLocalStorage } from "~/utils/utils";
-import { translate } from "~/utils/i18n";
-import { isDev } from "~/utils/constants";
-import { uploadImageEvent } from "~/dev-server/types";
+import { getLocalStorage, setLocalStorage, notify, translate, isDev, devHotListen } from "~/utils/nuxt";
+import { uploadImageEvent } from "~/vite-plugins/types";
 
 const props = defineProps({
   modelValue: Boolean

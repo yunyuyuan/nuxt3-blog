@@ -3,8 +3,7 @@ import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
 import type { Ref, PropType } from "vue";
 import type { editor as MonacoEditor } from "monaco-editor";
-import { afterInsertHtml, parseMarkdown } from "~/utils/markdown";
-import { initViewer } from "~/utils/viewer";
+import { afterInsertHtml, parseMarkdown, initViewer } from "~/utils/nuxt";
 
 const localePath = useLocalePath();
 const props = defineProps({

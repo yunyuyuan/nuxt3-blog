@@ -1,5 +1,5 @@
 import config from "../../../config";
-import { HeaderTabUrl } from "./../../../utils/types";
+import { HeaderTabUrl } from "../../../utils/common";
 import { getCollection } from "./mongodb";
 
 export type VisitorsDb = {

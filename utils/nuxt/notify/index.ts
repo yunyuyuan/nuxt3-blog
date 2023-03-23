@@ -1,6 +1,6 @@
 import { createVNode, render } from "vue";
-import { NotificationContainerId } from "../constants";
 import notification from "./common-notification.vue";
+import { NotificationContainerId } from "~/utils/common";
 
 export type NotifyType = "success" | "warn" | "error";
 

@@ -1,9 +1,7 @@
 <script setup lang="ts" generic="T extends CommonItem">
-import { deleteList } from "ls:~/utils/manage/github";
-import { CommonItem } from "~/utils/types";
-import { formatTime } from "~/utils/format-time";
-import { useStatusText } from "~/utils/manage";
-import { useManageList } from "~/utils/manage/list";
+import { deleteList } from "ls:~/utils/nuxt/manage/github";
+import { CommonItem } from "~/utils/common";
+import { formatTime, useStatusText, useManageList } from "~/utils/nuxt";
 
 const { targetTab, list, pending, customFilter } = useManageList<T>();
 

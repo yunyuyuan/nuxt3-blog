@@ -1,6 +1,6 @@
 import { useState } from "#app";
-import { GithubTokenKey } from "~/utils/constants";
-import { getLocalStorage, setLocalStorage } from "~/utils/utils";
+import { GithubTokenKey } from "~/utils/common";
+import { getLocalStorage, setLocalStorage } from "~/utils/nuxt";
 const ThemeModeKey = "theme-mode";
 
 // avoid loading during SSG

@@ -1,15 +1,5 @@
-import { getNowDayjsString } from "../utils/_dayjs";
-import type { ArticleItem } from "../utils/types";
+import { ArticleItem, getNowDayjsString, escapeHtml } from "../utils/common";
 import config from "../config";
-
-export function escapeHtml (s: string) {
-  return s.toString()
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface INode {

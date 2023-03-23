@@ -1,4 +1,4 @@
-export default [
+export const i18nLocales = [
   {
     code: "en",
     iso: "en-US",
@@ -18,3 +18,9 @@ export default [
     formatMonth: "MM.DD"
   }
 ];
+
+export const allLocales = i18nLocales.map(item => item.code);
+
+export const getLocaleByCode = (code: typeof allLocales[number]) => {
+  return i18nLocales.find(locale => locale.code === code);
+};

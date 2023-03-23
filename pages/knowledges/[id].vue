@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import useContentPage from "~/utils/public/detail";
-import { KnowledgeItem } from "~/utils/types";
-import { useComment } from "~/utils/utils";
 import config from "~/config";
-import { initViewer } from "~/utils/viewer";
+import { useContentPage, useComment, initViewer } from "~/utils/nuxt";
+import { KnowledgeItem } from "~/utils/common";
 
 const { item, tabUrl, modifyTime, markdownRef, htmlContent, mdPending } =
   useContentPage<KnowledgeItem>();

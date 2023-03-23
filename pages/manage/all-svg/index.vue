@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { notify } from "~/utils/notify/notify";
-import { translateT } from "~/utils/i18n";
+import { notify, translateT } from "~/utils/nuxt";
 
 const svgs = useRuntimeConfig().public.svgs;
 

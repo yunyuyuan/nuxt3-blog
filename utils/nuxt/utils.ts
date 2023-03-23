@@ -1,11 +1,9 @@
 import fs from "fs";
 import type { Ref, WatchOptions } from "vue";
-import { AllKeys, CommonItem, HeaderTabs, HeaderTabUrl, NeedsItem } from "./types";
-import { githubRepoUrl, inBrowser, isDev, isPrerender } from "./constants";
+import { AllKeys, allLocales, CommonItem, HeaderTabs, githubRepoUrl, HeaderTabUrl, getUniqueId } from "~/utils/common";
+import { inBrowser, isDev, isPrerender } from "~/utils/nuxt";
 import config from "~/config";
-import i18nLocales from "~/i18n/locales";
 
-const allLocales = i18nLocales.map(item => item.code);
 const timestamp = () => useRuntimeConfig().public.timestamp;
 
 type returnType<T> = {
@@ -97,37 +95,6 @@ export function calcRocketUrl () {
   return useLocalePath()(url);
 }
 
-/**
- * localStorage 操作
- */
-export function getLocalStorage<T extends string> (key: string): T | null {
-  if (inBrowser) {
-    const item = localStorage.getItem(key);
-    return item as T;
-  }
-  return null;
-}
-
-export function setLocalStorage (key: string, value: string) {
-  if (inBrowser) {
-    localStorage.setItem(key, value);
-  }
-}
-
-export function rmLocalStorage (key: string) {
-  if (inBrowser) {
-    localStorage.removeItem(key);
-  }
-}
-
-/**
- * 生成唯一id
- */
-let uniqueId = 0;
-export function getUniqueId (): typeof uniqueId {
-  return uniqueId++;
-}
-
 export function watchUntil (
   source: any,
   cb: (_: any, _old: any, _cleanup: any) => void,
@@ -173,7 +140,7 @@ const updateGiscusConfig = (config: object) => {
 export function useComment (key: HeaderTabUrl) {
   const tab = key.substring(1);
   const { cmtRepCateId, cmtRepId } = useRuntimeConfig().app;
-  const hasComment = config.Comment[tab] && cmtRepCateId && cmtRepId;
+  const hasComment = (config.Comment as any)[tab] && cmtRepCateId && cmtRepId;
   const root = ref<HTMLElement>();
   onMounted(() => {
     if (hasComment) {
@@ -236,42 +203,6 @@ export function registerCancelWatchEncryptor (): (() => void)[] {
 }
 
 /**
- * 创建一个新item
- */
-export function createNewItem (url: HeaderTabUrl): CommonItem {
-  const baseInfo: NeedsItem = {
-    id: 0,
-    time: 0,
-    modifyTime: 0,
-    encrypt: false
-  };
-  switch (url) {
-    case "/articles":
-      return {
-        title: "",
-        menu: [],
-        len: 0,
-        tags: [],
-        ...baseInfo
-      };
-    case "/records":
-      return {
-        images: [],
-        ...baseInfo
-      };
-    case "/knowledges":
-      return {
-        title: "",
-        summary: "",
-        link: "",
-        cover: "",
-        type: "book",
-        ...baseInfo
-      };
-  }
-}
-
-/**
  * 简化版deepClone
  */
 export function deepClone<T extends object> (item: T): T {
@@ -295,6 +226,29 @@ export function assignItem<T extends CommonItem> (dest: T, src: T) {
     } else {
       dest[k] = src[k];
     }
+  }
+}
+
+/**
+ * localStorage 操作
+ */
+export function getLocalStorage<T extends string> (key: string): T | null {
+  if (inBrowser) {
+    const item = localStorage.getItem(key);
+    return item as T;
+  }
+  return null;
+}
+
+export function setLocalStorage (key: string, value: string) {
+  if (inBrowser) {
+    localStorage.setItem(key, value);
+  }
+}
+
+export function rmLocalStorage (key: string) {
+  if (inBrowser) {
+    localStorage.removeItem(key);
   }
 }
 

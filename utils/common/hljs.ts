@@ -1,6 +1,6 @@
 let registered = false;
 
-export default async function initHljs () {
+export async function initHljs () {
   const hljs = (await import("highlight.js")).default;
   if (!registered) {
     hljs.registerLanguage("vue", hljs => ({

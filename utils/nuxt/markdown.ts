@@ -1,13 +1,10 @@
 import { createApp, createVNode, render } from "vue";
 import type { Ref } from "vue";
 import { marked as Marked } from "marked";
-import { inBrowser, isPrerender, ViewerAttr } from "./constants";
-import { notify } from "./notify/notify";
-import initHljs from "./hljs";
-import { translate } from "./i18n";
+import { translate, notify, inBrowser, isPrerender } from "~/utils/nuxt";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
-import { escapeHtml } from "~/scripts/rss";
+import { escapeHtml, initHljs, ViewerAttr } from "~/utils/common";
 
 let inited = false;
 

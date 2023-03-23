@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ArticleItem } from "~/utils/types";
-import { formatTime, literalTime } from "~/utils/format-time";
-import useListPage from "~/utils/public/list";
+import { ArticleItem } from "~/utils/common";
+import { formatTime, literalTime, useListPage } from "~/utils/nuxt";
 
 const localePath = useLocalePath();
 const { list: articlesList, pending } = useListPage<ArticleItem>();

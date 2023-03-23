@@ -1,5 +1,5 @@
 import axios from "axios";
-import { isDev, isPrerender } from "./../constants";
+import { isDev, devHotListen, isPrerender } from "~/utils/nuxt";
 
 /** 是否在dev下操作数据库 */
 const DbOperateInDev = false;
@@ -25,3 +25,6 @@ export function DBOperate<T = any> (
     }
   }
 }
+
+export * from "./list";
+export * from "./detail";

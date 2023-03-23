@@ -1,5 +1,5 @@
-import { isDev } from "~/utils/constants";
-import { allHotEvent } from "~/dev-server/types";
+import { isDev } from "~/utils/nuxt";
+import { allHotEvent } from "~/vite-plugins/types";
 
 // HACK need `import.meta.hot.off()`
 export default defineNuxtPlugin(() => {

@@ -1,16 +1,10 @@
 <script setup lang="ts" generic="T extends CommonItem">
-import { createCommit, deleteList } from "ls:~/utils/manage/github";
+import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
 import type { Ref } from "vue";
-import MdEditor from "./md-editor.vue";
+import MdEditor from "~/pages/manage/comps/md-editor.vue";
 // eslint-disable-next-line no-unused-vars
-import { CommonItem, HeaderTabs } from "~/utils/types";
-import { notify } from "~/utils/notify/notify";
-import { getNowStamp } from "~/utils/_dayjs";
-import { deepClone, getLocalStorage, rmLocalStorage } from "~/utils/utils";
-import { translate } from "~/utils/i18n";
-import { compareMd, loadOrDumpDraft, randomId } from "~/utils/manage";
-import { processEncryptDescrypt } from "~/utils/process-encrypt-descrypt";
-import { useManageContent } from "~/utils/manage/detail";
+import { CommonItem, HeaderTabs, getNowStamp, processEncryptDescrypt } from "~/utils/common";
+import { notify, deepClone, translate, getLocalStorage, rmLocalStorage, compareMd, loadOrDumpDraft, randomId, useManageContent } from "~/utils/nuxt";
 
 const props = defineProps<{
   preProcessItem?:(_item: T, _list?: Ref<T[]> | {value: T[]}) => void;

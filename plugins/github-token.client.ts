@@ -1,8 +1,5 @@
-import { isDev, inBrowser, GithubTokenKey } from "~/utils/constants";
-import { getLocalStorage } from "~/utils/utils";
-import { translate } from "~/utils/i18n";
-import { isAuthor } from "~/utils/manage/github";
-import { notify } from "~/utils/notify/notify";
+import { GithubTokenKey } from "~/utils/common";
+import { getLocalStorage, notify, isAuthor, translate, isDev, inBrowser } from "~/utils/nuxt";
 
 export default defineNuxtPlugin(() => {
   if (isDev) {

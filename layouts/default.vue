@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type Headroom from "headroom.js";
-import { githubRepoUrl, inBrowser, isPrerender } from "~/utils/constants";
-import { calcRocketUrl } from "~/utils/utils";
+import { inBrowser, isPrerender, calcRocketUrl } from "~/utils/nuxt";
+import { i18nLocales, githubRepoUrl } from "~/utils/common";
 import LayoutMenu from "~/pages/templates/layout-menu.vue";
 import config from "~/config";
-import i18nLocales from "~/i18n/locales";
 
 const i18n = useI18n();
 const { themeMode, toggleThemeMode } = useThemeMode();

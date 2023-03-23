@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { formatTime, literalTime } from "~/utils/format-time";
-import useContentPage from "~/utils/public/detail";
-import { RecordItem } from "~/utils/types";
-import { useComment } from "~/utils/utils";
-import { translate } from "~/utils/i18n";
 import config from "~/config";
-import { initViewer } from "~/utils/viewer";
+import { formatTime, literalTime, useContentPage, useComment, translate, initViewer } from "~/utils/nuxt";
+import { RecordItem } from "~/utils/common";
 
 const { item, tabUrl, publishTime, modifyTime, htmlContent, markdownRef, mdPending } = useContentPage<RecordItem>();
 

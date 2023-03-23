@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { HeaderTabs } from "~/utils/types";
-import { useUnlocalePath } from "~/utils/utils";
+import { HeaderTabs } from "~/utils/common";
+import { useUnlocalePath } from "~/utils/nuxt";
 
 const localePath = useLocalePath();
 const activeRoute = computed(() => {

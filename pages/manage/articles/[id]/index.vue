@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from "vue";
-import ManageContentEdit from "../../comps/manage-content-edit.vue";
-import { ArticleItem } from "~/utils/types";
+import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
+import { ArticleItem } from "~/utils/common";
 
 const allTags = reactive(new Set<string>());
 const showTagSelect = ref<boolean>(false);

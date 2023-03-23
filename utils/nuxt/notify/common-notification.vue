@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from "vue";
-import { NotifyType } from "./notify";
+import { NotifyType } from "~/utils/nuxt";
 
 defineProps({
   type: { type: String as PropType<NotifyType>, default: "success" },

@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import { formatTime, literalTime } from "~/utils/format-time";
-import {
-  KnowledgeItem,
-  KnowledgeTabs,
-  KnowledgeTabsList
-} from "~/utils/types";
-import useListPage from "~/utils/public/list";
+import { formatTime, literalTime, useListPage } from "~/utils/nuxt";
+import { KnowledgeItem, KnowledgeTabs, KnowledgeTabsList } from "~/utils/common";
 
 const localePath = useLocalePath();
 const { list: knowledgeList, pending } = useListPage<KnowledgeItem>();

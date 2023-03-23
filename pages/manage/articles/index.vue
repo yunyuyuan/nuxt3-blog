@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ManageListTable from "../comps/manage-list-table.vue";
-import { ArticleItem } from "~/utils/types";
+import ManageListTable from "~/pages/manage/comps/manage-list-table.vue";
+import { ArticleItem } from "~/utils/common";
 
 const localePath = useLocalePath();
 const searchTag = reactive(new Set<string>());

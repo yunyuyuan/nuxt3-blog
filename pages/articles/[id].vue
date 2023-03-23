@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import useContentPage from "~/utils/public/detail";
-import { ArticleItem } from "~/utils/types";
-import { addScrollListener, rmScrollListener } from "~/utils/scroll-event";
-import { getLocalStorage, rmLocalStorage, setLocalStorage, useComment, watchUntil } from "~/utils/utils";
-import { isPrerender } from "~/utils/constants";
 import config from "~/config";
-import { initViewer } from "~/utils/viewer";
+import { addScrollListener, rmScrollListener, ArticleItem } from "~/utils/common";
+import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerender, useContentPage, useComment, watchUntil } from "~/utils/nuxt";
 
 const { item, tabUrl, modifyTime, htmlContent, markdownRef, mdPending, htmlInserted } = useContentPage<ArticleItem>();
 

@@ -27,10 +27,10 @@ English Readme | [中文说明](/README.zh.md)
 #### One-click deployment (note：uncheck `Create private Git Repository`)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyunyuyuan%2Fnuxt3-blog&repository-name=nuxt3-blog)
 
-#### Changing user
+#### Change user
 Change `githubName` in `config.ts` to your current Github account.
 
-#### get a new token
+#### Generate a new token
 Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `Generate token`.
 
 #### Addons
@@ -64,6 +64,32 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 - [x] block level encryption
 - [ ] SSR for self-hosting
 - [ ] support cloudflare page,netlify and others
+
+## Project Structure
+* `/api` serverless functions.
+* `/assets`
+  * `/image` images that imported by vite.
+  * `/style` public style and utils style.
+  * `/svg` all svg files, will used by `/components/svg-icon.vue`.
+* `/components` vue components, auto-import by nuxt.
+* `/composables` vue composables, auto-import by nuxt.
+* `/vite-plugins` vite plugins.
+* `/i18n` i18n message files.
+* `/layouts` nuxt layout files.
+* `/lib` functions used by `/api`.
+* `/pages` all views page.
+* `/plugins` nuxt plugin files.
+* `/public`
+  * `/rebuild` all blog data.
+  * `/sticker` all stickers for markdown.
+* `/scripts`
+  * `/generate.ts` script for `npm run generate`.
+  * `/change-pwd.ts` script for `npm run chpwd`, run it locally when you want to change your password.
+* `/utils`
+  * `/nuxt` common codes of nuxt.
+  * `/common` common codes of javascript.
+* `/config.ts` blog configurations, your must change it.
+
 
 ## Changelog
 

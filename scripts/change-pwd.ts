@@ -1,5 +1,4 @@
-import { CommonItem, HeaderTabUrl } from "../utils/types";
-import { processEncryptDescrypt } from "../utils/process-encrypt-descrypt";
+import { CommonItem, processEncryptDescrypt, HeaderTabUrl } from "../utils/common";
 import { rebuildPath } from "./constants";
 
 const fs = require("fs");

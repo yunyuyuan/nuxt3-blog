@@ -1,16 +1,13 @@
-import { processEncryptDescrypt } from "../process-encrypt-descrypt";
-import { CommonItem } from "../types";
-import { deepClone, fetchList, registerCancelWatchEncryptor, useCurrentTab, watchUntil } from "../utils";
-import { isPrerender } from "./../constants";
-import { DBOperate } from ".";
+import { CommonItem, processEncryptDescrypt } from "~/utils/common";
+import { DBOperate, isPrerender, deepClone, fetchList, registerCancelWatchEncryptor, useCurrentTab, watchUntil } from "~/utils/nuxt";
 import config from "~/config";
-import { getVisitorsEvent } from "~/dev-server/types";
+import { getVisitorsEvent } from "~/vite-plugins/types";
 import { VisitorsDb } from "~/lib/api/db/visitors";
 
 /**
  * 列表页面通用功能
  */
-export default function useListPage<T extends CommonItem> () {
+export function useListPage<T extends CommonItem> () {
   const githubToken = useGithubToken();
   const encryptor = useEncryptor();
 
