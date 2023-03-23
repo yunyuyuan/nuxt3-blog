@@ -259,7 +259,7 @@ onMounted(() => {
       :loading="processing && currentOperate === 'upload'"
       @click="doUpload"
     >
-      {{ $T(isNew ? "publish" : "upload") }}
+      {{ $T(isNew ? "publish" : "update") }}
     </common-button>
     <common-button
       v-if="!isNew"
