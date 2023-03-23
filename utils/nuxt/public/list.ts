@@ -1,4 +1,4 @@
-import { CommonItem, processEncryptDescrypt } from "~/utils/common";
+import { CommonItem, processEncryptDecrypt } from "~/utils/common";
 import { DBOperate, isPrerender, deepClone, fetchList, registerCancelWatchEncryptor, useCurrentTab, watchUntil } from "~/utils/nuxt";
 import config from "~/config";
 import { getVisitorsEvent } from "~/vite-plugins/types";
@@ -52,7 +52,7 @@ export function useListPage<T extends CommonItem> () {
     cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
       for (const item of resultList) {
         if (item.encrypt) {
-          await processEncryptDescrypt(item, decrypt, targetTab.url);
+          await processEncryptDecrypt(item, decrypt, targetTab.url);
         }
       }
     }));

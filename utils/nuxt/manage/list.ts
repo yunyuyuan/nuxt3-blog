@@ -1,4 +1,4 @@
-import { CommonItem, processEncryptDescrypt } from "~/utils/common";
+import { CommonItem, processEncryptDecrypt } from "~/utils/common";
 import { registerCancelWatchEncryptor, deepClone, useCurrentTab, fetchList, watchUntil, translate, isPrerender } from "~/utils/nuxt";
 import config from "~/config";
 
@@ -30,7 +30,7 @@ export function useManageList<T extends CommonItem> () {
     cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
       for (const item of resultList) {
         if (item.encrypt) {
-          await processEncryptDescrypt(item, decrypt, targetTab.url);
+          await processEncryptDecrypt(item, decrypt, targetTab.url);
         }
       }
     }));

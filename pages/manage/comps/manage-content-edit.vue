@@ -3,7 +3,7 @@ import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
 import type { Ref } from "vue";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 // eslint-disable-next-line no-unused-vars
-import { CommonItem, HeaderTabs, getNowStamp, processEncryptDescrypt } from "~/utils/common";
+import { CommonItem, HeaderTabs, getNowStamp, processEncryptDecrypt } from "~/utils/common";
 import { notify, deepClone, translate, getLocalStorage, rmLocalStorage, compareMd, loadOrDumpDraft, randomId, useManageContent } from "~/utils/nuxt";
 
 const props = defineProps<{
@@ -110,7 +110,7 @@ const getUploadInfo = async () => {
         title: translate("need-passwd")
       });
     }
-    await processEncryptDescrypt(newItem, encryptor.encrypt, targetTab.url);
+    await processEncryptDecrypt(newItem, encryptor.encrypt, targetTab.url);
     mdContent = await encryptor.encrypt(mdContent);
     // 整篇加密的markdown，不会再有加密块
     delete item.encryptBlocks;
@@ -365,7 +365,7 @@ onMounted(() => {
 
   $border: rgb(216 216 216);
   $border-dark: rgb(53 53 53);
-  $bg-dark: rgb(73 73 73);
+  $bg-dark: rgb(39 39 39);
 
   &-base-info > .detail,
   &-md-info > .manage-md-editor {
@@ -374,6 +374,7 @@ onMounted(() => {
     border: 1px solid $border;
 
     @include dark-mode {
+      box-shadow: 0 0 15px rgb(255 255 255 / 10%);
       border-color: $border-dark;
     }
   }

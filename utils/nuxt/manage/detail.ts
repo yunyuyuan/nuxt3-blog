@@ -1,5 +1,5 @@
 import type { Ref } from "vue";
-import { createNewItem, CommonItem, processEncryptDescrypt } from "~/utils/common";
+import { createNewItem, CommonItem, processEncryptDecrypt } from "~/utils/common";
 import { registerCancelWatchEncryptor, isPrerender, useHasModified, translate, useStatusText, useCurrentTab, deepClone, watchUntil, assignItem, fetchList, fetchMdManage } from "~/utils/nuxt";
 
 import config from "~/config";
@@ -56,7 +56,7 @@ export function useManageContent<T extends CommonItem> () {
       // item的内容可以马上解密
       if (item.encrypt) {
         cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
-          await processEncryptDescrypt(item, decrypt, targetTab.url);
+          await processEncryptDecrypt(item, decrypt, targetTab.url);
           itemDecrypted.value = true;
           resetOriginItem();
         }));

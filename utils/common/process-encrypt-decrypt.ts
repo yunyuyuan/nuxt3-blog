@@ -3,7 +3,7 @@ import { CommonItem, ArticleItem, RecordItem, KnowledgeItem, HeaderTabUrl } from
 /**
  * 三种类型的数据加解密
  */
-export async function processEncryptDescrypt (
+export async function processEncryptDecrypt (
   item: CommonItem,
   fn: (_s: string) => Promise<string>,
   type: HeaderTabUrl

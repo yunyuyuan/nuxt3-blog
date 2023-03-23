@@ -1,7 +1,7 @@
 @use "sass:color";
 @import "./theme";
 
-$background: #fff;
+$background: #f8f8f8;
 $background-dark: #363636;
 $theme-color: $theme;
 $theme-color-lighten: color.adjust($theme-color, $lightness: 20%);
@@ -18,9 +18,9 @@ $z-index-footer: 30;
 $z-index-notify: 1000;
 $z-index-modal: 999;
 $z-index-dropdown: 999;
+$font-source-han-sans: "monospace";
 
-// $font-source-han-sans: unset;
-$font-source-han-sans: "lxgwwenkai", system-ui, monospace;
+// $font-source-han-sans: "lxgwwenkai", system-ui, monospace;
 
 // $font-source-han-sans: none;
 

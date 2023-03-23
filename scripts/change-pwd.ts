@@ -1,4 +1,4 @@
-import { CommonItem, processEncryptDescrypt, HeaderTabUrl } from "../utils/common";
+import { CommonItem, processEncryptDecrypt, HeaderTabUrl } from "../utils/common";
 import { rebuildPath } from "./constants";
 
 const fs = require("fs");
@@ -30,8 +30,8 @@ const processJson = async (file: HeaderTabUrl) => {
   for (const item of itemList) {
     if (item.encrypt) {
       count += 1;
-      await processEncryptDescrypt(item, decrypt, file);
-      await processEncryptDescrypt(item, encrypt, file);
+      await processEncryptDecrypt(item, decrypt, file);
+      await processEncryptDecrypt(item, encrypt, file);
       fs.writeFileSync(jsonPath, JSON.stringify(itemList, null, 2));
       // markdown文件
       const mdPath = path.join(rebuildPath, file, String(item.id) + ".md");

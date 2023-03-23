@@ -1,6 +1,6 @@
 // @import "source-code-pro";
 // @import "source-han-sans";
-@import "lxgwwenkai";
+// @import "lxgwwenkai";
 @import "fira-code";
 @import "markdown";
 @import "code-style";
@@ -109,21 +109,22 @@ select {
   @include dark-mode {
     color: white;
     background: #2d2d2d;
+    border-color: rgb(116 116 116);
 
     &:hover {
-      border-color: white;
+      border-color: rgb(139 139 139);
     }
 
     &:focus {
-      box-shadow: 0 0 4px rgba($theme-color-lighten, 20%);
-      border-color: $theme-color-lighten;
+      box-shadow: 0 0 4px rgba($theme-color, 20%);
+      border-color: $theme-color;
       background: rgb(36 36 36);
     }
 
     &:disabled {
       cursor: not-allowed;
       border-color: #a5a5a5;
-      background: rgb(121 121 121);
+      background: rgb(87 87 87);
     }
   }
 }

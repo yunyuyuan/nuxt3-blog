@@ -229,8 +229,8 @@ function deleteSelect () {
     background: rgb(255 255 255);
 
     @include dark-mode {
-      background: rgb(88 88 88);
-      border-color: rgb(128 128 128);
+      background: rgb(36 36 36);
+      border-color: rgb(105 105 105);
     }
 
     padding: 26px 30px;
@@ -264,7 +264,7 @@ function deleteSelect () {
       background: rgb(251 254 255 / 98%);
 
       @include dark-mode {
-        background: #505050;
+        background: #363636;
       }
     }
 
@@ -316,6 +316,10 @@ function deleteSelect () {
       &-lock {
         svg {
           @include square(15px);
+
+          @include dark-mode {
+            fill: rgb(194 194 194);
+          }
         }
       }
     }

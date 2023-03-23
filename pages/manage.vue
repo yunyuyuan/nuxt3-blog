@@ -207,6 +207,11 @@ $menu-width: 120px;
     overflow: hidden;
     border-radius: 2px;
 
+    @include dark-mode {
+      box-shadow: 0 0 14px rgb(107 107 107 / 36%);
+      background: #202020;
+    }
+
     li {
       .upload-img-btn {
         cursor: cell;
@@ -234,6 +239,10 @@ $menu-width: 120px;
           top: 0;
           opacity: 0;
           transition: $common-transition;
+
+          @include dark-mode {
+            background: rgb(202 202 202);
+          }
         }
 
         &:hover {
@@ -269,6 +278,10 @@ $menu-width: 120px;
     font-size: f-size(0.8);
     color: $theme-color-darken;
     font-weight: bold;
+
+    @include dark-mode {
+      background: rgb(235 235 235);
+    }
 
     &:hover {
       transform: scale(1.1);

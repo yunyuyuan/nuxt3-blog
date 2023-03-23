@@ -229,7 +229,7 @@ initViewer(markdownRef);
   background: white;
 
   @include dark-mode {
-    background: rgb(73 73 73);
+    background: rgb(39 39 39);
   }
 
   position: relative;
@@ -284,7 +284,7 @@ initViewer(markdownRef);
     background: #fefffe;
 
     @include dark-mode {
-      background: rgb(73 73 73);
+      background: rgb(39 39 39);
     }
 
     position: relative;
@@ -422,7 +422,7 @@ initViewer(markdownRef);
                 border: 1px solid #ddd;
 
                 @include dark-mode {
-                  border-color: rgb(180 180 180);
+                  border-color: rgb(117 117 117);
                 }
 
                 border-left: none;

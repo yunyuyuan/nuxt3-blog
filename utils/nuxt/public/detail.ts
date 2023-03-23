@@ -1,5 +1,5 @@
 import { marked } from "marked";
-import { CommonItem, createNewItem, processEncryptDescrypt } from "~/utils/common";
+import { CommonItem, createNewItem, processEncryptDecrypt } from "~/utils/common";
 import { parseMarkdown, formatTime, DBOperate, isPrerender, translate, afterInsertHtml, parseMarkdownSync, registerCancelWatchEncryptor, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "~/utils/nuxt";
 import config from "~/config";
 import { incVisitorsEvent } from "~/vite-plugins/types";
@@ -35,7 +35,7 @@ export function useContentPage<T extends CommonItem> () {
     }
     if (item.encrypt) {
       cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
-        await processEncryptDescrypt(item, decrypt, targetTab.url);
+        await processEncryptDecrypt(item, decrypt, targetTab.url);
         itemDecrypted.value = true;
       }));
     } else {
