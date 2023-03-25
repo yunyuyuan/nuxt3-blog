@@ -2,6 +2,7 @@
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 import mdSample from "~/assets/style/markdown.md?raw";
 import config from "~/config";
+import { translate } from "~/utils/nuxt";
 
 const inputMarkdown = ref(mdSample);
 
