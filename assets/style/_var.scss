@@ -2,7 +2,7 @@
 @import "./theme";
 
 $background: #f8f8f8;
-$background-dark: #363636;
+$background-dark: #23272e;
 $theme-color: $theme;
 $theme-color-lighten: color.adjust($theme-color, $lightness: 20%);
 $theme-color-darken: color.adjust($theme-color, $lightness: -10%);
