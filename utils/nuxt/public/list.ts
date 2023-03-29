@@ -1,5 +1,5 @@
 import { CommonItem, processEncryptDecrypt } from "~/utils/common";
-import { DBOperate, isPrerender, deepClone, fetchList, registerCancelWatchEncryptor, useCurrentTab, watchUntil } from "~/utils/nuxt";
+import { DBOperate, isPrerender, deepClone, fetchList, registerCancelWatchEncryptor, useCurrentTab, watchUntil, translateT } from "~/utils/nuxt";
 import config from "~/config";
 import { getVisitorsEvent } from "~/vite-plugins/types";
 import { VisitorsDb } from "~/lib/api/db/visitors";
@@ -15,7 +15,7 @@ export function useListPage<T extends CommonItem> () {
   const { pending, data: list } = fetchList(targetTab.url);
 
   useHead({
-    title: targetTab.name + config.SEO_title
+    title: translateT(targetTab.name) + config.SEO_title
   });
 
   // cancelWatchPasswd
