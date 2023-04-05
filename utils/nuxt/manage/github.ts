@@ -101,7 +101,7 @@ export async function createCommit (
     createCommitOnBranch(
       input: {
         branch: {
-          branchName: "${config.githubBranch}",
+          branchName: "${useRuntimeConfig().app.githubBranch}",
           repositoryNameWithOwner: "${config.githubName}/${config.githubRepo}"
         },
         message: {

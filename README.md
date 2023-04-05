@@ -11,7 +11,7 @@
 
 English Readme | [中文说明](/README.zh.md)
 
-## Features
+# Features
 * 💻 **Build in 5 minutes**. Completely free, no need to write any code.
 * 🤝 **Convenient to use**. An all-in-one admin interface where you only need a token to **update configurations, add/edit/delete blog content on the web page**. no `notepad`, no `git push`.
 * 📷 **Integrated image hosting service**. Integrated with `smms` image hosting service and `tinypng` image compression, one-click upload of blog images on the web page.
@@ -23,10 +23,17 @@ English Readme | [中文说明](/README.zh.md)
   * 🚪Block-level encryption:  
       <img height="300px" src="https://s2.loli.net/2023/03/09/9UQurkTGaOSY3j4.png"/>
 
-## How to use
-#### One-click deployment (note：uncheck `Create private Git Repository`)
+# How to use
+## Two ways to deploy
+### The first way: One-click deployment (note：uncheck `Create private Git Repository`)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyunyuyuan%2Fnuxt3-blog&repository-name=nuxt3-blog)
 
+### The second way: fork and deploy(recommended if you want to sync my future commits)
+1. fork this project
+2. deploy within vercel(no need to change any build params)
+
+
+## After deploy
 #### Change user
 Change `githubName` in `config.ts` to your current Github account.
 
@@ -37,7 +44,7 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 * If you want to use the views analyze feature, you need to [register a MongoDB account](https://www.mongodb.com/cloud/atlas/register), and enable [MongoDB integration](https://vercel.com/integrations/mongodbatlas)
 * If you want to use the commenting feature, you need to install [giscus](https://github.com/apps/giscus) for your Github, and enable [discussion](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository). Changing `CommentRepoId` and `CommentDiscussionCategoryId` in `config.ts`. Please goto [giscus.app](giscus.app) to get more information.
 
-## Todo
+# Todo
 #### Features
 - [ ] 404 page
 - [x] work with `npm run dev`
@@ -65,7 +72,7 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 - [ ] SSR for self-hosting
 - [ ] support cloudflare page,netlify and others
 
-## Project Structure
+# Project Structure
 * `/api` serverless functions.
 * `/assets`
   * `/image` images that imported by vite.
@@ -91,11 +98,11 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 * `/config.ts` blog configurations, your must change it.
 
 
-## Changelog
+# Changelog
 
 [CHANGELOG.md](/CHANGELOG.md)
 
-## Others
+# Others
 * QQ group：745105612
 * email：me@yunyuyuan.net
 * discord: https://discord.gg/HtSehSMYXa
