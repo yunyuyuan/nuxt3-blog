@@ -30,7 +30,8 @@ const isImgLoading = computed(() => imgState.value === "loading");
 const isShowImg = computed(
   () => imgState.value === "loading" || imgState.value === "loaded"
 );
-const isEncryptedImg = computed(() => !props.src.includes("."));
+const isBlankSrc = computed(() => !props.src.trim());
+const isEncryptedImg = computed(() => !isBlankSrc.value && !props.src.includes("."));
 const containerStyle = computed<StyleValue>(() => {
   // 只要有compStyle，则无论什么情况都使用compStyle
   if (props.compStyle) {
@@ -64,6 +65,9 @@ function loadFinish (error: boolean) {
 }
 let watchEncrypt: ReturnType<typeof watch> | null = null;
 function refreshView () {
+  if (isBlankSrc.value) {
+    return;
+  }
   if (isEncryptedImg.value || props.noLazy) {
     imgState.value = "loaded";
     return;
@@ -84,11 +88,11 @@ function refreshView () {
     const contractX = root.value!.getBoundingClientRect().x - winWidth;
     if (
       contractY < 0 &&
-    contractY > -winHeight - height.value &&
-    contractX < 0 &&
-    contractX > -winWidth - width.value
+      contractY > -winHeight - height.value &&
+      contractX < 0 &&
+      contractX > -winWidth - width.value
     ) {
-    // outerView -> loading
+      // outerView -> loading
       imgState.value = "loading";
       // 取消监听
       rmScrollListener(refreshView);
