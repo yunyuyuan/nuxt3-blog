@@ -22,7 +22,6 @@ export function createNewItem (url: HeaderTabUrl): CommonItem {
     case "/articles":
       return {
         title: "",
-        menu: [],
         len: 0,
         tags: [],
         ...baseInfo

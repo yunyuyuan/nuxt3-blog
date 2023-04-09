@@ -25,3 +25,5 @@ export const useThemeMode = () => {
     }
   };
 };
+
+export const useCurrentMenu = () => useState<{size: "big"|"small", text: string, url: string}[]>("current-md-menu", () => []);

@@ -10,22 +10,40 @@ let inited = false;
 
 export async function parseMarkdown (text: string) {
   const marked = (await import("marked")).marked;
-  return parseMarkdown_(text, marked);
+  return _parseMarkdown(text, marked);
 }
 
 export function parseMarkdownSync (text: string, marked: typeof Marked) {
-  return parseMarkdown_(text, marked);
+  return _parseMarkdown(text, marked);
 }
 
-function parseMarkdown_ (text: string, marked: typeof Marked) {
+function _parseMarkdown (text: string, marked: typeof Marked) {
+  const currentMenu = useCurrentMenu();
+  currentMenu.value = [];
+  let currentId: string;
+  let sameId = 0;
   if (!inited) {
     inited = true;
     marked.use({
       gfm: true,
       renderer: {
-        heading (text, level) {
-          const anchor = "id-" + encodeURIComponent(text);
-          return `<h${level}><sup class="fake-head" ${!isPrerender ? `id="${anchor}"` : ""}></sup><a class="header-link" href="#${anchor}">${text}</a></h${level}>`;
+        heading (text, level, raw) {
+          let url = raw;
+          if (raw === currentId) {
+            sameId++;
+            url = `${raw}-${sameId}`;
+          } else {
+            sameId = 0;
+            url = raw;
+          }
+          const menuItem: typeof currentMenu.value[number] = {
+            size: level < 4 ? "big" : "small",
+            text,
+            url
+          };
+          currentMenu.value.push(menuItem);
+          currentId = raw;
+          return `<h${level}><sup class="fake-head" ${!isPrerender ? `id="${url}"` : ""}></sup><a class="header-link" href="#${url}">${text}</a></h${level}>`;
         },
         image (href, _, text) {
           // sticker

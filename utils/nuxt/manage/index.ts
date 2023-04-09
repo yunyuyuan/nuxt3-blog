@@ -96,7 +96,7 @@ export function loadOrDumpDraft (key: string, type: "load" | "dump", item: Commo
  */
 export function useHasModified<T extends CommonItem> ({ item, origin }: { item: T, origin: T, }) {
   const markdownModified = ref(false);
-  // 目前只有menu,tag和images这几种简单数据，可以直接进行比较
+  // 目前只有tag和images这几种简单数据，可以直接进行比较
   const hasModified = computed(() => markdownModified.value || keysOfCommonItem()
     .filter(k => typeof item[k] !== "undefined")
     .some((k) => {

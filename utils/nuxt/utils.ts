@@ -215,7 +215,7 @@ export function deepClone<T extends object> (item: T): T {
 export function assignItem<T extends CommonItem> (dest: T, src: T) {
   for (const k of (Object.keys(src) as AllKeys[])) {
     // deepClone一下
-    if (["menu", "tags"].includes(k)) {
+    if (["tags"].includes(k)) {
       dest[k].splice(0, dest[k].length, ...deepClone(src[k]));
     } else if (k === "images") {
       // images需要特殊处理，设置id

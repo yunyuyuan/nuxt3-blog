@@ -11,10 +11,6 @@ export async function processEncryptDecrypt (
   switch (type) {
     case "/articles":
       item = item as ArticleItem;
-      for (const anchor of item.menu) {
-        anchor.text = await fn(anchor.text);
-        anchor.url = await fn(anchor.url);
-      }
       item.title = await fn(item.title);
       break;
     case "/records":

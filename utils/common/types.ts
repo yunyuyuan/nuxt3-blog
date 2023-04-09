@@ -14,11 +14,6 @@ export type NeedsItem = {
 export type ArticleItem = NeedsItem & {
   title: string;
   len: number;
-  menu: {
-    size: "big" | "small";
-    text: string;
-    url: string;
-  }[];
   tags: string[];
 };
 

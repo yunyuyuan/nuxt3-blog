@@ -1,23 +1,6 @@
 [
   {
     "title": "自动推送epic免费游戏到邮箱",
-    "menu": [
-      {
-        "size": "big",
-        "text": "实际效果\n",
-        "url": "#id-%E5%AE%9E%E9%99%85%E6%95%88%E6%9E%9C"
-      },
-      {
-        "size": "big",
-        "text": "功能\n",
-        "url": "#id-%E5%8A%9F%E8%83%BD"
-      },
-      {
-        "size": "big",
-        "text": "使用方式\n",
-        "url": "#id-%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"
-      }
-    ],
     "len": 647,
     "tags": [
       "python"
@@ -29,7 +12,6 @@
   },
   {
     "title": "stardust: 年付5欧元的ipv6主机，性价比王者",
-    "menu": [],
     "len": 243,
     "tags": [
       "linux",
@@ -42,53 +24,6 @@
   },
   {
     "title": "使用cloudflare tunnel打洞，随时随地访问内网服务",
-    "menu": [
-      {
-        "size": "big",
-        "text": "安装",
-        "url": "#id-%E5%AE%89%E8%A3%85"
-      },
-      {
-        "size": "small",
-        "text": "前置条件",
-        "url": "#id-%E5%89%8D%E7%BD%AE%E6%9D%A1%E4%BB%B6"
-      },
-      {
-        "size": "small",
-        "text": "准备",
-        "url": "#id-%E5%87%86%E5%A4%87"
-      },
-      {
-        "size": "small",
-        "text": "服务器安装 cloudflared",
-        "url": "#id-%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85cloudflared"
-      },
-      {
-        "size": "big",
-        "text": "配置与转发",
-        "url": "#id-%E9%85%8D%E7%BD%AE%E4%B8%8E%E8%BD%AC%E5%8F%91"
-      },
-      {
-        "size": "small",
-        "text": "ssh 访问",
-        "url": "#id-ssh%E8%AE%BF%E9%97%AE"
-      },
-      {
-        "size": "small",
-        "text": "vnc 远程桌面",
-        "url": "#id-vnc%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2"
-      },
-      {
-        "size": "big",
-        "text": "浏览器访问 SSH&VNC",
-        "url": "#id-%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AESSH%26VNC"
-      },
-      {
-        "size": "big",
-        "text": "Tips",
-        "url": "#id-Tips"
-      }
-    ],
     "len": 5331,
     "tags": [
       "杂谈",
@@ -101,7 +36,6 @@
   },
   {
     "title": "U2FsdGVkX18iu6KKOFZ+nyaQcyFcbHdBsAOQ5jYIDbU=",
-    "menu": [],
     "len": 150,
     "tags": [],
     "id": 8798,
@@ -111,23 +45,6 @@
   },
   {
     "title": "树莓派监控摄像头制作",
-    "menu": [
-      {
-        "size": "big",
-        "text": "外观",
-        "url": "#id-%E5%A4%96%E8%A7%82"
-      },
-      {
-        "size": "big",
-        "text": "制作",
-        "url": "#id-%E5%88%B6%E4%BD%9C"
-      },
-      {
-        "size": "big",
-        "text": "代码",
-        "url": "#id-%E4%BB%A3%E7%A0%81"
-      }
-    ],
     "len": 1673,
     "tags": [
       "树莓派",
@@ -141,28 +58,6 @@
   },
   {
     "title": "终极白嫖：使用免费MongoDB显示浏览量",
-    "menu": [
-      {
-        "size": "big",
-        "text": "初始化",
-        "url": "#id-%E5%88%9D%E5%A7%8B%E5%8C%96"
-      },
-      {
-        "size": "big",
-        "text": "功能代码",
-        "url": "#id-%E5%8A%9F%E8%83%BD%E4%BB%A3%E7%A0%81"
-      },
-      {
-        "size": "big",
-        "text": "API 代码",
-        "url": "#id-API%E4%BB%A3%E7%A0%81"
-      },
-      {
-        "size": "big",
-        "text": "其他",
-        "url": "#id-%E5%85%B6%E4%BB%96"
-      }
-    ],
     "len": 4376,
     "tags": [
       "前端",
@@ -175,18 +70,6 @@
   },
   {
     "title": "dark mode实现——全站暗黑模式切换",
-    "menu": [
-      {
-        "size": "big",
-        "text": "color",
-        "url": "#id-color"
-      },
-      {
-        "size": "big",
-        "text": "background",
-        "url": "#id-background"
-      }
-    ],
     "len": 1591,
     "tags": [
       "前端"
@@ -198,18 +81,6 @@
   },
   {
     "title": "web开发调试：打断点",
-    "menu": [
-      {
-        "size": "big",
-        "text": "讲解",
-        "url": "#id-%E8%AE%B2%E8%A7%A3"
-      },
-      {
-        "size": "big",
-        "text": "使用 vscode 调试",
-        "url": "#id-%E4%BD%BF%E7%94%A8vscode%E8%B0%83%E8%AF%95"
-      }
-    ],
     "len": 2562,
     "tags": [
       "前端"
@@ -221,43 +92,6 @@
   },
   {
     "title": "树莓派bt下载器/局域网NAS/远程控制",
-    "menu": [
-      {
-        "size": "big",
-        "text": "准备",
-        "url": "#id-%E5%87%86%E5%A4%87"
-      },
-      {
-        "size": "big",
-        "text": "开工",
-        "url": "#id-%E5%BC%80%E5%B7%A5"
-      },
-      {
-        "size": "small",
-        "text": "硬盘检查",
-        "url": "#id-%E7%A1%AC%E7%9B%98%E6%A3%80%E6%9F%A5"
-      },
-      {
-        "size": "small",
-        "text": "bt 下载器",
-        "url": "#id-bt%E4%B8%8B%E8%BD%BD%E5%99%A8"
-      },
-      {
-        "size": "small",
-        "text": "局域网 NAS",
-        "url": "#id-%E5%B1%80%E5%9F%9F%E7%BD%91NAS"
-      },
-      {
-        "size": "small",
-        "text": "远程控制（非必须）",
-        "url": "#id-%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%EF%BC%88%E9%9D%9E%E5%BF%85%E9%A1%BB%EF%BC%89"
-      },
-      {
-        "size": "big",
-        "text": "完工",
-        "url": "#id-%E5%AE%8C%E5%B7%A5"
-      }
-    ],
     "len": 4570,
     "tags": [
       "树莓派",
@@ -270,18 +104,6 @@
   },
   {
     "title": "使用serverless function上传图片",
-    "menu": [
-      {
-        "size": "big",
-        "text": "代码",
-        "url": "#id-%E4%BB%A3%E7%A0%81"
-      },
-      {
-        "size": "big",
-        "text": "解读",
-        "url": "#id-%E8%A7%A3%E8%AF%BB"
-      }
-    ],
     "len": 2102,
     "tags": [
       "前端"
@@ -293,7 +115,6 @@
   },
   {
     "title": "U2FsdGVkX1+8g111ox/q+Zv3SvDaL4OC65LoYANo7x2jd3JvMIFE5PqmSxrxzhBD",
-    "menu": [],
     "len": 1417,
     "tags": [],
     "id": 8394,
@@ -303,53 +124,6 @@
   },
   {
     "title": "nuxt3使用笔记",
-    "menu": [
-      {
-        "size": "big",
-        "text": ":)",
-        "url": "#id-%3A)"
-      },
-      {
-        "size": "big",
-        "text": "一些想法",
-        "url": "#id-%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95"
-      },
-      {
-        "size": "big",
-        "text": "学习笔记",
-        "url": "#id-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0"
-      },
-      {
-        "size": "small",
-        "text": "typescript",
-        "url": "#id-typescript"
-      },
-      {
-        "size": "small",
-        "text": "Composition API",
-        "url": "#id-Composition%20API"
-      },
-      {
-        "size": "small",
-        "text": "use in anywhere!",
-        "url": "#id-use%20in%20anywhere!"
-      },
-      {
-        "size": "small",
-        "text": "打包优化",
-        "url": "#id-%E6%89%93%E5%8C%85%E4%BC%98%E5%8C%96"
-      },
-      {
-        "size": "small",
-        "text": "本地后端服务",
-        "url": "#id-%E6%9C%AC%E5%9C%B0%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1"
-      },
-      {
-        "size": "big",
-        "text": "简论",
-        "url": "#id-%E7%AE%80%E8%AE%BA"
-      }
-    ],
     "len": 7606,
     "tags": [
       "前端"
@@ -361,23 +135,6 @@
   },
   {
     "title": "jenkins+github配置CI/CD",
-    "menu": [
-      {
-        "size": "big",
-        "text": "前置条件",
-        "url": "#id-%E5%89%8D%E7%BD%AE%E6%9D%A1%E4%BB%B6"
-      },
-      {
-        "size": "big",
-        "text": "过程",
-        "url": "#id-%E8%BF%87%E7%A8%8B"
-      },
-      {
-        "size": "big",
-        "text": "完工",
-        "url": "#id-%E5%AE%8C%E5%B7%A5"
-      }
-    ],
     "len": 2698,
     "tags": [
       "运维"
@@ -389,23 +146,6 @@
   },
   {
     "title": "树莓派桌面小屏",
-    "menu": [
-      {
-        "size": "big",
-        "text": "效果展示",
-        "url": "#id-%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA"
-      },
-      {
-        "size": "big",
-        "text": "制作过程",
-        "url": "#id-%E5%88%B6%E4%BD%9C%E8%BF%87%E7%A8%8B"
-      },
-      {
-        "size": "big",
-        "text": "其他",
-        "url": "#id-%E5%85%B6%E4%BB%96"
-      }
-    ],
     "len": 1677,
     "tags": [
       "树莓派",
@@ -424,18 +164,6 @@
     "modifyTime": 1652032450167,
     "len": 388,
     "encrypt": true,
-    "menu": [
-      {
-        "size": "big",
-        "text": "U2FsdGVkX19HL6SA7pXfuvtu3Rf6PWDqtYwVUj+LIzA=",
-        "url": "U2FsdGVkX185S1j4Aa9ukHjO983MGxiqQDLU/uC2TnoOpvUV+zVlGjD/JydG+bO4"
-      },
-      {
-        "size": "small",
-        "text": "U2FsdGVkX19Ai7AXq7wPgUGeLtD0CtKF2OXCxiediY0=",
-        "url": "U2FsdGVkX1+uN0eMADRIE4fipuXdC/phdBUpIgRKt1CBNFIn2xe9QIVCXG+Lnl05"
-      }
-    ],
     "tags": []
   },
   {
@@ -445,23 +173,6 @@
     "modifyTime": 1640786463701,
     "len": 2387,
     "encrypt": false,
-    "menu": [
-      {
-        "size": "big",
-        "text": "做过尝试",
-        "url": "#id-%E5%81%9A%E8%BF%87%E5%B0%9D%E8%AF%95"
-      },
-      {
-        "size": "big",
-        "text": "改变思路",
-        "url": "#id-%E6%94%B9%E5%8F%98%E6%80%9D%E8%B7%AF"
-      },
-      {
-        "size": "big",
-        "text": "真正的问题",
-        "url": "#id-%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%97%AE%E9%A2%98"
-      }
-    ],
     "tags": [
       "vue"
     ]
@@ -473,23 +184,6 @@
     "modifyTime": 1640707071736,
     "len": 1262,
     "encrypt": false,
-    "menu": [
-      {
-        "size": "big",
-        "text": "起因",
-        "url": "#id-%E8%B5%B7%E5%9B%A0"
-      },
-      {
-        "size": "big",
-        "text": "踩坑",
-        "url": "#id-%E8%B8%A9%E5%9D%91"
-      },
-      {
-        "size": "big",
-        "text": "小结",
-        "url": "#id-%E5%B0%8F%E7%BB%93"
-      }
-    ],
     "tags": [
       "linux"
     ]
@@ -501,68 +195,10 @@
     "modifyTime": 1639760062162,
     "len": 274,
     "encrypt": true,
-    "menu": [],
     "tags": []
   },
   {
     "title": "再重写blog，以及新手建站教程",
-    "menu": [
-      {
-        "size": "big",
-        "text": "起因",
-        "url": "#id-%E8%B5%B7%E5%9B%A0"
-      },
-      {
-        "size": "big",
-        "text": "教程",
-        "url": "#id-%E6%95%99%E7%A8%8B"
-      },
-      {
-        "size": "small",
-        "text": "账号以及环境准备",
-        "url": "#id-%E8%B4%A6%E5%8F%B7%E4%BB%A5%E5%8F%8A%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"
-      },
-      {
-        "size": "big",
-        "text": "开始",
-        "url": "#id-%E5%BC%80%E5%A7%8B"
-      },
-      {
-        "size": "small",
-        "text": "(1) Fork 项目",
-        "url": "#id-(1)Fork%E9%A1%B9%E7%9B%AE"
-      },
-      {
-        "size": "small",
-        "text": "(2) 修改 config.js 配置文件",
-        "url": "#id-(2)%E4%BF%AE%E6%94%B9config.js%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"
-      },
-      {
-        "size": "small",
-        "text": "(3) 导入到 vercel",
-        "url": "#id-(3)%E5%AF%BC%E5%85%A5%E5%88%B0vercel"
-      },
-      {
-        "size": "small",
-        "text": "(4) 修改编译参数",
-        "url": "#id-(4)%E4%BF%AE%E6%94%B9%E7%BC%96%E8%AF%91%E5%8F%82%E6%95%B0"
-      },
-      {
-        "size": "small",
-        "text": "(5) 新建 token",
-        "url": "#id-(5)%E6%96%B0%E5%BB%BAtoken"
-      },
-      {
-        "size": "small",
-        "text": "(6) 完工",
-        "url": "#id-(6)%E5%AE%8C%E5%B7%A5"
-      },
-      {
-        "size": "big",
-        "text": "小结",
-        "url": "#id-%E5%B0%8F%E7%BB%93"
-      }
-    ],
     "len": 3735,
     "tags": [
       "杂谈",
@@ -575,23 +211,6 @@
   },
   {
     "title": "vite+vue3下如何使用动态导入的svg-sprite",
-    "menu": [
-      {
-        "size": "big",
-        "text": "思路",
-        "url": "#id-%E6%80%9D%E8%B7%AF"
-      },
-      {
-        "size": "big",
-        "text": "代码",
-        "url": "#id-%E4%BB%A3%E7%A0%81"
-      },
-      {
-        "size": "big",
-        "text": "小结",
-        "url": "#id-%E5%B0%8F%E7%BB%93"
-      }
-    ],
     "len": 3280,
     "tags": [
       "vue"
@@ -608,30 +227,12 @@
     "modifyTime": 1625270385860,
     "len": 108,
     "encrypt": false,
-    "menu": [],
     "tags": [
       "杂谈"
     ]
   },
   {
     "title": "如何简单地在vue3中实现i18n",
-    "menu": [
-      {
-        "size": "big",
-        "text": "闲扯",
-        "url": "#id-%E9%97%B2%E6%89%AF"
-      },
-      {
-        "size": "big",
-        "text": "简介",
-        "url": "#id-%E7%AE%80%E4%BB%8B"
-      },
-      {
-        "size": "big",
-        "text": "vue3 实现",
-        "url": "#id-vue3%E5%AE%9E%E7%8E%B0"
-      }
-    ],
     "len": 2448,
     "tags": [
       "vue"
@@ -643,23 +244,6 @@
   },
   {
     "title": "使用树莓派制作手机遥控小车",
-    "menu": [
-      {
-        "size": "big",
-        "text": "准备",
-        "url": "#id-%E5%87%86%E5%A4%87"
-      },
-      {
-        "size": "big",
-        "text": "开始制作",
-        "url": "#id-%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C"
-      },
-      {
-        "size": "big",
-        "text": "简单说说",
-        "url": "#id-%E7%AE%80%E5%8D%95%E8%AF%B4%E8%AF%B4"
-      }
-    ],
     "len": 2240,
     "tags": [
       "树莓派"
@@ -671,23 +255,6 @@
   },
   {
     "title": "使用Nuxtjs+cloudflare page部署高可用的半静态博客",
-    "menu": [
-      {
-        "size": "big",
-        "text": "想法",
-        "url": "#id-%E6%83%B3%E6%B3%95"
-      },
-      {
-        "size": "big",
-        "text": "操作",
-        "url": "#id-%E6%93%8D%E4%BD%9C"
-      },
-      {
-        "size": "big",
-        "text": "后话",
-        "url": "#id-%E5%90%8E%E8%AF%9D"
-      }
-    ],
     "len": 1118,
     "tags": [
       "前端"
@@ -699,28 +266,6 @@
   },
   {
     "title": "树莓派初次使用小记",
-    "menu": [
-      {
-        "size": "small",
-        "text": "初次使用",
-        "url": "#id-%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8"
-      },
-      {
-        "size": "big",
-        "text": "准备工具",
-        "url": "#id-%E5%87%86%E5%A4%87%E5%B7%A5%E5%85%B7"
-      },
-      {
-        "size": "big",
-        "text": "开始操作",
-        "url": "#id-%E5%BC%80%E5%A7%8B%E6%93%8D%E4%BD%9C"
-      },
-      {
-        "size": "big",
-        "text": "基础操作",
-        "url": "#id-%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C"
-      }
-    ],
     "len": 2484,
     "tags": [
       "树莓派"
@@ -732,23 +277,6 @@
   },
   {
     "title": "批量重命名工具",
-    "menu": [
-      {
-        "size": "big",
-        "text": "闲话",
-        "url": "#id-%E9%97%B2%E8%AF%9D"
-      },
-      {
-        "size": "big",
-        "text": "写代码",
-        "url": "#id-%E5%86%99%E4%BB%A3%E7%A0%81"
-      },
-      {
-        "size": "big",
-        "text": "使用",
-        "url": "#id-%E4%BD%BF%E7%94%A8"
-      }
-    ],
     "len": 1094,
     "tags": [
       "python"
@@ -760,28 +288,6 @@
   },
   {
     "title": "关于此站建设",
-    "menu": [
-      {
-        "size": "big",
-        "text": "简述",
-        "url": "#id-%E7%AE%80%E8%BF%B0"
-      },
-      {
-        "size": "big",
-        "text": "技术栈",
-        "url": "#id-%E6%8A%80%E6%9C%AF%E6%A0%88"
-      },
-      {
-        "size": "big",
-        "text": "基本使用",
-        "url": "#id-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"
-      },
-      {
-        "size": "big",
-        "text": "任务列表",
-        "url": "#id-%E4%BB%BB%E5%8A%A1%E5%88%97%E8%A1%A8"
-      }
-    ],
     "len": 1298,
     "tags": [
       "杂谈"

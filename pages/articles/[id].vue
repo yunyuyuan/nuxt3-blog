@@ -5,6 +5,8 @@ import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerend
 
 const { item, tabUrl, modifyTime, htmlContent, markdownRef, mdPending, htmlInserted } = useContentPage<ArticleItem>();
 
+const currentMenu = useCurrentMenu();
+
 useHead({
   title: computed(() => item.title + config.SEO_title)
 });
@@ -29,12 +31,12 @@ const listenAnchor = () => {
     for (const link of links) {
       if (link.getBoundingClientRect().y <= 52) {
         const hash = link.getAttribute("href");
-        activeAnchor.value = item.menu.find(anchor => anchor.url === hash)?.url;
+        activeAnchor.value = currentMenu.value.find(anchor => anchor.url === hash?.slice(1))?.url;
         return;
       }
     }
     // 未找到
-    activeAnchor.value = item.menu[0].url;
+    activeAnchor.value = currentMenu.value[0].url;
   } catch {}
 };
 
@@ -47,9 +49,7 @@ if (!isPrerender) {
           watchUntil(htmlInserted, () => {
             window.scrollTo({
               top: document
-                .getElementById(
-                  encodeURIComponent(decodeURIComponent(hash.slice(1)))
-                )
+                .getElementById(hash.slice(1))
                 ?.getBoundingClientRect().y
             });
           }, { immediate: true }, "boolean", "cancelAfterUntil");
@@ -104,14 +104,14 @@ initViewer(root);
           </span>
         </div>
       </div>
-      <div v-if="item.menu.length" class="menu flexc" :class="{compact: hideMenu}">
+      <div v-if="currentMenu.length" class="menu flexc" :class="{compact: hideMenu}">
         <span class="toggle flex" :title="$t((hideMenu ? 'unfold':'fold')+'-menu')" @click="hideMenu = !hideMenu">
           <svg-icon name="up" />
         </span>
         <ol>
-          <li v-for="(anchor, idx) in item.menu" :key="idx">
+          <li v-for="(anchor, idx) in currentMenu" :key="idx">
             <a
-              :href="anchor.url"
+              :href="'#'+anchor.url"
               :class="[anchor.size, { active: activeAnchor === anchor.url }]"
               :title="anchor.text"
             >

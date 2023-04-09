@@ -46,21 +46,12 @@ const preProcessItem = (item: ArticleItem, list: Ref<ArticleItem[]>) => {
   });
 };
 
-// 目前只有article类型需要根据内容计算item的`len`和`menu`字段
-const processContent = (md: string, html: HTMLElement, item: ArticleItem) => {
+// 目前只有article类型需要根据内容计算item的`len`字段
+const processContent = (md: string, _html: HTMLElement, item: ArticleItem) => {
   item.len = md.length;
-  item.menu = [];
   if (item.encrypt) {
     item.tags.splice(0, item.tags.length);
   }
-  html.querySelectorAll<HTMLHeadElement>("h1, h2, h3, h4, h5, h6").forEach((el) => {
-    const size = ["H1", "H2", "H3"].includes(el.tagName) ? "big" : "small";
-    item.menu.push({
-      size,
-      text: el.innerText,
-      url: el.querySelector("a")!.getAttribute("href")!
-    });
-  });
 };
 </script>
 
