@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { StyleValue, CSSProperties } from "vue";
+import type { StyleValue, PropType, CSSProperties } from "vue";
 import { ViewerAttr, addScrollListener, rmScrollListener } from "~/utils/common";
 import { isPrerender, watchUntil } from "~/utils/nuxt";
 
@@ -13,6 +13,10 @@ const props = defineProps({
   compStyle: { type: String, default: "" },
   /** 内部图片样式 */
   imgStyle: { type: String, default: "" },
+  /** 加载错误时的大小 */
+  errSize: { type: Object as PropType<{height: string, width: string}|null>, default: null },
+  /** 显示“点击重试”按钮 */
+  retry: { type: Boolean, default: true },
   title: { type: String, default: "" }
 });
 
@@ -37,6 +41,10 @@ const containerStyle = computed<StyleValue>(() => {
   if (props.compStyle) {
     return props.compStyle;
   }
+  // err
+  if (imgState.value === "error") {
+    return props.errSize || "";
+  }
   // 加载完成，直接删除containerStyle
   if (imgState.value === "loaded") {
     return "";
@@ -53,7 +61,7 @@ const containerStyle = computed<StyleValue>(() => {
 const root = ref<HTMLElement>();
 
 function containerClick () {
-  if (imgState.value === "error") {
+  if (props.retry && imgState.value === "error") {
     imgState.value = "loading";
   }
 }
@@ -146,7 +154,7 @@ const attr = ViewerAttr;
     <img v-if="isPrerender && !isEncryptedImg" :src="props.src" :alt="alt">
     <span v-if="isImgErr || isImgLoading" class="svg flexc s100">
       <svg-icon :name="isImgErr ? 'img-error' : 'loading'" />
-      <span v-show="isImgErr" class="tips">{{ useNuxtApp().$i18n.t('click-to-retry') }}</span>
+      <span v-show="retry && isImgErr" class="tips">{{ useNuxtApp().$i18n.t('click-to-retry') }}</span>
     </span>
     <img
       v-if="isShowImg"

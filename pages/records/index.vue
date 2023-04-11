@@ -41,7 +41,11 @@ const years = computed(() => {
               :class="{ multiple: item.images.length > 1 }"
               :to="'/records/' + item.id"
             >
-              <the-lazy-img alt="cover" :src="item.images[0]?.src ?? 'no-poster'" />
+              <the-lazy-img
+                alt="cover"
+                :src="item.images[0]?.src ?? 'no-poster'"
+                :retry="false"
+              />
             </NuxtLink>
           </div>
         </div>

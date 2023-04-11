@@ -15,12 +15,14 @@ const searchFn = (item: RecordItem, s:string) => !item.images.length || item.ima
       <template #images="{ data: images, dataUrl }">
         <nuxt-link :to="localePath(dataUrl)">
           <the-lazy-img
-            v-for="img,idx in (images.length ? images : [{alt: '', src: ''}])"
+            v-for="img,idx in (images.length ? images : [{alt: '', src: 'no-poster'}])"
             :key="idx"
             :container-size="[50, 50]"
             :alt="img.alt"
             :src="img.src"
             :title="img.alt"
+            :retry="false"
+            :err-size="{width: '100px', height: '100px'}"
           />
         </nuxt-link>
       </template>
