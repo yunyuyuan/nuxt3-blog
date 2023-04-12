@@ -79,7 +79,7 @@
   "date": "date",
   "encrypt": "encrypt",
   "select": "select",
-  "noting-here": "nothing here ~",
+  "nothing-here": "nothing here ~",
   "has-encrypted": "encrypted",
   "selected-items": "<b style='margin: 0 8px; font-size: 1rem;'>{0}</b> items selected",
   "add-sticker": "add sticker",

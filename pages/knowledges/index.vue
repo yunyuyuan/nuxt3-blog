@@ -21,6 +21,8 @@ const filteredList = computed(() => {
   }
   return knowledgeList;
 });
+const filteredListEmpty = computed(() => !filteredList.value.some(i => i._show));
+
 function getFilteredListLength (tab?: string) {
   return knowledgeList.filter(item => item._show && (!tab || item.type === tab)).length;
 }
@@ -45,16 +47,21 @@ onMounted(() => {
     </nav>
     <div class="body flexc">
       <common-loading v-show="pending" :show-in-first="false" />
-      <nuxt-link
-        v-for="item in filteredList"
-        v-show="item._show"
-        :key="item.id"
-        :to="localePath('/knowledges/' + item.id)"
-      >
-        <svg-icon :name="item.type" />
-        <span>《<b>{{ item.title }}</b>》</span>
-        <time :title="formatTime(item.time)">{{ literalTime(item.time) }}</time>
-      </nuxt-link>
+      <div v-if="!filteredListEmpty">
+        <nuxt-link
+          v-for="item in filteredList"
+          v-show="item._show"
+          :key="item.id"
+          :to="localePath('/knowledges/' + item.id)"
+        >
+          <svg-icon :name="item.type" />
+          <span>《<b>{{ item.title }}</b>》</span>
+          <time :title="formatTime(item.time)">{{ literalTime(item.time) }}</time>
+        </nuxt-link>
+      </div>
+      <div v-else-if="!pending" class="empty">
+        {{ $T('nothing-here') }}
+      </div>
     </div>
   </div>
 </template>
@@ -123,6 +130,10 @@ $space: 16px;
     .common-loading {
       margin-top: calc(50vh - $header-height);
       transform: translateY(-100%);
+    }
+
+    > div {
+      width: 100%;
     }
 
     a {
@@ -221,6 +232,18 @@ $space: 16px;
           color: #000;
         }
       }
+    }
+
+    .empty {
+      color: rgb(53 53 53);
+      text-align: center;
+      font-size: 1rem;
+
+      @include dark-mode {
+        color: rgb(212 212 212);
+      }
+
+      margin-top: 20px;
     }
   }
 }

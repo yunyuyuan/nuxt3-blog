@@ -59,7 +59,7 @@ const toggleTags = (tag: string) => {
     </div>
     <div class="body flexc">
       <common-loading v-show="pending" :show-in-first="false" />
-      <ul class="w100">
+      <ul v-if="filteredList.length" class="w100">
         <li v-for="item in filteredList" v-show="item._show" :key="item.id">
           <nuxt-link :to="localePath('/articles/' + String(item.id))">
             <b>{{ item.title }}</b>
@@ -77,6 +77,9 @@ const toggleTags = (tag: string) => {
           </nuxt-link>
         </li>
       </ul>
+      <div v-else v-show="!pending" class="empty">
+        {{ $T('nothing-here') }}
+      </div>
     </div>
   </div>
 </template>
@@ -237,6 +240,17 @@ $space: 13px;
           }
         }
       }
+    }
+
+    .empty {
+      color: rgb(53 53 53);
+      font-size: 1rem;
+
+      @include dark-mode {
+        color: rgb(212 212 212);
+      }
+
+      margin-top: 20px;
     }
   }
 }

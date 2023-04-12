@@ -29,7 +29,7 @@ const years = computed(() => {
 <template>
   <div class="record-list">
     <common-loading v-show="pending" :show-in-first="false" />
-    <ul>
+    <ul v-if="years.length">
       <li v-for="year in years" v-show="year.items.some(item => item._show)" :key="year.year">
         <h2>{{ year.year }}</h2>
         <div class="contain flex">
@@ -51,6 +51,9 @@ const years = computed(() => {
         </div>
       </li>
     </ul>
+    <div v-else v-show="!pending" class="empty">
+      {{ $T('nothing-here') }}
+    </div>
   </div>
 </template>
 
@@ -65,6 +68,18 @@ $space: 16px;
   .common-loading {
     margin-top: calc(50vh - $header-height);
     transform: translateY(-100%);
+  }
+
+  .empty {
+    color: rgb(53 53 53);
+    font-size: 1rem;
+    text-align: center;
+
+    @include dark-mode {
+      color: rgb(212 212 212);
+    }
+
+    margin-top: 50px;
   }
 
   ul {

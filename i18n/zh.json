@@ -79,7 +79,7 @@
   "date": "日期",
   "encrypt": "加密",
   "select": "选择",
-  "noting-here": "空空如也～",
+  "nothing-here": "空空如也～",
   "has-encrypted": "已加密",
   "selected-items": "已选择<b style='margin: 0 8px; font-size: 1rem;'>{0}</b>项",
   "add-sticker": "添加表情",
