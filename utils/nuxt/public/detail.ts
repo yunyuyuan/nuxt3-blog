@@ -48,7 +48,7 @@ export function useContentPage<T extends CommonItem> () {
   const htmlContent = ref<string>("");
   const { pending, data: content } = fetchMd(targetTab.url, id);
 
-  watch([listPending, pending, itemDecrypted], ([listPend, pend, itemDecrypted]) => {
+  watch([listPending, pending, itemDecrypted, githubToken], ([listPend, pend, itemDecrypted, logined]) => {
     if ((!listPend && !pend) || isPrerender) {
       mdContent.value = content.value as string;
       if (!itemDecrypted) {
@@ -69,7 +69,7 @@ export function useContentPage<T extends CommonItem> () {
         let newMarkdownContent = mdContent.value;
         for (const block of item.encryptBlocks) {
           const { start, end } = block;
-          newMarkdownContent = githubToken.value
+          newMarkdownContent = logined
             ? newMarkdownContent.slice(0, start) + translate("encrypted-content") + "![sticker](aru/59)" + newMarkdownContent.slice(end)
             : newMarkdownContent.slice(0, start - 10) + newMarkdownContent.slice(end + 11);
         }
