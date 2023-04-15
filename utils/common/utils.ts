@@ -51,3 +51,7 @@ export function escapeHtml (s: string) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&apos;");
 }
+
+export function escapeNewLine (s: string) {
+  return s.replace(/\r\n/g, "\n");
+}

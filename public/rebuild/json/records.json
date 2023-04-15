@@ -8,8 +8,14 @@
     ],
     "id": 4324,
     "time": 1681536465981,
-    "modifyTime": 1681536465981,
-    "encrypt": false
+    "modifyTime": 1681538372637,
+    "encrypt": false,
+    "encryptBlocks": [
+      {
+        "start": 32,
+        "end": 76
+      }
+    ]
   },
   {
     "images": [
