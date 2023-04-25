@@ -42,7 +42,7 @@ const containerStyle = computed<StyleValue>(() => {
     return props.compStyle;
   }
   // err
-  if (imgState.value === "error") {
+  if (imgState.value === "error" && props.errSize) {
     return props.errSize || "";
   }
   // 加载完成，直接删除containerStyle
