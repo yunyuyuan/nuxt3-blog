@@ -24,6 +24,10 @@ English Readme | [中文说明](/README.zh.md)
       <img height="300px" src="https://s2.loli.net/2023/03/09/9UQurkTGaOSY3j4.png"/>
 
 # How to use
+<center>
+<img width="600px" src="https://s2.loli.net/2023/05/12/742XNyquQ3CTRWO.png"/>
+</center>
+
 ## Two ways to deploy
 ### The first way: One-click deployment (note：uncheck `Create private Git Repository`)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyunyuyuan%2Fnuxt3-blog&repository-name=nuxt3-blog)
