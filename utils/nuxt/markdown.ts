@@ -347,6 +347,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
       lang.innerText = (hljs.getLanguage(language) || { name: language }).name!;
       hljs.highlightElement(el);
     });
+    // lazy-img
     mdEl
       .querySelectorAll<HTMLImageElement>(".image-container > img")
       .forEach((el) => {

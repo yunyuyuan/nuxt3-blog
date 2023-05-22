@@ -23,7 +23,7 @@ const props = defineProps({
 type ImgState = "outerView" | "loading" | "loaded" | "error";
 
 /** 组件状态 */
-const imgState = ref<ImgState>(props.noLazy ? "loaded" : "outerView");
+const imgState = ref<ImgState>("outerView");
 /** container元素的高度 */
 const height = ref(0);
 /** container元素的宽度 */
@@ -76,7 +76,7 @@ function refreshView () {
   if (isBlankSrc.value) {
     return;
   }
-  if (isEncryptedImg.value || props.noLazy) {
+  if (isEncryptedImg.value) {
     imgState.value = "loaded";
     return;
   }
@@ -94,11 +94,12 @@ function refreshView () {
     const winWidth = window.innerWidth;
     const contractY = root.value!.getBoundingClientRect().y - winHeight;
     const contractX = root.value!.getBoundingClientRect().x - winWidth;
-    if (
+    if ((
       contractY < 0 &&
       contractY > -winHeight - height.value &&
       contractX < 0 &&
-      contractX > -winWidth - width.value
+      contractX > -winWidth - width.value) ||
+      props.noLazy
     ) {
       // outerView -> loading
       imgState.value = "loading";
