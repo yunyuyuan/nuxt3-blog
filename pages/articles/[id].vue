@@ -11,7 +11,7 @@ useHead({
   title: computed(() => item.title + config.SEO_title)
 });
 useSeoMeta({
-  ogTitle: item.title
+  ogTitle: computed(() => item.title)
 });
 
 const activeAnchor = ref<string>();
@@ -74,7 +74,7 @@ initViewer(root);
   <div ref="root" class="article-detail">
     <div class="captain w100" :class="{'has-comment': hasComment}">
       <div class="article-container">
-        <h2>{{ item.title }}</h2>
+        <h1>{{ item.title }}</h1>
         <common-loading v-show="mdPending" :show-in-first="false" />
         <div ref="viewerContainer" class="html-container">
           <article
@@ -141,7 +141,7 @@ initViewer(root);
       max-width: 900px;
       min-width: 900px;
 
-      > h2 {
+      > h1 {
         margin: 30px 0 40px;
         text-align: center;
         color: #1d1d1d;
