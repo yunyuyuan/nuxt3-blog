@@ -1,5 +1,22 @@
 [
   {
+    "title": "Friends",
+    "summary": "Follows the personal and professional lives of six twenty to thirty year-old friends living in the Manhattan borough of New York City.",
+    "link": "https://www.imdb.com/title/tt0108778/",
+    "cover": "https://s2.loli.net/2023/05/28/UeaRp1KkcA7DsHL.jpg",
+    "type": "film",
+    "id": 9914,
+    "time": 1685284716754,
+    "modifyTime": 1685284716754,
+    "encrypt": false,
+    "encryptBlocks": [
+      {
+        "start": 10,
+        "end": 778
+      }
+    ]
+  },
+  {
     "title": "献给阿尔吉侬的花束",
     "summary": "声称能改造智能的科学实验在白老鼠阿尔吉侬身上获得了突破性的进展，下一步急需进行人体实验。个性和善、学习态度积极的心智障碍者查理·高登成为最佳人选。手术成功后，查理的智商从68跃升为185，然而那些从未有过的情绪和记忆也逐渐浮现。",
     "link": "https://book.douban.com/subject/26362836/",
