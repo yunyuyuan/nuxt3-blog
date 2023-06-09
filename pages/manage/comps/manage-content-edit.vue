@@ -3,7 +3,7 @@ import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
 import type { Ref } from "vue";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 // eslint-disable-next-line no-unused-vars
-import { CommonItem, HeaderTabs, escapeNewLine, getNowStamp, processEncryptDecrypt } from "~/utils/common";
+import { CommonItem, HeaderTabs, escapeNewLine, getEncryptedBlocks, getNowStamp, processEncryptDecrypt } from "~/utils/common";
 import { notify, deepClone, translate, getLocalStorage, rmLocalStorage, compareMd, loadOrDumpDraft, randomId, useManageContent } from "~/utils/nuxt";
 
 const props = defineProps<{
@@ -118,31 +118,16 @@ const getUploadInfo = async () => {
     // 未解密，不处理
   } else {
     // encryptBlocks
-    const reg = /(^|\n)\[encrypt]\n([\s\S]+?)\n\[\/encrypt]/gd;
-    let matcher;
-    const encryptBlocks = [];
-    while (true) {
-      matcher = reg.exec(mdContent);
-      if (matcher) {
-        if (!encryptor.usePasswd.value) {
-          return notify({
-            type: "error",
-            title: translate("need-passwd")
-          });
-        }
-        const [start, end] = matcher.indices[2];
-        const encryptedText = await encryptor.encrypt(matcher[2]);
-        mdContent = mdContent.slice(0, start) + encryptedText + mdContent.slice(end);
-        encryptBlocks.push({
-          start,
-          end: end + encryptedText.length - matcher[2].length
-        });
-      } else {
-        break;
-      }
+    if (!encryptor.usePasswd.value) {
+      return notify({
+        type: "error",
+        title: translate("need-passwd")
+      });
     }
-    if (encryptBlocks.length) {
-      newItem.encryptBlocks = encryptBlocks.reverse();
+    const { md, blocks } = await getEncryptedBlocks(mdContent, encryptor.encrypt);
+    mdContent = md;
+    if (blocks.length) {
+      newItem.encryptBlocks = blocks.reverse();
     } else {
       delete item.encryptBlocks;
     }

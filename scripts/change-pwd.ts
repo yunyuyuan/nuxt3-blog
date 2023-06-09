@@ -1,66 +1,42 @@
-import { CommonItem, processEncryptDecrypt, HeaderTabUrl } from "../utils/common";
-import { rebuildPath } from "./constants";
+import { processBlogItem, encrypt, encryptAndWriteMd } from ".";
 
 const fs = require("fs");
-const path = require("path");
-const CryptoJS = require("crypto-js");
 const prompt = require("prompt");
 
-let oldPwd_: string, newPwd_: string;
-
-// eslint-disable-next-line require-await
-const encrypt = async (s: string): Promise<string> => {
-  return CryptoJS.AES.encrypt(s, newPwd_).toString();
-};
-
-// eslint-disable-next-line require-await
-const decrypt = async (s: string): Promise<string> => {
-  const result = CryptoJS.AES.decrypt(s, oldPwd_).toString(CryptoJS.enc.Utf8);
-  if (!result) {
-    console.error("Password incorrect");
-    process.exit();
-  }
-  return result;
-};
-
-const processJson = async (file: HeaderTabUrl) => {
-  const jsonPath = path.join(rebuildPath, "json", file + ".json");
-  const itemList: CommonItem[] = JSON.parse(fs.readFileSync(jsonPath).toString());
-  let count = 0;
-  for (const item of itemList) {
-    if (item.encrypt) {
-      count += 1;
-      await processEncryptDecrypt(item, decrypt, file);
-      await processEncryptDecrypt(item, encrypt, file);
-      fs.writeFileSync(jsonPath, JSON.stringify(itemList, null, 2));
-      // markdown文件
-      const mdPath = path.join(rebuildPath, file, String(item.id) + ".md");
-      fs.writeFileSync(mdPath, await encrypt(await decrypt(fs.readFileSync(mdPath).toString())));
-    }
-  }
-  console.log(file.substring(1) + `(${count} in total) processing completed`);
-};
-
-export default function () {
+export default async function () {
   prompt.start();
-  prompt.get({
-    properties: {
-      oldPwd: {
-        description: "Old password",
-        required: true
-      },
-      newPwd: {
-        description: "New password",
-        required: true
+  await new Promise<void>((resolve) => {
+    prompt.get({
+      properties: {
+        oldPwd: {
+          description: "Old password",
+          required: true
+        },
+        newPwd: {
+          description: "New password",
+          required: true
+        }
       }
-    }
-  }, function (err, result) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    oldPwd_ = result.oldPwd;
-    newPwd_ = result.newPwd;
-    ["/articles", "/records", "/knowledges"].map(processJson);
+    }, async function (err, result) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      const _encrypt = (s: string) => encrypt(s, result.newPwd);
+
+      await processBlogItem(result.oldPwd, async ({ decryptedItem, decryptedMd, type, mdPath }) => {
+        await encryptAndWriteMd({
+          item: decryptedItem,
+          md: decryptedMd,
+          type,
+          path: mdPath,
+          encrypt: _encrypt
+        });
+      }, ({ decryptedItemList, jsonPath }) => {
+        // 写入json，json本身是不加密的
+        fs.writeFileSync(jsonPath, JSON.stringify(decryptedItemList, null, 2));
+      });
+      resolve();
+    });
   });
 }

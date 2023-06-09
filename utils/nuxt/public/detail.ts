@@ -70,7 +70,9 @@ export function useContentPage<T extends CommonItem> () {
         for (const block of item.encryptBlocks) {
           const { start, end } = block;
           newMarkdownContent = logined
+            // 如果已登录：给block显示为sticker表情
             ? newMarkdownContent.slice(0, start) + translate("encrypted-content") + "![sticker](aru/59)" + newMarkdownContent.slice(end)
+            // 如果未登录：直接隐藏block
             : newMarkdownContent.slice(0, start - 10) + newMarkdownContent.slice(end + 11);
         }
         if (isPrerender) {
