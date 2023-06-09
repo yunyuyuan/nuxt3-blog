@@ -2,6 +2,7 @@
 nuxt.d.ts
 .output
 img.json
+imgs/
 
 # Logs
 logs

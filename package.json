@@ -6,6 +6,7 @@
     "generate": "gulp generate",
     "chpwd": "gulp change-passwd",
     "genimg": "gulp generate-image-map",
+    "downimg": "gulp download-image",
     "subimg": "gulp substitute-image",
     "lint": "eslint --fix --ext .ts,vue --ignore-path .gitignore .",
     "preview": "vite preview",

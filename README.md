@@ -58,7 +58,7 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 - [x] serverless function to upload images
 - [x] mongodb integration(views analyze)
 - [ ] algolia searching
-- [ ] images migration
+- [x] images migration
 - [x] changing password(only available while using `npm run dev`)
 
 

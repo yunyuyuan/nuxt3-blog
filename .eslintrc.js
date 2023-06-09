@@ -24,6 +24,7 @@ module.exports = {
     quotes: ["error", "double"],
     semi: ["error", "always"],
     indent: ["error", 2, { SwitchCase: 1 }],
+    "prefer-promise-reject-errors": "off",
     "no-multi-spaces": ["error"],
     "no-unused-vars": [
       "error",
