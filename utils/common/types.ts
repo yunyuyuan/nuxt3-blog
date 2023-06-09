@@ -1,12 +1,14 @@
+export type EncryptBlock = {
+  start: number;
+  end: number;
+}
+
 export type NeedsItem = {
   id: number;
   time: number;
   modifyTime: number;
   encrypt: boolean;
-  encryptBlocks?: {
-    start: number;
-    end: number;
-  }[] | null;
+  encryptBlocks?: EncryptBlock[] | null;
   visitors?: number;
   _show?: boolean;
 };
@@ -72,3 +74,5 @@ export const Order = [
   "cover",
   "summary"
 ];
+
+export type DecryptFunction = (_s: string) => Promise<string>;

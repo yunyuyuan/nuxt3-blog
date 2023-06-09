@@ -4,7 +4,9 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "gulp generate",
-    "chpwd": "gulp chpwd",
+    "chpwd": "gulp change-passwd",
+    "genimg": "gulp generate-image-map",
+    "subimg": "gulp substitute-image",
     "lint": "eslint --fix --ext .ts,vue --ignore-path .gitignore .",
     "preview": "vite preview",
     "prepare": "husky install"

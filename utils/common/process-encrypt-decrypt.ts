@@ -1,4 +1,4 @@
-import { CommonItem, ArticleItem, RecordItem, KnowledgeItem, HeaderTabUrl } from "./types";
+import { CommonItem, ArticleItem, RecordItem, KnowledgeItem, HeaderTabUrl, DecryptFunction, EncryptBlock } from "./types";
 
 /**
  * 三种类型的数据加解密
@@ -28,4 +28,34 @@ export async function processEncryptDecrypt (
       item.link = await fn(item.link);
       break;
   }
+}
+
+/**
+ * 先加密block，然后获取这些block的start和end位置
+ */
+export async function getEncryptedBlocks (md: string, encrypt: DecryptFunction): Promise<{
+  md: string,
+  blocks: EncryptBlock[]
+}> {
+  const reg = /(^|\n)\[encrypt]\n([\s\S]+?)\n\[\/encrypt]/gd;
+  let matcher;
+  const encryptBlocks: EncryptBlock[] = [];
+  while (true) {
+    matcher = reg.exec(md);
+    if (matcher && matcher.indices) {
+      const [start, end] = matcher.indices[2];
+      const encryptedText = await encrypt(matcher[2]);
+      md = md.slice(0, start) + encryptedText + md.slice(end);
+      encryptBlocks.push({
+        start,
+        end: end + encryptedText.length - matcher[2].length
+      });
+    } else {
+      break;
+    }
+  }
+  return {
+    md,
+    blocks: encryptBlocks
+  };
 }

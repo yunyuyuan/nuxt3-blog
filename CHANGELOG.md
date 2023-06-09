@@ -1,3 +1,8 @@
+## 2023.06.09
+* Fix `npm run chpwd` (change password) not working for block-level.
+* Add `npm run genimg` for generating img map.
+* Add `npm run subimg` for substituting img.
+
 ## 2023.03.23
 * Folder refactoring
 
