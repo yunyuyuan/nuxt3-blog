@@ -1,5 +1,5 @@
-import { ArticleItem, getNowDayjsString, escapeHtml } from "../utils/common";
-import config from "../config";
+import { ArticleItem, getNowDayjsString, escapeHtml } from "../../utils/common";
+import config from "../../config";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface INode {
@@ -31,7 +31,7 @@ class Node implements INode {
   }
 }
 
-export default function genRss (json: ArticleItem[]) {
+export function genRss (json: ArticleItem[]) {
   const origin = config.domain;
   const startStr = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\">";
   const endStr = "</rss>";

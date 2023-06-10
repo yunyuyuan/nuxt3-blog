@@ -1,31 +1,8 @@
-import cmd from "child_process";
+import fs from "fs";
 import colors from "colors";
-import { CommonItem, processEncryptDecrypt, HeaderTabUrl, getEncryptedBlocks } from "../utils/common";
-import { DecryptFunction } from "./../utils/common/types";
-import { rebuildPath } from "./constants";
-
-const fs = require("fs");
-const path = require("path");
-const CryptoJS = require("crypto-js");
-
-export async function runCmd (command: string) {
-  return await new Promise<void>((resolve, reject) => {
-    cmd.exec(command, {
-      maxBuffer: 1024 * 1024 * 5
-    }, (err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    }).stdout?.pipe(process.stdout);
-  });
-}
-
-export function nbLog (s: string, head = "generate") {
-  // eslint-disable-next-line no-console
-  console.log(`[${colors.blue.bold(head)}] ${colors.green(s)}`);
-}
+import CryptoJS from "crypto-js";
+import { CommonItem, DecryptFunction, processEncryptDecrypt, HeaderTabUrl, getEncryptedBlocks, escapeNewLine } from "../../utils/common";
+import { getRebuildPath } from ".";
 
 // eslint-disable-next-line require-await
 export async function encrypt (s: string, pwd: string): Promise<string> {
@@ -35,7 +12,7 @@ export async function encrypt (s: string, pwd: string): Promise<string> {
 export async function decrypt (s: string, pwd: string): Promise<string> {
   const result = CryptoJS.AES.decrypt(s, pwd).toString(CryptoJS.enc.Utf8);
   if (!result) {
-    console.error("Password incorrect");
+    console.error(colors.red("Password incorrect"));
     process.exit();
   }
   return result;
@@ -51,12 +28,12 @@ export function processBlogItem (
   const _decrypt = (s: string) => decrypt(s, pwd);
 
   const processJson = async (file: HeaderTabUrl) => {
-    const jsonPath = path.join(rebuildPath, "json", file + ".json");
+    const jsonPath = getRebuildPath("json", file + ".json");
     const itemList: CommonItem[] = JSON.parse(fs.readFileSync(jsonPath).toString());
     let count = 0;
     for (const item of itemList) {
-      const mdPath = path.join(rebuildPath, file, String(item.id) + ".md");
-      let decryptedMd = fs.readFileSync(mdPath).toString();
+      const mdPath = getRebuildPath(file, String(item.id) + ".md");
+      let decryptedMd = escapeNewLine(fs.readFileSync(mdPath).toString());
       if (item.encrypt) {
         // 解密item
         await processEncryptDecrypt(item, _decrypt, file);

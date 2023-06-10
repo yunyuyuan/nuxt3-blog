@@ -15,8 +15,8 @@ gulp.task("download-image", async (cb) => {
   cb();
 });
 
-gulp.task("substitute-image", (cb) => {
-  subImg();
+gulp.task("substitute-image", async (cb) => {
+  await subImg();
   cb();
 });
 

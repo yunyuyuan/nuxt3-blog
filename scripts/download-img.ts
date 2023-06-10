@@ -1,22 +1,20 @@
-const fs = require("fs");
-const path = require("path");
-const https = require("https");
-
-export type ImgMap = Record<string, {
-  newUrl: string,
-  appearIn: string[]
-}>
+import fs from "fs";
+import path from "path";
+import https from "https";
+import { ImgMap, getAbsolutePath } from "./utils";
 
 export default async function () {
-  await downloadImages(JSON.parse(fs.readFileSync("img.json").toString()));
+  await downloadImages(JSON.parse(fs.readFileSync(getAbsolutePath("img.json")).toString()));
 }
+
+const imgsPath = getAbsolutePath("imgs");
 
 function downloadImages (json: ImgMap) {
   const urls = Object.keys(json);
   const downloadPromises = urls.map(url => downloadImage(url));
 
-  if (!fs.existsSync("imgs")) {
-    fs.mkdirSync("imgs");
+  if (!fs.existsSync(imgsPath)) {
+    fs.mkdirSync(imgsPath);
   }
 
   // Wait for all download promises to resolve
@@ -25,7 +23,7 @@ function downloadImages (json: ImgMap) {
 
 function downloadImage (url: string) {
   return new Promise<[string, boolean]>((resolve) => {
-    const fileName = path.join("imgs", url.replace(/^.*?([^/]*)$/, "$1"));
+    const fileName = path.join(imgsPath, url.replace(/^.*?([^/]*)$/, "$1"));
     if (fs.existsSync(fileName)) {
       console.log(`${fileName} existed, ignore...`);
       resolve([url, true]);

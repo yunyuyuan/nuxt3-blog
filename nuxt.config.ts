@@ -1,26 +1,10 @@
 import fs from "fs";
 import { execSync } from "child_process";
-import type { Plugin } from "vite";
-import { dataToEsm } from "rollup-pluginutils";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
 import { i18nLocales } from "./utils/common";
 
 const isDev = process.env.NODE_ENV === "development";
-
-const rawLoaderPlugin: Plugin = {
-  name: "raw-file-loader",
-  transform (_: string, filepath: string) {
-    if (filepath.includes("node_modules")) {
-      return null;
-    }
-    if (filepath.endsWith(".svg")) {
-      return {
-        code: dataToEsm(fs.readFileSync(filepath).toString())
-      };
-    }
-  }
-};
 
 // themeColor
 fs.writeFileSync("./assets/style/_theme.scss", `$theme: ${config.themeColor};`);
@@ -129,7 +113,7 @@ export default defineNuxtConfig({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   vite: {
-    plugins: [rawLoaderPlugin, ...(isDev ? allPlugins : buildPlugins)],
+    plugins: isDev ? allPlugins : buildPlugins,
     css: {
       preprocessorOptions: {
         scss: {

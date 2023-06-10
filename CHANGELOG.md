@@ -1,3 +1,7 @@
+## 2023.06.10
+* Use package `prompts` instead of `prompt` for better experience.
+* `/scripts` refactor.
+
 ## 2023.06.09
 * Fix `npm run chpwd` (change password) not working for block-level.
 * Add `npm run genimg` for generating img map.
