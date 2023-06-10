@@ -27,16 +27,16 @@ export function processBlogItem (
 ) {
   const _decrypt = (s: string) => decrypt(s, pwd);
 
-  const processJson = async (file: HeaderTabUrl) => {
-    const jsonPath = getRebuildPath("json", file + ".json");
+  const processJson = async (type: HeaderTabUrl) => {
+    const jsonPath = getRebuildPath("json", type + ".json");
     const itemList: CommonItem[] = JSON.parse(fs.readFileSync(jsonPath).toString());
     let count = 0;
     for (const item of itemList) {
-      const mdPath = getRebuildPath(file, String(item.id) + ".md");
+      const mdPath = getRebuildPath(type, String(item.id) + ".md");
       let decryptedMd = escapeNewLine(fs.readFileSync(mdPath).toString());
       if (item.encrypt) {
         // 解密item
-        await processEncryptDecrypt(item, _decrypt, file);
+        await processEncryptDecrypt(item, _decrypt, type);
         // 解密markdown
         decryptedMd = await _decrypt(decryptedMd);
       } else if (item.encryptBlocks?.length) {
@@ -46,17 +46,11 @@ export function processBlogItem (
           decryptedMd = decryptedMd.slice(0, start) + await _decrypt(decryptedMd.slice(start, end)) + decryptedMd.slice(end);
         }
       }
-      const result = itemCb({ decryptedItem: item, decryptedMd, type: file, mdPath });
-      if (result instanceof Promise) {
-        await result;
-      }
+      await itemCb({ decryptedItem: item, decryptedMd, type, mdPath });
       count += 1;
     }
-    const result = jsonCb({ decryptedItemList: itemList, type: file, jsonPath });
-    if (result instanceof Promise) {
-      await result;
-    }
-    console.log(file.substring(1) + `(${count} in total) processing completed`);
+    await jsonCb({ decryptedItemList: itemList, type, jsonPath });
+    console.log(colors.bold.bgCyan(type.substring(1) + ` (${count} in total) processing completed!`));
   };
 
   return Promise.all(["/articles", "/records", "/knowledges"].map(processJson));

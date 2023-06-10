@@ -1,18 +1,16 @@
 import cmd from "child_process";
 import path from "path";
 import colors from "colors";
-import type { PromptObject } from "prompts";
+import prompts, { PromptObject } from "prompts";
 
-import prompts = require("prompts");
-
-export async function promptTask (params: PromptObject[], cb: (_: Record<string, any>) => any|Promise<any>) {
+export async function promptTask<const T extends PromptObject & {name: string}> (params: T[], cb: (_: Record<T["name"], any>) => any|Promise<any>) {
   let canceled = false;
   const response = await prompts(params, {
     onCancel: () => {
       console.log(colors.red("Program canceled"));
       canceled = true;
     }
-  });
+  }) as any;
 
   if (!canceled) {
     await cb(response);

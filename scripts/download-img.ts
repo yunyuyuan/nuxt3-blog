@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import https from "https";
+import colors from "colors";
 import { ImgMap, getAbsolutePath } from "./utils";
 
 export default async function () {
@@ -9,7 +10,7 @@ export default async function () {
 
 const imgsPath = getAbsolutePath("imgs");
 
-function downloadImages (json: ImgMap) {
+async function downloadImages (json: ImgMap) {
   const urls = Object.keys(json);
   const downloadPromises = urls.map(url => downloadImage(url));
 
@@ -18,7 +19,8 @@ function downloadImages (json: ImgMap) {
   }
 
   // Wait for all download promises to resolve
-  return Promise.all(downloadPromises);
+  const result = await Promise.all(downloadPromises);
+  console.log(colors.bold("Downloaded " + colors.green(result.filter(([_, success]) => success).length.toString()) + "/" + urls.length + " items"));
 }
 
 function downloadImage (url: string) {
