@@ -3,7 +3,7 @@ import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
 import type { Ref } from "vue";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 // eslint-disable-next-line no-unused-vars
-import { CommonItem, HeaderTabs, escapeNewLine, getEncryptedBlocks, getNowStamp, processEncryptDecrypt } from "~/utils/common";
+import { CommonItem, HeaderTabs, getEncryptedBlocks, getNowStamp, processEncryptDecrypt } from "~/utils/common";
 import { notify, deepClone, translate, getLocalStorage, rmLocalStorage, compareMd, loadOrDumpDraft, randomId, useManageContent } from "~/utils/nuxt";
 
 const props = defineProps<{
@@ -97,7 +97,7 @@ const getUploadInfo = async () => {
   }
   // 需要clone一份item，clone的item仅用于上传
   const newItem = deepClone(item) as T;
-  let mdContent = escapeNewLine(inputMarkdown.value);
+  let mdContent = inputMarkdown.value;
   // 处理item
   if (props.processWithContent) {
     props.processWithContent(mdContent, markdownRef!.value, newItem);

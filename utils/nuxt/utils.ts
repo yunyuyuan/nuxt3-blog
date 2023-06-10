@@ -1,6 +1,6 @@
 import fs from "fs";
 import type { Ref, WatchOptions } from "vue";
-import { AllKeys, allLocales, CommonItem, HeaderTabs, githubRepoUrl, HeaderTabUrl, getUniqueId } from "~/utils/common";
+import { AllKeys, allLocales, CommonItem, HeaderTabs, githubRepoUrl, HeaderTabUrl, getUniqueId, escapeNewLine } from "~/utils/common";
 import { inBrowser, isDev, isPrerender } from "~/utils/nuxt";
 import config from "~/config";
 
@@ -36,7 +36,7 @@ export const fetchMd = (tab: HeaderTabUrl, id: string) => {
   if (isPrerender) {
     return {
       data: {
-        value: fs.readFileSync(`./public/rebuild${tab}/${id}.md`).toString()
+        value: escapeNewLine(fs.readFileSync(`./public/rebuild${tab}/${id}.md`).toString())
       },
       pending: ref(true)
     };
@@ -47,6 +47,7 @@ export const fetchMd = (tab: HeaderTabUrl, id: string) => {
 export const fetchMdManage = (tab: HeaderTabUrl, id: string) => {
   return useFetch<string>(`/rebuild${tab}/${id}.md?s=${timestamp()}`, {
     key: process.env.NODE_ENV + `${tab}/${id}`,
+    transform: (v: string) => escapeNewLine(v),
     default: () => ""
   });
 };

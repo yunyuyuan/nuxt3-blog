@@ -1,5 +1,5 @@
 import { createVNode, render } from "vue";
-import { CommonItem, AllKeys, HeaderTabUrl, ModalContainerId, escapeNewLine } from "~/utils/common";
+import { CommonItem, AllKeys, HeaderTabUrl, ModalContainerId } from "~/utils/common";
 import { getLocalStorage, setLocalStorage, assignItem, translate, translateT, useCurrentTab, notify } from "~/utils/nuxt";
 import CommonModal from "~/components/common-modal.vue";
 
@@ -114,7 +114,7 @@ export function useHasModified<T extends CommonItem> ({ item, origin }: { item: 
  * 比较markdown
  */
 export function compareMd (s1: string, s2: string) {
-  return escapeNewLine(s1) === escapeNewLine(s2);
+  return s1 === s2;
 }
 
 /**
