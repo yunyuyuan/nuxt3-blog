@@ -28,6 +28,9 @@ function _parseMarkdown (text: string, marked: typeof Marked) {
       gfm: true,
       renderer: {
         heading (text, level, raw) {
+          const tmpDiv = document.createElement("div");
+          tmpDiv.innerHTML = text;
+          text = tmpDiv.innerText;
           let url = raw;
           if (raw === currentId) {
             sameId++;
@@ -366,6 +369,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
       lang.innerText = (hljs.getLanguage(language) || { name: language }).name!;
       hljs.highlightElement(el);
     });
+    // katex
     mdEl
       .querySelectorAll<HTMLImageElement>(".math-formula:not(.parsed)")
       .forEach(async (el) => {
