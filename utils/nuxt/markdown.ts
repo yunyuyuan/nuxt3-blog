@@ -242,6 +242,25 @@ function _parseMarkdown (text: string, marked: typeof Marked) {
                   </div>`;
           }
         },
+        {
+          name: "math-formula",
+          level: "inline",
+          start (src: string) { return src.match(/\$\$/)?.index; },
+          tokenizer (src: string) {
+            const match = /^\$\$(\n?)([\s\S]+?)(\n?)\$\$/.exec(src);
+            if (match) {
+              return {
+                type: "math-formula",
+                raw: match[0],
+                content: match[2],
+                inline: !match[1] && !match[3]
+              };
+            }
+          },
+          renderer ({ content, inline }) {
+            return `<span class="math-formula${inline ? " inline" : ""}">${content}</span>`;
+          }
+        },
         // block level
         {
           name: "raw-html",
@@ -347,6 +366,12 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
       lang.innerText = (hljs.getLanguage(language) || { name: language }).name!;
       hljs.highlightElement(el);
     });
+    mdEl
+      .querySelectorAll<HTMLImageElement>(".math-formula:not(.parsed)")
+      .forEach(async (el) => {
+        el.innerHTML = (await import("katex")).default.renderToString(el.innerText);
+        el.classList.add("parsed");
+      });
     // lazy-img
     mdEl
       .querySelectorAll<HTMLImageElement>(".image-container > img")

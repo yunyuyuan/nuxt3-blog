@@ -1,3 +1,6 @@
+## 2023.06.14
+* Add `katex` for mathematic formula markdown syntax.
+
 ## 2023.06.10
 * Use package `prompts` instead of `prompt` for better experience.
 * `/scripts` refactor.

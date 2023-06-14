@@ -71,7 +71,7 @@ export default defineNuxtConfig({
       title: config.title
     }
   },
-  css: ["~/assets/style/main.scss"],
+  css: ["~/assets/style/main.scss", "~/node_modules/katex/dist/katex.min.css"],
   runtimeConfig: {
     public: {
       stickers,

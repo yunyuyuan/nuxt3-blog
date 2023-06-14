@@ -118,18 +118,18 @@ const getUploadInfo = async () => {
     // 未解密，不处理
   } else {
     // encryptBlocks
-    if (!encryptor.usePasswd.value) {
-      return notify({
-        type: "error",
-        title: translate("need-passwd")
-      });
-    }
     const { md, blocks } = await getEncryptedBlocks(mdContent, encryptor.encrypt);
     mdContent = md;
     if (blocks.length) {
       newItem.encryptBlocks = blocks.reverse();
     } else {
       delete item.encryptBlocks;
+    }
+    if (item.encryptBlocks?.length && !encryptor.usePasswd.value) {
+      return notify({
+        type: "error",
+        title: translate("need-passwd")
+      });
     }
   }
   if (!newItem.id) {
