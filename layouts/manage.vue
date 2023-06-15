@@ -1,20 +1,10 @@
 <script setup lang="ts">
-import { RouteLocationNormalized } from "vue-router";
 import UploadImage from "~/pages/manage/comps/upload-image.vue";
 import ManageMenu from "~/pages/templates/manage-menu.vue";
 import { rmLocalStorage, setLocalStorage, isAuthor, notify, translate, isDev } from "~/utils/nuxt";
 import { GithubTokenKey } from "~/utils/common";
 
 const pageLoading = useLoading();
-
-definePageMeta({
-  layout: "blank",
-  middleware (to: RouteLocationNormalized) {
-    if (to.name === "manage") {
-      return navigateTo(useLocalePath()("/manage/config"));
-    }
-  }
-});
 
 // 上传图片
 const showUploadImage = ref(false);
