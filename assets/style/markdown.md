@@ -74,5 +74,16 @@ will be encrypted during uploading
 [video][with poster](https://sw-oss.yunyuyuan.net/bigbuckbunny.jpg|https://sw-oss.yunyuyuan.net/bigbuckbunny.mp4)[/video]
 [audio][奥里给](https://sw-oss.yunyuyuan.net/aoligei.mp3)[/audio]
 
+## 14. mathematic formula
+* inline level $$F(n) = F(n-1) + F(n-2)$$ formula.
+* block level:
+$$
+F(n) = \begin{cases}
+  0, & \text{if } n = 0 \\
+  1, & \text{if } n = 1 \\
+  F(n-1) + F(n-2), & \text{if } n > 1
+\end{cases}
+$$
+
 # More
 coming...
