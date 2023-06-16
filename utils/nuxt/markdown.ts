@@ -246,25 +246,42 @@ function _parseMarkdown (text: string, marked: typeof Marked) {
           }
         },
         {
-          name: "math-formula",
+          name: "math-formula-inline",
           level: "inline",
           start (src: string) { return src.match(/\$\$/)?.index; },
           tokenizer (src: string) {
-            const match = /^\$\$(\n?)([\s\S]+?)(\n?)\$\$/.exec(src);
+            const match = /^\$\$([\s\S]+?)\$\$/.exec(src);
             if (match) {
               return {
-                type: "math-formula",
+                type: "math-formula-inline",
                 raw: match[0],
-                content: match[2],
-                inline: !match[1] && !match[3]
+                content: match[1]
               };
             }
           },
-          renderer ({ content, inline }) {
-            return `<span class="math-formula${inline ? " inline" : ""}">${content}</span>`;
+          renderer ({ content }) {
+            return `<span class="math-formula inline">${content}</span>`;
           }
         },
         // block level
+        {
+          name: "math-formula-block",
+          level: "block",
+          start (src: string) { return src.match(/\$\$\n/)?.index; },
+          tokenizer (src: string) {
+            const match = /^\$\$\n([\s\S]+?)\n\$\$/.exec(src);
+            if (match) {
+              return {
+                type: "math-formula-block",
+                raw: match[0],
+                content: match[1]
+              };
+            }
+          },
+          renderer ({ content }) {
+            return `<div class="math-formula block"><div>${content}</div></div>`;
+          }
+        },
         {
           name: "raw-html",
           level: "block",
@@ -371,9 +388,10 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
     });
     // katex
     mdEl
-      .querySelectorAll<HTMLImageElement>(".math-formula:not(.parsed)")
+      .querySelectorAll<HTMLDivElement>(".math-formula:not(.parsed)")
       .forEach(async (el) => {
-        el.innerHTML = (await import("katex")).default.renderToString(el.innerText);
+        const realEl = el.classList.contains("block") ? el.children[0] as HTMLElement : el;
+        realEl.innerHTML = (await import("katex")).default.renderToString(realEl.innerText);
         el.classList.add("parsed");
       });
     // lazy-img
