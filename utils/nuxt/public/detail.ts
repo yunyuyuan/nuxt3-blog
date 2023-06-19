@@ -24,7 +24,6 @@ export function useContentPage<T extends CommonItem> () {
   const cancelFnList = registerCancelWatchEncryptor();
   let destroyFns: ReturnType<typeof afterInsertHtml> = [];
 
-  const itemDecrypted = ref(false);
   watchUntil(listPending, async () => {
     const foundItem = list.value!.find(item => item.id === Number(id));
     if (!foundItem) {
@@ -36,10 +35,7 @@ export function useContentPage<T extends CommonItem> () {
     if (item.encrypt) {
       cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
         await processEncryptDecrypt(item, decrypt, targetTab.url);
-        itemDecrypted.value = true;
       }));
-    } else {
-      itemDecrypted.value = true;
     }
   }, { immediate: true }, pending => !pending || isPrerender, "once");
 
@@ -48,12 +44,9 @@ export function useContentPage<T extends CommonItem> () {
   const htmlContent = ref<string>("");
   const { pending, data: content } = fetchMd(targetTab.url, id);
 
-  watch([listPending, pending, itemDecrypted, githubToken], ([listPend, pend, itemDecrypted, logined]) => {
+  watch([listPending, pending, githubToken], ([listPend, pend, logined]) => {
     if ((!listPend && !pend) || isPrerender) {
       mdContent.value = content.value as string;
-      if (!itemDecrypted) {
-        return;
-      }
       if (item.encrypt) {
         encryptor.decryptOrWatchToDecrypt(
           async (decrypt) => {

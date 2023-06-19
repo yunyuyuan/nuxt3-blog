@@ -73,12 +73,9 @@ export function useManageContent<T extends CommonItem> () {
   if (!isNew) {
     const { pending, data: content } = fetchMdManage(targetTab.url, itemId);
     mdPending = pending;
-    watch([listPending, content, itemDecrypted], async ([listPend, markdown, itemDecrypted]) => {
+    watch([listPending, content], async ([listPend, markdown]) => {
       if ((!listPend && markdown) || isPrerender) {
         markdownContent.value = markdown?.trim() || "";
-        if (!itemDecrypted) {
-          return;
-        }
         // 取到结果后，处理解密
         if (item.encrypt) {
           blockDecrypted.value = true;
