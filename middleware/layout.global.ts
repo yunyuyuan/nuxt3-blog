@@ -1,5 +1,7 @@
+import { useUnlocalePath } from "~/utils/nuxt";
+
 export default defineNuxtRouteMiddleware((to) => {
-  if (to.fullPath.startsWith("/manage")) {
+  if (useUnlocalePath(to.fullPath).startsWith("/manage")) {
     to.meta.layout = "manage";
   }
 });
