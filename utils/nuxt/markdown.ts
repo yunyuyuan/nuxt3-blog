@@ -1,6 +1,7 @@
 import { createApp, createVNode, render } from "vue";
 import type { Ref } from "vue";
 import { marked as Marked } from "marked";
+import { encode } from "html-entities";
 import { translate, notify, isPrerender } from "~/utils/nuxt";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
@@ -28,9 +29,7 @@ function _parseMarkdown (text: string, marked: typeof Marked) {
       gfm: true,
       renderer: {
         heading (text, level, raw) {
-          const tmpDiv = document.createElement("div");
-          tmpDiv.innerHTML = text;
-          text = tmpDiv.innerText;
+          text = encode(text);
           let url = raw;
           if (raw === currentId) {
             sameId++;
