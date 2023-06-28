@@ -447,7 +447,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
       }).on("success", (e) => {
         e.clearSelection();
         notify({
-          title: translate("copy successful")
+          title: translate("copy-successful")
         });
       });
       destroyFns.push(() => {
