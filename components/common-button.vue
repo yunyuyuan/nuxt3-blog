@@ -137,5 +137,9 @@ button.common-button {
       line-height: f-size(0.66);
     }
   }
+
+  &:focus {
+    box-shadow: 0 0 1px 1px rgb(66 66 66);
+  }
 }
 </style>

@@ -51,7 +51,10 @@ const root = ref<HTMLElement>();
 const emit = defineEmits(["confirm", "cancel", "update:modelValue"]);
 
 const setFocus = () => {
-  root.value?.focus();
+  if (root.value) {
+    const focusEl = root.value.querySelector<HTMLElement>("[data-focus]") || root.value;
+    focusEl?.focus();
+  }
 };
 const ok = () => {
   if (props.onOk) {

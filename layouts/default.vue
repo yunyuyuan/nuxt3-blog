@@ -140,7 +140,7 @@ const isFirst = ref(true);
         {{ $T('passwd') }}
       </template>
       <template #body>
-        <input v-model="inputPwd" :placeholder="$t('input-passwd')" style="font-size: 16px;padding: 5px;width: calc(100% - 12px);">
+        <input v-model="inputPwd" data-focus :placeholder="$t('input-passwd')" style="font-size: 16px;padding: 5px;width: calc(100% - 12px);">
       </template>
     </common-modal>
   </div>

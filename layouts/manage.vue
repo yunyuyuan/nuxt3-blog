@@ -112,7 +112,7 @@ const modalOk = () => {
         <b>Github Token
           <svg-icon v-if="!!githubToken" name="correct" />
         </b>
-        <input v-model="inputToken" :disabled="isDev">
+        <input v-model="inputToken" data-focus :disabled="isDev">
       </label>
       <label class="manage-input-pwd">
         <b>
