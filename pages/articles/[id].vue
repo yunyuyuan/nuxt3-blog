@@ -115,7 +115,7 @@ initViewer(root);
               :class="[anchor.size, { active: activeAnchor === anchor.url }]"
               :title="anchor.text"
             >
-              <span>{{ anchor.text }}</span>
+              <span v-html="anchor.text" />
             </a>
           </li>
         </ol>

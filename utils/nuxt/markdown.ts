@@ -1,7 +1,6 @@
 import { createApp, createVNode, render } from "vue";
 import type { Ref } from "vue";
 import { marked as Marked } from "marked";
-import { encode } from "html-entities";
 import { translate, notify, isPrerender } from "~/utils/nuxt";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
@@ -21,30 +20,22 @@ export function parseMarkdownSync (text: string, marked: typeof Marked) {
 function _parseMarkdown (text: string, marked: typeof Marked) {
   const currentMenu = useCurrentMenu();
   currentMenu.value = [];
-  let currentId: string;
-  let sameId = 0;
   if (!inited) {
     inited = true;
     marked.use({
       gfm: true,
       renderer: {
-        heading (text, level, raw) {
-          text = encode(text);
-          let url = raw;
-          if (raw === currentId) {
-            sameId++;
-            url = `${raw}-${sameId}`;
-          } else {
-            sameId = 0;
-            url = raw;
-          }
+        heading (text, level, raw, slugger) {
+          const url = slugger.slug(raw);
+
           const menuItem: typeof currentMenu.value[number] = {
             size: level < 4 ? "big" : "small",
-            text,
+            // the "raw" param is not real raw, weird
+            // text: escapeHtml(raw),
+            text: text.replace(/<\/?[^>]+(>|$)/g, ""),
             url
           };
           currentMenu.value.push(menuItem);
-          currentId = raw;
           return `<h${level}><sup class="fake-head" ${!isPrerender ? `id="${url}"` : ""}></sup><a class="header-link" href="#${url}">${text}</a></h${level}>`;
         },
         image (href, _, text) {
