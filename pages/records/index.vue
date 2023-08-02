@@ -2,6 +2,8 @@
 import { RecordItem, getNowDayjs } from "~/utils/common";
 import { formatTime, useListPage } from "~/utils/nuxt";
 
+const localePath = useLocalePath();
+
 const { list: recordList, pending } = useListPage<RecordItem>();
 
 const years = computed(() => {
@@ -39,7 +41,7 @@ const years = computed(() => {
             }}</b>
             <NuxtLink
               :class="{ multiple: item.images.length > 1 }"
-              :to="'/records/' + item.id"
+              :to="localePath('/records/' + item.id)"
             >
               <the-lazy-img
                 alt="cover"
