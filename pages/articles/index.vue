@@ -188,7 +188,8 @@ $space: 13px;
           }
 
           b {
-            color: $theme-color-darken;
+            color: black;
+            font-weight: 500;
             font-size: f-size(1.02);
             min-height: 20px;
             line-height: 20px;
@@ -198,7 +199,7 @@ $space: 13px;
             letter-spacing: 0.2px;
 
             @include dark-mode {
-              color: $theme-color-lighten;
+              color: white;
             }
           }
 

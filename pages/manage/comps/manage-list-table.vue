@@ -296,6 +296,8 @@ function deleteSelect () {
       &-title {
         a {
           @include textoverflow;
+
+          font-weight: 500;
         }
       }
 

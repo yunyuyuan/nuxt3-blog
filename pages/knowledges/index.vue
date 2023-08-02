@@ -197,10 +197,11 @@ $space: 16px;
 
         b {
           font-size: f-size();
-          color: $theme-color-darken;
+          color: black;
+          font-weight: 500;
 
           @include dark-mode {
-            color: $theme-color-lighten;
+            color: white;
           }
 
           margin: 0 4px;
