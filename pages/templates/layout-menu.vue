@@ -2,7 +2,7 @@
 import { HeaderTabs } from "~/utils/common";
 
 const activeRoute = computed(() => {
-  return useRoute().path.split("/")[1];
+  return useRoute().path.split("/")[1] || HeaderTabs[0].url.substring(1);
 });
 const isMobile = useIsMobile();
 </script>

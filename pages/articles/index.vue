@@ -2,6 +2,10 @@
 import { ArticleItem } from "~/utils/common";
 import { formatTime, literalTime, useListPage } from "~/utils/nuxt";
 
+definePageMeta({
+  alias: "/"
+});
+
 const { list: articlesList, pending } = useListPage<ArticleItem>();
 
 const articleTagList = new Set<string>();

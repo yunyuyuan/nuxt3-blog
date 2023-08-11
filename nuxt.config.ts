@@ -87,6 +87,7 @@ export default defineNuxtConfig({
   },
   nitro: {
     prerender: {
+      failOnError: false,
       ignore: ["/manage"]
     },
     output: { dir: "{{ rootDir }}/.output", serverDir: "{{ output.dir }}/server", publicDir: "{{ output.dir }}/public" }

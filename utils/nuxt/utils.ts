@@ -53,7 +53,7 @@ export const fetchMdManage = (tab: HeaderTabUrl, id: string) => {
 };
 
 export function useCurrentTab () {
-  return HeaderTabs.find(tab => useRoute().path.includes(tab.url))!;
+  return HeaderTabs.find(tab => useRoute().path.includes(tab.url)) || HeaderTabs[0];
 }
 
 /**

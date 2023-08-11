@@ -32,7 +32,7 @@ initViewer(root);
           <h2>
             {{ item.title }}
             <a
-              v-if="item.link"
+              v-if="item.link && item.link.startsWith('http')"
               target="_blank"
               :href="item.link"
               :title="$t('link')"
