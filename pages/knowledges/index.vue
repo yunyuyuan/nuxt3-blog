@@ -2,7 +2,6 @@
 import { formatTime, literalTime, useListPage } from "~/utils/nuxt";
 import { KnowledgeItem, KnowledgeTabs, KnowledgeTabsList } from "~/utils/common";
 
-const localePath = useLocalePath();
 const { list: knowledgeList, pending } = useListPage<KnowledgeItem>();
 
 const currentTab = computed(() => (useRoute().query.type as string) || "");
@@ -52,7 +51,7 @@ onMounted(() => {
           v-for="item in filteredList"
           v-show="item._show"
           :key="item.id"
-          :to="localePath('/knowledges/' + item.id)"
+          :to="'/knowledges/' + item.id"
         >
           <svg-icon :name="item.type" />
           <span>《<b>{{ item.title }}</b>》</span>

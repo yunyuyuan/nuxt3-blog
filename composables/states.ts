@@ -1,6 +1,7 @@
 import { useState } from "#app";
-import { GithubTokenKey } from "~/utils/common";
+import { GithubTokenKey, I18nCode } from "~/utils/common";
 import { getLocalStorage, setLocalStorage } from "~/utils/nuxt";
+import config from "~/config";
 const ThemeModeKey = "theme-mode";
 
 // avoid loading during SSG
@@ -27,3 +28,4 @@ export const useThemeMode = () => {
 };
 
 export const useCurrentMenu = () => useState<{size: "big"|"small", text: string, url: string}[]>("current-md-menu", () => []);
+export const useI18nCode = () => useState<I18nCode>("i18n-code", () => config.defaultLang as any);

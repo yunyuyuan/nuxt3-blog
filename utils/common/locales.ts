@@ -17,9 +17,10 @@ export const i18nLocales = [
     formatDate: "YYYY-MM-DD",
     formatMonth: "MM.DD"
   }
-];
+] as const;
 
 export const allLocales = i18nLocales.map(item => item.code);
+export type I18nCode = typeof allLocales[number];
 
 export const getLocaleByCode = (code: typeof allLocales[number]) => {
   return i18nLocales.find(locale => locale.code === code);

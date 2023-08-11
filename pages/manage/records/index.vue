@@ -2,7 +2,6 @@
 import ManageListTable from "~/pages/manage/comps/manage-list-table.vue";
 import { RecordItem } from "~/utils/common";
 
-const localePath = useLocalePath();
 const searchFn = (item: RecordItem, s:string) => !item.images.length || item.images.some(img => img.alt.includes(s));
 </script>
 
@@ -13,7 +12,7 @@ const searchFn = (item: RecordItem, s:string) => !item.images.length || item.ima
       :search-fn="searchFn"
     >
       <template #images="{ data: images, dataUrl }">
-        <nuxt-link :to="localePath(dataUrl)">
+        <nuxt-link :to="dataUrl">
           <the-lazy-img
             v-for="img,idx in (images.length ? images : [{alt: '', src: 'no-poster'}])"
             :key="idx"

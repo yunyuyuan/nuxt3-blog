@@ -2,7 +2,6 @@ import fs from "fs";
 import { execSync } from "child_process";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
-import { i18nLocales } from "./utils/common";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -87,25 +86,10 @@ export default defineNuxtConfig({
     }
   },
   nitro: {
+    prerender: {
+      ignore: ["/manage"]
+    },
     output: { dir: "{{ rootDir }}/.output", serverDir: "{{ output.dir }}/server", publicDir: "{{ output.dir }}/public" }
-  },
-  modules: [
-    "@nuxtjs/i18n"
-  ],
-  i18n: {
-    strategy: "prefix_except_default",
-    baseUrl: config.domain,
-    locales: i18nLocales.map(item => ({
-      code: item.code,
-      file: item.file,
-      iso: item.iso
-    })),
-    lazy: true,
-    langDir: "i18n",
-    defaultLocale: config.defaultLang,
-    vueI18n: {
-      fallbackLocale: config.defaultLang
-    }
   },
   experimental: {
     /**

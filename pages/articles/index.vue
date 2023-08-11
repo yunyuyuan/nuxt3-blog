@@ -2,7 +2,6 @@
 import { ArticleItem } from "~/utils/common";
 import { formatTime, literalTime, useListPage } from "~/utils/nuxt";
 
-const localePath = useLocalePath();
 const { list: articlesList, pending } = useListPage<ArticleItem>();
 
 const articleTagList = new Set<string>();
@@ -61,7 +60,7 @@ const toggleTags = (tag: string) => {
       <common-loading v-show="pending" :show-in-first="false" />
       <ul v-if="filteredList.length" class="w100">
         <li v-for="item in filteredList" v-show="item._show" :key="item.id">
-          <nuxt-link :to="localePath('/articles/' + String(item.id))">
+          <nuxt-link :to="'/articles/' + String(item.id)">
             <b>{{ item.title }}</b>
             <div class="foot flex">
               <span :title="formatTime(item.time)">{{

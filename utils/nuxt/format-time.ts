@@ -3,7 +3,7 @@ import { getLocaleByCode, getNowDayjs } from "~/utils/common";
 
 export function formatTime (stamp?: number, type: "full" | "date" | "month" = "full") {
   return computed(() => {
-    const { formatFull, formatDate, formatMonth } = getLocaleByCode(useNuxtApp().$i18n.locale.value)!;
+    const { formatFull, formatDate, formatMonth } = getLocaleByCode(useI18nCode().value)!;
     let format = "";
     switch (type) {
       case "full":

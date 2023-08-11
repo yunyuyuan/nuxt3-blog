@@ -9,7 +9,7 @@
     "downimg": "gulp download-image",
     "subimg": "gulp substitute-image",
     "lint": "eslint --fix --ext .ts,vue --ignore-path .gitignore .",
-    "preview": "vite preview",
+    "preview": "vite preview --outDir .output/public",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
-    "@nuxtjs/i18n": "^8.0.0-beta.10",
     "@types/crypto-js": "^4.1.1",
     "@types/gulp": "^4.0.9",
     "@types/headroom.js": "^0.12.2",
@@ -50,7 +49,7 @@
     "lodash": "^4.17.21",
     "mongodb": "^4.12.0",
     "multiparty": "^4.2.3",
-    "nuxt": "3.3.1",
+    "nuxt": "^3.6.5",
     "postcss-html": "^1.4.1",
     "prompts": "^2.4.2",
     "rollup-pluginutils": "^2.8.2",

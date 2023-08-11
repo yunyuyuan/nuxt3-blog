@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { HeaderTabs } from "~/utils/common";
-import { useUnlocalePath } from "~/utils/nuxt";
 
-const localePath = useLocalePath();
 const activeRoute = computed(() => {
-  return useUnlocalePath()?.split("/")[1];
+  return useRoute().path.split("/")[1];
 });
 const isMobile = useIsMobile();
 </script>
@@ -15,7 +13,7 @@ const isMobile = useIsMobile();
       v-for="item in HeaderTabs"
       :key="item.url"
       :class="{ item: true, active: activeRoute === item.url.substring(1) }"
-      :to="localePath(item.url)"
+      :to="item.url"
     >
       {{ $T(item.name) }}
       <span />

@@ -3,7 +3,7 @@ import { HeaderTabs } from "~/utils/common";
 
 definePageMeta({
   middleware () {
-    return navigateTo(useLocalePath()(HeaderTabs[0].url));
+    return navigateTo(HeaderTabs[0].url);
   }
 });
 </script>
