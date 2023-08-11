@@ -5,7 +5,6 @@ import type { Ref, PropType } from "vue";
 import type { editor as MonacoEditor } from "monaco-editor";
 import { afterInsertHtml, parseMarkdown, initViewer } from "~/utils/nuxt";
 
-const localePath = useLocalePath();
 const props = defineProps({
   modelValue: { type: String, default: "" },
   disabled: { type: Boolean, default: false },
@@ -186,7 +185,7 @@ initViewer(markdownRef);
           </div>
         </common-dropdown>
       </a>
-      <nuxt-link v-if="!single" :title="$t('markdown-ref')" :to="localePath('/manage/md-ref')" target="_blank">
+      <nuxt-link v-if="!single" :title="$t('markdown-ref')" :to="'/manage/md-ref'" target="_blank">
         <svg-icon name="markdown" />
       </nuxt-link>
       <a v-if="!single" class="preview" :title="$t('preview')" @click="emit('preview')"><svg-icon name="preview" /></a>

@@ -1,9 +1,6 @@
 import axios from "axios";
 import { isDev, devHotListen, isPrerender } from "~/utils/nuxt";
 
-/** 是否在dev下操作数据库 */
-const DbOperateInDev = false;
-
 export function DBOperate<T = any> (
   { hotEvent, apiPath, query, callback }:
   { hotEvent: string, apiPath: string, query: any, callback: (_: T) => any}
@@ -16,10 +13,8 @@ export function DBOperate<T = any> (
     };
 
     if (isDev) {
-      if (DbOperateInDev) {
-        import.meta.hot!.send(hotEvent, query);
-        devHotListen<T>(hotEvent, cb);
-      }
+      import.meta.hot!.send(hotEvent, query);
+      devHotListen<T>(hotEvent, cb);
     } else {
       axios.post(`/api${apiPath}`, query).then(res => cb(res.data));
     }

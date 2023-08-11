@@ -1,17 +1,29 @@
-import capitalize from "lodash/capitalize";
+import { i18nLocales } from "~/utils/common/locales";
+import { loadI18nJson, translate, translateT, translateTT } from "~/utils/nuxt";
 
-export default defineNuxtPlugin((app) => {
+export default defineNuxtPlugin(async (app) => {
+  const i18nCode = useI18nCode();
+  await loadI18nJson(i18nCode.value, true);
   app.hook("vue:setup", () => {
     useHead({
       htmlAttrs: computed(() => {
-        const prop = useNuxtApp().$i18n.localeProperties.value;
         return {
-          lang: prop.iso
+          lang: i18nLocales.find(i => i.code === i18nCode.value)!.iso
         };
       })
     });
   });
 
-  app.provide("T", (...args: Parameters<typeof app.$i18n.t>) => capitalize(app.$i18n.t(...args)));
-  app.provide("TT", (...args: Parameters<typeof app.$i18n.t>) => app.$i18n.t(...args).toUpperCase());
+  app.provide("t", (...args: [name: string, params: string[]]) => computed(() => {
+    const code = useI18nCode().value;
+    return translate(...args, code);
+  }).value);
+  app.provide("T", (...args: [name: string, params: string[]]) => computed(() => {
+    const code = useI18nCode().value;
+    return translateT(...args, code);
+  }).value);
+  app.provide("TT", (...args: [name: string, params: string[]]) => computed(() => {
+    const code = useI18nCode().value;
+    return translateTT(...args, code);
+  }).value);
 });

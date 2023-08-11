@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { HeaderTabs } from "~/utils/common";
-import { calcRocketUrl, useUnlocalePath, isDev } from "~/utils/nuxt";
+import { calcRocketUrl, isDev } from "~/utils/nuxt";
 
 const emit = defineEmits(["upload-image", "show-verify"]);
 
-const localePath = useLocalePath();
 const githubToken = useGithubToken();
 const encryptor = useEncryptor();
 const allPassed = computed(() => !!githubToken && encryptor.passwdCorrect.value);
 
 const activeRoute = computed(() => {
-  return useUnlocalePath().replace(/^\/manage\//, "/");
+  return useRoute().path.replace(/^\/manage\//, "/");
 });
 const travel = computed(() => {
   return calcRocketUrl();
@@ -28,7 +27,7 @@ const travel = computed(() => {
       </li>
       <li>
         <nuxt-link
-          :to="localePath('/manage/config')"
+          :to="'/manage/config'"
           :class="{ active: activeRoute.startsWith('/config') }"
         >
           {{ $T('config') }}
@@ -36,7 +35,7 @@ const travel = computed(() => {
       </li>
       <li v-for="tab in HeaderTabs" :key="tab.url">
         <nuxt-link
-          :to="localePath('/manage' + tab.url)"
+          :to="'/manage' + tab.url"
           :class="{ active: activeRoute.startsWith(tab.url) }"
         >
           <span>{{ $T(tab.name) }}</span>
@@ -53,10 +52,10 @@ const travel = computed(() => {
         name="password"
       />
     </div>
-    <nuxt-link title="🚀" :to="localePath(travel)">
+    <nuxt-link title="🚀" :to="travel">
       <svg-icon name="rocket" />
     </nuxt-link>
-    <nuxt-link v-if="isDev" title="svgs" :to="localePath('/manage/all-svg')" target="_blank">
+    <nuxt-link v-if="isDev" title="svgs" :to="'/manage/all-svg'" target="_blank">
       SVG
     </nuxt-link>
   </div>

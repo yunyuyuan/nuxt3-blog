@@ -1,6 +1,6 @@
 import fs from "fs";
 import type { Ref, WatchOptions } from "vue";
-import { AllKeys, allLocales, CommonItem, HeaderTabs, githubRepoUrl, HeaderTabUrl, getUniqueId, escapeNewLine } from "~/utils/common";
+import { AllKeys, CommonItem, HeaderTabs, githubRepoUrl, HeaderTabUrl, getUniqueId, escapeNewLine } from "~/utils/common";
 import { inBrowser, isDev, isPrerender } from "~/utils/nuxt";
 import config from "~/config";
 
@@ -53,25 +53,14 @@ export const fetchMdManage = (tab: HeaderTabUrl, id: string) => {
 };
 
 export function useCurrentTab () {
-  return HeaderTabs.find(tab => useUnlocalePath(useRoute().path).includes(tab.url))!;
-}
-
-export function useUnlocalePath (s?: string) {
-  const path = typeof s === "undefined" ? useRoute().path : s;
-  for (const locale of allLocales) {
-    const prefix = "/" + locale;
-    if (path.startsWith(prefix)) {
-      return path.slice(prefix.length);
-    }
-  }
-  return path;
+  return HeaderTabs.find(tab => useRoute().path.includes(tab.url))!;
 }
 
 /**
  * 计算rocket的url
  */
 function calcRocketUrlSuffix (): boolean | string {
-  const path = useUnlocalePath();
+  const path = useRoute().path;
   const fromManage = path.startsWith("/manage");
   const paths = (fromManage ? path.replace(/^\/manage/, "") : path)
     .split("/")
@@ -93,7 +82,7 @@ export function calcRocketUrl () {
   if (typeof url === "boolean") {
     return githubRepoUrl;
   }
-  return useLocalePath()(url);
+  return (url);
 }
 
 export function watchUntil (
@@ -171,11 +160,11 @@ export function useComment (key: HeaderTabUrl) {
         script.setAttribute("data-emit-metadata", "0");
         script.setAttribute("data-input-position", "top");
         script.setAttribute("data-theme", getTheme());
-        script.setAttribute("data-lang", getLang(useNuxtApp().$i18n.locale.value));
+        script.setAttribute("data-lang", getLang(useI18nCode().value));
         script.setAttribute("crossorigin", "anonymous");
         script.setAttribute("async", "");
         root.value!.appendChild(script);
-        watch(useNuxtApp().$i18n.locale, (locale) => {
+        watch(useI18nCode(), (locale) => {
           updateGiscusConfig({
             lang: getLang(locale)
           });

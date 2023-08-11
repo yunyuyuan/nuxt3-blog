@@ -5,9 +5,17 @@ import { RecordItem } from "~/utils/common";
 
 const { item, tabUrl, publishTime, modifyTime, htmlContent, markdownRef, mdPending } = useContentPage<RecordItem>();
 
+const htmlTitle = ref("");
+watch(() => item.time, (time) => {
+  htmlTitle.value = `${translate("records")}: ${formatTime(time, "date")}${config.SEO_title}`;
+}, { immediate: true });
 useHead({
-  title: computed(() => `${translate("records")}: ${formatTime(item.time, "date")}${config.SEO_title}`)
+  title: computed(() => htmlTitle.value)
 });
+// FIXME
+// useHead({
+//   title: computed(() => `${translate("records")}: ${formatTime(item.time, "date")}${config.SEO_title}`)
+// });
 useSeoMeta({
   ogTitle: computed(() => `${translate("records")}: ${formatTime(item.time, "date")}${config.SEO_title}`)
 });
