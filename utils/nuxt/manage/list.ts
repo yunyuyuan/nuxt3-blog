@@ -24,7 +24,7 @@ export function useManageList<T extends CommonItem> () {
       return deepClone({
         ...item,
         _show: true
-      });
+      }) as T;
     }));
     // 解密列表数据
     cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {

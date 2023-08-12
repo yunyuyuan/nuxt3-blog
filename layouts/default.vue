@@ -1,14 +1,17 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import type Headroom from "headroom.js";
-import { inBrowser, isPrerender, calcRocketUrl, loadI18nJson } from "~/utils/nuxt";
-import { i18nLocales, githubRepoUrl, I18nCode } from "~/utils/common";
-import LayoutMenu from "~/pages/templates/layout-menu.vue";
+import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
+import { inBrowser, isPrerender, calcRocketUrl, translateT } from "~/utils/nuxt";
+import { i18nLocales, githubRepoUrl, I18nCode, HeaderTabs } from "~/utils/common";
 import config from "~/config";
 
-const i18nCode = useI18nCode();
+const { i18nCode, changeI18n } = useI18nCode();
 const { themeMode, toggleThemeMode } = useThemeMode();
 const pageLoading = useLoading();
 const route = useRoute();
+const activeRoute = computed(() => {
+  return route.path.split("/")[1] || HeaderTabs[0].url.substring(1);
+});
 const footerDomain = inBrowser ? window.location.hostname : "";
 
 // mobile menu
@@ -19,10 +22,34 @@ watch(isMobile, () => {
     menuShow.value = false;
   });
 });
+const LayoutMenu = defineComponent({
+  // XXX why need?
+  components: {
+    "nuxt-link": NuxtLink
+  },
+  render: () =>
+    <div class={`layout-menu flex ${isMobile.value ? "in-mobile" : ""}`}>
+      {
+        HeaderTabs.map(item => (
+          <nuxt-link
+            key={item.url}
+            class={{ item: true, active: activeRoute.value === item.url.substring(1) }}
+            to={item.url}
+          >
+            { translateT(item.name) }
+            <span />
+            <span />
+            <span />
+            <span />
+          </nuxt-link>
+        ))
+      }
+    </div>
+});
 
 const showI18n = ref<boolean>(false);
 const setLocale = (locale: I18nCode) => {
-  loadI18nJson(locale);
+  changeI18n(locale);
   showI18n.value = false;
 };
 

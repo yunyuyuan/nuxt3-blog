@@ -1,19 +1,16 @@
 import capitalize from "lodash/capitalize";
-import { I18nCode } from "~/utils/common/locales";
+import { I18nCode } from "~/utils/common";
 const messages: Partial<Record<I18nCode, Record<string, string>>> = {};
 
-export async function loadI18nJson (code: I18nCode, init = false) {
+export async function loadI18nJson (code: I18nCode) {
   if (!messages[code]) {
     const json = await import(`../../i18n/${code}.json?raw`);
     messages[code] = JSON.parse(json.default);
   }
-  if (!init) {
-    useI18nCode().value = code;
-  }
 }
 
 export function translate (name: string, params?: any[], code?: I18nCode): string {
-  code = code || useI18nCode().value;
+  code = code || useI18nCode().i18nCode.value!;
   if (!messages[code]) {
     return name;
   }

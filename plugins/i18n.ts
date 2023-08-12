@@ -1,9 +1,8 @@
 import { i18nLocales } from "~/utils/common/locales";
-import { loadI18nJson, translate, translateT, translateTT } from "~/utils/nuxt";
+import { translate, translateT, translateTT } from "~/utils/nuxt";
 
-export default defineNuxtPlugin(async (app) => {
-  const i18nCode = useI18nCode();
-  await loadI18nJson(i18nCode.value, true);
+export default defineNuxtPlugin((app) => {
+  const { i18nCode } = useI18nCode();
   app.hook("vue:setup", () => {
     useHead({
       htmlAttrs: computed(() => {
@@ -13,17 +12,17 @@ export default defineNuxtPlugin(async (app) => {
       })
     });
   });
-
-  app.provide("t", (...args: [name: string, params: string[]]) => computed(() => {
-    const code = useI18nCode().value;
-    return translate(...args, code);
-  }).value);
-  app.provide("T", (...args: [name: string, params: string[]]) => computed(() => {
-    const code = useI18nCode().value;
-    return translateT(...args, code);
-  }).value);
-  app.provide("TT", (...args: [name: string, params: string[]]) => computed(() => {
-    const code = useI18nCode().value;
-    return translateTT(...args, code);
-  }).value);
+  return {
+    provide: {
+      t: (...args: Parameters<typeof translate>) => computed(() => {
+        return translate(...args);
+      }).value,
+      T: (...args: Parameters<typeof translate>) => computed(() => {
+        return translateT(...args);
+      }).value,
+      TT: (...args: Parameters<typeof translate>) => computed(() => {
+        return translateTT(...args);
+      }).value
+    }
+  };
 });

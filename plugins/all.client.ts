@@ -1,13 +1,10 @@
 import { initScrollTrigger, SvgContainerId, NotificationContainerId, ModalContainerId } from "~/utils/common";
+import { loadI18nJson } from "~/utils/nuxt";
 
-export default defineNuxtPlugin((app: any) => {
+export default defineNuxtPlugin(async (app: any) => {
   app.$router.options.scrollBehavior = () => {
     return { left: 0, top: 0 };
   };
-
-  app.provide("sameSha", computed(() => {
-    return useCorrectSha().value === useRuntimeConfig().app.NUXT_ENV_CURRENT_GIT_SHA;
-  }));
 
   initScrollTrigger();
   // init theme
@@ -16,6 +13,8 @@ export default defineNuxtPlugin((app: any) => {
     localStorage.getItem("code-theme") || "light"
   );
   document.documentElement.classList.add(`${useThemeMode().themeMode.value}-mode`);
+
+  await loadI18nJson(useI18nCode().i18nCode.value);
 
   const fragment = new DocumentFragment();
 
@@ -37,4 +36,11 @@ export default defineNuxtPlugin((app: any) => {
   fragment.appendChild(svgContainer);
 
   document.body.appendChild(fragment);
+  return {
+    provide: {
+      sameSha: computed(() => {
+        return useCorrectSha().value === useRuntimeConfig().app.NUXT_ENV_CURRENT_GIT_SHA;
+      })
+    }
+  };
 });

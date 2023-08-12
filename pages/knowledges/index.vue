@@ -39,7 +39,7 @@ onMounted(() => {
 <template>
   <div class="knowledge-list">
     <nav class="flex">
-      <span v-for="tab in tabs" :key="tab.key + un" :class="{ active: tab.key === currentTab }" @click="goTo(tab.key)">
+      <span v-for="tab in tabs" :key="tab.key + un" :class="{ active: tab.active }" @click="goTo(tab.key)">
         {{ $T(tab.name) }}
         <b>{{ getFilteredListLength(tab.key) }}</b>
       </span>

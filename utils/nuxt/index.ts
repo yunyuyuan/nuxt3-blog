@@ -7,3 +7,4 @@ export * from "./markdown";
 export * from "./utils";
 export * from "./viewer";
 export * from "./notify";
+export * from "./fetch";

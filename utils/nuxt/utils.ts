@@ -1,56 +1,7 @@
-import fs from "fs";
-import type { Ref, WatchOptions } from "vue";
-import { AllKeys, CommonItem, HeaderTabs, githubRepoUrl, HeaderTabUrl, getUniqueId, escapeNewLine } from "~/utils/common";
-import { inBrowser, isDev, isPrerender } from "~/utils/nuxt";
+import type { WatchOptions } from "vue";
+import { AllKeys, CommonItem, HeaderTabs, githubRepoUrl, HeaderTabUrl, getUniqueId } from "~/utils/common";
+import { inBrowser, isDev } from "~/utils/nuxt";
 import config from "~/config";
-
-const timestamp = () => useRuntimeConfig().public.timestamp;
-
-type returnType<T> = {
-  data: {
-    value: T
-  },
-  pending: Ref<boolean>
-}
-
-export const fetchList = <T extends CommonItem>(tab: HeaderTabUrl) => {
-  if (isPrerender) {
-    return {
-      data: {
-        value: JSON.parse(fs.readFileSync(`./public/rebuild/json${tab}.json`).toString()) as T[]
-      },
-      pending: ref(true)
-    };
-  }
-  return fetchListManage<T>(tab);
-};
-
-export const fetchListManage = <T extends CommonItem>(tab: HeaderTabUrl) => {
-  return useFetch<T[]>(`/rebuild/json${tab}.json?s=${timestamp()}`, {
-    key: process.env.NODE_ENV + tab,
-    default: () => []
-  }) as returnType<T[]>;
-};
-
-export const fetchMd = (tab: HeaderTabUrl, id: string) => {
-  if (isPrerender) {
-    return {
-      data: {
-        value: escapeNewLine(fs.readFileSync(`./public/rebuild${tab}/${id}.md`).toString())
-      },
-      pending: ref(true)
-    };
-  }
-  return fetchMdManage(tab, id);
-};
-
-export const fetchMdManage = (tab: HeaderTabUrl, id: string) => {
-  return useFetch<string>(`/rebuild${tab}/${id}.md?s=${timestamp()}`, {
-    key: process.env.NODE_ENV + `${tab}/${id}`,
-    transform: (v: string) => escapeNewLine(v),
-    default: () => ""
-  });
-};
 
 export function useCurrentTab () {
   return HeaderTabs.find(tab => useRoute().path.includes(tab.url)) || HeaderTabs[0];
@@ -160,11 +111,11 @@ export function useComment (key: HeaderTabUrl) {
         script.setAttribute("data-emit-metadata", "0");
         script.setAttribute("data-input-position", "top");
         script.setAttribute("data-theme", getTheme());
-        script.setAttribute("data-lang", getLang(useI18nCode().value));
+        script.setAttribute("data-lang", getLang(useI18nCode().i18nCode.value));
         script.setAttribute("crossorigin", "anonymous");
         script.setAttribute("async", "");
         root.value!.appendChild(script);
-        watch(useI18nCode(), (locale) => {
+        watch(useI18nCode().i18nCode, (locale) => {
           updateGiscusConfig({
             lang: getLang(locale)
           });
@@ -246,7 +197,7 @@ export function rmLocalStorage (key: string) {
  * dev热更新
  */
 export function devHotListen<T> (event: string, callback: (_: T) => unknown) {
-  if (isDev) {
+  if (isDev && inBrowser) {
     const listener = (e: Event) => {
       callback((e as CustomEvent<T>).detail);
       window.removeEventListener(event, listener);

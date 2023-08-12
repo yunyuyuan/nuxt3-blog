@@ -1,6 +1,6 @@
 import type { Ref } from "vue";
 import { createNewItem, CommonItem, processEncryptDecrypt } from "~/utils/common";
-import { registerCancelWatchEncryptor, isPrerender, useHasModified, translate, useStatusText, useCurrentTab, deepClone, watchUntil, assignItem, fetchList, fetchMdManage } from "~/utils/nuxt";
+import { registerCancelWatchEncryptor, isPrerender, useHasModified, translate, useStatusText, useCurrentTab, deepClone, watchUntil, assignItem, fetchList, fetchMd } from "~/utils/nuxt";
 
 import config from "~/config";
 
@@ -51,7 +51,7 @@ export function useManageContent<T extends CommonItem> () {
   const blockDecrypted = ref(false);
   watchUntil(listPending, async () => {
     if (!isNew) {
-      assignItem<T>(originItem, deepClone(list.value!.find(item => item.id === Number(itemId))!));
+      assignItem<T>(originItem, deepClone(list.value.find(item => item.id === Number(itemId))!) as T);
       assignItem<T>(item, deepClone(originItem));
       // item的内容可以马上解密
       if (item.encrypt) {
@@ -71,7 +71,7 @@ export function useManageContent<T extends CommonItem> () {
 
   let mdPending: Ref<boolean> | null = null;
   if (!isNew) {
-    const { pending, data: content } = fetchMdManage(targetTab.url, itemId);
+    const { pending, data: content } = fetchMd(targetTab.url, itemId);
     mdPending = pending;
     watch([listPending, content], async ([listPend, markdown]) => {
       if ((!listPend && markdown) || isPrerender) {

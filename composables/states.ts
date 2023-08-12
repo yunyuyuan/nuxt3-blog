@@ -1,6 +1,7 @@
+import { GithubTokenKey, I18nCode, I18nStoreKey } from "~/utils/common";
 import { useState } from "#app";
-import { GithubTokenKey, I18nCode } from "~/utils/common";
-import { getLocalStorage, setLocalStorage } from "~/utils/nuxt";
+
+import { getLocalStorage, loadI18nJson, setLocalStorage } from "~/utils/nuxt";
 import config from "~/config";
 const ThemeModeKey = "theme-mode";
 
@@ -28,4 +29,15 @@ export const useThemeMode = () => {
 };
 
 export const useCurrentMenu = () => useState<{size: "big"|"small", text: string, url: string}[]>("current-md-menu", () => []);
-export const useI18nCode = () => useState<I18nCode>("i18n-code", () => config.defaultLang as any);
+export const useI18nCode = () => {
+  const i18nCode = useState<I18nCode>(I18nStoreKey, () => config.defaultLang as any);
+  i18nCode.value = getLocalStorage(I18nStoreKey) || config.defaultLang as any;
+  return {
+    i18nCode,
+    changeI18n: async (code: I18nCode) => {
+      await loadI18nJson(code);
+      i18nCode.value = code;
+      setLocalStorage(I18nStoreKey, code);
+    }
+  };
+};
