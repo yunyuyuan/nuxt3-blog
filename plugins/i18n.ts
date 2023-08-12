@@ -15,15 +15,9 @@ export default defineNuxtPlugin(async (app) => {
   });
   return {
     provide: {
-      t: (...args: Parameters<typeof translate>) => computed(() => {
-        return translate(...args);
-      }).value,
-      T: (...args: Parameters<typeof translate>) => computed(() => {
-        return translateT(...args);
-      }).value,
-      TT: (...args: Parameters<typeof translate>) => computed(() => {
-        return translateTT(...args);
-      }).value
+      t: (...args: Parameters<typeof translate>) => translate(...args),
+      T: (...args: Parameters<typeof translate>) => translateT(...args),
+      TT: (...args: Parameters<typeof translate>) => translateTT(...args)
     }
   };
 });
