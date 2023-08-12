@@ -1,7 +1,6 @@
 import { initScrollTrigger, SvgContainerId, NotificationContainerId, ModalContainerId } from "~/utils/common";
-import { loadI18nJson } from "~/utils/nuxt";
 
-export default defineNuxtPlugin(async (app: any) => {
+export default defineNuxtPlugin((app: any) => {
   app.$router.options.scrollBehavior = () => {
     return { left: 0, top: 0 };
   };
@@ -13,8 +12,6 @@ export default defineNuxtPlugin(async (app: any) => {
     localStorage.getItem("code-theme") || "light"
   );
   document.documentElement.classList.add(`${useThemeMode().themeMode.value}-mode`);
-
-  await loadI18nJson(useI18nCode().i18nCode.value);
 
   const fragment = new DocumentFragment();
 

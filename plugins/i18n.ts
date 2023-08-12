@@ -1,8 +1,9 @@
 import { i18nLocales } from "~/utils/common/locales";
 import { translate, translateT, translateTT } from "~/utils/nuxt";
 
-export default defineNuxtPlugin((app) => {
-  const { i18nCode } = useI18nCode();
+export default defineNuxtPlugin(async (app) => {
+  const { i18nCode, changeI18n } = useI18nCode();
+  await changeI18n(i18nCode.value);
   app.hook("vue:setup", () => {
     useHead({
       htmlAttrs: computed(() => {
