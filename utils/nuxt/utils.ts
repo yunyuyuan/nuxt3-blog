@@ -3,6 +3,15 @@ import { AllKeys, CommonItem, HeaderTabs, githubRepoUrl, HeaderTabUrl, getUnique
 import { inBrowser, isDev } from "~/utils/nuxt";
 import config from "~/config";
 
+// XXX 在mount时更新一下key，防止SSG里v-for产生的元素，在client里被vue忽略
+export const useHackKey = () => {
+  const key = ref(1);
+  onMounted(() => {
+    key.value += 1;
+  });
+  return key;
+};
+
 export function useCurrentTab () {
   return HeaderTabs.find(tab => useRoute().path.includes(tab.url)) || HeaderTabs[0];
 }

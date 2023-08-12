@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { formatTime, literalTime, useListPage } from "~/utils/nuxt";
+import { formatTime, literalTime, useHackKey, useListPage } from "~/utils/nuxt";
 import { KnowledgeItem, KnowledgeTabs, KnowledgeTabsList } from "~/utils/common";
+
+const hackKey = useHackKey();
 
 const { list: knowledgeList, pending } = useListPage<KnowledgeItem>();
 
@@ -29,17 +31,12 @@ function goTo (tab?: string) {
   navigateTo({ query: { type: tab } }, { replace: true });
 }
 
-// FIXME
-const un = ref(0);
-onMounted(() => {
-  un.value += 1;
-});
 </script>
 
 <template>
   <div class="knowledge-list">
     <nav class="flex">
-      <span v-for="tab in tabs" :key="tab.key + un" :class="{ active: tab.active }" @click="goTo(tab.key)">
+      <span v-for="tab in tabs" :key="tab.key + hackKey" :class="{ active: tab.active }" @click="goTo(tab.key)">
         {{ $T(tab.name) }}
         <b>{{ getFilteredListLength(tab.key) }}</b>
       </span>

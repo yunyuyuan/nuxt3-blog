@@ -1,10 +1,11 @@
 <script setup lang="tsx">
 import type Headroom from "headroom.js";
 import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
-import { inBrowser, isPrerender, calcRocketUrl, translateT } from "~/utils/nuxt";
+import { inBrowser, isPrerender, calcRocketUrl, translateT, useHackKey } from "~/utils/nuxt";
 import { i18nLocales, githubRepoUrl, I18nCode, HeaderTabs } from "~/utils/common";
 import config from "~/config";
 
+const hackKey = useHackKey();
 const { i18nCode, changeI18n } = useI18nCode();
 const { themeMode, toggleThemeMode } = useThemeMode();
 const pageLoading = useLoading();
@@ -106,7 +107,7 @@ const isFirst = ref(true);
           <div class="i18n-select">
             <div
               v-for="locale of i18nLocales"
-              :key="locale.code"
+              :key="locale.code + hackKey"
               :class="{ active: i18nCode===locale.code}"
               @click="setLocale(locale.code)"
             >
