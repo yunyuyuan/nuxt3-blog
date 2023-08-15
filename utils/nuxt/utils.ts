@@ -20,11 +20,9 @@ export function useCurrentTab () {
  * 计算rocket的url
  */
 function calcRocketUrlSuffix (): boolean | string {
-  const path = useRoute().path;
-  const fromManage = path.startsWith("/manage");
-  const paths = (fromManage ? path.replace(/^\/manage/, "") : path)
-    .split("/")
-    .slice(1);
+  const path = useRoute().path.substring(1) || "articles";
+  const fromManage = path.startsWith("manage");
+  const paths = (fromManage ? path.replace(/^\/manage/, "") : path).split("/");
   if (paths[0] === "about") {
     return false;
   }

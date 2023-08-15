@@ -121,7 +121,7 @@ const isFirst = ref(true);
         v-if="!isPrerender"
         class="mode"
         :class="themeMode"
-        :title="$t('switch-mode', [$t(`mode-${themeMode}`)])"
+        :title="$t('switch-mode', [$t(`mode-${themeMode === 'light' ? 'dark' : 'light'}`)])"
         @click="toggleTheme"
       >
         <span>
