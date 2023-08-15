@@ -1,8 +1,8 @@
 {
     "framework": null,
-    "buildCommand": "yarn generate",
+    "buildCommand": "pnpm generate",
     "outputDirectory": "./.output/public",
-    "installCommand": "yarn install",
+    "installCommand": "pnpm install",
     "github": {
         "silent": true,
         "autoJobCancelation": true
