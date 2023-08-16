@@ -102,6 +102,21 @@
   * `/common` javascript相关的功能代码(不依赖vue或nuxt)
 * `/config.ts` 博客配置，必须修改
 
+# Node脚本
+```json5
+"scripts": {
+  "build": "nuxt build", // 编译为ssr
+  "dev": "nuxt dev", //开发
+  "generate": "gulp generate", // 编译为static
+  "chpwd": "gulp change-passwd", // 全局修改密码
+  "genimg": "gulp generate-image-map", // 收集全站图片，输出到img.json
+  "downimg": "gulp download-image", // 读取img.json，下载所有图片到imgs/
+  "subimg": "gulp substitute-image", // 读取img.json，替换为新的图片（运行此脚本前，请先修改img.json里的newUrl为需要替换的url）
+  "lint": "eslint --fix --ext .ts,vue --ignore-path .gitignore .", //执行eslint
+  "preview": "nuxt preview", // 预览编译后的网站
+  "prepare": "husky install" // 安装husky
+}
+```
 
 # 更新日志
 

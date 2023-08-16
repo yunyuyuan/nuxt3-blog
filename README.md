@@ -102,6 +102,22 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 * `/config.ts` blog configurations, your must change it.
 
 
+# Node scripts
+```json5
+"scripts": {
+  "build": "nuxt build", // Compile for SSR
+  "dev": "nuxt dev", // Development
+  "generate": "gulp generate", // Compile to static
+  "chpwd": "gulp change-passwd", // Globally change password
+  "genimg": "gulp generate-image-map", // Collect site-wide images, output to img.json
+  "downimg": "gulp download-image", // Read img.json, download all images to imgs/
+  "subimg": "gulp substitute-image", // Read img.json, replace with new images (before running this script, please modify newUrl in img.json to the URL to be replaced)
+  "lint": "eslint --fix --ext .ts,vue --ignore-path .gitignore .", // Execute eslint
+  "preview": "nuxt preview", // Preview the compiled website
+  "prepare": "husky install" // Install Husky
+}
+```
+
 # Changelog
 
 [CHANGELOG.md](/CHANGELOG.md)
