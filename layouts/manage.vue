@@ -78,9 +78,16 @@ const ManageMenu = defineComponent({
       </nuxt-link>
       {
         isDev &&
-    <nuxt-link title="svgs" to="/manage/all-svg" target="_blank">
-      SVG
-    </nuxt-link>
+      <nuxt-link title="svgs" to="/manage/all-svg" target="_blank">
+        SVG
+      </nuxt-link>
+      }
+      {
+        (pageLoading.loadingState.value && !isMobile.value)
+          ? <div>
+            <svg-icon name="loading"/>
+          </div>
+          : null
       }
     </div>
   )
