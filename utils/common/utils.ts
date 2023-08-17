@@ -55,3 +55,10 @@ export function escapeHtml (s: string) {
 export function escapeNewLine (s: string) {
   return s.replace(/\r\n/g, "\n");
 }
+
+export function toggleCodeBlockTheme (theme?: string) {
+  const body = document.body;
+  theme = theme || (body.getAttribute("code-theme") === "light" ? "dark" : "light");
+  body.setAttribute("code-theme", theme);
+  localStorage.setItem("code-theme", theme);
+}

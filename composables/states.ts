@@ -1,4 +1,4 @@
-import { GithubTokenKey, I18nCode, I18nStoreKey } from "~/utils/common";
+import { GithubTokenKey, I18nCode, I18nStoreKey, toggleCodeBlockTheme } from "~/utils/common";
 import { useState } from "#app";
 
 import { getLocalStorage, loadI18nJson, setLocalStorage } from "~/utils/nuxt";
@@ -24,6 +24,7 @@ export const useThemeMode = () => {
       themeMode.value = themeMode.value === "light" ? "dark" : "light";
       document.documentElement.classList.add(`${themeMode.value}-mode`);
       setLocalStorage(ThemeModeKey, themeMode.value);
+      toggleCodeBlockTheme(themeMode.value);
     }
   };
 };

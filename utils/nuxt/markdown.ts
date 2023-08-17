@@ -4,7 +4,7 @@ import { marked as Marked } from "marked";
 import { translate, notify, isPrerender } from "~/utils/nuxt";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
-import { escapeHtml, initHljs, ViewerAttr } from "~/utils/common";
+import { escapeHtml, initHljs, toggleCodeBlockTheme, ViewerAttr } from "~/utils/common";
 
 let inited = false;
 
@@ -418,13 +418,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
         actions.appendChild(span);
       });
       themeBtn.title = "theme";
-      themeBtn.onclick = () => {
-        const body = document.body;
-        const theme =
-          body.getAttribute("code-theme") === "light" ? "dark" : "light";
-        body.setAttribute("code-theme", theme);
-        localStorage.setItem("code-theme", theme);
-      };
+      themeBtn.onclick = () => toggleCodeBlockTheme();
       const copyBtn = createSvgIcon("copy", (span) => {
         span.classList.add("copy");
         actions.appendChild(span);
