@@ -1,6 +1,6 @@
 import { marked } from "marked";
 import { CommonItem, createNewItem, processEncryptDecrypt } from "~/utils/common";
-import { parseMarkdown, formatTime, DBOperate, isPrerender, translate, afterInsertHtml, parseMarkdownSync, registerCancelWatchEncryptor, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "~/utils/nuxt";
+import { parseMarkdown, formatTime, DBOperate, isPrerender, translate, afterInsertHtml, parseMarkdownSync, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "~/utils/nuxt";
 import config from "~/config";
 import { incVisitorsEvent } from "~/vite-plugins/types";
 
@@ -20,11 +20,9 @@ export function useContentPage<T extends CommonItem> () {
 
   const item = reactive(createNewItem(targetTab.url)) as T;
 
-  // cancelWatchPasswd
-  const cancelFnList = registerCancelWatchEncryptor();
   let destroyFns: ReturnType<typeof afterInsertHtml> = [];
 
-  watchUntil(listPending, async () => {
+  watchUntil(listPending, () => {
     const foundItem = list.value!.find(item => item.id === Number(id));
     if (!foundItem) {
       showError({ statusCode: 404, fatal: true });
@@ -33,9 +31,9 @@ export function useContentPage<T extends CommonItem> () {
       item.visitors = 0;
     }
     if (item.encrypt) {
-      cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
+      encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
         await processEncryptDecrypt(item, decrypt, targetTab.url);
-      }));
+      });
     }
   }, { immediate: true }, pending => !pending || isPrerender, "once");
 
@@ -55,9 +53,7 @@ export function useContentPage<T extends CommonItem> () {
           () => {
             htmlContent.value = mdContent.value;
           }
-        ).then((cancelFn) => {
-          cancelFnList.push(cancelFn);
-        });
+        );
       } else if (item.encryptBlocks) {
         let newMarkdownContent = mdContent.value;
         for (const block of item.encryptBlocks) {
@@ -82,8 +78,6 @@ export function useContentPage<T extends CommonItem> () {
             newMarkdownContent = newMarkdownContent.slice(0, start) + await decrypt(newMarkdownContent.slice(start, end)) + newMarkdownContent.slice(end);
           }
           htmlContent.value = await parseMarkdown(newMarkdownContent);
-        }).then((cancelFn) => {
-          cancelFnList.push(cancelFn);
         });
       } else if (isPrerender) {
         htmlContent.value = parseMarkdownSync(mdContent.value, marked);

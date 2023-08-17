@@ -1,6 +1,6 @@
 import type { Ref } from "vue";
 import { createNewItem, CommonItem, processEncryptDecrypt } from "~/utils/common";
-import { registerCancelWatchEncryptor, isPrerender, useHasModified, translate, useStatusText, useCurrentTab, deepClone, watchUntil, assignItem, fetchList, fetchMd } from "~/utils/nuxt";
+import { isPrerender, useHasModified, translate, useStatusText, useCurrentTab, deepClone, watchUntil, assignItem, fetchList, fetchMd } from "~/utils/nuxt";
 
 import config from "~/config";
 
@@ -20,9 +20,6 @@ export function useManageContent<T extends CommonItem> () {
 
   const isNew = itemId === "new";
   const hasDraft = ref(false);
-
-  // cancelWatchPasswd
-  const cancelFnList = registerCancelWatchEncryptor();
 
   const originItem = reactive(createNewItem(targetTab.url)) as T;
   const draftItem = reactive(createNewItem(targetTab.url)) as T;
@@ -49,17 +46,17 @@ export function useManageContent<T extends CommonItem> () {
   const mdDecrypted = ref(false);
   const decrypted = computed(() => itemDecrypted.value && mdDecrypted.value);
   const blockDecrypted = ref(false);
-  watchUntil(listPending, async () => {
+  watchUntil(listPending, () => {
     if (!isNew) {
       assignItem<T>(originItem, deepClone(list.value.find(item => item.id === Number(itemId))!) as T);
       assignItem<T>(item, deepClone(originItem));
       // item的内容可以马上解密
       if (item.encrypt) {
-        cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
+        encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
           await processEncryptDecrypt(item, decrypt, targetTab.url);
           itemDecrypted.value = true;
           resetOriginItem();
-        }));
+        });
       } else {
         itemDecrypted.value = true;
       }
@@ -73,19 +70,19 @@ export function useManageContent<T extends CommonItem> () {
   if (!isNew) {
     const { pending, data: content } = fetchMd(targetTab.url, itemId);
     mdPending = pending;
-    watch([listPending, content], async ([listPend, markdown]) => {
+    watch([listPending, content], ([listPend, markdown]) => {
       if ((!listPend && markdown) || isPrerender) {
         markdownContent.value = markdown?.trim() || "";
         // 取到结果后，处理解密
         if (item.encrypt) {
           blockDecrypted.value = true;
-          cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
+          encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
             markdownContent.value = (await decrypt(markdownContent.value)).trim();
             mdDecrypted.value = true;
-          }));
+          });
         } else if (item.encryptBlocks) {
           mdDecrypted.value = true;
-          cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
+          encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
             let newMarkdownContent = markdownContent.value;
             for (const block of item.encryptBlocks!) {
               const { start, end } = block;
@@ -93,7 +90,7 @@ export function useManageContent<T extends CommonItem> () {
             }
             markdownContent.value = newMarkdownContent;
             blockDecrypted.value = true;
-          }));
+          });
         } else {
           mdDecrypted.value = true;
           blockDecrypted.value = true;

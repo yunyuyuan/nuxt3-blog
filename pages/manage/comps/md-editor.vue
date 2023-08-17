@@ -119,6 +119,7 @@ watch(
 
 // md改变时，更新html
 const markdownRef = ref<HTMLElement>();
+let destroyFn: ReturnType<typeof afterInsertHtml>;
 const currentHtml = ref<string>("");
 watch(
   currentText,
@@ -126,7 +127,7 @@ watch(
     currentHtml.value = await parseMarkdown(currentText.value);
     nextTick(() => {
       if (markdownRef.value) {
-        afterInsertHtml(markdownRef.value, true);
+        destroyFn = afterInsertHtml(markdownRef.value, true);
       }
     });
   },
@@ -138,6 +139,7 @@ props.getHtml(markdownRef);
 onMounted(initEditor);
 onBeforeUnmount(() => {
   editor?.dispose();
+  destroyFn.forEach(fn => fn());
 });
 initViewer(markdownRef);
 </script>

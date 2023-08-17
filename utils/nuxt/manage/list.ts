@@ -1,5 +1,5 @@
 import { CommonItem, processEncryptDecrypt } from "~/utils/common";
-import { registerCancelWatchEncryptor, deepClone, useCurrentTab, fetchList, watchUntil, translate, isPrerender } from "~/utils/nuxt";
+import { deepClone, useCurrentTab, fetchList, watchUntil, translate, isPrerender } from "~/utils/nuxt";
 import config from "~/config";
 
 /**
@@ -15,11 +15,8 @@ export function useManageList<T extends CommonItem> () {
     title: translate("list-manage", [targetTab.name]) + config.SEO_title
   });
 
-  // cancelWatchPasswd
-  const cancelFnList = registerCancelWatchEncryptor();
-
   const resultList = reactive([]) as T[];
-  watchUntil(pending, async () => {
+  watchUntil(pending, () => {
     resultList.splice(0, resultList.length, ...list.value!.map((item) => {
       return deepClone({
         ...item,
@@ -27,13 +24,13 @@ export function useManageList<T extends CommonItem> () {
       }) as T;
     }));
     // 解密列表数据
-    cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
+    encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
       for (const item of resultList) {
         if (item.encrypt) {
           await processEncryptDecrypt(item, decrypt, targetTab.url);
         }
       }
-    }));
+    });
   }, { immediate: true }, pending => !pending || isPrerender, "once");
 
   // filter

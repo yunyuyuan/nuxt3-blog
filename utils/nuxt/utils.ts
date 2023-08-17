@@ -138,18 +138,6 @@ export function useComment (key: HeaderTabUrl) {
   return { root, hasComment };
 }
 
-// XXX Must declare lifetime hook before using vue feature,like `render()` inside `notify()`.
-/**
- * 注册onBeforeUnmounted加密取消监听
- */
-export function registerCancelWatchEncryptor (): (() => void)[] {
-  const cancelFnList: (() => void)[] = [];
-  onBeforeUnmount(() => {
-    cancelFnList.forEach(fn => fn());
-  });
-  return cancelFnList;
-}
-
 /**
  * 简化版deepClone
  */

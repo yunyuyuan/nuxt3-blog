@@ -16,6 +16,11 @@ export const useEncryptor = () => {
   /** 同一个错误密码只会提示一次错误信息 */
   const incorrectPwd = useState<string>("incorrect-passwd", () => "");
 
+  const cancelFnList: (() => void)[] = [];
+  onBeforeUnmount(() => {
+    cancelFnList.forEach(fn => fn());
+  });
+
   const encrypt: DecryptFunction = async (s: string) => {
     if (!s) {
       return s;
@@ -72,13 +77,12 @@ export const useEncryptor = () => {
   const decryptOrWatchToDecrypt = async (
     callback: (_decrypt: DecryptFunction) => Promise<void>,
     firstIsFailed: () => any = () => undefined
-  ): Promise<() => void> => {
+  ): Promise<void> => {
     try {
       if (!usePasswd.value) {
         throw new Error(translate("need-passwd"));
       }
       await callback(decrypt);
-      return () => undefined;
     } catch (e) {
       firstIsFailed();
       const cancel = watch(usePasswd, async (pwd) => {
@@ -90,7 +94,7 @@ export const useEncryptor = () => {
           cancel();
         } catch {}
       });
-      return cancel;
+      cancelFnList.push(cancel);
     }
   };
 

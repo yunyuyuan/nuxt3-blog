@@ -1,5 +1,5 @@
 import { CommonItem, processEncryptDecrypt } from "~/utils/common";
-import { DBOperate, isPrerender, deepClone, fetchList, registerCancelWatchEncryptor, useCurrentTab, watchUntil, translateT } from "~/utils/nuxt";
+import { DBOperate, isPrerender, deepClone, fetchList, useCurrentTab, watchUntil, translateT } from "~/utils/nuxt";
 import config from "~/config";
 import { getVisitorsEvent } from "~/vite-plugins/types";
 import { VisitorsDb } from "~/lib/api/db/visitors";
@@ -18,11 +18,8 @@ export function useListPage<T extends CommonItem> () {
     title: translateT(targetTab.name) + config.SEO_title
   });
 
-  // cancelWatchPasswd
-  const cancelFnList = registerCancelWatchEncryptor();
-
   const resultList = reactive([]) as T[];
-  watchUntil(pending, async () => {
+  watchUntil(pending, () => {
     resultList.splice(0, 0, ...list.value!.map((item) => {
       return deepClone({
         ...item,
@@ -49,13 +46,13 @@ export function useListPage<T extends CommonItem> () {
     }, { immediate: true });
 
     // 解密列表数据
-    cancelFnList.push(await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
+    encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
       for (const item of resultList) {
         if (item.encrypt) {
           await processEncryptDecrypt(item, decrypt, targetTab.url);
         }
       }
-    }));
+    });
   }, { immediate: true }, pending => !pending || isPrerender, "once");
 
   return {
