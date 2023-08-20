@@ -94,11 +94,7 @@ export default defineNuxtConfig({
     output: { dir: "{{ rootDir }}/.output", serverDir: "{{ output.dir }}/server", publicDir: "{{ output.dir }}/public" }
   },
   experimental: {
-    /**
-     * Need payload to cache the data from useAsyncData, but why?
-     * https://github.com/nuxt/nuxt/blob/main/packages/nuxt/src/app/plugins/payload.client.ts#L27
-     */
-    // payloadExtraction: false
+    payloadExtraction: false
   },
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
