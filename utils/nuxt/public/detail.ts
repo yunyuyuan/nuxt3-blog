@@ -67,7 +67,9 @@ export async function useContentPage<T extends CommonItem> () {
         // 如果未登录：直接隐藏block
           : newMarkdownContent.slice(0, start - 10) + newMarkdownContent.slice(end + 11);
       }
-      htmlContent.value = parseMarkdownSync(mdContent.value);
+      nuxtApp.runWithContext(() => {
+        htmlContent.value = parseMarkdownSync(newMarkdownContent);
+      });
       encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
         let newMarkdownContent = mdContent.value;
         for (const block of item.encryptBlocks!) {
@@ -76,7 +78,7 @@ export async function useContentPage<T extends CommonItem> () {
         }
         htmlContent.value = parseMarkdownSync(newMarkdownContent);
       });
-    });
+    }, { immediate: true });
   } else {
     nuxtApp.runWithContext(() => {
       htmlContent.value = parseMarkdownSync(mdContent.value);
