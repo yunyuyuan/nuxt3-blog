@@ -16,13 +16,25 @@ export function useCurrentTab () {
   return HeaderTabs.find(tab => useRoute().path.includes(tab.url)) || HeaderTabs[0];
 }
 
+// https://github.com/nuxt/nuxt/issues/22590
+export function useFuckTitle (compute: ComputedRef<string>) {
+  const title = ref("");
+  watch(() => compute.value, (v) => {
+    title.value = v;
+  }, { immediate: true });
+
+  useHead({
+    title: computed(() => title.value)
+  });
+}
+
 /**
  * 计算rocket的url
  */
 function calcRocketUrlSuffix (): boolean | string {
   const path = useRoute().path.substring(1) || "articles";
   const fromManage = path.startsWith("manage");
-  const paths = (fromManage ? path.replace(/^\/manage/, "") : path).split("/");
+  const paths = (fromManage ? path.replace(/^manage\//, "") : path).split("/");
   if (paths[0] === "about") {
     return false;
   }
@@ -40,7 +52,7 @@ export function calcRocketUrl () {
   if (typeof url === "boolean") {
     return githubRepoUrl;
   }
-  return (url);
+  return url;
 }
 
 export function watchUntil (

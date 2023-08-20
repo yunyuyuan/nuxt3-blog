@@ -16,6 +16,8 @@ export function createNewItem (url: HeaderTabUrl): CommonItem {
     id: 0,
     time: 0,
     modifyTime: 0,
+    _show: true,
+    visitors: 0,
     encrypt: false
   };
   switch (url) {

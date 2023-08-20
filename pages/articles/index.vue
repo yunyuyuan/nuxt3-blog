@@ -6,7 +6,7 @@ definePageMeta({
   alias: "/"
 });
 
-const { list: articlesList, pending } = useListPage<ArticleItem>();
+const articlesList = await useListPage<ArticleItem>();
 
 const articleTagList = new Set<string>();
 
@@ -61,7 +61,6 @@ const toggleTags = (tag: string) => {
       </span>
     </div>
     <div class="body flexc">
-      <common-loading v-show="pending" :show-in-first="false" />
       <ul v-if="filteredList.length" class="w100">
         <li v-for="item in filteredList" v-show="item._show" :key="item.id">
           <nuxt-link :to="'/articles/' + String(item.id)">
@@ -80,7 +79,7 @@ const toggleTags = (tag: string) => {
           </nuxt-link>
         </li>
       </ul>
-      <div v-else v-show="!pending" class="empty">
+      <div v-else class="empty">
         {{ $T('nothing-here') }}
       </div>
     </div>

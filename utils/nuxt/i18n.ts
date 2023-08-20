@@ -1,16 +1,17 @@
 import capitalize from "lodash/capitalize";
 import { I18nCode } from "~/utils/common";
-const messages: Partial<Record<I18nCode, Record<string, string>>> = {};
 
 export async function loadI18nJson (code: I18nCode) {
-  if (!messages[code]) {
+  const messages = useNuxtApp().$i18nMessages;
+  if (!messages.value[code]) {
     const json = await import(`../../i18n/${code}.json?raw`);
-    messages[code] = JSON.parse(json.default);
+    messages.value[code] = JSON.parse(json.default);
   }
 }
 
 export function translate (name: string, params?: any[], code?: I18nCode): string {
   code = code || useI18nCode().i18nCode.value!;
+  const messages = useNuxtApp().$i18nMessages.value;
   if (!messages[code]) {
     return name;
   }

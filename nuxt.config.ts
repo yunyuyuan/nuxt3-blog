@@ -112,6 +112,7 @@ export default defineNuxtConfig({
       }
     },
     build: {
+      // minify: false,
       rollupOptions: {
         output: {
           manualChunks: {

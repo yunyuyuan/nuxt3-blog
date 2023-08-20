@@ -3,7 +3,7 @@ import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
 import type { Ref, PropType } from "vue";
 import type { editor as MonacoEditor } from "monaco-editor";
-import { afterInsertHtml, parseMarkdown, initViewer } from "~/utils/nuxt";
+import { afterInsertHtml, parseMarkdownSync, initViewer } from "~/utils/nuxt";
 
 const props = defineProps({
   modelValue: { type: String, default: "" },
@@ -124,7 +124,7 @@ const currentHtml = ref<string>("");
 watch(
   currentText,
   async () => {
-    currentHtml.value = await parseMarkdown(currentText.value);
+    currentHtml.value = await parseMarkdownSync(currentText.value);
     nextTick(() => {
       if (markdownRef.value) {
         destroyFn = afterInsertHtml(markdownRef.value, true);

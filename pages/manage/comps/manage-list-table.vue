@@ -3,7 +3,7 @@ import { deleteList } from "ls:~/utils/nuxt/manage/github";
 import { CommonItem } from "~/utils/common";
 import { formatTime, useStatusText, useManageList } from "~/utils/nuxt";
 
-const { targetTab, list, pending, customFilter } = useManageList<T>();
+const { targetTab, list, customFilter } = await useManageList<T>();
 
 const props = defineProps<{
   colPrefix: string;
@@ -108,8 +108,7 @@ function deleteSelect () {
         {{ $T('select') }}
       </div>
     </li>
-    <common-loading v-show="pending" :show-in-first="false" />
-    <div v-if="!searchedList.length && !pending" class="flex empty">
+    <div v-if="!searchedList.length" class="flex empty">
       {{ $t('nothing-here') }}
     </div>
     <li

@@ -8,13 +8,16 @@ import { escapeHtml, initHljs, toggleCodeBlockTheme, ViewerAttr } from "~/utils/
 
 let inited = false;
 
+/**
+ * @deprecated use `parseMarkdownSync`
+ */
 export async function parseMarkdown (text: string) {
   const marked = (await import("marked")).marked;
   return _parseMarkdown(text, marked);
 }
 
-export function parseMarkdownSync (text: string, marked: typeof Marked) {
-  return _parseMarkdown(text, marked);
+export function parseMarkdownSync (text: string) {
+  return _parseMarkdown(text, Marked);
 }
 
 function _parseMarkdown (text: string, marked: typeof Marked) {

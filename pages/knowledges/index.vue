@@ -4,7 +4,7 @@ import { KnowledgeItem, KnowledgeTabs, KnowledgeTabsList } from "~/utils/common"
 
 const hackKey = useHackKey();
 
-const { list: knowledgeList, pending } = useListPage<KnowledgeItem>();
+const knowledgeList = await useListPage<KnowledgeItem>();
 
 const currentTab = computed(() => (useRoute().query.type as string) || "");
 const isAll = computed(
@@ -42,7 +42,6 @@ function goTo (tab?: string) {
       </span>
     </nav>
     <div class="body flexc">
-      <common-loading v-show="pending" :show-in-first="false" />
       <div v-if="!filteredListEmpty">
         <nuxt-link
           v-for="item in filteredList"
@@ -55,7 +54,7 @@ function goTo (tab?: string) {
           <time :title="formatTime(item.time)">{{ literalTime(item.time) }}</time>
         </nuxt-link>
       </div>
-      <div v-else-if="!pending" class="empty">
+      <div v-else class="empty">
         {{ $T('nothing-here') }}
       </div>
     </div>

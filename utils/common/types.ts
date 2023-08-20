@@ -9,8 +9,8 @@ export type NeedsItem = {
   modifyTime: number;
   encrypt: boolean;
   encryptBlocks?: EncryptBlock[] | null;
-  visitors?: number;
-  _show?: boolean;
+  visitors: number;
+  _show: boolean;
 };
 
 export type ArticleItem = NeedsItem & {

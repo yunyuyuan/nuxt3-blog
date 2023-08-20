@@ -3,7 +3,7 @@ import config from "~/config";
 import { addScrollListener, rmScrollListener, ArticleItem } from "~/utils/common";
 import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerender, useContentPage, useComment, watchUntil } from "~/utils/nuxt";
 
-const { item, tabUrl, modifyTime, htmlContent, markdownRef, mdPending, htmlInserted } = useContentPage<ArticleItem>();
+const { item, tabUrl, modifyTime, htmlContent, markdownRef, htmlInserted } = await useContentPage<ArticleItem>();
 
 const currentMenu = useCurrentMenu();
 
@@ -42,23 +42,21 @@ const listenAnchor = () => {
 
 if (!isPrerender) {
   onMounted(() => {
-    watchUntil(mdPending, () => {
-      const hash = useRoute().hash;
-      nextTick(() => {
-        if (hash) {
-          watchUntil(htmlInserted, () => {
-            window.scrollTo({
-              top: document
-                .getElementById(hash.slice(1))
-                ?.getBoundingClientRect().y
-            });
-          }, { immediate: true }, "boolean", "cancelAfterUntil");
-        } else {
-          listenAnchor();
-        }
-        addScrollListener(listenAnchor);
-      });
-    }, { immediate: true }, "boolean", "cancelAfterUntil");
+    const hash = useRoute().hash;
+    nextTick(() => {
+      if (hash) {
+        watchUntil(htmlInserted, () => {
+          window.scrollTo({
+            top: document
+              .getElementById(hash.slice(1))
+              ?.getBoundingClientRect().y
+          });
+        }, { immediate: true }, "boolean", "cancelAfterUntil");
+      } else {
+        listenAnchor();
+      }
+      addScrollListener(listenAnchor);
+    });
   });
 }
 
@@ -75,7 +73,6 @@ initViewer(root);
     <div class="captain w100" :class="{'has-comment': hasComment}">
       <div class="article-container">
         <h1>{{ item.title }}</h1>
-        <common-loading v-show="mdPending" :show-in-first="false" />
         <div ref="viewerContainer" class="html-container">
           <article
             ref="markdownRef"

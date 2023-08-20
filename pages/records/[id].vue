@@ -1,21 +1,11 @@
 <script setup lang="ts">
 import config from "~/config";
-import { formatTime, literalTime, useContentPage, useComment, translate, initViewer } from "~/utils/nuxt";
+import { formatTime, literalTime, useContentPage, useComment, translate, initViewer, useFuckTitle } from "~/utils/nuxt";
 import { RecordItem } from "~/utils/common";
 
-const { item, tabUrl, publishTime, modifyTime, htmlContent, markdownRef, mdPending } = useContentPage<RecordItem>();
+const { item, tabUrl, publishTime, modifyTime, htmlContent, markdownRef } = await useContentPage<RecordItem>();
 
-const htmlTitle = ref("");
-watch(() => item.time, (time) => {
-  htmlTitle.value = `${translate("records")}: ${formatTime(time, "date")}${config.SEO_title}`;
-}, { immediate: true });
-useHead({
-  title: computed(() => htmlTitle.value)
-});
-// FIXME
-// useHead({
-//   title: computed(() => `${translate("records")}: ${formatTime(item.time, "date")}${config.SEO_title}`)
-// });
+useFuckTitle(computed(() => `${translate("records")}: ${formatTime(item.time, "date")}${config.SEO_title}`));
 useSeoMeta({
   ogTitle: computed(() => `${translate("records")}: ${formatTime(item.time, "date")}${config.SEO_title}`)
 });
@@ -45,7 +35,6 @@ initViewer(root);
           {{ item.visitors }}
         </span>
       </p>
-      <common-loading v-show="mdPending" :show-in-first="false" />
       <div class="article-container">
         <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
       </div>

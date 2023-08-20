@@ -30,11 +30,8 @@ const {
   decrypted,
   blockDecrypted,
   draftMarkdownContent,
-  markdownContent,
-  pending,
-  mdPending,
-  listPending
-} = useManageContent<T>();
+  markdownContent
+} = await useManageContent<T>();
 
 const activeRoute = targetTab.url;
 const encryptor = useEncryptor();
@@ -214,33 +211,27 @@ const delDraft = () => {
   hasDraft.value = false;
 };
 onMounted(() => {
-  // FIXME Why do we need to watch item.id?
-  // Seems like watcher of listPending has been triggered with wrong order.
-  watch([listPending, () => item.id], ([pend, _]) => {
-    if (!pend) {
-      hasDraft.value = getLocalStorage(draftPrefix()) !== null;
-    }
-  }, { immediate: true });
+  hasDraft.value = getLocalStorage(draftPrefix()) !== null;
 });
 </script>
 
 <template>
   <div class="manage-content-header flex">
     <div class="draft flex">
-      <common-button theme="default" size="small" :disabled="pending || !hasDraft" @click="loadDraft">
+      <common-button theme="default" size="small" :disabled="!hasDraft" @click="loadDraft">
         {{ $t('load-draft') }}
       </common-button>
-      <common-button theme="default" size="small" class="load-draft" :disabled="pending || undefined" @click="dumpDraft">
+      <common-button theme="default" size="small" class="load-draft" @click="dumpDraft">
         {{ $t('save-draft') }}
       </common-button>
-      <common-button theme="default" size="small" :disabled="pending || !hasDraft" @click="delDraft">
+      <common-button theme="default" size="small" :disabled="!hasDraft" @click="delDraft">
         {{ $t('delete-draft') }}
       </common-button>
     </div>
     <span class="status">{{ statusText }}</span>
     <common-button
       icon="upload"
-      :disabled="pending || !canUpload || currentOperate === 'delete' || (!decrypted && !mdPending)"
+      :disabled="!canUpload || currentOperate === 'delete' || !decrypted"
       :loading="processing && currentOperate === 'upload'"
       @click="doUpload"
     >
@@ -251,7 +242,7 @@ onMounted(() => {
       class="delete"
       theme="danger"
       icon="delete"
-      :disabled="pending || !canDelete || currentOperate === 'upload'"
+      :disabled="!canDelete || currentOperate === 'upload'"
       :loading="processing && currentOperate === 'delete'"
       @click="showDeleteModal = true"
     >
@@ -275,7 +266,6 @@ onMounted(() => {
       />
       <slot v-for="slot in slots" :name="slot" :item="item" :disabled="!decrypted" />
     </div>
-    <common-loading v-show="listPending" :show-in-first="false" />
   </div>
   <div class="manage-content-md-info" :data-title="$TT('content')">
     <client-only>
@@ -283,7 +273,6 @@ onMounted(() => {
         v-model="inputMarkdown"
         :get-html="getHtml"
         :disabled="!decrypted || !blockDecrypted"
-        :loading="mdPending?.value || false"
         @preview="setPreviewInfo()"
       />
     </client-only>

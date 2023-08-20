@@ -3,8 +3,7 @@ import config from "~/config";
 import { useContentPage, useComment, initViewer } from "~/utils/nuxt";
 import { KnowledgeItem } from "~/utils/common";
 
-const { item, tabUrl, modifyTime, markdownRef, htmlContent, mdPending } =
-  useContentPage<KnowledgeItem>();
+const { item, tabUrl, modifyTime, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
 
 useHead({
   title: computed(() => `《${item.title}》${config.SEO_title}`)
@@ -62,7 +61,6 @@ initViewer(root);
           <span />
         </div>
       </div>
-      <common-loading v-show="mdPending" :show-in-first="false" />
       <div class="article-container">
         <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
       </div>
