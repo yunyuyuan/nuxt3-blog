@@ -12,7 +12,7 @@ const searchFn = (item: RecordItem, s:string) => !item.images.length || item.ima
       :search-fn="searchFn"
     >
       <template #images="{ data: images, dataUrl }">
-        <nuxt-link :to="dataUrl">
+        <nuxt-link no-prefetch :to="dataUrl">
           <the-lazy-img
             v-for="img,idx in (images.length ? images : [{alt: '', src: 'no-poster'}])"
             :key="idx"

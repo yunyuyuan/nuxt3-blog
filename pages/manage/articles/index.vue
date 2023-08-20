@@ -42,7 +42,7 @@ const searchFn = (item: ArticleItem, s: string) => item.title.includes(s);
         </div>
       </template>
       <template #title="{ data: title, dataUrl }">
-        <nuxt-link :to="dataUrl">
+        <nuxt-link no-prefetch :to="dataUrl">
           {{ title }}
         </nuxt-link>
       </template>
