@@ -112,25 +112,14 @@ export default defineNuxtConfig({
       }
     },
     build: {
-      // minify: false,
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            // jsonWorker: [`${prefix}/language/json/json.worker`],
-            // cssWorker: [`${prefix}/language/css/css.worker`],
-            // htmlWorker: [`${prefix}/language/html/html.worker`],
-            // tsWorker: [`${prefix}/language/typescript/ts.worker`],
-            // editorWorker: [`${prefix}/editor/editor.worker`],
-          }
-        }
-      }
+      // minify: false
     }
   },
   hooks: {
     "vite:extendConfig" (config, { isClient }) {
       if (isClient) {
         (config.build?.rollupOptions?.output as any).manualChunks = {
-          markdown: ["highlight.js", "katex", "marked"]
+          // markdown: ["highlight.js", "katex", "marked"]
         };
       }
     }

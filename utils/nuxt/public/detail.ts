@@ -1,5 +1,5 @@
 import { CommonItem, createNewItem, processEncryptDecrypt } from "~/utils/common";
-import { formatTime, inBrowser, DBOperate, translate, afterInsertHtml, parseMarkdownSync, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "~/utils/nuxt";
+import { formatTime, inBrowser, DBOperate, translate, afterInsertHtml, parseMarkdown, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "~/utils/nuxt";
 import config from "~/config";
 import { incVisitorsEvent } from "~/vite-plugins/types";
 
@@ -22,6 +22,7 @@ export async function useContentPage<T extends CommonItem> () {
   // 所有页面都有markdown
   const mdContent = ref<string>("");
   const htmlContent = ref<string>("");
+  const menuItems = ref<Awaited<ReturnType<typeof parseMarkdown>>["menu"]>([]);
   // 所有页面都有发布时间与更新时间
   const publishTime = computed(() => formatTime(item.time));
   const modifyTime = computed(() => formatTime(item.modifyTime));
@@ -50,14 +51,16 @@ export async function useContentPage<T extends CommonItem> () {
   if (item.encrypt) {
     encryptor.decryptOrWatchToDecrypt(
       async (decrypt) => {
-        htmlContent.value = parseMarkdownSync(await decrypt(mdContent.value));
+        const result = await parseMarkdown(await decrypt(mdContent.value));
+        htmlContent.value = result.md;
+        menuItems.value = result.menu;
       },
       () => {
         htmlContent.value = mdContent.value;
       }
     );
   } else if (item.encryptBlocks) {
-    watch(githubToken, (logined) => {
+    watch(githubToken, async (logined) => {
       let newMarkdownContent = mdContent.value;
       for (const block of item.encryptBlocks!) {
         const { start, end } = block;
@@ -67,8 +70,10 @@ export async function useContentPage<T extends CommonItem> () {
         // 如果未登录：直接隐藏block
           : newMarkdownContent.slice(0, start - 10) + newMarkdownContent.slice(end + 11);
       }
-      nuxtApp.runWithContext(() => {
-        htmlContent.value = parseMarkdownSync(newMarkdownContent);
+      await nuxtApp.runWithContext(async () => {
+        const result = await parseMarkdown(newMarkdownContent);
+        htmlContent.value = result.md;
+        menuItems.value = result.menu;
       });
       encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
         let newMarkdownContent = mdContent.value;
@@ -76,12 +81,16 @@ export async function useContentPage<T extends CommonItem> () {
           const { start, end } = block;
           newMarkdownContent = newMarkdownContent.slice(0, start) + await decrypt(newMarkdownContent.slice(start, end)) + newMarkdownContent.slice(end);
         }
-        htmlContent.value = parseMarkdownSync(newMarkdownContent);
+        const result = await parseMarkdown(newMarkdownContent);
+        htmlContent.value = result.md;
+        menuItems.value = result.menu;
       });
     }, { immediate: true });
   } else {
-    nuxtApp.runWithContext(() => {
-      htmlContent.value = parseMarkdownSync(mdContent.value);
+    await nuxtApp.runWithContext(async () => {
+      const result = await parseMarkdown(mdContent.value);
+      htmlContent.value = result.md;
+      menuItems.value = result.menu;
     });
   }
 
@@ -120,6 +129,7 @@ export async function useContentPage<T extends CommonItem> () {
     item,
     tabUrl: targetTab.url,
     htmlContent,
+    menuItems,
     publishTime,
     modifyTime,
     markdownRef,

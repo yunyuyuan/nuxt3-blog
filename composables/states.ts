@@ -29,7 +29,6 @@ export const useThemeMode = () => {
   };
 };
 
-export const useCurrentMenu = () => useState<{size: "big"|"small", text: string, url: string}[]>("current-md-menu", () => []);
 export const useI18nCode = () => {
   const i18nCode = useState<I18nCode>(I18nStoreKey, () => config.defaultLang as any);
   i18nCode.value = getLocalStorage(I18nStoreKey) || config.defaultLang as any;

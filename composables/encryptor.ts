@@ -1,5 +1,5 @@
 import type cryptoJS from "crypto-js";
-import { notify, translate } from "~/utils/nuxt";
+import { notify, isPrerender, translate } from "~/utils/nuxt";
 import { DecryptFunction } from "~/utils/common";
 
 let CryptoJS: typeof cryptoJS;
@@ -78,6 +78,11 @@ export const useEncryptor = () => {
     callback: (_decrypt: DecryptFunction) => Promise<void>,
     firstIsFailed: () => any = () => undefined
   ): Promise<void> => {
+    // prerender时默认解密失败，且不再监听
+    if (isPrerender) {
+      firstIsFailed();
+      return;
+    }
     try {
       if (!usePasswd.value) {
         throw new Error(translate("need-passwd"));
