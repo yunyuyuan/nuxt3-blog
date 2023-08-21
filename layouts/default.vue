@@ -148,7 +148,7 @@ const isFirst = ref(true);
         </div>
       </div>
       <sub />
-      <nuxt-link class="about" :to="'/about'" :title="$t('about')">
+      <nuxt-link class="about" :to="inAbout ? '/' : '/about'" :title="$t('about')">
         <img class="s100" src="/icon.png" :alt="$t('avatar')">
       </nuxt-link>
       <span v-show="!!pageLoading.loadingState.value" class="loading" :style="{width: `${pageLoading.loadingState.value}%`}" />
