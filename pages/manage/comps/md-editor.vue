@@ -121,18 +121,14 @@ watch(
 const markdownRef = ref<HTMLElement>();
 let destroyFn: ReturnType<typeof afterInsertHtml>;
 const currentHtml = ref<string>("");
-watch(
-  currentText,
-  async () => {
-    currentHtml.value = await parseMarkdownSync(currentText.value);
-    nextTick(() => {
-      if (markdownRef.value) {
-        destroyFn = afterInsertHtml(markdownRef.value, true);
-      }
-    });
-  },
-  { immediate: true }
-);
+watch(currentText, () => {
+  currentHtml.value = parseMarkdownSync(currentText.value);
+  setTimeout(() => {
+    if (markdownRef.value) {
+      destroyFn = afterInsertHtml(markdownRef.value, true);
+    }
+  });
+}, { immediate: true });
 // 把htmlRef元素传给parent
 props.getHtml(markdownRef);
 

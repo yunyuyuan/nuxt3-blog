@@ -1,6 +1,8 @@
 import { createApp, createVNode, render } from "vue";
 import type { Ref } from "vue";
-import { marked as Marked } from "marked";
+import { marked } from "marked";
+import katex from "katex";
+import hljs from "highlight.js";
 import { translate, notify, isPrerender } from "~/utils/nuxt";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
@@ -8,19 +10,7 @@ import { escapeHtml, initHljs, toggleCodeBlockTheme, ViewerAttr } from "~/utils/
 
 let inited = false;
 
-/**
- * @deprecated use `parseMarkdownSync`
- */
-export async function parseMarkdown (text: string) {
-  const marked = (await import("marked")).marked;
-  return _parseMarkdown(text, marked);
-}
-
 export function parseMarkdownSync (text: string) {
-  return _parseMarkdown(text, Marked);
-}
-
-function _parseMarkdown (text: string, marked: typeof Marked) {
   const currentMenu = useCurrentMenu();
   currentMenu.value = [];
   if (!inited) {
@@ -67,7 +57,11 @@ function _parseMarkdown (text: string, marked: typeof Marked) {
         },
         code (code, language, escaped) {
           code = escaped ? code : escapeHtml(code);
-          return `<pre><div></div><small></small><code class="language-${language}">${code}</code></pre>`;
+          if (isPrerender) {
+            initHljs(hljs);
+            code = hljs.highlightAuto(code, [language!]).value;
+          }
+          return `<pre><div></div><small></small><code class="language-${language} ${isPrerender ? "hljs" : ""}">${code}</code></pre>`;
         }
       },
       extensions: [
@@ -253,7 +247,7 @@ function _parseMarkdown (text: string, marked: typeof Marked) {
             }
           },
           renderer ({ content }) {
-            return `<span class="math-formula inline">${content}</span>`;
+            return `<span class="math-formula inline ${isPrerender ? "parsed" : ""}">${isPrerender ? katex.renderToString(content) : content}</span>`;
           }
         },
         // block level
@@ -272,7 +266,7 @@ function _parseMarkdown (text: string, marked: typeof Marked) {
             }
           },
           renderer ({ content }) {
-            return `<div class="math-formula block"><div>${content}</div></div>`;
+            return `<div class="math-formula block ${isPrerender ? "parsed" : ""}"><div>${isPrerender ? katex.renderToString(content) : content}</div></div>`;
           }
         },
         {
@@ -375,7 +369,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
     mdEl.querySelectorAll<HTMLElement>("pre>code:not(.hljs)").forEach(async (el) => {
       const lang = el.parentElement!.querySelector<HTMLElement>(":scope > small")!;
       const language = el.className.replace(/^.*?language-([^ ]+).*?$/, "$1");
-      const hljs = await initHljs();
+      const hljs = initHljs((await import("highlight.js")).default);
       lang.innerText = (hljs.getLanguage(language) || { name: language }).name!;
       hljs.highlightElement(el);
     });

@@ -70,7 +70,7 @@ export default defineNuxtConfig({
       title: config.title
     }
   },
-  css: ["~/assets/style/main.scss", "~/node_modules/katex/dist/katex.min.css"],
+  css: ["~/assets/style/main.scss", "~/node_modules/katex/dist/katex.min.css", "~/node_modules/viewerjs/dist/viewer.css"],
   runtimeConfig: {
     public: {
       stickers,
@@ -123,6 +123,15 @@ export default defineNuxtConfig({
             // editorWorker: [`${prefix}/editor/editor.worker`],
           }
         }
+      }
+    }
+  },
+  hooks: {
+    "vite:extendConfig" (config, { isClient }) {
+      if (isClient) {
+        (config.build?.rollupOptions?.output as any).manualChunks = {
+          markdown: ["highlight.js", "katex", "marked"]
+        };
       }
     }
   }
