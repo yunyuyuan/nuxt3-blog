@@ -8,14 +8,13 @@ import { incVisitorsEvent } from "~/vite-plugins/types";
  */
 export async function useContentPage<T extends CommonItem> () {
   const nuxtApp = useNuxtApp();
-  const route = useRoute();
   const encryptor = useEncryptor();
   const isAuthor = useIsAuthor();
   const markdownRef = ref<HTMLElement>();
   const githubToken = useGithubToken();
   const targetTab = useCurrentTab();
 
-  const id = route.params.id as string;
+  const id = useRoute().params.id as string;
 
   const item = reactive(createNewItem(targetTab.url)) as T;
 
@@ -28,6 +27,10 @@ export async function useContentPage<T extends CommonItem> () {
   const modifyTime = computed(() => formatTime(item.modifyTime));
 
   let destroyFns: ReturnType<typeof afterInsertHtml> = [];
+
+  onBeforeUnmount(() => {
+    destroyFns.forEach(fn => fn());
+  });
 
   await nuxtApp.runWithContext(async () => {
     const { data: list } = await fetchList(targetTab.url);
@@ -120,10 +123,6 @@ export async function useContentPage<T extends CommonItem> () {
       }
     });
   }, { immediate: true });
-
-  onBeforeUnmount(() => {
-    destroyFns.forEach(fn => fn());
-  });
 
   return {
     item,
