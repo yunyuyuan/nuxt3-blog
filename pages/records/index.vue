@@ -36,8 +36,9 @@ const years = computed(() => {
             <b :title="formatTime(item.time)">{{
               formatTime(item.time, 'month')
             }}</b>
-            <NuxtLink
+            <nuxt-link
               :class="{ multiple: item.images.length > 1 }"
+              no-prefetch
               :to="'/records/' + item.id"
             >
               <the-lazy-img
@@ -45,7 +46,7 @@ const years = computed(() => {
                 :src="item.images[0]?.src ?? 'no-poster'"
                 :retry="false"
               />
-            </NuxtLink>
+            </nuxt-link>
           </div>
         </div>
       </li>

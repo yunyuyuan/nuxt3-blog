@@ -7,23 +7,56 @@ import config from "~/config";
  * 管理页面详情编辑通用功能
  */
 export async function useManageContent<T extends CommonItem> () {
+  const nuxtApp = useNuxtApp();
   const encryptor = useEncryptor();
   const itemId = useRoute().params.id as string;
   const targetTab = useCurrentTab();
 
   useFuckTitle(computed(() => translate("detail-manage", [targetTab.name]) + config.SEO_title));
 
-  const { data: list } = await fetchList<T>(targetTab.url);
-
   const isNew = itemId === "new";
-  const hasDraft = ref(false);
 
   const originItem = reactive(createNewItem(targetTab.url)) as T;
   const draftItem = reactive(createNewItem(targetTab.url)) as T;
   const item = reactive(deepClone(originItem)) as T;
 
+  const blockDecrypted = ref(false);
   const markdownContent = ref("");
   const draftMarkdownContent = ref("");
+
+  const hasDraft = ref(false);
+  const itemDecrypted = ref(false);
+  const mdDecrypted = ref(false);
+  const decrypted = computed(() => itemDecrypted.value && mdDecrypted.value);
+
+  let list: T[] = [];
+
+  const { hasModified, markdownModified } = useHasModified<T>({ item, origin: originItem });
+  // 额外加上是否修改提示
+  const { statusText: statusText_, canCommit, processing, toggleProcessing } = useStatusText();
+  const canUpload = computed(() => canCommit.value && hasModified.value);
+  const statusText = computed(() => {
+    if (item.encrypt && !decrypted.value) {
+      return translate("need-decrypt");
+    }
+    return statusText_.value || (!hasModified.value ? translate("not-modified") : "");
+  });
+
+  const { hasModified: hasModifiedForDraft, markdownModified: markdownModifiedForDraft } = useHasModified<T>({ item, origin: draftItem });
+  // 提示未保存内容
+  watch([hasModified, hasDraft, hasModifiedForDraft], ([modified, hasDraft, draftModified]) => {
+    // 和origin，草稿对得上一个就行了
+    let modified_ = true;
+    if (hasDraft) {
+      if (!modified || !draftModified) {
+        modified_ = false;
+      }
+    } else if (!modified) {
+      modified_ = false;
+    }
+    useUnsavedContent().value = modified_;
+  });
+
   // 解密完成 or 上传完成(表面工作)，用来比较是否发生改变的originItem需要更新
   const resetOriginItem = (md?: string) => {
     Object.assign(originItem, deepClone(item));
@@ -39,12 +72,13 @@ export async function useManageContent<T extends CommonItem> () {
     }
   };
 
-  const itemDecrypted = ref(false);
-  const mdDecrypted = ref(false);
-  const decrypted = computed(() => itemDecrypted.value && mdDecrypted.value);
-  const blockDecrypted = ref(false);
+  await nuxtApp.runWithContext(async () => {
+    const { data } = await fetchList<T>(targetTab.url);
+    list = data.value;
+  });
+
   if (!isNew) {
-    assignItem<T>(originItem, deepClone(list.value.find(item => item.id === Number(itemId))!) as T);
+    assignItem<T>(originItem, deepClone(list.find(item => item.id === Number(itemId))!));
     assignItem<T>(item, deepClone(originItem));
     // item的内容可以马上解密
     if (item.encrypt) {
@@ -62,8 +96,10 @@ export async function useManageContent<T extends CommonItem> () {
   }
 
   if (!isNew) {
-    const { data: markdown } = await fetchMd(targetTab.url, itemId);
-    markdownContent.value = markdown.value.trim() || "";
+    await nuxtApp.runWithContext(async () => {
+      const { data: markdown } = await fetchMd(targetTab.url, itemId);
+      markdownContent.value = markdown.value.trim() || "";
+    });
     // 取到结果后，处理解密
     if (item.encrypt) {
       blockDecrypted.value = true;
@@ -90,39 +126,13 @@ export async function useManageContent<T extends CommonItem> () {
     mdDecrypted.value = true;
   }
 
-  const { hasModified, markdownModified } = useHasModified<T>({ item, origin: originItem });
-  // 额外加上是否修改提示
-  const { statusText: statusText_, canCommit: canCommit_, processing, toggleProcessing } = useStatusText();
-  const canUpload = computed(() => canCommit_.value && hasModified.value);
-  const statusText = computed(() => {
-    if (item.encrypt && !decrypted.value) {
-      return translate("need-decrypt");
-    }
-    return statusText_.value || (!hasModified.value ? translate("not-modified") : "");
-  });
-
-  const { hasModified: hasModifiedForDraft, markdownModified: markdownModifiedForDraft } = useHasModified<T>({ item, origin: draftItem });
-  // 提示未保存内容
-  watch([hasModified, hasDraft, hasModifiedForDraft], ([modified, hasDraft, draftModified]) => {
-    // 和origin，草稿对得上一个就行了
-    let modified_ = true;
-    if (hasDraft) {
-      if (!modified || !draftModified) {
-        modified_ = false;
-      }
-    } else if (!modified) {
-      modified_ = false;
-    }
-    useUnsavedContent().value = modified_;
-  });
-
   return {
     statusText,
     hasDraft,
     markdownModified,
     markdownModifiedForDraft,
     canUpload,
-    canDelete: canCommit_,
+    canDelete: canCommit,
     processing,
     toggleProcessing,
     resetOriginItem,

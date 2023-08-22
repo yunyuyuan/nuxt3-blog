@@ -7,11 +7,11 @@ import config from "~/config";
  */
 export async function useManageList<T extends CommonItem> () {
   const encryptor = useEncryptor();
-
   const targetTab = useCurrentTab();
-  const { data: list } = await fetchList<T>(targetTab.url);
 
   useFuckTitle(computed(() => translate("list-manage", [targetTab.name]) + config.SEO_title));
+
+  const { data: list } = await fetchList<T>(targetTab.url);
 
   const resultList = reactive([]) as T[];
   resultList.splice(0, 0, ...list.value.map((item) => {

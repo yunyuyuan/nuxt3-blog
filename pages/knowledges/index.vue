@@ -47,6 +47,7 @@ function goTo (tab?: string) {
           v-for="item in filteredList"
           v-show="item._show"
           :key="item.id"
+          no-prefetch
           :to="'/knowledges/' + item.id"
         >
           <svg-icon :name="item.type" />

@@ -63,7 +63,7 @@ const toggleTags = (tag: string) => {
     <div class="body flexc">
       <ul v-if="filteredList.length" class="w100">
         <li v-for="item in filteredList" v-show="item._show" :key="item.id">
-          <nuxt-link :to="'/articles/' + String(item.id)">
+          <nuxt-link no-prefetch :to="'/articles/' + String(item.id)">
             <b>{{ item.title }}</b>
             <div class="foot flex">
               <span :title="formatTime(item.time)">{{

@@ -88,8 +88,8 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      failOnError: false,
-      ignore: ["/manage"]
+      failOnError: false
+      // ignore: ["/manage"]
     },
     output: { dir: "{{ rootDir }}/.output", serverDir: "{{ output.dir }}/server", publicDir: "{{ output.dir }}/public" }
   },

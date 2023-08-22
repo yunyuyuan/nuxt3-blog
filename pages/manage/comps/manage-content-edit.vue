@@ -7,7 +7,7 @@ import { CommonItem, HeaderTabs, getEncryptedBlocks, getNowStamp, processEncrypt
 import { notify, deepClone, translate, getLocalStorage, rmLocalStorage, compareMd, loadOrDumpDraft, randomId, useManageContent } from "~/utils/nuxt";
 
 const props = defineProps<{
-  preProcessItem?:(_item: T, _list?: Ref<T[]> | {value: T[]}) => void;
+  preProcessItem?:(_item: T, _list?: T[]) => void;
   /** 更新之前处理item，附带markdown信息 */
   processWithContent?:(_md: string, _html: HTMLElement, _item: T) => void;
 }>();
@@ -65,18 +65,18 @@ const previewContent = ref("");
 
 /** 更新list */
 const replaceOld = (newItem?: T) => {
-  const cloneList = list.value.map(item => deepClone(item));
+  const cloneList = list.map(item => deepClone(item));
   if (!!newItem && isNew) {
     // 更新item且是新增
     cloneList.splice(0, 0, newItem);
   } else if (newItem) {
     cloneList.splice(
-      list.value.findIndex(i => i.id === item.id),
+      list.findIndex(i => i.id === item.id),
       1,
       newItem
     );
   } else {
-    cloneList.splice(list.value.findIndex(i => i.id === item.id), 1);
+    cloneList.splice(list.findIndex(i => i.id === item.id), 1);
   }
   return cloneList;
 };
