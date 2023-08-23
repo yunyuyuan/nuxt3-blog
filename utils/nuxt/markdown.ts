@@ -24,7 +24,7 @@ export async function parseMarkdown (text: string) {
           url
         };
         menuItems.push(menuItem);
-        return `<h${level}><sup class="fake-head" ${!isPrerender ? `id="${url}"` : ""}></sup><a class="header-link" href="#${url}">${text}</a></h${level}>`;
+        return `<h${level}><sup class="fake-head" id="${url}"></sup><a class="header-link" href="#${url}">${text}</a></h${level}>`;
       },
       image (href, _, text) {
         // sticker
