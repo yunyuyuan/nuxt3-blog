@@ -3,8 +3,12 @@ import { CommonItem, AllKeys, HeaderTabUrl, ModalContainerId } from "~/utils/com
 import { getLocalStorage, setLocalStorage, assignItem, translate, translateT, useCurrentTab, notify } from "~/utils/nuxt";
 import CommonModal from "~/components/common-modal.vue";
 
-export function randomId (exist: CommonItem[] = [], len = 4) {
-  const ids: number[] = exist.map(item => item.id);
+export function randomId (exist: CommonItem[] = []) {
+  const ids = exist.map(item => item.id);
+  let len = ids.length ? Math.max(...ids).toString().length : 4;
+  if (ids.length > 10 ** (len - 1) * 0.6) {
+    len += 1;
+  }
   while (true) {
     let id: string | number = "";
     for (let i = 0; i < len; i++) {

@@ -130,7 +130,7 @@ const getUploadInfo = async () => {
     }
   }
   if (!newItem.id) {
-    newItem.id = randomId();
+    newItem.id = randomId(list);
   }
   // 更新日期
   const nowTime = getNowStamp();
