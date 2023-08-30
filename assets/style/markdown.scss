@@ -303,12 +303,48 @@
   }
 
   table {
-    width: 90%;
+    width: 100%;
     margin: 1rem auto;
+    border: 1px solid #dbdbdb;
+    border-spacing: 0;
+    border-collapse: collapse;
+
+    @include dark-mode {
+      border: 1px solid #646464;
+    }
+
+    thead {
+      background: rgba($theme-color-lighten, 0.1);
+
+      @include dark-mode {
+        background: #2a2f36;
+        color: white;
+      }
+
+      font-weight: 600;
+
+      th {
+        padding: 8px 0;
+      }
+    }
 
     tbody {
-      td {
-        text-align: center;
+      background: white;
+
+      @include dark-mode {
+        background: #1b1b1b;
+      }
+
+      tr {
+        padding: 10px 0;
+
+        &:nth-child(2n) {
+          background: #f7f7f7;
+
+          @include dark-mode {
+            background: inherit;
+          }
+        }
       }
     }
   }

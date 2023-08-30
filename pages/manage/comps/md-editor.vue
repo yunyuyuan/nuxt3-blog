@@ -288,6 +288,7 @@ initViewer(markdownRef);
       background: rgb(39 39 39);
     }
 
+    box-sizing: border-box;
     position: relative;
     padding: 8px 10px;
     border-top-right-radius: 4px;
