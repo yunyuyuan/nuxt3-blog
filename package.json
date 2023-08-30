@@ -3,7 +3,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "gulp generate",
+    "generate": "nuxt generate",
     "chpwd": "gulp change-passwd",
     "genimg": "gulp generate-image-map",
     "downimg": "gulp download-image",

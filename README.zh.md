@@ -107,7 +107,7 @@
 "scripts": {
   "build": "nuxt build", // 编译为ssr
   "dev": "nuxt dev", //开发
-  "generate": "gulp generate", // 编译为static
+  "generate": "nuxt generate", // 编译为static
   "chpwd": "gulp change-passwd", // 全局修改密码
   "genimg": "gulp generate-image-map", // 收集全站图片，输出到img.json
   "downimg": "gulp download-image", // 读取img.json，下载所有图片到imgs/

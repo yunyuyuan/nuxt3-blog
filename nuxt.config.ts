@@ -1,5 +1,6 @@
 import fs from "fs";
 import { execSync } from "child_process";
+import { generateSiteMap, generateTimestamp } from "./scripts/generate";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
 
@@ -90,6 +91,12 @@ export default defineNuxtConfig({
       crawlLinks: true,
       failOnError: false
       // ignore: ["/manage"]
+    },
+    hooks: {
+      close () {
+        generateSiteMap();
+        generateTimestamp();
+      }
     },
     output: { dir: "{{ rootDir }}/.output", serverDir: "{{ output.dir }}/server", publicDir: "{{ output.dir }}/public" }
   },

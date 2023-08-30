@@ -277,6 +277,10 @@ initViewer(markdownRef);
     }
   }
 
+  >div {
+    width: 100%;
+  }
+
   .editor-head {
     background: #fefffe;
 

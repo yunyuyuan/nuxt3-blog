@@ -1,20 +1,14 @@
 import fs from "fs";
 import { getNowDayjsString } from "../utils/common";
-import { genRss, getDistPath, getRebuildPath, nbLog, runCmd } from "./utils";
+import { genRss, getDistPath, getRebuildPath, nbLog } from "./utils";
 
-export default async function () {
-  await runCmd("nuxt generate");
-  generateSiteMap();
-  generateTimestamp();
-}
-
-function generateSiteMap () {
+export function generateSiteMap () {
   nbLog("sitemap");
   fs.writeFileSync(getDistPath("sitemap.xml"),
     genRss(JSON.parse(fs.readFileSync(getRebuildPath("json", "articles.json")).toString())));
 }
 
-function generateTimestamp () {
+export function generateTimestamp () {
   nbLog("inject timestamp");
   const timestamp = getNowDayjsString();
   fs.writeFileSync(getDistPath("timestamp.txt"), timestamp);

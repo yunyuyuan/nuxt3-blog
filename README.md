@@ -107,7 +107,7 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 "scripts": {
   "build": "nuxt build", // Compile for SSR
   "dev": "nuxt dev", // Development
-  "generate": "gulp generate", // Compile to static
+  "generate": "nuxt generate", // Compile to static
   "chpwd": "gulp change-passwd", // Globally change password
   "genimg": "gulp generate-image-map", // Collect site-wide images, output to img.json
   "downimg": "gulp download-image", // Read img.json, download all images to imgs/
