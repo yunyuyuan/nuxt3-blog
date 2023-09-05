@@ -138,8 +138,12 @@ const getUploadInfo = async () => {
     newItem.time = nowTime;
   }
   newItem.modifyTime = nowTime;
+  // 删除_show和visitors
+  const _newItem = newItem as any;
+  delete _newItem.visitors;
+  delete _newItem._show;
   return {
-    item: newItem,
+    item: _newItem as T,
     md: mdContent
   };
 };
