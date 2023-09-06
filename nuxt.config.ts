@@ -5,7 +5,6 @@ import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
 
 const isDev = process.env.NODE_ENV === "development";
-let publicDir: string;
 
 // themeColor
 fs.writeFileSync("./assets/style/_theme.scss", `$theme: ${config.themeColor};`);
@@ -91,15 +90,6 @@ export default defineNuxtConfig({
       crawlLinks: true,
       failOnError: false
       // ignore: ["/manage"]
-    },
-    hooks: {
-      "rollup:before" (nitro) {
-        publicDir = nitro.options.output.publicDir;
-      },
-      close () {
-        generateSiteMap(publicDir);
-        generateTimestamp(publicDir);
-      }
     }
   },
   experimental: {
@@ -131,6 +121,10 @@ export default defineNuxtConfig({
           // markdown: ["highlight.js", "katex", "marked"]
         };
       }
+    },
+    "nitro:build:public-assets" (nitro) {
+      generateSiteMap(nitro.options.output.publicDir);
+      generateTimestamp(nitro.options.output.publicDir);
     }
   }
 });

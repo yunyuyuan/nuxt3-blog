@@ -1,5 +1,5 @@
 import { readBody, createError } from "h3";
-import { increaseVisitorsREST } from "../../../utils/api";
+import { increaseVisitorsREST, increaseVisitors } from "../../../utils/api";
 
 export default defineEventHandler(async (event) => {
   if (event.node.req.method?.toUpperCase() !== "POST") {
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   }
   try {
     const args = await readBody(event);
-    return await (process.env.NITRO_PRESET === "node-server" ? increaseVisitorsREST : increaseVisitorsREST)({
+    return await (process.env.NITRO_PRESET === "node-server" ? increaseVisitors : increaseVisitorsREST)({
       id: args.id,
       type: args.type,
       inc: args.inc
