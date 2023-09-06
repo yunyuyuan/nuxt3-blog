@@ -1,5 +1,5 @@
 import { readMultipartFormData, createError, setResponseStatus } from "h3";
-import { smmsUpload } from "../../../utils/api";
+import { smmsUpload } from "../../../utils/api/smms";
 
 export default defineEventHandler(async (event) => {
   if (event.node.req.method?.toUpperCase() !== "POST") {

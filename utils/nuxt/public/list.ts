@@ -1,4 +1,3 @@
-import { VisitorsDb } from "~/utils/api";
 import { CommonItem, processEncryptDecrypt } from "~/utils/common";
 import { DBOperate, deepClone, fetchList, useCurrentTab, translateT, useFuckTitle } from "~/utils/nuxt";
 import config from "~/config";
@@ -14,7 +13,7 @@ export async function useListPage<T extends CommonItem> () {
 
   useFuckTitle(computed(() => translateT(targetTab.name) + config.SEO_title));
 
-  DBOperate<VisitorsDb[]>({
+  DBOperate<any[]>({
     apiPath: "/db/get-visitors",
     query: { type: targetTab.url },
     callback: (data) => {

@@ -1,3 +1,4 @@
+import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
 import { generateSiteMap, generateTimestamp } from "./scripts/generate";
@@ -80,7 +81,7 @@ export default defineNuxtConfig({
     app: {
       NUXT_ENV_CURRENT_GIT_SHA: execSync("git rev-parse HEAD").toString().trim(),
       githubBranch,
-      mongoDBEnabled: !!process.env.MONGODB_URI,
+      mongoDBEnabled: !!process.env.MONGODB_URI && !!process.env.MONGODB_USER,
       cmtRepId: config.CommentRepoId || process.env.CommentRepoId,
       cmtRepCateId: config.CommentDiscussionCategoryId || process.env.CommentDiscussionCategoryId
     }
@@ -120,6 +121,14 @@ export default defineNuxtConfig({
         (config.build?.rollupOptions?.output as any).manualChunks = {
           // markdown: ["highlight.js", "katex", "marked"]
         };
+      }
+    },
+    "nitro:build:before" (nitro) {
+      const apiPath = path.join(__dirname, "utils", "api");
+      if (["node-server"].includes(nitro.options.preset)) {
+        for (const file of fs.readdirSync(path.join(apiPath, "db-tcp"))) {
+          fs.renameSync(path.join(apiPath, "db-tcp", file), path.join(apiPath, "db", file));
+        }
       }
     },
     "nitro:build:public-assets" (nitro) {

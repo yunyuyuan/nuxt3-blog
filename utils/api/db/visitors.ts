@@ -1,7 +1,6 @@
 import axios from "axios";
 import config from "../../../config";
 import { HeaderTabUrl } from "../../common";
-import { getCollection } from "./mongodb";
 
 const request = (path: string, data: any) => {
   if (!process.env.MONGODB_PWD || !process.env.MONGODB_USER) {
@@ -24,7 +23,7 @@ const request = (path: string, data: any) => {
   });
 };
 
-export async function getVisitorsREST (type: HeaderTabUrl) {
+export async function getVisitors (type: HeaderTabUrl) {
   const res = await request("/action/find", {
     filter: {
       ntype: type
@@ -34,7 +33,7 @@ export async function getVisitorsREST (type: HeaderTabUrl) {
   return res.data.documents;
 }
 
-export async function increaseVisitorsREST ({ id, type, inc }: {id: number, type: HeaderTabUrl, inc?: boolean}) {
+export async function increaseVisitors ({ id, type, inc }: {id: number, type: HeaderTabUrl, inc?: boolean}) {
   const preset = {
     nid: id,
     ntype: type
@@ -60,46 +59,4 @@ export async function increaseVisitorsREST ({ id, type, inc }: {id: number, type
   return (await request("/action/findOne", {
     filter: preset
   })).data.document.nvisitors;
-}
-
-export type VisitorsDb = {
-  nid: number,
-  ntype: HeaderTabUrl,
-  nvisitors?: number,
-}
-
-const sqlOptions = {
-  projection: { _id: 0, nid: 1, nvisitors: 1 }
-};
-
-export async function getVisitors (type: HeaderTabUrl) {
-  const collection = await getCollection<VisitorsDb>();
-  const query: Partial<VisitorsDb> = {
-    ntype: type
-  };
-  const results = await collection.find(query, sqlOptions);
-  return await results.toArray();
-}
-
-export async function increaseVisitors ({ id, type, inc }: {id: number, type: HeaderTabUrl, inc?: boolean}) {
-  const collection = await getCollection<VisitorsDb>();
-  const preset: VisitorsDb = {
-    nid: id,
-    ntype: type
-  };
-  const incN = inc ? 1 : 0;
-  const result = await collection.findOneAndUpdate(preset, {
-    $inc: {
-      nvisitors: incN
-    }
-  }, sqlOptions);
-  if (result) {
-    return result.nvisitors! + incN;
-  } else {
-    await collection.insertOne({
-      ...preset,
-      nvisitors: config.MongoDb.initialVisitors
-    });
-    return config.MongoDb.initialVisitors;
-  }
 }
