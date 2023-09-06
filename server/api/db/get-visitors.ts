@@ -1,5 +1,5 @@
 import { readBody, createError } from "h3";
-import { getVisitors } from "../../../utils/api";
+import { getVisitorsREST } from "../../../utils/api";
 
 export default defineEventHandler(async (event) => {
   if (event.node.req.method?.toUpperCase() !== "POST") {
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const args = await readBody(event);
-    return await getVisitors(args.type);
+    return await (process.env.NITRO_PRESET === "node-server" ? getVisitorsREST : getVisitorsREST)(args.type);
   } catch (e: any) {
     return createError({
       statusCode: 503,

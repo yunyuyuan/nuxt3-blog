@@ -23,6 +23,8 @@ export default {
     knowledges: false                                          // “文化”是否开启评论
   },
   MongoDb: {                                                   // 浏览量统计，请先设置 https://vercel.com/integrations/mongodbatlas
+    database: "nuxt3-blog",
+    collection: "visitors",
     initialVisitors: 1,                                        // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
     visitFromOwner: false                                      // 网站拥有者访问时，是否增加浏览量
   },
