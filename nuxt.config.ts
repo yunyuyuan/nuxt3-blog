@@ -96,8 +96,7 @@ export default defineNuxtConfig({
         generateSiteMap();
         generateTimestamp();
       }
-    },
-    output: { dir: "{{ rootDir }}/.output", serverDir: "{{ output.dir }}/server", publicDir: "{{ output.dir }}/public" }
+    }
   },
   experimental: {
     /**
