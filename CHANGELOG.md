@@ -1,3 +1,6 @@
+## 2023.09.06
+* Use `/server` to handle api request.
+
 ## 2023.08.20
 * Use `useAsyncData` for a better page initialization experience.
 

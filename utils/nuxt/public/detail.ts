@@ -1,7 +1,6 @@
 import { CommonItem, createNewItem, processEncryptDecrypt } from "~/utils/common";
 import { formatTime, inBrowser, DBOperate, translate, afterInsertHtml, parseMarkdown, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "~/utils/nuxt";
 import config from "~/config";
-import { incVisitorsEvent } from "~/vite-plugins/types";
 
 /**
  * 详情页面通用功能
@@ -100,7 +99,6 @@ export async function useContentPage<T extends CommonItem> () {
   if (item.id && inBrowser) {
     watchUntil(isAuthor, () => {
       DBOperate({
-        hotEvent: incVisitorsEvent,
         apiPath: "/db/inc-visitors",
         query: {
           id: item.id,

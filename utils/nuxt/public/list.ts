@@ -1,8 +1,7 @@
+import { VisitorsDb } from "utils/api";
 import { CommonItem, processEncryptDecrypt } from "~/utils/common";
 import { DBOperate, deepClone, fetchList, useCurrentTab, translateT, useFuckTitle } from "~/utils/nuxt";
 import config from "~/config";
-import { getVisitorsEvent } from "~/vite-plugins/types";
-import { VisitorsDb } from "~/lib/api/db/visitors";
 
 /**
  * 列表页面通用功能
@@ -25,7 +24,6 @@ export async function useListPage<T extends CommonItem> () {
   }));
 
   DBOperate<VisitorsDb[]>({
-    hotEvent: getVisitorsEvent,
     apiPath: "/db/get-visitors",
     query: { type: targetTab.url },
     callback: (data) => {
