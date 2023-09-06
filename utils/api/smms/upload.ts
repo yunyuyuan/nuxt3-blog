@@ -1,41 +1,35 @@
-import fs from "fs";
 import axios from "axios";
 import FormData from "form-data";
 import tinify from "tinify";
 
-export default async function (
+export async function smmsUpload (
   { token, tinyPngToken, file }:
-  {token: string, tinyPngToken: string, file: any}
+  {token?: string, tinyPngToken?: string, file: any}
 ) {
-  const isBuffer = file.path instanceof Buffer;
-
-  const formData = new FormData();
-  let fp: any;
-  let size: number;
-  if (isBuffer) {
-    fp = file.path;
-    size = Buffer.byteLength(fp);
-  } else {
-    fp = fs.createReadStream(file.path);
-    size = fp.size;
+  if (!token) {
+    throw new Error("Need token");
   }
+
+  let buffer = file.data;
+  let size = Buffer.byteLength(buffer);
   // tinypng
   if (tinyPngToken) {
     tinify.key = tinyPngToken;
     try {
-      const source = isBuffer ? tinify.fromBuffer(file.path) : tinify.fromFile(file.path);
-      const buffer = await source.toBuffer();
-      fp = buffer;
+      const source = tinify.fromBuffer(buffer);
+      buffer = await source.toBuffer();
       size = Buffer.byteLength(buffer);
     } catch (e: any) {
       throw new Error(`Error from tinypng: ${e.toString()}`);
     }
   }
 
-  formData.append("smfile", fp, {
+  const formData = new FormData();
+  const filename = Date.now().toString();
+  formData.append("smfile", buffer, {
     knownLength: size,
-    filepath: isBuffer ? file.originalFilename : file.path,
-    filename: file.originalFilename
+    filepath: filename,
+    filename
   });
   const len = await new Promise<number>((resolve, reject) => {
     formData.getLength((err, len) => {

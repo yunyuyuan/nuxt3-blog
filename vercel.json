@@ -1,6 +1,6 @@
 {
     "framework": null,
-    "buildCommand": "pnpm generate",
+    "buildCommand": "pnpm build",
     "outputDirectory": "./.output/public",
     "installCommand": "pnpm install",
     "github": {

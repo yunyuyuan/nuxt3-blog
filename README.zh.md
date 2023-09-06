@@ -74,7 +74,7 @@
 - [ ] 一键拉取上游github仓库更新 
 - [ ] IV for AES encryption
 - [x] 块级加密
-- [ ] SSR, 用于服务端渲染
+- [x] SSR, 用于服务端渲染
 - [ ] 支持 cloudflare page,netlify 以及其他服务
 
 # 项目结构
@@ -88,16 +88,15 @@
 * `/vite-plugins` vite插件
 * `/i18n` 国际化翻译文件
 * `/layouts` nuxt布局文件
-* `/lib` 被`/api`使用的函数
 * `/pages` 所有网页视图
 * `/plugins` nuxt插件
 * `/public`
   * `/rebuild` 所有博客数据
   * `/sticker` 所有表情图片
-* `/scripts`
-  * `/generate.ts` 运行`npm run generate`的实际文件
-  * `/change-pwd.ts` 运行`npm run chpwd`的实际文件，用于在本地修改密码
+* `/scripts` Gulp执行的脚本.
+* `/server` api server,仅在SSR下可用.
 * `/utils`
+  * `/api` `/server`调用的函数.
   * `/nuxt` nuxt相关的功能代码
   * `/common` javascript相关的功能代码(不依赖vue或nuxt)
 * `/config.ts` 博客配置，必须修改

@@ -73,7 +73,7 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 - [ ] pulling update of upsteam github repo
 - [ ] IV for AES encryption
 - [x] block level encryption
-- [ ] SSR for self-hosting
+- [x] SSR for self-hosting
 - [ ] support cloudflare page,netlify and others
 
 # Project Structure
@@ -87,16 +87,15 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 * `/vite-plugins` vite plugins.
 * `/i18n` i18n message files.
 * `/layouts` nuxt layout files.
-* `/lib` functions used by `/api`.
 * `/pages` all views page.
 * `/plugins` nuxt plugin files.
 * `/public`
   * `/rebuild` all blog data.
   * `/sticker` all stickers for markdown.
-* `/scripts`
-  * `/generate.ts` script for `npm run generate`.
-  * `/change-pwd.ts` script for `npm run chpwd`, run it locally when you want to change your password.
+* `/scripts` scripts for Gulp.
+* `/server` api server, only works for SSR.
 * `/utils`
+  * `/api` functions used by `/server`.
   * `/nuxt` common codes of nuxt.
   * `/common` common codes of javascript.
 * `/config.ts` blog configurations, your must change it.
