@@ -1,5 +1,5 @@
 import { CommonItem, createNewItem, processEncryptDecrypt } from "~/utils/common";
-import { formatTime, inBrowser, DBOperate, translate, afterInsertHtml, parseMarkdown, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "~/utils/nuxt";
+import { formatTime, DBOperate, translate, afterInsertHtml, parseMarkdown, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "~/utils/nuxt";
 import config from "~/config";
 
 /**
@@ -32,8 +32,8 @@ export async function useContentPage<T extends CommonItem> () {
   });
 
   await nuxtApp.runWithContext(async () => {
-    const { data: list } = await fetchList(targetTab.url);
-    const foundItem = list.value.find(item => item.id === Number(id));
+    const list = await fetchList(targetTab.url);
+    const foundItem = list.find(item => item.id === Number(id));
     if (!foundItem) {
       showError({ statusCode: 404, fatal: true });
     } else {
@@ -47,8 +47,7 @@ export async function useContentPage<T extends CommonItem> () {
     });
   }
   await nuxtApp.runWithContext(async () => {
-    const { data: md } = await fetchMd(targetTab.url, id);
-    mdContent.value = md.value;
+    mdContent.value = await fetchMd(targetTab.url, id);
   });
   if (item.encrypt) {
     encryptor.decryptOrWatchToDecrypt(
@@ -96,7 +95,7 @@ export async function useContentPage<T extends CommonItem> () {
     });
   }
 
-  if (item.id && inBrowser) {
+  if (item.id) {
     watchUntil(isAuthor, () => {
       DBOperate({
         apiPath: "/db/inc-visitors",

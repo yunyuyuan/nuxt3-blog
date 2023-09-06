@@ -1,8 +1,5 @@
 {
   // https://v3.nuxtjs.org/concepts/typescript
-  "includes": [
-    "./shim.d.ts",
-  ],
   "exclude": [
     "**/node_modules/*",
     "./dist",
@@ -11,5 +8,5 @@
   "vueCompilerOptions": {
     "experimentalRfc436": true
   },
-  "extends": "./.nuxt/tsconfig.json",
+  "extends": "./.nuxt/tsconfig.json"
 }

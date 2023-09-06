@@ -73,8 +73,7 @@ export async function useManageContent<T extends CommonItem> () {
   };
 
   await nuxtApp.runWithContext(async () => {
-    const { data } = await fetchList<T>(targetTab.url);
-    list = data.value;
+    list = await fetchList<T>(targetTab.url);
   });
 
   if (!isNew) {
@@ -97,8 +96,8 @@ export async function useManageContent<T extends CommonItem> () {
 
   if (!isNew) {
     await nuxtApp.runWithContext(async () => {
-      const { data: markdown } = await fetchMd(targetTab.url, itemId);
-      markdownContent.value = markdown.value.trim() || "";
+      const markdown = await fetchMd(targetTab.url, itemId);
+      markdownContent.value = markdown.trim() || "";
     });
     // 取到结果后，处理解密
     if (item.encrypt) {

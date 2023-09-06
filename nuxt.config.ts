@@ -51,7 +51,6 @@ for (const b of [
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
   telemetry: false,
-  ssr: !isDev,
   app: {
     head: {
       meta: [
