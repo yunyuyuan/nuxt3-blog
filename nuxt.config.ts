@@ -5,6 +5,7 @@ import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
 
 const isDev = process.env.NODE_ENV === "development";
+let publicDir: string;
 
 // themeColor
 fs.writeFileSync("./assets/style/_theme.scss", `$theme: ${config.themeColor};`);
@@ -92,9 +93,12 @@ export default defineNuxtConfig({
       // ignore: ["/manage"]
     },
     hooks: {
+      "rollup:before" (nitro) {
+        publicDir = nitro.options.output.publicDir;
+      },
       close () {
-        generateSiteMap();
-        generateTimestamp();
+        generateSiteMap(publicDir);
+        generateTimestamp(publicDir);
       }
     }
   },

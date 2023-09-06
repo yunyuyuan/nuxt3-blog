@@ -6,7 +6,6 @@ import config from "~/config";
  * 详情页面通用功能
  */
 export async function useContentPage<T extends CommonItem> () {
-  const nuxtApp = useNuxtApp();
   const encryptor = useEncryptor();
   const isAuthor = useIsAuthor();
   const markdownRef = ref<HTMLElement>();
@@ -31,24 +30,20 @@ export async function useContentPage<T extends CommonItem> () {
     destroyFns.forEach(fn => fn());
   });
 
-  await nuxtApp.runWithContext(async () => {
-    const list = await fetchList(targetTab.url);
-    const foundItem = list.find(item => item.id === Number(id));
-    if (!foundItem) {
-      showError({ statusCode: 404, fatal: true });
-    } else {
-      assignItem(item, foundItem);
-      item.visitors = 0;
-    }
-  });
+  const list = await fetchList(targetTab.url);
+  const foundItem = list.find(item => item.id === Number(id));
+  if (!foundItem) {
+    showError({ statusCode: 404, fatal: true });
+  } else {
+    assignItem(item, foundItem);
+    item.visitors = 0;
+  }
   if (item.encrypt) {
     encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
       await processEncryptDecrypt(item, decrypt, targetTab.url);
     });
   }
-  await nuxtApp.runWithContext(async () => {
-    mdContent.value = await fetchMd(targetTab.url, id);
-  });
+  mdContent.value = await fetchMd(targetTab.url, id);
   if (item.encrypt) {
     encryptor.decryptOrWatchToDecrypt(
       async (decrypt) => {
@@ -71,11 +66,9 @@ export async function useContentPage<T extends CommonItem> () {
         // 如果未登录：直接隐藏block
           : newMarkdownContent.slice(0, start - 10) + newMarkdownContent.slice(end + 11);
       }
-      await nuxtApp.runWithContext(async () => {
-        const result = await parseMarkdown(newMarkdownContent);
-        htmlContent.value = result.md;
-        menuItems.value = result.menu;
-      });
+      const result = await parseMarkdown(newMarkdownContent);
+      htmlContent.value = result.md;
+      menuItems.value = result.menu;
       encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
         let newMarkdownContent = mdContent.value;
         for (const block of item.encryptBlocks!) {
@@ -88,11 +81,9 @@ export async function useContentPage<T extends CommonItem> () {
       });
     }, { immediate: true });
   } else {
-    await nuxtApp.runWithContext(async () => {
-      const result = await parseMarkdown(mdContent.value);
-      htmlContent.value = result.md;
-      menuItems.value = result.menu;
-    });
+    const result = await parseMarkdown(mdContent.value);
+    htmlContent.value = result.md;
+    menuItems.value = result.menu;
   }
 
   if (item.id) {

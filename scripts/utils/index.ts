@@ -25,10 +25,6 @@ export function getRebuildPath (...s: string[]) {
   return getAbsolutePath("public", "rebuild", ...s);
 }
 
-export function getDistPath (...s: string[]) {
-  return getAbsolutePath(".output", "public", ...s);
-}
-
 export async function runCmd (command: string) {
   return await new Promise<void>((resolve, reject) => {
     cmd.exec(command, {

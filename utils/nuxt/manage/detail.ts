@@ -7,7 +7,6 @@ import config from "~/config";
  * 管理页面详情编辑通用功能
  */
 export async function useManageContent<T extends CommonItem> () {
-  const nuxtApp = useNuxtApp();
   const encryptor = useEncryptor();
   const itemId = useRoute().params.id as string;
   const targetTab = useCurrentTab();
@@ -72,9 +71,7 @@ export async function useManageContent<T extends CommonItem> () {
     }
   };
 
-  await nuxtApp.runWithContext(async () => {
-    list = await fetchList<T>(targetTab.url);
-  });
+  list = await fetchList<T>(targetTab.url);
 
   if (!isNew) {
     assignItem<T>(originItem, deepClone(list.find(item => item.id === Number(itemId))!));
@@ -95,10 +92,8 @@ export async function useManageContent<T extends CommonItem> () {
   }
 
   if (!isNew) {
-    await nuxtApp.runWithContext(async () => {
-      const markdown = await fetchMd(targetTab.url, itemId);
-      markdownContent.value = markdown.trim() || "";
-    });
+    const markdown = await fetchMd(targetTab.url, itemId);
+    markdownContent.value = markdown.trim() || "";
     // 取到结果后，处理解密
     if (item.encrypt) {
       blockDecrypted.value = true;
