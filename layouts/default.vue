@@ -90,6 +90,7 @@ const isFirst = ref(true);
   <div id="default-layout" :class="{'in-about': inAbout}">
     <div v-if="!isPrerender" class="mode-bg" :class="[themeMode, {active: !isFirst}]" />
     <nav id="header" ref="headerRef" class="flex w100">
+      <span v-show="!!pageLoading.loadingState.value" class="loading" :style="{width: `${pageLoading.loadingState.value}%`}" />
       <del class="space-left" />
       <span class="mobile-menu-toggler" :class="{active: menuShow}" @click="menuShow = true">
         <svg-icon name="menu" />
@@ -151,7 +152,6 @@ const isFirst = ref(true);
       <nuxt-link class="about" :to="inAbout ? '/' : '/about'" :title="$t('about')">
         <img class="s100" src="/icon.png" :alt="$t('avatar')">
       </nuxt-link>
-      <span v-show="!!pageLoading.loadingState.value" class="loading" :style="{width: `${pageLoading.loadingState.value}%`}" />
     </nav>
     <section id="body">
       <slot />
@@ -507,11 +507,12 @@ const isFirst = ref(true);
   >.loading {
     position: absolute;
     left: 0;
-    bottom: 0;
+    top: 0;
     height: 3px;
     z-index: 2;
     background: $theme-color;
     transition: width 0.1s linear;
+    box-shadow: 0 0 10px $theme-color;
   }
 
   &:not(.headroom--pinned).headroom--not-top {

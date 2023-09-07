@@ -1,4 +1,4 @@
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin((app) => {
   const router = useRouter();
   const loading = useLoading();
   const firstLoad = useFirstLoad();
@@ -13,7 +13,7 @@ export default defineNuxtPlugin(() => {
     loading.start();
   });
 
-  router.afterEach(() => {
+  app.hook("page:finish", () => {
     loading.finish();
   });
 });

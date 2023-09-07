@@ -1,4 +1,4 @@
-let handle: NodeJS.Timer;
+let handle: number;
 
 export const useLoading = () => {
   const loadingState = useState<number>("loading", () => 0);
@@ -17,7 +17,7 @@ export const useLoading = () => {
       if (loadingState.value === 100) {
         clearInterval(handle);
       }
-    }, 30);
+    }, 30) as unknown as number;
   };
 
   return {
