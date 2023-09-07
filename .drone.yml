@@ -1,0 +1,57 @@
+kind: pipeline
+type: docker
+name: default
+
+trigger:
+  event:
+    - push
+  branch:
+    - master
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: build_project
+    image: node:18
+    volumes:
+      - name: cache
+        path: /drone/src/node_modules
+      - name: dist
+        path: /drone/src/.output
+    environment:
+      MONGODB_URI:
+        from_secret: MONGODB_URI
+      CommentRepoId:
+        from_secret: CommentRepoId
+      CommentDiscussionCategoryId:
+        from_secret: CommentDiscussionCategoryId
+      CloudflareAnalyze:
+        from_secret: CloudflareAnalyze
+    commands:
+      - npm i -g pnpm
+      - pnpm i
+      - pnpm build
+        
+  - name: reload_systemd
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: SSHHost
+      username:
+        from_secret: SSHUser
+      password:
+        from_secret: SSHPasswd
+      port: 22
+      script:
+        - journalctl -u nuxt3-blog -n 50
+        - systemctl --user restart nuxt3-blog
+
+volumes:
+  - name: cache
+    host:
+      path: /var/cache/drone-nuxt3-blog
+  - name: dist
+    host:
+      path: /var/lib/nuxt3-blog
