@@ -33,6 +33,7 @@ steps:
       - npm i -g pnpm
       - pnpm i
       - pnpm build
+      - echo "export MONGODB_URI=$MONGODB_URI" > .output/.env
         
   - name: reload_systemd
     image: appleboy/drone-ssh
