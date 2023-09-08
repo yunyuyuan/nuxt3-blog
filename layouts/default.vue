@@ -90,7 +90,6 @@ const isFirst = ref(true);
   <div id="default-layout" :class="{'in-about': inAbout}">
     <div v-if="!isPrerender" class="mode-bg" :class="[themeMode, {active: !isFirst}]" />
     <nav id="header" ref="headerRef" class="flex w100">
-      <span v-show="!!pageLoading.loadingState.value" class="loading" :style="{width: `${pageLoading.loadingState.value}%`}" />
       <del class="space-left" />
       <span class="mobile-menu-toggler" :class="{active: menuShow}" @click="menuShow = true">
         <svg-icon name="menu" />
@@ -153,6 +152,7 @@ const isFirst = ref(true);
         <img class="s100" src="/icon.png" :alt="$t('avatar')">
       </nuxt-link>
     </nav>
+    <span v-show="!!pageLoading.loadingState.value" class="loading" :style="{width: `${pageLoading.loadingState.value}%`}" />
     <section id="body">
       <slot />
     </section>
@@ -229,6 +229,17 @@ const isFirst = ref(true);
         animation-name: light-dark;
       }
     }
+  }
+
+  >.loading {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 3px;
+    z-index: $z-index-header-loading;
+    background: $theme-color;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 10px $theme-color;
   }
 }
 
@@ -502,17 +513,6 @@ const isFirst = ref(true);
     &:hover {
       opacity: 1;
     }
-  }
-
-  >.loading {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 3px;
-    z-index: 2;
-    background: $theme-color;
-    transition: width 0.1s linear;
-    box-shadow: 0 0 10px $theme-color;
   }
 
   &:not(.headroom--pinned).headroom--not-top {
