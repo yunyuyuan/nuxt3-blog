@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-name: default
+name: build
 
 trigger:
   event:
@@ -34,20 +34,6 @@ steps:
       - pnpm i
       - pnpm build
       - echo "export MONGODB_URI=$MONGODB_URI" > .output/.env
-        
-  - name: reload_systemd
-    image: appleboy/drone-ssh
-    settings:
-      host:
-        from_secret: SSHHost
-      username:
-        from_secret: SSHUser
-      password:
-        from_secret: SSHPasswd
-      port: 22
-      script:
-        - journalctl -u nuxt3-blog -n 50
-        - systemctl --user restart nuxt3-blog
 
 volumes:
   - name: cache
@@ -56,3 +42,22 @@ volumes:
   - name: dist
     host:
       path: /var/lib/nuxt3-blog
+
+---
+
+kind: pipeline
+type: exec
+name: reload
+
+clone:
+  disable: true
+
+steps:
+  - name: reload_systemd
+    commands:
+      - whoami
+      - journalctl -u nuxt3-blog -n 50
+      - systemctl restart nuxt3-blog
+depends_on:
+  - build
+        
