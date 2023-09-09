@@ -184,14 +184,14 @@ const modalOk = () => {
         <b>Github Token
           <svg-icon v-if="!!githubToken" name="correct" />
         </b>
-        <input v-model="inputToken" data-focus :disabled="isDev">
+        <input v-model="inputToken" :placeholder="$t('please-input')" data-focus :disabled="isDev">
       </label>
       <label class="manage-input-pwd">
         <b>
           {{ $T('passwd') }}
           <svg-icon v-if="encryptor.passwdCorrect.value" name="correct" />
         </b>
-        <input v-model="inputPwd">
+        <input v-model="inputPwd" :placeholder="$t('please-input')">
       </label>
     </template>
   </common-modal>

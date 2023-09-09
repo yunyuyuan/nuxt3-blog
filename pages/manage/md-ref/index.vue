@@ -7,7 +7,7 @@ import { translate } from "~/utils/nuxt";
 const inputMarkdown = ref(mdSample);
 
 useHead({
-  title: translate("detail-manage", ["markdown"]) + config.SEO_title
+  title: translate("markdown-ref") + config.SEO_title
 });
 </script>
 

@@ -13,7 +13,7 @@ const typeSelectShow = ref(false);
           <b>{{ $T('title') }}</b>
           <svg-icon name="title" />
         </span>
-        <input v-model="item.title" :disabled="disabled">
+        <input v-model="item.title" :placeholder="$t('please-input')" :disabled="disabled">
       </template>
       <template #type="{ disabled, item }">
         <span>
@@ -38,21 +38,21 @@ const typeSelectShow = ref(false);
           <b>{{ $T('link') }}</b>
           <svg-icon name="link" />
         </span>
-        <input v-model="item.link" :disabled="disabled">
+        <input v-model="item.link" :placeholder="$t('please-input')" :disabled="disabled">
       </template>
       <template #cover="{ disabled, item }">
         <span :class="{ invalid: !item.cover }">
           <b>{{ $T('cover') }}</b>
           <svg-icon name="images" />
         </span>
-        <input v-model="item.cover" :disabled="disabled">
+        <input v-model="item.cover" :placeholder="$t('please-input')" :disabled="disabled">
       </template>
       <template #summary="{ disabled, item }">
         <span :class="{ invalid: !item.summary }">
           <b>{{ $T('summary') }}</b>
           <svg-icon name="summary" />
         </span>
-        <textarea v-model="item.summary" :disabled="disabled" />
+        <textarea v-model="item.summary" :placeholder="$t('please-input')" :disabled="disabled" />
       </template>
     </manage-content-edit>
   </div>

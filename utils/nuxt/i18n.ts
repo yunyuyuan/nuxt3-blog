@@ -12,7 +12,7 @@ export async function loadI18nJson (code: I18nCode) {
 export function translate (name: string, params?: any[], code?: I18nCode): string {
   code = code || useI18nCode().i18nCode.value!;
   const messages = useNuxtApp().$i18nMessages.value;
-  if (!messages[code]) {
+  if (!messages[code] || !messages[code][name]) {
     return name;
   }
   const regex = /\{(\d+)\}/g;

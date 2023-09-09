@@ -57,7 +57,7 @@ const processContent = (md: string, _html: HTMLElement, item: ArticleItem) => {
           <b>{{ $T('title') }}</b>
           <svg-icon name="title" />
         </span>
-        <input v-model="item.title" :disabled="disabled">
+        <input v-model="item.title" :placeholder="$t('please-input')" :disabled="disabled">
       </template>
       <template #tags="{ disabled, item }">
         <span>

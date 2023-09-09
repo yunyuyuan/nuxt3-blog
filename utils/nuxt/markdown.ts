@@ -17,7 +17,7 @@ export async function parseMarkdown (text: string) {
         const url = slugger.slug(raw);
 
         const menuItem: typeof menuItems[number] = {
-          size: level < 4 ? "big" : "small",
+          size: level < 3 ? "big" : "small",
           // the "raw" param is not real raw, weird
           // text: escapeHtml(raw),
           text: text.replace(/<\/?[^>]+(>|$)/g, ""),
