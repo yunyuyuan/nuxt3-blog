@@ -1,3 +1,6 @@
+## 2023.09.09
+* Add [Drone](https://drone.io) CI/CD support.
+
 ## 2023.09.06
 * Use `/server` to handle api request.
 * No longer use `useAsyncData`.

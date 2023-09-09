@@ -105,7 +105,7 @@ export async function createCommit (
           repositoryNameWithOwner: "${config.githubName}/${config.githubRepo}"
         },
         message: {
-          headline: "[🤖${formatTime()}]${commit}"
+          headline: "[${formatTime()}]${commit}"
         },
         expectedHeadOid: "${correctSha}",
         fileChanges: {
