@@ -13,6 +13,15 @@ export async function useListPage<T extends CommonItem> () {
 
   useFuckTitle(computed(() => translateT(targetTab.name) + config.SEO_title));
 
+  const list = await fetchList(targetTab.url);
+  resultList.splice(0, 0, ...list.map((item) => {
+    return deepClone({
+      ...item,
+      _show: true,
+      visitors: 0
+    }) as T;
+  }));
+
   DBOperate<any[]>({
     apiPath: "/db/get-visitors",
     query: { type: targetTab.url },
@@ -22,15 +31,6 @@ export async function useListPage<T extends CommonItem> () {
       });
     }
   });
-
-  const list = await fetchList(targetTab.url);
-  resultList.splice(0, 0, ...list.map((item) => {
-    return deepClone({
-      ...item,
-      _show: true,
-      visitors: 0
-    }) as T;
-  }));
 
   // 有token或者密码正确，显示加密的item
   watch([githubToken, encryptor.passwdCorrect], ([hasToken, hasPwd]) => {
