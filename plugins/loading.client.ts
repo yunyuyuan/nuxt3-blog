@@ -3,7 +3,10 @@ export default defineNuxtPlugin((app) => {
   const loading = useLoading();
   const firstLoad = useFirstLoad();
   let index = 0;
-  router.beforeEach(() => {
+  router.beforeEach((to, from) => {
+    if (to.path === from.path) {
+      return;
+    }
     if (index < 2) {
       index += 1;
     }
