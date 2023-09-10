@@ -74,7 +74,7 @@
 - [ ] 一键拉取上游github仓库更新 
 - [ ] IV for AES encryption
 - [x] 块级加密
-- [x] SSR, 用于服务端渲染
+- [x] SSR, 用于自建([参考](https://blog.yunyuyuan.net/articles/8346))
 - [ ] 支持 cloudflare page,netlify 以及其他服务
 
 # 项目结构

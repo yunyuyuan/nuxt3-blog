@@ -73,7 +73,7 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 - [ ] pulling update of upsteam github repo
 - [ ] IV for AES encryption
 - [x] block level encryption
-- [x] SSR for self-hosting
+- [x] SSR for self-hosting([reference](https://blog.yunyuyuan.net/articles/8346))
 - [ ] support cloudflare page,netlify and others
 
 # Project Structure
