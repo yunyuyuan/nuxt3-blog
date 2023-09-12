@@ -1,13 +1,13 @@
 [
   {
-    "title": "使用Drone.io配置本地轻量化CI/CD",
+    "title": "使用Drone+docker配置本地轻量化CI/CD",
     "len": 5618,
     "tags": [
       "运维"
     ],
     "id": 8346,
     "time": 1694238608081,
-    "modifyTime": 1694357870266,
+    "modifyTime": 1694480246046,
     "encrypt": false
   },
   {
