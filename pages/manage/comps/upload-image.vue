@@ -59,6 +59,22 @@ const dropImg = (ev: DragEvent) => {
   }
   img.value = file;
 };
+const onPaste = (event: ClipboardEvent) => {
+  const items = event.clipboardData && event.clipboardData.items;
+  let file: File | null = null;
+  if (items && items.length) {
+    for (let i = 0; i < items.length; i += 1) {
+      if (items[i].type.includes("image")) {
+        file = items[i].getAsFile();
+        break;
+      }
+    }
+  }
+  if (file) {
+    img.value = file;
+  }
+};
+
 watch(img, (img) => {
   if (img) {
     const reader = new FileReader();
@@ -128,10 +144,12 @@ onMounted(async () => {
       title: translate("copy-successful")
     });
   });
+  document.addEventListener("paste", onPaste);
 });
 
 onUnmounted(() => {
   clipboard?.destroy();
+  document.removeEventListener("paste", onPaste);
 });
 </script>
 

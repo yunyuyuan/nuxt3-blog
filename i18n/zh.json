@@ -79,7 +79,7 @@
   "refresh-after-sec": "{0}秒后将刷新页面",
   "save-draft": "保存草稿",
   "select": "选择",
-  "select-image": "选择图片/拖拽图片到此",
+  "select-image": "选择图片/拖拽/粘贴图片到此",
   "selected-items": "已选择<b style='margin: 0 8px; font-size: 1rem;'>{0}</b>项",
   "summary": "简介",
   "switch-mode": "切换到{0}模式",

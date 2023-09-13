@@ -79,7 +79,7 @@
   "refresh-after-sec": "{0} seconds later, the page will refresh",
   "save-draft": "save draft",
   "select": "select",
-  "select-image": "select image/drag image and drop here",
+  "select-image": "select image/drag-drop/paste image here",
   "selected-items": "<b style='margin: 0 8px; font-size: 1rem;'>{0}</b> items selected",
   "summary": "summary",
   "switch-mode": "switch to {0} mode",
