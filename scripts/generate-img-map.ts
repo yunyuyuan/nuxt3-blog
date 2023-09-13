@@ -1,19 +1,8 @@
 import fs from "fs";
 import { ImgMap, getAbsolutePath, processBlogItem, promptTask } from "./utils";
 
-export default async function () {
-  await promptTask([{
-    name: "pwd",
-    type: "text",
-    message: "password",
-    validate: v => !!v
-  }, {
-    name: "reg",
-    type: "text",
-    message: "RegExp",
-    initial: "(https?:\\/\\/)?([\\w.-]+)\\.([a-zA-Z]{2,6})(\\/[\\w.-]*)*?\\.(jpg|jpeg|webp|gif|png)",
-    validate: v => !!v
-  }], async function (result) {
+export default async function (pwd?: string, reg?: string) {
+  const fn = async function (result) {
     const regexp = RegExp(result.reg, "gi");
 
     const imgMap: ImgMap = {};
@@ -46,5 +35,24 @@ export default async function () {
       pushImg(JSON.stringify(decryptedItem), mdPath);
     });
     fs.writeFileSync(getAbsolutePath("img.json"), JSON.stringify(imgMap, null, 2));
-  });
+  };
+  if (pwd && reg) {
+    fn({
+      pwd,
+      reg
+    });
+  } else {
+    await promptTask([{
+      name: "pwd",
+      type: "text",
+      message: "password",
+      validate: v => !!v
+    }, {
+      name: "reg",
+      type: "text",
+      message: "RegExp",
+      initial: "(https?:\\/\\/)?([\\w.-]+)\\.([a-zA-Z]{2,6})(\\/[\\w.-]*)*?\\.(jpg|jpeg|webp|gif|png)",
+      validate: v => !!v
+    }], fn);
+  }
 }

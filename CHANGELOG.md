@@ -1,3 +1,6 @@
+## 2023.09.13
+* Add Drone cronjob for backup img.
+
 ## 2023.09.09
 * Add [Drone](https://drone.io) CI/CD support.
 

@@ -5,7 +5,7 @@ import subImg from "./substitute-img";
 import downloadImg from "./download-img";
 
 gulp.task("generate-image-map", async (cb) => {
-  await genImgMap();
+  await genImgMap(process.env.NB_PASSWD, process.env.NB_IMG_REGEX);
   cb();
 });
 

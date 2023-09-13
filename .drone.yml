@@ -62,3 +62,46 @@ volumes:
   - name: docker
     host:
       path: /var/run/docker.sock
+
+---
+
+kind: pipeline
+type: docker
+name: backup_img
+
+trigger:
+  event:
+    - cron
+  cron:
+    - backup_img
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: backup_img
+    image: node:18
+    volumes:
+      - name: cache
+        path: /drone/src/node_modules
+      - name: imgs
+        path: /drone/src/imgs
+    environment:
+      NB_PASSWD:
+        from_secret: NB_PASSWD
+      NB_IMG_REGEX:
+        from_secret: NB_IMG_REGEX
+    commands:
+      - npm i -g pnpm
+      - pnpm genimg
+      - pnpm downimg
+
+
+volumes:
+  - name: cache
+    host:
+      path: /var/cache/drone-nuxt3-blog
+  - name: imgs
+    host:
+      path: /data/nuxt3-blog-imgs
