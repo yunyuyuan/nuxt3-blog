@@ -1,6 +1,5 @@
 import { CommonItem, processEncryptDecrypt } from "~/utils/common";
-import { deepClone, useCurrentTab, fetchList, translate, useFuckTitle } from "~/utils/nuxt";
-import config from "~/config";
+import { deepClone, useCurrentTab, fetchList, translate, useCommonSEOTitle } from "~/utils/nuxt";
 
 /**
  * 管理页面列表通用功能
@@ -9,7 +8,7 @@ export async function useManageList<T extends CommonItem> () {
   const encryptor = useEncryptor();
   const targetTab = useCurrentTab();
 
-  useFuckTitle(computed(() => translate("list-manage", [targetTab.name]) + config.SEO_title));
+  useCommonSEOTitle(computed(() => translate("list-manage", [targetTab.name])));
 
   const list = await fetchList<T>(targetTab.url);
 

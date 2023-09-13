@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import config from "~/config";
-import { formatTime, literalTime, useContentPage, useComment, translate, initViewer, useFuckTitle } from "~/utils/nuxt";
+import { formatTime, literalTime, useContentPage, useComment, translate, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
 import { RecordItem } from "~/utils/common";
 
 const { item, tabUrl, publishTime, modifyTime, htmlContent, markdownRef } = await useContentPage<RecordItem>();
+useCommonSEOTitle(computed(() => `${translate("records")}: ${formatTime(item.time, "date")}`));
 
-useFuckTitle(computed(() => `${translate("records")}: ${formatTime(item.time, "date")}${config.SEO_title}`));
-useSeoMeta({
-  ogTitle: computed(() => `${translate("records")}: ${formatTime(item.time, "date")}${config.SEO_title}`)
-});
 const { root, hasComment } = useComment(tabUrl);
 initViewer(root);
 </script>

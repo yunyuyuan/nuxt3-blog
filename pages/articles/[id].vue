@@ -1,17 +1,9 @@
 <script setup lang="ts">
-import config from "~/config";
 import { addScrollListener, rmScrollListener, ArticleItem } from "~/utils/common";
-import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerender, useContentPage, useComment, watchUntil } from "~/utils/nuxt";
+import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerender, useContentPage, useComment, watchUntil, useCommonSEOTitle } from "~/utils/nuxt";
 
 const { item, tabUrl, modifyTime, menuItems, htmlContent, markdownRef, htmlInserted } = await useContentPage<ArticleItem>();
-
-useHead({
-  title: computed(() => item.title + config.SEO_title)
-});
-useSeoMeta({
-  ogTitle: computed(() => item.title)
-});
-
+useCommonSEOTitle(computed(() => item.title), computed(() => item.tags));
 const activeAnchor = ref<string>();
 
 const hideMenu = ref(!!getLocalStorage("hideMenu"));

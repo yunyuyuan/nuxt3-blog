@@ -1,6 +1,5 @@
 import { CommonItem, processEncryptDecrypt } from "~/utils/common";
-import { DBOperate, deepClone, fetchList, useCurrentTab, translateT, useFuckTitle } from "~/utils/nuxt";
-import config from "~/config";
+import { DBOperate, deepClone, fetchList, useCurrentTab, translateT, useCommonSEOTitle } from "~/utils/nuxt";
 
 /**
  * 列表页面通用功能
@@ -11,7 +10,7 @@ export async function useListPage<T extends CommonItem> () {
   const targetTab = useCurrentTab();
   const resultList = reactive([]) as T[];
 
-  useFuckTitle(computed(() => translateT(targetTab.name) + config.SEO_title));
+  useCommonSEOTitle(computed(() => translateT(targetTab.name)));
 
   const list = await fetchList(targetTab.url);
   resultList.splice(0, 0, ...list.map((item) => {

@@ -1,7 +1,5 @@
 import { createNewItem, CommonItem, processEncryptDecrypt } from "~/utils/common";
-import { useHasModified, useFuckTitle, translate, useStatusText, useCurrentTab, deepClone, assignItem, fetchList, fetchMd } from "~/utils/nuxt";
-
-import config from "~/config";
+import { useHasModified, translate, useStatusText, useCurrentTab, deepClone, assignItem, fetchList, fetchMd, useCommonSEOTitle } from "~/utils/nuxt";
 
 /**
  * 管理页面详情编辑通用功能
@@ -11,7 +9,7 @@ export async function useManageContent<T extends CommonItem> () {
   const itemId = useRoute().params.id as string;
   const targetTab = useCurrentTab();
 
-  useFuckTitle(computed(() => translate("detail-manage", [targetTab.name]) + config.SEO_title));
+  useCommonSEOTitle(computed(() => translate("detail-manage", [targetTab.name])));
 
   const isNew = itemId === "new";
 

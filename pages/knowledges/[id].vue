@@ -1,16 +1,10 @@
 <script setup lang="ts">
-import config from "~/config";
-import { useContentPage, useComment, initViewer } from "~/utils/nuxt";
+import { useContentPage, useComment, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
 import { KnowledgeItem } from "~/utils/common";
 
 const { item, tabUrl, modifyTime, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
+useCommonSEOTitle(computed(() => item.title));
 
-useHead({
-  title: computed(() => `《${item.title}》${config.SEO_title}`)
-});
-useSeoMeta({
-  ogTitle: computed(() => `《${item.title}》`)
-});
 const { root, hasComment } = useComment(tabUrl);
 initViewer(root);
 </script>

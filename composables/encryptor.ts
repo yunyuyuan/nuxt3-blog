@@ -40,6 +40,7 @@ export const useEncryptor = () => {
   // 解密操作是异步的，因为CryptoJs只有在使用时才被import。缺点是很多地方要改成await
   const decrypt: DecryptFunction = async (s: string) => {
     if (!s) {
+      passwdCorrect.value = false;
       return s;
     }
     try {

@@ -16,15 +16,21 @@ export function useCurrentTab () {
   return HeaderTabs.find(tab => useRoute().path.includes(tab.url)) || HeaderTabs[0];
 }
 
-// https://github.com/nuxt/nuxt/issues/22590
-export function useFuckTitle (compute: ComputedRef<string>) {
-  const title = ref("");
-  watch(() => compute.value, (v) => {
-    title.value = v;
-  }, { immediate: true });
-
+export function useCommonSEOTitle (raw: ComputedRef<string>, keys?: ComputedRef<string[]>) {
+  const title = computed(() => raw.value + config.SEO_title);
   useHead({
-    title: computed(() => title.value)
+    title,
+    meta: [{
+      name: "description",
+      content: title
+    }, {
+      name: "keywords",
+      content: computed(() => `${raw.value}${keys?.value.length ? ("," + keys?.value.join(",")) : ""},${config.SEO_keywords}`)
+    }]
+  });
+  useSeoMeta({
+    ogTitle: title,
+    ogDescription: title
   });
 }
 

@@ -39,8 +39,7 @@ export function genRss (json: ArticleItem[]) {
   const channel = new Node("channel");
   channel.addChild(new Node("title", config.title));
   channel.addChild(new Node("link", origin));
-  channel.addChild(new Node("description", config.SEO_description));
-  channel.addChild(new Node("language", "zh-cn"));
+  channel.addChild(new Node("language", config.defaultLang));
 
   for (const i of json.filter(i => !i.encrypt)) {
     const item = new Node("item");

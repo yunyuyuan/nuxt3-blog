@@ -60,7 +60,6 @@ export default defineNuxtConfig({
           name: "viewport",
           content: "width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
         },
-        { name: "description", content: config.SEO_description },
         { name: "keywords", content: config.SEO_keywords },
         { name: "author", content: config.nickName }
       ],
@@ -89,8 +88,8 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      failOnError: false
-      // ignore: ["/manage"]
+      failOnError: false,
+      ignore: ["/manage"]
     }
   },
   experimental: {
