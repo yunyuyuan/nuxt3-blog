@@ -1,10 +1,11 @@
 import fs from "fs";
+import { isPrerender } from "./constants";
 import { CommonItem, HeaderTabUrl, escapeNewLine } from "~/utils/common";
 import { inBrowser } from "~/utils/nuxt";
 
 const timestamp = () => useRuntimeConfig().public.timestamp;
 
-const magicFetch = async<T = any>(path: string, transform: (_: string) => T): Promise<T> => {
+const magicFetch = async<T = any>(path: string, transform: (_: string) => T): Promise<T | undefined> => {
   if (inBrowser) {
     if (!window.NBCache) {
       window.NBCache = {};
@@ -16,17 +17,17 @@ const magicFetch = async<T = any>(path: string, transform: (_: string) => T): Pr
       window.NBCache[path] = res;
       return res;
     }
-  } else {
+  } else if (isPrerender) {
     return transform(fs.readFileSync("public/" + path, { encoding: "utf-8" }).toString());
   }
 };
 
-export const fetchList = <T extends CommonItem>(tab: HeaderTabUrl): Promise<T[]> => {
-  return magicFetch<T[]>(`rebuild/json${tab}.json`, JSON.parse);
+export const fetchList = async<T extends CommonItem>(tab: HeaderTabUrl) => {
+  return await magicFetch<T[]>(`rebuild/json${tab}.json`, JSON.parse) || [];
 };
 
-export const fetchMd = (tab: HeaderTabUrl, id: string): Promise<string> => {
-  return magicFetch<string>(`rebuild${tab}/${id}.md`, escapeNewLine);
+export const fetchMd = async (tab: HeaderTabUrl, id: string) => {
+  return await magicFetch<string>(`rebuild${tab}/${id}.md`, escapeNewLine) || "";
 };
 
 declare global {
