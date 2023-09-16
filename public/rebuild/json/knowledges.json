@@ -1,5 +1,16 @@
 [
   {
+    "title": "Oppenheimer",
+    "summary": "The story of American scientist, J. Robert Oppenheimer, and his role in the development of the atomic bomb.",
+    "link": "https://www.imdb.com/title/tt15398776",
+    "cover": "https://s2.loli.net/2023/09/16/iLg1dYcs7t9GAT3.jpg",
+    "type": "film",
+    "id": 2110,
+    "time": 1694844913658,
+    "modifyTime": 1694844913658,
+    "encrypt": false
+  },
+  {
     "title": "Breaking Bad",
     "summary": "A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family's future.",
     "link": "https://www.imdb.com/title/tt0903747/",
