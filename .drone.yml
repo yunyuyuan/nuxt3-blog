@@ -104,4 +104,4 @@ volumes:
       path: /var/cache/drone-nuxt3-blog
   - name: imgs
     host:
-      path: /data/nuxt3-blog-imgs
+      path: /data/next-cloud/data/yunyuyuan/files/nuxt3-blog-imgs
