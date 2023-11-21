@@ -85,6 +85,9 @@ export default defineNuxtConfig({
       cmtRepCateId: config.CommentDiscussionCategoryId || process.env.CommentDiscussionCategoryId
     }
   },
+  modules: [
+    "nuxt-clarity-analytics"
+  ],
   nitro: {
     prerender: {
       crawlLinks: true,

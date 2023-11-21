@@ -106,6 +106,9 @@ devDependencies:
   nuxt:
     specifier: ^3.7.1
     version: 3.7.1(@types/node@20.5.9)(eslint@8.48.0)(sass@1.66.1)(stylelint@14.16.1)(typescript@5.2.2)
+  nuxt-clarity-analytics:
+    specifier: ^0.0.6
+    version: 0.0.6
   postcss-html:
     specifier: ^1.4.1
     version: 1.5.0
@@ -6446,6 +6449,15 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.3
+    dev: true
+
+  /nuxt-clarity-analytics@0.0.6:
+    resolution: {integrity: sha512-5Aks0ALsti6jnkaFwvlIlj5wQq6sff5iliX0l8fYgYi9UfRalXvLpX33tbHykuEBbzuBXC34Vypu7BMgvlpCqA==}
+    dependencies:
+      '@nuxt/kit': 3.7.1
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
     dev: true
 
   /nuxt@3.7.1(@types/node@20.5.9)(eslint@8.48.0)(sass@1.66.1)(stylelint@14.16.1)(typescript@5.2.2):

@@ -1,3 +1,6 @@
+## 2023.11.21
+* Add Microsoft [Clarity](https://clarity.microsoft.com/) analytics.
+
 ## 2023.09.13
 * Add Drone cronjob for backup img.
 
