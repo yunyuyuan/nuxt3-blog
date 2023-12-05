@@ -20,13 +20,19 @@ fs.readdirSync("./public/sticker").forEach((dir) => {
 const svgs = fs.readdirSync("./assets/svg").map(file => file.replace(/\.svg$/, ""));
 
 const scripts = [];
-const analyzeId = config.CloudflareAnalyze || process.env.CloudflareAnalyze;
-if (analyzeId && !isDev) {
+const cfAnalyzeId = config.CloudflareAnalyze || process.env.CloudflareAnalyze;
+const msAnalyzeId = config.MSClarityId || process.env.MSClarityId;
+if (cfAnalyzeId && !isDev) {
   scripts.push({
     src: "https://static.cloudflareinsights.com/beacon.min.js",
     async: false,
     defer: true,
-    "data-cf-beacon": `{"token": "${analyzeId}"}`
+    "data-cf-beacon": `{"token": "${cfAnalyzeId}"}`
+  });
+}
+if (msAnalyzeId && !isDev) {
+  scripts.push({
+    children: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${msAnalyzeId}");`
   });
 }
 
@@ -85,9 +91,6 @@ export default defineNuxtConfig({
       cmtRepCateId: config.CommentDiscussionCategoryId || process.env.CommentDiscussionCategoryId
     }
   },
-  modules: [
-    "nuxt-clarity-analytics"
-  ],
   nitro: {
     prerender: {
       crawlLinks: true,
