@@ -1,5 +1,4 @@
 import fs from "fs";
-import { isPrerender } from "./constants";
 import { CommonItem, HeaderTabUrl, escapeNewLine } from "~/utils/common";
 import { inBrowser } from "~/utils/nuxt";
 
@@ -17,7 +16,7 @@ const magicFetch = async<T = any>(path: string, transform: (_: string) => T): Pr
       window.NBCache[path] = res;
       return res;
     }
-  } else if (isPrerender) {
+  } else {
     return transform(fs.readFileSync("public/" + path, { encoding: "utf-8" }).toString());
   }
 };

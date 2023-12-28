@@ -51,10 +51,13 @@ export async function parseMarkdown (text: string) {
         }" src="${href}"/><small class="desc">${marked.parseInline(alt_)}</small></span>`;
       },
       code (code, language, escaped) {
-        code = escaped ? code : escapeHtml(code);
         if (isPrerender) {
+          // 在这里parse
           initHljs(hljs!);
           code = hljs!.highlightAuto(code, [language!]).value;
+        } else {
+          // 先escape，留在afterInsertHtml里parse
+          code = escaped ? code : escapeHtml(code);
         }
         return `<pre><div></div><small></small><code class="language-${language} ${isPrerender ? "hljs" : ""}">${code}</code></pre>`;
       }
@@ -364,12 +367,14 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
   const destroyFns: (()=>void)[] = [];
   nextTick(async () => {
     // hljs
-    mdEl.querySelectorAll<HTMLElement>("pre>code:not(.hljs)").forEach(async (el) => {
+    mdEl.querySelectorAll<HTMLElement>("pre>code").forEach(async (el) => {
       const lang = el.parentElement!.querySelector<HTMLElement>(":scope > small")!;
       const language = el.className.replace(/^.*?language-([^ ]+).*?$/, "$1");
       const hljs = initHljs((await import("highlight.js")).default);
       lang.innerText = (hljs.getLanguage(language) || { name: language }).name!;
-      hljs.highlightElement(el);
+      if (!el.classList.contains("hljs")) {
+        hljs.highlightElement(el);
+      }
     });
     // katex
     mdEl
