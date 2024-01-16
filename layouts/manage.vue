@@ -166,7 +166,9 @@ const modalOk = () => {
     </nav>
     <section>
       <div>
-        <nuxt-page />
+        <client-only>
+          <nuxt-page />
+        </client-only>
       </div>
     </section>
   </div>
