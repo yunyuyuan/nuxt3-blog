@@ -4,8 +4,8 @@ import https from "https";
 import colors from "colors";
 import { ImgMap, getAbsolutePath } from "./utils";
 
-export default async function () {
-  await downloadImages(JSON.parse(fs.readFileSync(getAbsolutePath("img.json")).toString()));
+export default async function (user?: number, group?: number) {
+  await downloadImages(JSON.parse(fs.readFileSync(getAbsolutePath("img.json")).toString()), user, group);
 }
 
 const imgsPath = getAbsolutePath("imgs");
@@ -16,7 +16,7 @@ function sleep () {
   });
 }
 
-async function downloadImages (json: ImgMap) {
+async function downloadImages (json: ImgMap, user?: number, group?: number) {
   const urls = Object.keys(json);
 
   if (!fs.existsSync(imgsPath)) {
@@ -28,7 +28,7 @@ async function downloadImages (json: ImgMap) {
     let count = 0;
     while (true) {
       try {
-        const res = await downloadImage(url);
+        const res = await downloadImage(url, user, group);
         if (res !== null) {
           await sleep();
         }
@@ -48,7 +48,7 @@ async function downloadImages (json: ImgMap) {
   console.log(colors.bold("Downloaded " + colors.green(succeedCount + "/" + urls.length + " items")));
 }
 
-function downloadImage (url: string) {
+function downloadImage (url: string, user?: number, group?: number) {
   return new Promise<boolean | null>((resolve, reject) => {
     const fileName = path.join(imgsPath, url.replace(/^.*?([^/]*)$/, "$1"));
     if (fs.existsSync(fileName)) {
@@ -67,6 +67,9 @@ function downloadImage (url: string) {
 
       response.pipe(fileStream);
       fileStream.on("finish", () => {
+        if (user && group) {
+          fs.chown(fileName, user, group, () => undefined);
+        }
         console.log(`Downloaded ${url} as ${fileName}`);
         resolve(true);
       });

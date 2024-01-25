@@ -10,7 +10,7 @@ gulp.task("generate-image-map", async (cb) => {
 });
 
 gulp.task("download-image", async (cb) => {
-  await downloadImg();
+  await downloadImg(parseInt(process.env.FILE_USER), parseInt(process.env.FILE_GROUP));
   cb();
 });
 
