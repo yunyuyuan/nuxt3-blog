@@ -7,7 +7,15 @@
 
 [![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v3-%2300DC82?logo=nuxt.js)
 
-> 🚀[https://blog.yunyuyuan.net](https://blog.yunyuyuan.net)
+**🚀已通过[NitroJS](https://nitro.unjs.io/)多平台部署（NitroJS是Nuxt3的[官方引擎](https://nuxt.com/docs/guide/concepts/server-engine)）**
+> Vercel:[https://blog.yunyuyuan.net](https://blog.yunyuyuan.net)
+> 
+> Cloudflare Page:[https://blog-cfpage.yunyuyuan.net](https://blog-cfpage.yunyuyuan.net)
+> 
+> Netlify:[https://blog-netlify.yunyuyuan.net](https://blog-netlify.yunyuyuan.net)
+>
+**🚀self hosted部署（参考[我的文章](https://blog.yunyuyuan.net/articles/8346)）**
+> Drone:[https://blog-drone-cf.yunyuyuan.net](https://blog-drone-cf.yunyuyuan.net)，这里的`cf`意思是使用cloudflare做内网穿透
 
 [English Readme](/README.md) | 中文说明
 

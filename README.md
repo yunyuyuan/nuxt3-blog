@@ -7,7 +7,15 @@
 
 [![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v3-%2300DC82?logo=nuxt.js)
 
-> 🚀[https://blog.yunyuyuan.net](https://blog.yunyuyuan.net)
+**🚀Deployed across multiple platforms through [NitroJS](https://nitro.unjs.io/) (NitroJS is the [official engine](https://nuxt.com/docs/guide/concepts/server-engine) for Nuxt3)**
+> Vercel: [https://blog.yunyuyuan.net](https://blog.yunyuyuan.net)
+> 
+> Cloudflare Page: [https://blog-cfpage.yunyuyuan.net](https://blog-cfpage.yunyuyuan.net)
+> 
+> Netlify: [https://blog-netlify.yunyuyuan.net](https://blog-netlify.yunyuyuan.net)
+>
+**🚀Self-hosted deployment (refer to [my article](https://blog.yunyuyuan.net/articles/8346))**
+> Drone: [https://blog-drone-cf.yunyuyuan.net](https://blog-drone-cf.yunyuyuan.net), where `cf` here stands for using Cloudflare for intranet penetration.
 
 English Readme | [中文说明](/README.zh.md)
 
