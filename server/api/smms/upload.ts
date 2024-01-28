@@ -1,4 +1,4 @@
-import { readMultipartFormData, createError, setResponseStatus } from "h3";
+import { readMultipartFormData, createError } from "h3";
 import { smmsUpload } from "../../../utils/api/smms";
 
 export default defineEventHandler(async (event) => {
@@ -14,10 +14,7 @@ export default defineEventHandler(async (event) => {
     const tinyPngToken = form!.find(i => i.name === "tinyPngToken")?.data.toString();
     const file = form!.find(i => i.name === "file");
 
-    const response = await smmsUpload({ token, tinyPngToken, file });
-
-    setResponseStatus(event, response.status);
-    return response.data;
+    return await smmsUpload({ token, tinyPngToken, file });
   } catch (e: any) {
     return createError({
       statusCode: 503,

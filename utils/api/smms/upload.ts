@@ -1,4 +1,4 @@
-import axios from "axios";
+import https from "https";
 import FormData from "form-data";
 import tinify from "tinify";
 
@@ -40,15 +40,49 @@ export async function smmsUpload (
       resolve(len);
     });
   });
-  const response = await axios({
-    url: "https://sm.ms/api/v2/upload",
-    method: "post",
+  const response = await uploadFile({
     headers: {
       Authorization: token,
       "Content-Length": len.toString(),
       "Content-Type": `multipart/form-data; boundary=${formData.getBoundary()}`
     },
-    data: formData
+    formData
   });
   return response;
+}
+
+function uploadFile ({ headers, formData }: {
+  headers: any,
+  formData: any,
+}) {
+  const url = "https://sm.ms/api/v2/upload";
+
+  const options = {
+    method: "POST",
+    headers
+  };
+
+  return new Promise<any>((resolve, reject) => {
+    const req = https.request(url, options, (res) => {
+      let responseData = "";
+
+      res.on("data", (chunk) => {
+        responseData += chunk;
+      });
+
+      res.on("end", () => {
+        if (res.statusCode === 200) {
+          resolve(JSON.parse(responseData));
+        } else {
+          reject(responseData);
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      reject(error.message);
+    });
+
+    formData.pipe(req);
+  });
 }

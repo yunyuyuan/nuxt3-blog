@@ -1,4 +1,4 @@
-import axios from "axios";
+import https from "https";
 import config from "../../../config";
 import type { HeaderTabUrl } from "../../common";
 
@@ -7,19 +7,45 @@ const request = (path: string, data: any) => {
     throw new Error("Need Mongodb Atlas Authentication");
   }
 
-  return axios({
-    method: "post",
-    url: process.env.MONGODB_ENDPOINT + path,
+  const url = process.env.MONGODB_ENDPOINT + path;
+  const requestData = {
+    ...data,
+    dataSource: process.env.MONGODB_DATA_SOURCE,
+    database: config.MongoDb.database,
+    collection: config.MongoDb.collection
+  };
+  const options = {
+    method: "POST",
     headers: {
+      "Content-Type": "application/json",
       email: process.env.MONGODB_USER,
       password: process.env.MONGODB_PWD
-    },
-    data: {
-      ...data,
-      dataSource: process.env.MONGODB_DATA_SOURCE,
-      database: config.MongoDb.database,
-      collection: config.MongoDb.collection
     }
+  };
+
+  return new Promise<any>((resolve, reject) => {
+    const req = https.request(url, options, (res) => {
+      let responseData = "";
+
+      res.on("data", (chunk) => {
+        responseData += chunk;
+      });
+
+      res.on("end", () => {
+        if (res.statusCode === 200) {
+          resolve(JSON.parse(responseData));
+        } else {
+          reject(responseData);
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      reject(error.message);
+    });
+
+    req.write(JSON.stringify(requestData));
+    req.end();
   });
 };
 
@@ -30,7 +56,7 @@ export async function getVisitors (type: HeaderTabUrl) {
     },
     projection: { _id: 0, nid: 1, nvisitors: 1 }
   });
-  return res.data.documents;
+  return res.documents;
 }
 
 export async function increaseVisitors ({ id, type, inc }: {id: number, type: HeaderTabUrl, inc?: boolean}) {
@@ -47,7 +73,7 @@ export async function increaseVisitors ({ id, type, inc }: {id: number, type: He
       }
     }
   });
-  if (!res.data.modifiedCount) {
+  if (!res.modifiedCount) {
     await request("/action/insertOne", {
       document: {
         ...preset,
@@ -58,5 +84,5 @@ export async function increaseVisitors ({ id, type, inc }: {id: number, type: He
   }
   return (await request("/action/findOne", {
     filter: preset
-  })).data.document.nvisitors;
+  })).document.nvisitors;
 }
