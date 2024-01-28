@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ManageListTable from "~/pages/manage/comps/manage-list-table.vue";
-import { ArticleItem } from "~/utils/common";
+import { type ArticleItem } from "~/utils/common";
 
 const searchTag = reactive(new Set<string>());
 const toggleTag = (tag: string) => {

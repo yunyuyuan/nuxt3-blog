@@ -1,5 +1,5 @@
 import type { WatchOptions } from "vue";
-import { AllKeys, CommonItem, HeaderTabs, githubRepoUrl, HeaderTabUrl, getUniqueId } from "~/utils/common";
+import { type AllKeys, type CommonItem, HeaderTabs, githubRepoUrl, type HeaderTabUrl, getUniqueId } from "~/utils/common";
 import { inBrowser, isDev } from "~/utils/nuxt";
 import config from "~/config";
 
@@ -16,21 +16,23 @@ export function useCurrentTab () {
   return HeaderTabs.find(tab => useRoute().path.includes(tab.url)) || HeaderTabs[0];
 }
 
-export function useCommonSEOTitle (raw: ComputedRef<string>, keys?: ComputedRef<string[]>) {
-  const title = computed(() => raw.value + config.SEO_title);
-  useHead({
-    title,
-    meta: [{
-      name: "description",
-      content: title
-    }, {
-      name: "keywords",
-      content: computed(() => `${raw.value}${keys?.value.length ? ("," + keys?.value.join(",")) : ""},${config.SEO_keywords}`)
-    }]
-  });
-  useSeoMeta({
-    ogTitle: title,
-    ogDescription: title
+export function useCommonSEOTitle (head: ComputedRef<string>, keys?: ComputedRef<string[]>) {
+  watch([head, keys], (head, keys) => {
+    const title = head + config.SEO_title;
+    useHead({
+      title,
+      meta: [{
+        name: "description",
+        content: title
+      }, {
+        name: "keywords",
+        content: computed(() => `${head}${keys?.length ? ("," + keys?.join(",")) : ""},${config.SEO_keywords}`)
+      }]
+    });
+    useSeoMeta({
+      ogTitle: title,
+      ogDescription: title
+    });
   });
 }
 

@@ -1,5 +1,5 @@
 import capitalize from "lodash/capitalize";
-import { I18nCode } from "~/utils/common";
+import type { I18nCode } from "~/utils/common";
 
 export async function loadI18nJson (code: I18nCode) {
   const messages = useNuxtApp().$i18nMessages;

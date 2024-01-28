@@ -1,4 +1,4 @@
-import { createNewItem, CommonItem, processEncryptDecrypt } from "~/utils/common";
+import { createNewItem, type CommonItem, processEncryptDecrypt } from "~/utils/common";
 import { useHasModified, translate, useStatusText, useCurrentTab, deepClone, assignItem, fetchList, fetchMd, useCommonSEOTitle } from "~/utils/nuxt";
 
 /**

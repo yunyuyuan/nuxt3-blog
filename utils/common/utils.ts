@@ -1,4 +1,4 @@
-import { HeaderTabUrl, CommonItem, NeedsItem } from "./types";
+import type { HeaderTabUrl, CommonItem, NeedsItem } from "./types";
 
 /**
  * 生成唯一id

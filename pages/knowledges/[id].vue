@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useContentPage, useComment, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
-import { KnowledgeItem } from "~/utils/common";
+import { type KnowledgeItem } from "~/utils/common";
 
 const { item, tabUrl, modifyTime, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
 useCommonSEOTitle(computed(() => item.title));

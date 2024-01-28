@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArticleItem } from "~/utils/common";
+import { type ArticleItem } from "~/utils/common";
 import { formatTime, literalTime, useListPage } from "~/utils/nuxt";
 
 definePageMeta({

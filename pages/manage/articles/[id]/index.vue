@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
-import { ArticleItem } from "~/utils/common";
+import { type ArticleItem } from "~/utils/common";
 
 const allTags = reactive(new Set<string>());
 const showTagSelect = ref<boolean>(false);

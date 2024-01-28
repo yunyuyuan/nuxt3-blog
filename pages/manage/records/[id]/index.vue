@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
-import { RecordItem, getUniqueId } from "~/utils/common";
+import { type RecordItem, getUniqueId } from "~/utils/common";
 
 const moveUpImg = (idx: number, item: RecordItem) => {
   item.images.splice(idx - 1, 2, item.images[idx], item.images[idx - 1]);

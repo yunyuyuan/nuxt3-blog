@@ -1,6 +1,6 @@
 import axios from "axios";
 import config from "../../../config";
-import { HeaderTabUrl } from "../../common";
+import type { HeaderTabUrl } from "../../common";
 
 const request = (path: string, data: any) => {
   if (!process.env.MONGODB_PWD || !process.env.MONGODB_USER) {

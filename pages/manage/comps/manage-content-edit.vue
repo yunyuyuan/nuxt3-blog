@@ -3,7 +3,7 @@ import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
 import type { Ref } from "vue";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 // eslint-disable-next-line no-unused-vars
-import { CommonItem, HeaderTabs, getEncryptedBlocks, getNowStamp, processEncryptDecrypt } from "~/utils/common";
+import { type CommonItem, HeaderTabs, getEncryptedBlocks, getNowStamp, processEncryptDecrypt } from "~/utils/common";
 import { notify, deepClone, translate, getLocalStorage, rmLocalStorage, compareMd, loadOrDumpDraft, randomId, useManageContent } from "~/utils/nuxt";
 
 const props = defineProps<{

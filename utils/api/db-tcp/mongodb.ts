@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { MongoClient, Document } from "mongodb";
+import { MongoClient, type Document } from "mongodb";
 
 const uri = process.env.MONGODB_URI as string; // your mongodb connection string
 const options = {};

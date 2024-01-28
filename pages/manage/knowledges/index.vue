@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ManageListTable from "~/pages/manage/comps/manage-list-table.vue";
-import { KnowledgeItem, KnowledgeTab, KnowledgeTabsList } from "~/utils/common";
+import { type KnowledgeItem, type KnowledgeTab, KnowledgeTabsList } from "~/utils/common";
 
 const filterType = ref<KnowledgeTab>();
 const registryFilter = (customFilter: (_: (_item: KnowledgeItem) => boolean) => void) => {

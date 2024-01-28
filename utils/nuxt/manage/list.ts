@@ -1,4 +1,4 @@
-import { CommonItem, processEncryptDecrypt } from "~/utils/common";
+import { type CommonItem, processEncryptDecrypt } from "~/utils/common";
 import { deepClone, useCurrentTab, fetchList, translate, useCommonSEOTitle } from "~/utils/nuxt";
 
 /**

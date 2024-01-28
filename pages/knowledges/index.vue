@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { formatTime, literalTime, useHackKey, useListPage } from "~/utils/nuxt";
-import { KnowledgeItem, KnowledgeTabs, KnowledgeTabsList } from "~/utils/common";
+import { type KnowledgeItem, KnowledgeTabs, KnowledgeTabsList } from "~/utils/common";
 
 const hackKey = useHackKey();
 

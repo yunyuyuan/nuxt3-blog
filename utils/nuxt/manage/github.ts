@@ -1,5 +1,5 @@
 import type { Axios } from "axios";
-import { CommonItem } from "~/utils/common";
+import type { CommonItem } from "~/utils/common";
 import { useCurrentTab, translate, formatTime, notify, createCommitModal } from "~/utils/nuxt";
 import config from "~/config";
 

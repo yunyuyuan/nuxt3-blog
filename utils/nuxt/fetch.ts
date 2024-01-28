@@ -1,5 +1,5 @@
 import fs from "fs";
-import { CommonItem, HeaderTabUrl, escapeNewLine } from "~/utils/common";
+import { type CommonItem, type HeaderTabUrl, escapeNewLine } from "~/utils/common";
 import { inBrowser } from "~/utils/nuxt";
 
 const timestamp = () => useRuntimeConfig().public.timestamp;

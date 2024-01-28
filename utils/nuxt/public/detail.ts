@@ -1,11 +1,11 @@
-import { CommonItem, createNewItem, processEncryptDecrypt } from "~/utils/common";
+import * as common from "~/utils/common";
 import { formatTime, DBOperate, translate, afterInsertHtml, parseMarkdown, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "~/utils/nuxt";
 import config from "~/config";
 
 /**
  * 详情页面通用功能
  */
-export async function useContentPage<T extends CommonItem> () {
+export async function useContentPage<T extends common.CommonItem> () {
   const encryptor = useEncryptor();
   const isAuthor = useIsAuthor();
   const markdownRef = ref<HTMLElement>();
@@ -14,7 +14,7 @@ export async function useContentPage<T extends CommonItem> () {
 
   const id = useRoute().params.id as string;
 
-  const item = reactive(createNewItem(targetTab.url)) as T;
+  const item = reactive(common.createNewItem(targetTab.url)) as T;
 
   // 所有页面都有markdown
   const mdContent = ref<string>("");
@@ -40,7 +40,7 @@ export async function useContentPage<T extends CommonItem> () {
   }
   if (item.encrypt) {
     encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
-      await processEncryptDecrypt(item, decrypt, targetTab.url);
+      await common.processEncryptDecrypt(item, decrypt, targetTab.url);
     });
   }
   mdContent.value = await fetchMd(targetTab.url, id);

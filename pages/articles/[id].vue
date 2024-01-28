@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { addScrollListener, rmScrollListener, ArticleItem } from "~/utils/common";
+import { addScrollListener, rmScrollListener, type ArticleItem } from "~/utils/common";
 import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerender, useContentPage, useComment, watchUntil, useCommonSEOTitle } from "~/utils/nuxt";
 
 const { item, tabUrl, modifyTime, menuItems, htmlContent, markdownRef, htmlInserted } = await useContentPage<ArticleItem>();

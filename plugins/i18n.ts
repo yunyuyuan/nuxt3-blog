@@ -1,4 +1,4 @@
-import { I18nCode, i18nLocales } from "~/utils/common/locales";
+import { type I18nCode, i18nLocales } from "~/utils/common/locales";
 import { translate, translateT, translateTT } from "~/utils/nuxt";
 
 export default defineNuxtPlugin(async (app) => {

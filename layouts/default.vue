@@ -2,7 +2,7 @@
 import type Headroom from "headroom.js";
 import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
 import { inBrowser, isPrerender, calcRocketUrl, translateT, useHackKey } from "~/utils/nuxt";
-import { i18nLocales, githubRepoUrl, I18nCode, HeaderTabs } from "~/utils/common";
+import { i18nLocales, githubRepoUrl, type I18nCode, HeaderTabs } from "~/utils/common";
 import config from "~/config";
 
 const hackKey = useHackKey();
