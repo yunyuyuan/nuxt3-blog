@@ -176,7 +176,6 @@ const close = () => {
     margin-top: 128px;
     box-shadow: 0 0 20px rgb(0 0 0 / 30%);
     transition: $common-transition;
-    max-width: calc(100% - 64px);
     align-items: stretch;
 
     @include dark-mode {

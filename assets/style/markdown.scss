@@ -433,8 +433,8 @@
 
       >span {
         cursor: pointer;
-        width: 15px;
-        height: 15px;
+        width: 24px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -535,7 +535,7 @@
   }
 
   fieldset {
-    width: calc(98% - 2rem);
+    width: 98%;
     margin: 22px 1%;
     padding: 1.2rem 1rem 0.6rem;
     position: relative;

@@ -92,7 +92,7 @@ onBeforeUnmount(() => {
 
   .editor-container {
     background: white;
-    height: calc(100% - 100px);
+    height: 100%;
     box-shadow: 0 0 12px rgb(0 0 0 / 10%);
   }
 }

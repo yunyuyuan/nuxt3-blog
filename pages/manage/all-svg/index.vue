@@ -53,6 +53,7 @@ const copySvg = async (name: string) => {
     svg {
       @include square(40px);
 
+      flex-shrink: 0;
       fill: dark;
 
       @include dark-mode {

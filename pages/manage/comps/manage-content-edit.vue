@@ -544,6 +544,7 @@ onMounted(() => {
   .manage-content {
     &-header {
       position: relative;
+      flex-wrap: wrap;
 
       .status {
         position: absolute;

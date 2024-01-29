@@ -49,7 +49,7 @@ onBeforeMount(async () => {
 
     .about {
       width: 100vw;
-      height: calc(100vh - #{$footer-height});
+      height: 100vh;
       padding-bottom: $footer-height;
       position: relative;
 

@@ -195,13 +195,13 @@ onUnmounted(() => {
           <div class="flex">
             <input v-model="smmsToken" :placeholder="$t('please-input') + ' smms API token'">
             <span @click="saveToken('smms-token', smmsToken)">
-              <svg-icon name="yes" />
+              <svg-icon name="save" />
             </span>
           </div>
           <div class="flex">
             <input v-model="tinyPngToken" :placeholder="`(${$t('optional')})${$t('please-input')} tinyPng API token`">
             <span @click="saveToken('tinypng-token', tinyPngToken)">
-              <svg-icon name="yes" />
+              <svg-icon name="save" />
             </span>
           </div>
           <common-button icon="upload" :loading="uploading" :disabled="!img || !smmsToken" @click="doUpload">
@@ -231,15 +231,20 @@ onUnmounted(() => {
 
   .modal-body > div {
     justify-content: center;
+    max-width: 300px;
+    margin: auto;
 
     .result {
+      width: 100%;
+
       span {
         font-size: f-size(0.75);
       }
 
       input {
         padding: 4px;
-        width: 220px;
+        flex-grow: 1;
+        width: 0;
       }
 
       margin-bottom: 10px;
@@ -252,7 +257,7 @@ onUnmounted(() => {
       cursor: pointer;
       transition: $common-transition;
       height: 200px;
-      width: 300px;
+      width: 100%;
       margin-bottom: 20px;
       background: rgb(240 240 240);
 
@@ -290,7 +295,10 @@ onUnmounted(() => {
     }
 
     .footer {
+      width: 100%;
+
       > div {
+        width: 100%;
         margin-bottom: 8px;
 
         > span {
@@ -308,9 +316,14 @@ onUnmounted(() => {
 
       input {
         font-size: f-size(0.75);
-        width: 300px;
         padding: 6px;
         margin-right: 5px;
+        width: 0;
+        flex-grow: 1;
+      }
+
+      button {
+        margin-bottom: 10px;
       }
     }
   }
