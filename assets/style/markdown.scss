@@ -202,18 +202,22 @@
       }
     }
 
-    >.open-link > svg {
-      display: none;
-      position: absolute;
-      top: 0;
-      right: 0;
-      transform: translate(100%, 50%);
-      width: 12px;
-      height: 12px;
-      fill: #0039ff;
+    >.open-link {
+      height: 1rem;
 
-      @include dark-mode {
-        fill: #fff;
+      > svg {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(100%, 50%);
+        width: 12px;
+        height: 12px;
+        fill: #0039ff;
+
+        @include dark-mode {
+          fill: #fff;
+        }
       }
     }
   }

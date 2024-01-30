@@ -48,6 +48,16 @@ export async function smmsUpload (
     },
     formData
   });
+  // XXX why $fetch cannot update FormData?
+  // const response = await $fetch("https://sm.ms/api/v2/upload", {
+  //   method: "POST",
+  //   headers: {
+  //     Authorization: token,
+  //     "Content-Length": len.toString(),
+  //     "Content-Type": `multipart/form-data; boundary=${formData.getBoundary()}`
+  //   },
+  //   body: formData
+  // });
   return response;
 }
 

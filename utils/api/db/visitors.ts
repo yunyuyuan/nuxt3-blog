@@ -1,8 +1,7 @@
-import https from "https";
 import config from "../../../config";
 import type { HeaderTabUrl } from "../../common";
 
-const request = (path: string, data: any) => {
+const request = async (path: string, data: any) => {
   if (!process.env.MONGODB_PWD || !process.env.MONGODB_USER) {
     throw new Error("Need Mongodb Atlas Authentication");
   }
@@ -14,39 +13,17 @@ const request = (path: string, data: any) => {
     database: config.MongoDb.database,
     collection: config.MongoDb.collection
   };
-  const options = {
+
+  const res = await $fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       email: process.env.MONGODB_USER,
       password: process.env.MONGODB_PWD
-    }
-  };
-
-  return new Promise<any>((resolve, reject) => {
-    const req = https.request(url, options, (res) => {
-      let responseData = "";
-
-      res.on("data", (chunk) => {
-        responseData += chunk;
-      });
-
-      res.on("end", () => {
-        if (res.statusCode === 200) {
-          resolve(JSON.parse(responseData));
-        } else {
-          reject(responseData);
-        }
-      });
-    });
-
-    req.on("error", (error) => {
-      reject(error.message);
-    });
-
-    req.write(JSON.stringify(requestData));
-    req.end();
+    },
+    body: requestData
   });
+  return res as any;
 };
 
 export async function getVisitors (type: HeaderTabUrl) {
