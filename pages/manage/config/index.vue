@@ -3,11 +3,9 @@ import { createCommit } from "ls:~/utils/nuxt/manage/github";
 import type { editor as Editor } from "monaco-editor";
 import configString from "~/config.ts?raw";
 import config from "~/config";
-import { inBrowser, useStatusText, translate } from "~/utils/nuxt";
+import { inBrowser, useStatusText, translate, useCommonSEOTitle } from "~/utils/nuxt";
 
-useHead({
-  title: translate("config-manage") + config.SEO_title
-});
+useCommonSEOTitle(computed(() => translate("config-manage") + config.SEO_title));
 
 let editor: Editor.IStandaloneCodeEditor;
 const editorRef = ref<HTMLElement>();

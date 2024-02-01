@@ -2,13 +2,11 @@
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 import mdSample from "~/assets/style/markdown.md?raw";
 import config from "~/config";
-import { translate } from "~/utils/nuxt";
+import { translate, useCommonSEOTitle } from "~/utils/nuxt";
 
 const inputMarkdown = ref(mdSample);
 
-useHead({
-  title: translate("markdown-ref") + config.SEO_title
-});
+useCommonSEOTitle(computed(() => translate("markdown-ref") + config.SEO_title));
 </script>
 
 <template>
