@@ -64,7 +64,7 @@ body {
 }
 
 #body {
-  min-height: calc(100vh - #{$header-height + $footer-height});
+  min-height: calc(100vh - $footer-height);
   padding-top: $header-height;
   z-index: $z-index-body;
   position: relative;
