@@ -53,7 +53,10 @@ function changeSelect (item: CommonItem) {
 function deleteSelect () {
   showConfirmModal.value = false;
   toggleProcessing();
-  const newList = list.filter((item) => {
+  const newList = list.map((item) => {
+    delete (item as any)._show;
+    return item;
+  }).filter((item) => {
     return (
       selectedList.find(selected => selected.id === item.id) === undefined
     );

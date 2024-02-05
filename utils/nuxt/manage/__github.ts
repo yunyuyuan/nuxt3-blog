@@ -47,7 +47,7 @@ function listenServer (): Promise<boolean> {
             description: translate("refresh-after-sec", [1])
           });
           setTimeout(() => {
-            import.meta.hot!.invalidate();
+            location.reload();
           }, 1000);
         }
       } else {
