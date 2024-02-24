@@ -112,10 +112,10 @@ const close = () => {
                 :theme="confirmTheme"
                 @click="ok"
               >
-                {{ useNuxtApp().$TT('ok') }}
+                {{ $TT('ok') }}
               </common-button>
               <common-button v-if="showCancel" theme="default" @click="close">
-                {{ useNuxtApp().$T('cancel') }}
+                {{ $T('cancel') }}
               </common-button>
             </div>
           </div>

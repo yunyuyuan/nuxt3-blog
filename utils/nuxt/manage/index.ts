@@ -141,6 +141,7 @@ export function createCommitModal () {
       render(null, container);
       resolve(false);
     };
+    vm.appContext = useNuxtApp().vueApp._context;
     render(vm, container);
     document
       .getElementById(ModalContainerId)!
