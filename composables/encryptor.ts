@@ -1,6 +1,6 @@
 import type cryptoJS from "crypto-js";
 import { notify, isPrerender, translate } from "~/utils/nuxt";
-import { DecryptFunction } from "~/utils/common";
+import type { DecryptFunction } from "~/utils/common";
 
 let CryptoJS: typeof cryptoJS;
 

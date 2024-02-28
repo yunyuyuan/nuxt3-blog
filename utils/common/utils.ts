@@ -54,6 +54,7 @@ export function escapeHtml (s: string) {
     .replace(/'/g, "&apos;");
 }
 
+// 用在两个地方：提交时，获取时
 export function escapeNewLine (s: string) {
   return s.replace(/\r\n/g, "\n");
 }

@@ -3,11 +3,11 @@ import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
 import type { Ref } from "vue";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 // eslint-disable-next-line no-unused-vars
-import { type CommonItem, HeaderTabs, getEncryptedBlocks, getNowStamp, processEncryptDecrypt } from "~/utils/common";
+import { type CommonItem, HeaderTabs, getEncryptedBlocks, getNowStamp, processEncryptDecrypt, escapeNewLine } from "~/utils/common";
 import { notify, deepClone, translate, getLocalStorage, rmLocalStorage, compareMd, loadOrDumpDraft, randomId, useManageContent } from "~/utils/nuxt";
 
 const props = defineProps<{
-  preProcessItem?:(_item: T, _list?: T[]) => void;
+  preProcessItem?:(_item: T, _list: T[]) => void;
   /** 更新之前处理item，附带markdown信息 */
   processWithContent?:(_md: string, _html: HTMLElement, _item: T) => void;
 }>();
@@ -48,7 +48,7 @@ let markdownRef: Ref | null = null;
 const getHtml = (ref: Ref) => {
   markdownRef = ref;
 };
-const inputMarkdown = ref<string>("");
+const inputMarkdown = ref("");
 watch(markdownContent, (text) => {
   inputMarkdown.value = text;
 }, { immediate: true });
@@ -94,7 +94,7 @@ const getUploadInfo = async () => {
   }
   // 需要clone一份item，clone的item仅用于上传
   const newItem = deepClone(item) as T;
-  let mdContent = inputMarkdown.value;
+  let mdContent = escapeNewLine(inputMarkdown.value);
   // 处理item
   if (props.processWithContent) {
     props.processWithContent(mdContent, markdownRef!.value, newItem);
@@ -110,7 +110,7 @@ const getUploadInfo = async () => {
     await processEncryptDecrypt(newItem, encryptor.encrypt, targetTab.url);
     mdContent = await encryptor.encrypt(mdContent);
     // 整篇加密的markdown，不会再有加密块
-    delete item.encryptBlocks;
+    delete newItem.encryptBlocks;
   } else if (item.encryptBlocks && !blockDecrypted.value) {
     // 未解密，不处理
   } else {
@@ -120,9 +120,9 @@ const getUploadInfo = async () => {
     if (blocks.length) {
       newItem.encryptBlocks = blocks.reverse();
     } else {
-      delete item.encryptBlocks;
+      delete newItem.encryptBlocks;
     }
-    if (item.encryptBlocks?.length && !encryptor.usePasswd.value) {
+    if (newItem.encryptBlocks?.length && !encryptor.usePasswd.value) {
       return notify({
         type: "error",
         title: translate("need-passwd")

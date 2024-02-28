@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
-import { KnowledgeTabs, KnowledgeTabsList } from "~/utils/common";
+import { KnowledgeTabs, KnowledgeTabsList, type KnowledgeItem } from "~/utils/common";
 
 const typeSelectShow = ref(false);
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const processWithContent = (_md: string, _html: HTMLElement, _item: KnowledgeItem) => {};
 </script>
 
 <template>
   <div class="manage-knowledge-detail">
-    <manage-content-edit>
+    <manage-content-edit :process-with-content="processWithContent">
       <template #title="{ disabled, item }">
         <span :class="{ invalid: !item.title }">
           <b>{{ $T('title') }}</b>

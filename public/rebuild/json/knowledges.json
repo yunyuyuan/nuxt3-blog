@@ -7,8 +7,14 @@
     "type": "film",
     "id": 5966,
     "time": 1709131770098,
-    "modifyTime": 1709131770098,
-    "encrypt": false
+    "modifyTime": 1709133019751,
+    "encrypt": false,
+    "encryptBlocks": [
+      {
+        "start": 60,
+        "end": 316
+      }
+    ]
   },
   {
     "title": "虫师",
