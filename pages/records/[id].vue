@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { formatTime, literalTime, useContentPage, useComment, translate, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
+import { formatTime, useContentPage, useComment, translate, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
 import { type RecordItem } from "~/utils/common";
 
-const { item, tabUrl, publishTime, modifyTime, htmlContent, markdownRef } = await useContentPage<RecordItem>();
+const { item, writeDate, tabUrl, htmlContent, markdownRef } = await useContentPage<RecordItem>();
 useCommonSEOTitle(computed(() => `${translate("records")}: ${formatTime(item.time, "date")}`));
 
 const { root, hasComment } = useComment(tabUrl);
@@ -23,9 +23,8 @@ initViewer(root);
       />
     </div>
     <div class="text" :class="{'has-comment': hasComment}">
-      <p class="flex" :title="$t('created-at') + ' ' + publishTime + ', ' + $t('updated-at') + ' ' + modifyTime">
-        <svg-icon name="write" />
-        <time>{{ literalTime(item.time) }}</time>
+      <p class="flex">
+        <writeDate />
         <span v-if="item.visitors >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
           <svg-icon name="view" />
           {{ item.visitors }}
@@ -60,26 +59,6 @@ initViewer(root);
     > p {
       border-bottom: 1px solid #b9b9b9;
 
-      svg {
-        @include square(16px);
-
-        fill: $theme-color;
-
-        @include dark-mode {
-          fill: $theme-color-lighten;
-        }
-      }
-
-      time {
-        color: black;
-        font-size: f-size(0.75);
-        line-height: f-size(1);
-
-        @include dark-mode {
-          color: rgb(221 221 221);
-        }
-      }
-
       .visitors {
         margin-left: auto;
         font-size: f-size(0.75);
@@ -92,6 +71,10 @@ initViewer(root);
         svg {
           margin-right: 5px;
           fill: rgb(54 54 54);
+
+          @include dark-mode {
+            fill: white;
+          }
 
           @include square(15px);
         }

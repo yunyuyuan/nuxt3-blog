@@ -2,7 +2,7 @@
 import { addScrollListener, rmScrollListener, type ArticleItem } from "~/utils/common";
 import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerender, useContentPage, useComment, watchUntil, useCommonSEOTitle } from "~/utils/nuxt";
 
-const { item, tabUrl, modifyTime, menuItems, htmlContent, markdownRef, htmlInserted } = await useContentPage<ArticleItem>();
+const { item, tabUrl, writeDate, menuItems, htmlContent, markdownRef, htmlInserted } = await useContentPage<ArticleItem>();
 useCommonSEOTitle(computed(() => item.title), computed(() => item.tags));
 const activeAnchor = ref<string>();
 
@@ -81,10 +81,7 @@ initViewer(root);
               {{ tag }}
             </the-tag>
           </div>
-          <span class="time">
-            {{ $t('updated-at') }}:
-            <span>{{ modifyTime }}</span>
-          </span>
+          <writeDate />
           <span v-if="Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
             <svg-icon name="view" />
             {{ item.visitors }}
@@ -181,12 +178,8 @@ initViewer(root);
           }
         }
 
-        > .time {
+        > .write-date {
           margin-left: auto;
-
-          span {
-            color: #ff6a00;
-          }
         }
 
         .visitors {

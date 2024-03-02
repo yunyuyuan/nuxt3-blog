@@ -1,0 +1,26 @@
+.write-date {
+  cursor: pointer;
+
+  &:hover {
+    svg {
+      fill: $theme-color !important;
+    }
+  }
+
+  svg {
+    transition: $common-transition;
+    margin-right: 6px;
+    fill: black;
+
+    @include dark-mode {
+      fill: white;
+    }
+
+    @include square(18px);
+  }
+
+  span {
+    font-size: f-size(0.6);
+    line-height: 1.5;
+  }
+}

@@ -1,6 +1,8 @@
 import * as common from "~/utils/common";
-import { formatTime, DBOperate, translate, afterInsertHtml, parseMarkdown, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil } from "~/utils/nuxt";
+import { formatTime, DBOperate, translate, afterInsertHtml, parseMarkdown, assignItem, useCurrentTab, fetchList, fetchMd, watchUntil, literalTime } from "~/utils/nuxt";
 import config from "~/config";
+import "./detail.scss";
+import SvgIcon from "~/components/svg-icon.vue";
 
 /**
  * 详情页面通用功能
@@ -20,9 +22,6 @@ export async function useContentPage<T extends common.CommonItem> () {
   const mdContent = ref<string>("");
   const htmlContent = ref<string>("");
   const menuItems = ref<Awaited<ReturnType<typeof parseMarkdown>>["menu"]>([]);
-  // 所有页面都有发布时间与更新时间
-  const publishTime = computed(() => formatTime(item.time));
-  const modifyTime = computed(() => formatTime(item.modifyTime));
 
   let destroyFns: ReturnType<typeof afterInsertHtml> = [];
 
@@ -116,10 +115,33 @@ export async function useContentPage<T extends common.CommonItem> () {
     item,
     tabUrl: targetTab.url,
     htmlContent,
+    writeDate: writeDate(item.time, item.modifyTime),
     menuItems,
-    publishTime,
-    modifyTime,
     markdownRef,
     htmlInserted
   };
+}
+
+function writeDate (time: number, modifyTime: number) {
+  const fuzzyMode = ref(true);
+  return defineComponent({
+    render: () => (
+      <div class="write-date flex" onClick={() => (fuzzyMode.value = !fuzzyMode.value)}>
+        <SvgIcon name="write" />
+        <div class="flexc">
+          {
+            fuzzyMode.value &&
+              <span>{ literalTime(time) }</span>
+          }
+          {
+            !fuzzyMode.value &&
+              <>
+                <span>{translate("created-at")}: {formatTime(time)}</span>
+                <span>{translate("updated-at")}: {formatTime(modifyTime)}</span>
+              </>
+          }
+        </div>
+      </div>
+    )
+  });
 }

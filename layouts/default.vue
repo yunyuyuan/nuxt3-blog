@@ -527,7 +527,7 @@ const isFirst = ref(true);
   z-index: $z-index-footer;
 
   .middle {
-    font-size: f-size(0.75);
+    font-size: f-size(0.6);
     color: #7c7c7c;
 
     @include dark-mode {
