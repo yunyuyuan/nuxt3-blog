@@ -85,7 +85,6 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
 - [ ] support cloudflare page,netlify and others
 
 # Project Structure
-* `/api` serverless functions.
 * `/assets`
   * `/image` images that imported by vite.
   * `/style` public style and utils style.
@@ -101,7 +100,7 @@ Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `
   * `/rebuild` all blog data.
   * `/sticker` all stickers for markdown.
 * `/scripts` scripts for Gulp.
-* `/server` api server, only works for SSR.
+* `/server` api server(Nodejs).
 * `/utils`
   * `/api` functions used by `/server`.
   * `/nuxt` common codes of nuxt.

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { type ArticleItem } from "~/utils/common";
-import { formatTime, literalTime, useListPage } from "~/utils/nuxt";
+import { formatTime, literalTime, useHackKey, useListPage } from "~/utils/nuxt";
 
 definePageMeta({
   alias: "/"
 });
 
+const hackKey = useHackKey();
 const articlesList = await useListPage<ArticleItem>();
 
 const articleTagList = new Set<string>();
@@ -49,7 +50,7 @@ const toggleTags = (tag: string) => {
       <div class="tags flex">
         <the-tag
           v-for="tag in articleTagList"
-          :key="tag"
+          :key="tag+hackKey"
           :active="tags.includes(tag)"
           @click="toggleTags(tag)"
         >

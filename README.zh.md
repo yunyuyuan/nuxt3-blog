@@ -86,7 +86,6 @@
 - [ ] 支持 cloudflare page,netlify 以及其他服务
 
 # 项目结构
-* `/api` serverless函数
 * `/assets`
   * `/image` vite引入的图片
   * `/style` 公共/功能样式
@@ -101,8 +100,8 @@
 * `/public`
   * `/rebuild` 所有博客数据
   * `/sticker` 所有表情图片
-* `/scripts` Gulp执行的脚本.
-* `/server` api server,仅在SSR下可用.
+* `/scripts` Gulp执行的脚本
+* `/server` api服务器(Nodejs)
 * `/utils`
   * `/api` `/server`调用的函数.
   * `/nuxt` nuxt相关的功能代码
