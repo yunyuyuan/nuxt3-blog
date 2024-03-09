@@ -44,6 +44,8 @@ for (const b of [
   process.env.VERCEL_GIT_COMMIT_REF,
   // cloudflare page
   process.env.CF_PAGES_BRANCH,
+  // netlify
+  process.env.BRANCH,
   // XXX Why `git rev-parse --abbrev-ref HEAD` not works as expected?
   // git cli for fallback
   execSync("git rev-parse --abbrev-ref HEAD").toString().trim()
