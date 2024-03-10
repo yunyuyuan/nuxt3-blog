@@ -20,7 +20,7 @@
 English Readme | [中文说明](/README.zh.md)
 
 # Features
-* 💻 **Build in 5 minutes**. Completely free, no need to write any code.
+* 💻 **Build in 5 minutes**. Quick setup, no need to write any code.
 * 🤝 **Convenient to use**. An all-in-one admin interface where you only need a token to **update configurations, add/edit/delete blog content on the web page**. no `notepad`, no `git push`.
 * 📷 **Integrated image hosting service**. Integrated with `smms` image hosting service and `tinypng` image compression, one-click upload of blog images on the web page.
 * 🌐 **Full static**. Packaged as a full static website, no backend required.
@@ -33,27 +33,18 @@ English Readme | [中文说明](/README.zh.md)
 
 # How to use
 <center>
-<img width="600px" src="https://s2.loli.net/2023/05/12/742XNyquQ3CTRWO.png"/>
+<img width="600px" src="https://s2.loli.net/2024/03/10/ih2KsmBDISAWN3U.png"/>
 </center>
 
-## Two ways to deploy
-### The first way: One-click deployment (note：uncheck `Create private Git Repository`)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyunyuyuan%2Fnuxt3-blog&repository-name=nuxt3-blog)
-
-### The second way: fork and deploy(recommended if you want to sync my future commits)
-1. fork this project
-2. deploy within vercel(no need to change any build params)
-
-
-## After deploy
-#### Change user
-Change `githubName` in `config.ts` to your current Github account.
-
-#### Generate a new token
-Goto https://github.com/settings/tokens/new, check **repo** scopes, then click `Generate token`.
+1. Fork this project.
+3. Change `githubName` in `config.ts` to your current Github account，and change `githubRepo` if you don't use **nuxt3-blog** as your repository name.
+2. Deploy on any platforms that [Nitro supports](https://nitro.unjs.io/deploy).
+4. Goto [https://github.com/settings/tokens/new](https://github.com/settings/tokens/new), check **repo** scopes, then click `Generate token`.
+5. Goto https://your-blog-domain/manage, input your github token.
+6. Enjoy the creation.
 
 #### Addons
-* If you want to use the views analyze feature, you need to [register a MongoDB account](https://www.mongodb.com/cloud/atlas/register), and enable [MongoDB integration](https://vercel.com/integrations/mongodbatlas)
+* If you want to use the views analyze feature, you need to [register a MongoDB account](https://www.mongodb.com/cloud/atlas/register), and create a database names `nuxt3-blog`, then set the Mongodb environments(see `env.sample`).
 * If you want to use the commenting feature, you need to install [giscus](https://github.com/apps/giscus) for your Github, and enable [discussion](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository). Changing `CommentRepoId` and `CommentDiscussionCategoryId` in `config.ts`. Please goto [giscus.app](giscus.app) to get more information.
 
 # Todo
