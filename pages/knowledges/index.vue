@@ -107,8 +107,8 @@ $space: 16px;
 
       b {
         font-size: f-size(0.75);
-        width: 25px;
         height: 17px;
+        padding: 0 8px;
         line-height: 17px;
         text-align: center;
         background: #f3884a;

@@ -1,3 +1,6 @@
+## 2024.04.07
+* Use `Array.some` instead of `Array.every` for articles tag filtering.
+
 ## 2024.01.28
 * Update nuxt to `3.9` to fix Cloudflare Pages development.
 
