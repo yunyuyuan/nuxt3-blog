@@ -1,4 +1,4 @@
-import { GithubTokenKey, I18nCode, I18nStoreKey, toggleCodeBlockTheme } from "~/utils/common";
+import { GithubTokenKey, type I18nCode, I18nStoreKey, toggleCodeBlockTheme } from "~/utils/common";
 import { useState } from "#app";
 
 import { getLocalStorage, loadI18nJson, setLocalStorage } from "~/utils/nuxt";

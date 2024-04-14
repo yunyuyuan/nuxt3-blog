@@ -37,7 +37,7 @@ const props = defineProps({
     type: String,
     default: undefined
   },
-  onCancel_: {
+  onClose: {
     type: Function,
     default: undefined
   },
@@ -63,8 +63,8 @@ const ok = () => {
   emit("confirm");
 };
 const close = () => {
-  if (props.onCancel_) {
-    return props.onCancel_();
+  if (props.onClose) {
+    return props.onClose();
   }
   emit("cancel");
   emit("update:modelValue", false);

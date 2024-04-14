@@ -59,7 +59,7 @@ initViewer(root);
         <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
       </div>
       <span class="foot flex">
-        <span v-if="Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
+        <span v-if="useRuntimeConfig().app.mongoDBEnabled && Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
           <svg-icon name="view" />
           {{ item.visitors }}
         </span>

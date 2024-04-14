@@ -137,7 +137,7 @@ export function createCommitModal () {
       render(null, container);
       resolve(true);
     };
-    vm.props!.onCancel_ = () => {
+    vm.props!.onClose = () => {
       render(null, container);
       resolve(false);
     };

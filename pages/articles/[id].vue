@@ -82,7 +82,7 @@ initViewer(root);
             </the-tag>
           </div>
           <writeDate />
-          <span v-if="Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
+          <span v-if="useRuntimeConfig().app.mongoDBEnabled && Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
             <svg-icon name="view" />
             {{ item.visitors }}
           </span>

@@ -1,5 +1,5 @@
 import { GithubTokenKey } from "~/utils/common";
-import { getLocalStorage, notify, isAuthor, translate, isDev, inBrowser } from "~/utils/nuxt";
+import { getLocalStorage, notify, isAuthor, translate, isDev } from "~/utils/nuxt";
 
 export default defineNuxtPlugin(() => {
   if (isDev) {
@@ -9,7 +9,7 @@ export default defineNuxtPlugin(() => {
   }
 
   const localToken = getLocalStorage(GithubTokenKey);
-  if (inBrowser && localToken) {
+  if (localToken) {
     // 进入界面时，检查token
     isAuthor(localToken)
       .then((res) => {
