@@ -31,13 +31,13 @@ export function literalTime (stamp: number) {
     return translate("today");
   }
   if (subWeek < 1) {
-    return translate("days-ago", [subDay + 1]);
+    return translate("days-ago", [Math.max(1, subDay)]);
   }
   if (subMonth < 1) {
-    return translate("weeks-ago", [subWeek + 1]);
+    return translate("weeks-ago", [Math.max(1, subWeek)]);
   }
   if (subYear < 1) {
-    return translate("months-ago", [subMonth + 1]);
+    return translate("months-ago", [Math.max(1, subMonth)]);
   }
-  return translate("years-ago", [subYear + 1]);
+  return translate("years-ago", [Math.max(1, subYear)]);
 }

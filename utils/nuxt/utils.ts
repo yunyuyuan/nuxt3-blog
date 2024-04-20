@@ -17,7 +17,7 @@ export function useCurrentTab () {
 }
 
 export function useCommonSEOTitle (head: ComputedRef<string>, keys?: ComputedRef<string[]>) {
-  watch([head, keys], ([head, keys]) => {
+  watch([head, keys].filter(i => !!i), ([head, keys]) => {
     const title = head + config.SEO_title;
     useHead({
       title,

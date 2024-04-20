@@ -1,6 +1,6 @@
 import { initScrollTrigger, SvgContainerId, NotificationContainerId, ModalContainerId } from "~/utils/common";
 
-export default defineNuxtPlugin((_app: any) => {
+export default defineNuxtPlugin(() => {
   initScrollTrigger();
   // init theme
   document.body.setAttribute(
