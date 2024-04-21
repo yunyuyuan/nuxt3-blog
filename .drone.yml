@@ -36,7 +36,7 @@ steps:
       - pnpm build
 
   - name: build_docker
-    image: docker:latest
+    image: docker:26.0.1
     volumes:
       - name: docker
         path: /var/run/docker.sock
