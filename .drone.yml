@@ -12,6 +12,9 @@ platform:
   os: linux
   arch: amd64
 
+clone:
+  retries: 3
+
 steps:
   - name: build_project
     image: node:18
@@ -78,6 +81,9 @@ trigger:
 platform:
   os: linux
   arch: amd64
+
+clone:
+  retries: 3
 
 steps:
   - name: backup_img
