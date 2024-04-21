@@ -87,7 +87,7 @@ const isFirst = ref(true);
 </script>
 
 <template>
-  <div id="default-layout" :class="{'in-about': inAbout}">
+  <div id="default-layout" :class="{'in-about': inAbout, 'no-margin': route.path === '/records'}">
     <div v-if="!isPrerender" class="mode-bg" :class="[themeMode, {active: !isFirst}]" />
     <nav id="header" ref="headerRef" class="flex w100">
       <del class="space-left" />
@@ -177,6 +177,16 @@ const isFirst = ref(true);
 #default-layout {
   $circle-w: calc(200vw * 1.5);
   $circle-h: calc(200vh * 1.5);
+
+  margin: 0 20%;
+
+  &.no-margin {
+    margin: 0;
+  }
+
+  @include mobile {
+    margin: auto;
+  }
 
   @keyframes light-dark {
     0% {
@@ -593,7 +603,17 @@ const isFirst = ref(true);
   }
 }
 
+@media screen and (min-width: 768px) and (max-width: 1050px) {
+  #default-layout {
+    margin: 0 10%;
+  }
+}
+
 @include mobile {
+  #default-layout {
+    margin: auto;
+  }
+
   #header {
     .mobile-menu-toggler {
       width: 36px;

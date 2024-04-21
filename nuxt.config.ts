@@ -59,6 +59,7 @@ for (const b of [
 // const prefix = "monaco-editor/esm/vs";
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
+  devtools: { enabled: false },
   telemetry: false,
   app: {
     head: {

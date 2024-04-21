@@ -14,7 +14,6 @@ html {
 html,
 body {
   min-width: 100%;
-  display: flex;
 }
 
 body {
@@ -68,14 +67,6 @@ body {
   padding-top: $header-height;
   z-index: $z-index-body;
   position: relative;
-}
-
-#__nuxt {
-  margin: auto;
-
-  @include mobile {
-    width: 100%;
-  }
 }
 
 input,

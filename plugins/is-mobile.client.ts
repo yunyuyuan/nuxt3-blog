@@ -10,7 +10,7 @@ export default defineNuxtPlugin(() => {
     } else {
       bodyEl.classList.remove("is-mobile");
     }
-  }, 200);
+  }, 25);
   window.addEventListener("resize", handler);
   handler();
   // return {

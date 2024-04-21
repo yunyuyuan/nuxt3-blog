@@ -92,7 +92,6 @@ const toggleTags = (tag: string) => {
 $space: 13px;
 
 .article-list {
-  width: 800px;
   margin: 0 auto 40px 0;
   align-items: flex-start;
 

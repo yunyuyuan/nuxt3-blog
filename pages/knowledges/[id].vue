@@ -76,7 +76,7 @@ initViewer(root);
   .captain {
     margin: auto;
     position: relative;
-    width: 1000px;
+    align-items: start;
 
     > .info {
       margin: 40px 0 20px;
@@ -348,10 +348,6 @@ initViewer(root);
       }
     }
 
-    > .article-container {
-      width: 800px;
-    }
-
     > .foot {
       margin-left: auto;
       margin-top: 40px;
@@ -389,8 +385,6 @@ initViewer(root);
 
     .captain {
       width: calc(100% - 20px) !important;
-      max-width: unset;
-      min-width: unset;
 
       > .info {
         flex-direction: column;
@@ -421,10 +415,6 @@ initViewer(root);
             padding-left: 0;
           }
         }
-      }
-
-      > .article-container {
-        width: 100%;
       }
     }
   }

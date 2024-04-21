@@ -35,7 +35,7 @@ function goTo (tab?: string) {
 
 <template>
   <div class="knowledge-list">
-    <nav class="flex">
+    <nav>
       <span v-for="tab in tabs" :key="tab.key + hackKey" :class="{ active: tab.active }" @click="goTo(tab.key)">
         {{ $T(tab.name) }}
         <b>{{ getFilteredListLength(tab.key) }}</b>
@@ -66,7 +66,6 @@ function goTo (tab?: string) {
 $space: 16px;
 
 .knowledge-list {
-  width: 800px;
   padding-bottom: 60px;
 
   nav {
@@ -74,6 +73,7 @@ $space: 16px;
     border-bottom: 1px solid #b4b4b4;
     justify-content: center;
     margin: 40px auto 10px;
+    text-align: center;
 
     > span {
       cursor: pointer;
@@ -81,7 +81,7 @@ $space: 16px;
       border-radius: 6px 6px 0 0;
       font-size: f-size(0.85);
       padding: 5px 10px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
 
       @include dark-mode {

@@ -110,7 +110,7 @@ initViewer(root);
 
 <style lang="scss">
 .article-detail {
-  margin-bottom: 60px;
+  margin: 0 auto 60px;
 
   .captain {
     display: flex;
@@ -118,12 +118,8 @@ initViewer(root);
     margin: auto;
 
     > .article-container {
-      flex-grow: 1;
       position: relative;
-      margin: 0 0 0 20px;
-      width: 900px;
-      max-width: 900px;
-      min-width: 900px;
+      width: 100%;
 
       > h1 {
         margin: 30px 0 40px;
@@ -414,76 +410,22 @@ initViewer(root);
   }
 }
 
-@media screen and (min-width: 768px) and (max-width: 1050px) {
+@media screen and (max-width: 1050px) {
   .article-detail {
-    width: 95vw;
-
     .captain {
-      width: 100% !important;
-      max-width: unset;
-      min-width: unset;
-
-      > .article-container {
-        width: calc(100% - 120px);
-        max-width: unset;
-        min-width: unset;
-        margin: 0 60px;
-      }
-
       > .menu {
         display: none;
       }
     }
 
     .more-info {
-      width: 100%;
       padding: 8px 60px 10px;
 
       .tags {
         margin-left: 8px;
       }
 
-      .time {
-        margin-right: 8px;
-      }
-    }
-  }
-}
-
-@include mobile {
-  .article-detail {
-    width: 100%;
-
-    .captain {
-      width: 100% !important;
-      max-width: unset;
-      min-width: unset;
-
-      > .article-container {
-        width: calc(100% - 20px);
-        max-width: unset;
-        min-width: unset;
-        margin: 0 10px;
-      }
-
-      > .menu {
-        display: none;
-
-        ul {
-          display: none;
-        }
-      }
-    }
-
-    .more-info {
-      width: 100%;
-      padding: 8px 0 10px;
-
-      .tags {
-        margin-left: 8px;
-      }
-
-      .time {
+      .write-date {
         margin-right: 8px;
       }
     }

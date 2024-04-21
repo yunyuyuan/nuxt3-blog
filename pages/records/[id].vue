@@ -40,7 +40,6 @@ initViewer(root);
 <style lang="scss">
 .record-detail {
   margin: 30px 20px 80px;
-  width: 1000px;
 
   .images {
     display: flex;
