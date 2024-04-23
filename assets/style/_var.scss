@@ -48,7 +48,7 @@ $font-code: "Fira Code", serif;
   height: $size;
 }
 
-$font-size: 18px;
+$font-size: 17px;
 
 @function f-size($size: 1) {
   @return $font-size * $size;

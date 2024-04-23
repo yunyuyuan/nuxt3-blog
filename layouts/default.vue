@@ -603,7 +603,7 @@ const isFirst = ref(true);
   }
 }
 
-@media screen and (min-width: 768px) and (max-width: 1050px) {
+@media screen and (min-width: 768px) and (max-width: 1100px) {
   #default-layout {
     margin: 0 10%;
   }

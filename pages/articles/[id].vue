@@ -209,7 +209,7 @@ initViewer(root);
       top: $header-height;
       align-items: flex-end;
       padding: 15px 0 55px;
-      margin-left: 36px;
+      margin-left: 20px;
 
       // @at-root #default-layout #header:not(.headroom--pinned).headroom--not-top + #body & {
       //   top: 0;
@@ -242,7 +242,7 @@ initViewer(root);
 
       ol {
         padding: 20px 0 0 5px;
-        width: 160px;
+        width: 150px;
         list-style: none;
 
         $mouse-out-color: #777;
@@ -291,7 +291,7 @@ initViewer(root);
 
             white-space: nowrap;
             line-height: f-size(1.2);
-            font-size: f-size(0.85);
+            font-size: f-size(0.75);
           }
 
           @include dark-mode {
@@ -303,7 +303,7 @@ initViewer(root);
             content: "";
             border-radius: 50%;
 
-            @include square(8px);
+            @include square(6px);
 
             background: $mouse-out-color;
 
@@ -318,7 +318,7 @@ initViewer(root);
 
           &.small {
             span {
-              font-size: f-size(0.8);
+              font-size: f-size(0.7);
             }
 
             padding-left: 32px;
@@ -361,7 +361,7 @@ initViewer(root);
             $active-color: #006fff;
             $active-color-dark: rgb(255 255 255);
 
-            background: #e3efff;
+            background: #f0f6ff;
             color: $active-color;
 
             @include dark-mode {
@@ -410,7 +410,7 @@ initViewer(root);
   }
 }
 
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 1100px) {
   .article-detail {
     .captain {
       > .menu {
@@ -429,6 +429,12 @@ initViewer(root);
         margin-right: 8px;
       }
     }
+  }
+}
+
+@include mobile {
+  .article-detail {
+    margin: 0 8px;
   }
 }
 </style>

@@ -120,8 +120,8 @@ $space: 13px;
   }
 
   .body {
-    $footer-color: #7c7c7c;
-    $footer-hover: black;
+    $footer-color: #9e9e9e;
+    $footer-hover: rgb(90 90 90);
     $footer-color-dark: rgb(218 218 218);
     $footer-hover-dark: rgb(253 253 253);
 
@@ -142,7 +142,7 @@ $space: 13px;
         }
 
         &:not(:last-of-type) {
-          margin-bottom: $space * 1.6;
+          margin-bottom: $space * 1.2;
         }
 
         &:hover {
@@ -185,7 +185,7 @@ $space: 13px;
             border-color: rgb(87 87 87);
           }
 
-          padding: $space * 0.8 0 $space * 1.4 $space * 0.8;
+          padding: $space * 0.4 0 $space * 1.2 $space * 0.8;
 
           &:active b {
             text-decoration: underline;
@@ -208,7 +208,7 @@ $space: 13px;
           }
 
           .foot {
-            margin-top: math.div($space, 1.5);
+            margin-top: math.div($space, 2);
             font-size: f-size(0.75);
             color: $footer-color;
             transition: $common-transition;
