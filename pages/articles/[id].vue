@@ -112,7 +112,7 @@ initViewer(root);
 .article-detail {
   margin: 0 auto 60px;
 
-  .captain {
+  >.captain {
     display: flex;
     align-items: flex-start;
     margin: auto;
@@ -174,7 +174,7 @@ initViewer(root);
           }
         }
 
-        > .write-date {
+        .write-date {
           margin-left: auto;
         }
 
@@ -412,7 +412,7 @@ initViewer(root);
 
 @media screen and (max-width: 1100px) {
   .article-detail {
-    .captain {
+    >.captain {
       > .menu {
         display: none;
       }

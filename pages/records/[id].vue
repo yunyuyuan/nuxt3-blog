@@ -23,13 +23,13 @@ initViewer(root);
       />
     </div>
     <div class="text" :class="{'has-comment': hasComment}">
-      <p class="flex">
+      <div class="header flex">
         <writeDate />
         <span v-if="useRuntimeConfig().app.mongoDBEnabled && Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
           <svg-icon name="view" />
           {{ item.visitors }}
         </span>
-      </p>
+      </div>
       <div class="article-container">
         <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
       </div>
@@ -41,7 +41,7 @@ initViewer(root);
 .record-detail {
   margin: 30px 20px 80px;
 
-  .images {
+  >.images {
     display: flex;
     flex-wrap: wrap;
 
@@ -52,10 +52,10 @@ initViewer(root);
     }
   }
 
-  .text {
+  >.text {
     margin-top: 10px;
 
-    > p {
+    .header {
       border-bottom: 1px solid #b9b9b9;
 
       .visitors {

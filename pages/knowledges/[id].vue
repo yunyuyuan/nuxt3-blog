@@ -73,7 +73,7 @@ initViewer(root);
 .knowledge-detail {
   margin: 0 15px 80px;
 
-  .captain {
+  >.captain {
     margin: auto;
     position: relative;
     align-items: start;
@@ -383,7 +383,7 @@ initViewer(root);
     width: 100%;
     margin: 0 0 80px;
 
-    .captain {
+    >.captain {
       width: calc(100% - 20px) !important;
 
       > .info {

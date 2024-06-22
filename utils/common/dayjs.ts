@@ -3,7 +3,6 @@ import weekOfYear from "dayjs/plugin/weekOfYear.js";
 import utc from "dayjs/plugin/utc.js";
 import timezone from "dayjs/plugin/timezone";
 import isToday from "dayjs/plugin/isToday.js";
-import config from "../../config";
 
 /* eslint-disable import/no-named-as-default-member */
 dayjs.extend(weekOfYear);
@@ -12,7 +11,7 @@ dayjs.extend(timezone);
 dayjs.extend(isToday);
 
 export function getNowDayjs (time?: number) {
-  return dayjs.tz(time, config.timezone);
+  return dayjs(time).tz();
 }
 
 export function getNowDayjsString (time?: number) {
