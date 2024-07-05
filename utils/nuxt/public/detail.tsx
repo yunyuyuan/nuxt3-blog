@@ -113,7 +113,6 @@ export async function useContentPage<T extends common.CommonItem> () {
 
   return {
     item,
-    tabUrl: targetTab.url,
     htmlContent,
     writeDate: writeDate(item.time, item.modifyTime),
     menuItems,

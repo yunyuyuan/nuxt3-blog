@@ -2,16 +2,16 @@
 import { useContentPage, useComment, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
 import { type KnowledgeItem } from "~/utils/common";
 
-const { item, tabUrl, writeDate, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
+const { item, writeDate, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
 useCommonSEOTitle(computed(() => item.title));
 
-const { root, hasComment } = useComment(tabUrl);
+const { root } = useComment(item.showComments);
 initViewer(root);
 </script>
 
 <template>
   <div ref="root" class="knowledge-detail">
-    <div class="captain flexc w100" :class="{'has-comment': hasComment}">
+    <div class="captain flexc w100" :class="{'has-comment': item.showComments}">
       <div class="info">
         <div class="cover">
           <the-lazy-img

@@ -268,6 +268,15 @@ onMounted(() => {
         :title="!blockDecrypted ? $t('decrypt-blocks') : ''"
         @change="item.encrypt = $event"
       />
+      <span>
+        <b>{{ $t('show-comments') }}</b>
+        <svg-icon name="comments" />
+      </span>
+      <common-checkbox
+        :checked="item.showComments"
+        :title="$t('show-comments')"
+        @change="item.showComments = $event"
+      />
       <slot v-for="slot in slots" :name="slot" :item="item" :disabled="!decrypted" />
     </div>
   </div>

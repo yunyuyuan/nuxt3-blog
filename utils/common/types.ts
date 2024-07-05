@@ -11,6 +11,7 @@ export type NeedsItem = {
   encryptBlocks?: EncryptBlock[] | null;
   visitors: number;
   _show: boolean;
+  showComments: boolean;
 };
 
 export type ArticleItem = NeedsItem & {

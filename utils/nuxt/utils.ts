@@ -1,5 +1,5 @@
 import type { WatchOptions } from "vue";
-import { type AllKeys, type CommonItem, HeaderTabs, githubRepoUrl, type HeaderTabUrl, getUniqueId } from "~/utils/common";
+import { type AllKeys, type CommonItem, HeaderTabs, githubRepoUrl, getUniqueId } from "~/utils/common";
 import { inBrowser, isDev } from "~/utils/nuxt";
 import config from "~/config";
 
@@ -105,10 +105,8 @@ const updateGiscusConfig = (config: object) => {
     }
   }, "https://giscus.app");
 };
-export function useComment (key: HeaderTabUrl) {
-  const tab = key.substring(1);
+export function useComment (hasComment: boolean) {
   const { cmtRepCateId, cmtRepId } = useRuntimeConfig().app;
-  const hasComment = (config.Comment as any)[tab] && cmtRepCateId && cmtRepId;
   const root = ref<HTMLElement>();
   onMounted(() => {
     if (hasComment) {

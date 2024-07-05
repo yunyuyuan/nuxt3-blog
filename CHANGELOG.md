@@ -1,3 +1,6 @@
+## 2024.07.05
+* Make the items control comments appear individually.
+
 ## 2024.04.07
 * Use `Array.some` instead of `Array.every` for articles tag filtering.
 

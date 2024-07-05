@@ -62,7 +62,7 @@ export function keysOfCommonItem (): AllKeys[] {
         keys = ["title", "type", "summary", "link", "cover"];
         break;
     }
-    return [...keys, "encrypt"];
+    return [...keys, "showComments", "encrypt"];
   } catch {
     return [];
   }

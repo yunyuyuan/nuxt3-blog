@@ -2,10 +2,10 @@
 import { formatTime, useContentPage, useComment, translate, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
 import { type RecordItem } from "~/utils/common";
 
-const { item, writeDate, tabUrl, htmlContent, markdownRef } = await useContentPage<RecordItem>();
+const { item, writeDate, htmlContent, markdownRef } = await useContentPage<RecordItem>();
 useCommonSEOTitle(computed(() => `${translate("records")}: ${formatTime(item.time, "date")}`));
 
-const { root, hasComment } = useComment(tabUrl);
+const { root } = useComment(item.showComments);
 initViewer(root);
 </script>
 
@@ -22,7 +22,7 @@ initViewer(root);
         :title="img.alt"
       />
     </div>
-    <div class="text" :class="{'has-comment': hasComment}">
+    <div class="text" :class="{'has-comment': item.showComments}">
       <div class="header flex">
         <writeDate />
         <span v-if="useRuntimeConfig().app.mongoDBEnabled && Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">

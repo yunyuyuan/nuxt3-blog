@@ -2,7 +2,7 @@
 import { addScrollListener, rmScrollListener, type ArticleItem } from "~/utils/common";
 import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerender, useContentPage, useComment, watchUntil, useCommonSEOTitle } from "~/utils/nuxt";
 
-const { item, tabUrl, writeDate, menuItems, htmlContent, markdownRef, htmlInserted } = await useContentPage<ArticleItem>();
+const { item, writeDate, menuItems, htmlContent, markdownRef, htmlInserted } = await useContentPage<ArticleItem>();
 useCommonSEOTitle(computed(() => item.title), computed(() => item.tags));
 const activeAnchor = ref<string>();
 
@@ -54,13 +54,13 @@ onBeforeUnmount(() => {
   rmScrollListener(listenAnchor);
 });
 
-const { root, hasComment } = useComment(tabUrl);
+const { root } = useComment(item.showComments);
 initViewer(root);
 </script>
 
 <template>
   <div ref="root" class="article-detail">
-    <div class="captain w100" :class="{'has-comment': hasComment}">
+    <div class="captain w100" :class="{'has-comment': item.showComments}">
       <div class="article-container">
         <h1>{{ item.title }}</h1>
         <div ref="viewerContainer" class="html-container">
