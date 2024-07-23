@@ -601,4 +601,23 @@ $common-box-shadow: 0 0 8px rgb(0 0 0 / 5%);
       margin: 0 0.5rem;
     }
   }
+
+  .text-with-mask {
+    background: black;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    color: black !important;
+
+    * {
+      color: black !important;
+    }
+
+    &:hover {
+      color: white !important;
+
+      * {
+        color: white !important;
+      }
+    }
+  }
 }

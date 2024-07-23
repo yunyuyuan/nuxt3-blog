@@ -1,3 +1,6 @@
+## 2024.07.23
+* Add **text-with-mask** markdown syntax.
+
 ## 2024.07.05
 * Make the items control comments appear individually.
 

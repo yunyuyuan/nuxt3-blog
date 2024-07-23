@@ -85,5 +85,11 @@ F(n) = \begin{cases}
 \end{cases}
 $$
 
+## 15. text with mask
+
+[!you found me you found me you found me you found me you found me you found me you found me you found me you found me you found me you found me you found me !]
+
+[!*and me*!]
+
 # More
 coming...

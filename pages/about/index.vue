@@ -53,7 +53,9 @@ onBeforeMount(async () => {
       width: 100vw;
       height: 100vh;
       padding-bottom: $footer-height;
-      position: relative;
+      position: fixed;
+      left: 0;
+      top: 0;
 
       img {
         position: absolute;

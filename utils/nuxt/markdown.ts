@@ -250,6 +250,24 @@ export async function parseMarkdown (text: string) {
           return `<span class="math-formula inline ${isPrerender ? "parsed" : ""}">${isPrerender ? katex!.renderToString(content, { strict: "ignore" }) : content}</span>`;
         }
       },
+      {
+        name: "text-with-mask",
+        level: "inline",
+        start (src: string) { return src.match(/\[!/)?.index; },
+        tokenizer (src: string) {
+          const match = /^\[!([\s\S]+?)!\]/.exec(src);
+          if (match) {
+            return {
+              type: "text-with-mask",
+              raw: match[0],
+              text: this.lexer.inlineTokens(match[1])
+            };
+          }
+        },
+        renderer ({ text }) {
+          return `<span class="text-with-mask">${this.parser.parseInline(text)}</span>`;
+        }
+      },
       // block level
       {
         name: "math-formula-block",
