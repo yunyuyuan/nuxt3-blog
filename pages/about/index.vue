@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isDev, isPrerender, translateT, useCommonSEOTitle } from "~/utils/nuxt";
+import { translateT, useCommonSEOTitle } from "~/utils/nuxt";
 import bg from "~/assets/image/outerwilds.jpg";
 import config from "~/config";
 
@@ -7,7 +7,7 @@ useCommonSEOTitle(computed(() => translateT("about")));
 
 const commitSha = computed(() => useRuntimeConfig().app.NUXT_ENV_CURRENT_GIT_SHA);
 const commitUrl = computed(() => `https://github.com/${config.githubName}/${config.githubRepo}/commit/${commitSha.value}`);
-const buildTime = ref<string>("$(inject:timestamp)");
+const buildTime = __NB_BUILD_TIME__;
 
 const paragraphs = [
   "幽深宇宙已岁逾百亿，惟闪烁星光点缀生机",
@@ -16,12 +16,6 @@ const paragraphs = [
   "光坠之地，吾之忧祈",
   "——2021.12.4"
 ];
-
-onBeforeMount(async () => {
-  if (!isPrerender) {
-    buildTime.value = (!isDev ? (await (await fetch("/timestamp.txt")).text()) : "-");
-  }
-});
 </script>
 
 <template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { formatTime, useContentPage, useComment, translate, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
 import { type RecordItem } from "~/utils/common";
+import Visitors from "~/utils/nuxt/public/visitors";
 
 const { item, writeDate, htmlContent, markdownRef } = await useContentPage<RecordItem>();
 useCommonSEOTitle(computed(() => `${translate("records")}: ${formatTime(item.time, "date")}`));
@@ -25,10 +26,7 @@ initViewer(root);
     <div class="text" :class="{'has-comment': item.showComments}">
       <div class="header flex">
         <writeDate />
-        <span v-if="useRuntimeConfig().app.mongoDBEnabled && Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
-          <svg-icon name="view" />
-          {{ item.visitors }}
-        </span>
+        <Visitors :visitors="item.visitors" />
       </div>
       <div class="article-container">
         <article ref="markdownRef" class="--markdown" v-html="htmlContent" />

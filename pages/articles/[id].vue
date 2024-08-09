@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { addScrollListener, rmScrollListener, type ArticleItem } from "~/utils/common";
 import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerender, useContentPage, useComment, watchUntil, useCommonSEOTitle } from "~/utils/nuxt";
+import Visitors from "~/utils/nuxt/public/visitors";
 
 const { item, writeDate, menuItems, htmlContent, markdownRef, htmlInserted } = await useContentPage<ArticleItem>();
 useCommonSEOTitle(computed(() => item.title), computed(() => item.tags));
@@ -82,10 +83,7 @@ initViewer(root);
             </the-tag>
           </div>
           <writeDate />
-          <span v-if="useRuntimeConfig().app.mongoDBEnabled && Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
-            <svg-icon name="view" />
-            {{ item.visitors }}
-          </span>
+          <Visitors :visitors="item.visitors" />
         </div>
       </div>
       <div v-if="menuItems.length" class="menu flexc" :class="{compact: hideMenu}">

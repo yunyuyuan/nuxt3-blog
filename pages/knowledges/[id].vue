@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useContentPage, useComment, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
 import { type KnowledgeItem } from "~/utils/common";
+import Visitors from "~/utils/nuxt/public/visitors";
 
 const { item, writeDate, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
 useCommonSEOTitle(computed(() => item.title));
@@ -59,10 +60,7 @@ initViewer(root);
         <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
       </div>
       <span class="foot flex">
-        <span v-if="useRuntimeConfig().app.mongoDBEnabled && Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
-          <svg-icon name="view" />
-          {{ item.visitors }}
-        </span>
+        <Visitors :visitors="item.visitors" />
         <writeDate />
       </span>
     </div>

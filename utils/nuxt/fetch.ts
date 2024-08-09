@@ -2,8 +2,6 @@ import fs from "fs";
 import { type CommonItem, type HeaderTabUrl, escapeNewLine } from "~/utils/common";
 import { inBrowser } from "~/utils/nuxt";
 
-const timestamp = () => useRuntimeConfig().public.timestamp;
-
 const magicFetch = async<T = any>(path: string, transform: (_: string) => T): Promise<T | undefined> => {
   if (inBrowser) {
     if (!window.NBCache) {
@@ -12,7 +10,7 @@ const magicFetch = async<T = any>(path: string, transform: (_: string) => T): Pr
     if (typeof window.NBCache[path] !== "undefined") {
       return window.NBCache[path];
     } else {
-      const res = await $fetch<T>(`/${path}`, { query: { s: timestamp() }, parseResponse: transform });
+      const res = await $fetch<T>(`/${path}`, { query: { s: __NB_BUILD_TIME__ }, parseResponse: transform });
       window.NBCache[path] = res;
       return res;
     }

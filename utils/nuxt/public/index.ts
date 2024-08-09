@@ -5,7 +5,7 @@ export function DBOperate<T = any> (
   { apiPath, query, callback }:
   { apiPath: string, query: any, callback: (_: T) => any}
 ) {
-  if (inBrowser && !isPrerender && useRuntimeConfig().app.mongoDBEnabled) {
+  if (inBrowser && !isPrerender && __NB_MONGODB_ENABLED__) {
     const cb = (data: T) => {
       try {
         callback(data);

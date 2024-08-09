@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type ArticleItem } from "~/utils/common";
 import { formatTime, literalTime, useHackKey, useListPage } from "~/utils/nuxt";
+import Visitors from "~/utils/nuxt/public/visitors";
 
 definePageMeta({
   alias: "/"
@@ -73,10 +74,7 @@ const toggleTags = (tag: string) => {
               }}</span>
               <b />
               <span>{{ item.len }} {{ $t('words-num') }}</span>
-              <span v-if="useRuntimeConfig().app.mongoDBEnabled && Number(item.visitors) >= 0" class="visitors flex" :title="$t('visit-time', [item.visitors])">
-                <svg-icon name="view" />
-                {{ item.visitors }}
-              </span>
+              <Visitors :visitors="item.visitors" />
             </div>
           </nuxt-link>
         </li>
@@ -160,16 +158,16 @@ $space: 13px;
                 }
               }
 
+              b {
+                background: color.adjust($footer-hover, $lightness: 30%);
+              }
+
               @include dark-mode {
                 color: $footer-hover-dark;
 
                 b {
-                  background: $footer-hover-dark;
+                  background: color.adjust($footer-hover-dark, $blackness: 30%);
                 }
-              }
-
-              b {
-                background: $footer-hover;
               }
             }
           }
@@ -225,7 +223,11 @@ $space: 13px;
               height: 60%;
               margin: 0 8px;
               width: 1px;
-              background: $footer-color;
+              background: color.adjust($footer-color, $lightness: 30%);
+
+              @include dark-mode {
+                background: color.adjust($footer-color-dark, $blackness: 60%);
+              }
             }
 
             .visitors {
