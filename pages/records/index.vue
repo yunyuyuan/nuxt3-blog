@@ -4,6 +4,8 @@ import { formatTime, useListPage } from "~/utils/nuxt";
 
 const recordList = await useListPage<RecordItem>();
 
+const currentYear = useState<number | undefined>("record-expand", () => undefined);
+
 const years = computed(() => {
   const result: {
     year: number;
@@ -22,7 +24,13 @@ const years = computed(() => {
         exist.items.push(item);
       }
     });
-  return result;
+  return result.sort((a, b) => b.year - a.year);
+});
+
+onMounted(() => {
+  if (years.value.length && !currentYear.value) {
+    currentYear.value = years.value[0].year;
+  }
 });
 </script>
 
@@ -30,8 +38,12 @@ const years = computed(() => {
   <div class="record-list">
     <ul v-if="years.length">
       <li v-for="year in years" v-show="year.items.some(item => item._show)" :key="year.year">
-        <h2>{{ year.year }}</h2>
-        <div class="contain flex">
+        <h2 class="flex" @click="currentYear = currentYear == year.year ? undefined : year.year">
+          <svg-icon :style="{transform: currentYear==year.year ? 'rotate(180deg)' : ''}" name="up" />
+          {{ year.year }}
+          <span class="size">( {{ year.items.length }} {{ $t('items') }} )</span>
+        </h2>
+        <div v-if="currentYear==year.year" class="contain flex">
           <div v-for="item in year.items" v-show="item._show" :key="item.id" class="item flexc">
             <b :title="formatTime(item.time)">{{
               formatTime(item.time, 'month')
@@ -63,7 +75,6 @@ $space: 16px;
 .record-list {
   margin: 20px 30px 0 40px;
   padding-bottom: 60px;
-  min-width: 800px;
 
   .common-loading {
     margin-top: calc(50vh - $header-height);
@@ -84,6 +95,7 @@ $space: 16px;
 
   ul {
     margin: auto;
+    list-style: none;
 
     li {
       @include dark-mode {
@@ -93,12 +105,36 @@ $space: 16px;
       }
 
       h2 {
+        margin: $space * 2 0;
         color: $theme-color-darken;
         text-shadow: 0 0 2px cyan;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+
+        svg {
+          @include square(24px);
+
+          transition: $common-transition;
+          margin-right: 8px;
+        }
+
+        .size {
+          font-size: f-size(0.86);
+          color: #373737;
+          margin-left: 8px;
+          text-shadow: none;
+        }
 
         @include dark-mode {
           color: $theme-color-lighten;
           text-shadow: 0 0 2px cyan;
+
+          .size {
+            color: #dedede;
+          }
         }
       }
 
@@ -109,10 +145,12 @@ $space: 16px;
       }
 
       .contain {
-        margin: $space * 2 0;
+        flex-wrap: wrap;
+        gap: $space * 2 0;
 
         .item {
           position: relative;
+          margin: 0 $space * 1.8;
 
           &::before {
             position: absolute;
@@ -120,13 +158,10 @@ $space: 16px;
             width: calc(100% + #{$space * 3.6});
             height: 1px;
             background: #e9e9e9;
-            left: -18px;
             top: 0;
           }
 
           &:not(:last-of-type) {
-            margin-right: $space * 3.6;
-
             &::after {
               position: absolute;
               content: "";
@@ -167,11 +202,9 @@ $space: 16px;
           a {
             margin-top: 5px;
             position: relative;
+            transition: $common-transition;
 
             @include square($space * 10);
-
-            height: $space * 10;
-            transition: $common-transition;
 
             .--lazy-img {
               z-index: 3;
@@ -240,7 +273,20 @@ $space: 16px;
 @include mobile {
   .record-list {
     margin: 20px 10px;
-    min-width: unset;
+
+    ul li .contain {
+      .item {
+        &:nth-child(even) {
+          &::after {
+            content: none;
+          }
+        }
+
+        a {
+          @include square(calc(50vw - $space * 3.6 - 10px));
+        }
+      }
+    }
   }
 }
 </style>

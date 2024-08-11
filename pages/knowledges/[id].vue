@@ -346,6 +346,10 @@ initViewer(root);
       }
     }
 
+    >.article-container {
+      min-height: 100px;
+    }
+
     > .foot {
       margin-left: auto;
       margin-top: 40px;

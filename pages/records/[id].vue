@@ -80,6 +80,7 @@ initViewer(root);
 
     >.article-container {
       padding: 8px;
+      min-height: 100px;
     }
   }
 }
