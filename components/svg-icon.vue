@@ -6,6 +6,8 @@ const props = defineProps({
   name: { type: String, required: true }
 });
 
+const svgContents = import.meta.glob<{default: string}>("../assets/svg/*.svg", { query: "?raw" });
+
 const icon = ref<string>("");
 
 if (inBrowser) {
@@ -19,7 +21,7 @@ if (inBrowser) {
         const svgIconList: Set<string> = (window as any).svgIconList || ((window as any).svgIconList = new Set());
         if (!svgIconList.has(id)) {
           svgIconList.add(id);
-          import(`../assets/svg/${name}.svg`).then((res) => {
+          svgContents[`../assets/svg/${name}.svg`]().then((res) => {
             const svgElement = new DOMParser()
               .parseFromString(res.default, "image/svg+xml")
               .querySelector("svg");
