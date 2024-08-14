@@ -73,7 +73,7 @@
   "performing-request": "正在发送请求...",
   "please-input": "请输入",
   "please-input-token-first": "请先验证token，再进行操作",
-  "preview": "提交预览",
+  "preview": "预览",
   "publish": "发布",
   "records": "记录",
   "refresh-after-sec": "{0}秒后将刷新页面",
@@ -110,5 +110,6 @@
   "words-num": "字",
   "years-ago": "{0}年前",
   "show-comments": "展示评论",
-  "items": "项"
+  "items": "项",
+  "edit": "编辑"
 }

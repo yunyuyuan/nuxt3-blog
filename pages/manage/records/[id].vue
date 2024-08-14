@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
 import { type RecordItem, getUniqueId } from "~/utils/common";
+import { initViewer } from "~/utils/nuxt";
+
+const editing = ref(true);
+const root = ref<HTMLElement>();
 
 const moveUpImg = (idx: number, item: RecordItem) => {
   item.images.splice(idx - 1, 2, item.images[idx], item.images[idx - 1]);
@@ -18,10 +22,12 @@ const processImages = (_md: string, _html: HTMLElement, item: RecordItem) => {
     delete img.id;
   });
 };
+
+initViewer(root);
 </script>
 
 <template>
-  <div class="manage-record-detail">
+  <div ref="root" class="manage-record-detail">
     <manage-content-edit :process-with-content="processImages">
       <template #images="{ disabled, item }">
         <span :class="{invalid: item.images.some(img => !img.src)}">
@@ -29,7 +35,18 @@ const processImages = (_md: string, _html: HTMLElement, item: RecordItem) => {
           <svg-icon name="images" />
         </span>
         <div class="input-images flexc">
-          <ul>
+          <div v-if="!editing" class="images">
+            <the-lazy-img
+              v-for="(img, idx) in item.images"
+              :key="idx"
+              viewer
+              :alt="img.alt"
+              :src="img.src"
+              :container-size="['200px', '150px']"
+              :title="img.alt"
+            />
+          </div>
+          <ul v-else>
             <li v-for="(img, idx) in item.images" :key="img.id" class="flex">
               <input
                 v-model="img.src"
@@ -62,15 +79,20 @@ const processImages = (_md: string, _html: HTMLElement, item: RecordItem) => {
                 />
               </div>
             </li>
-            <li>
-              <common-button
-                :disabled="disabled"
-                class="add-new"
-                icon="add"
-                @click="addImg(item)"
-              />
-            </li>
           </ul>
+          <div class="btns flex">
+            <common-button
+              :disabled="disabled"
+              icon="add"
+              @click="addImg(item)"
+            />
+            <common-button
+              :disabled="disabled"
+              @click="editing = !editing"
+            >
+              {{ editing ? $t('preview') : $t('edit') }}
+            </common-button>
+          </div>
         </div>
       </template>
     </manage-content-edit>
@@ -81,6 +103,17 @@ const processImages = (_md: string, _html: HTMLElement, item: RecordItem) => {
 .manage-record-detail {
   .input-images {
     align-items: flex-start;
+
+    .images {
+      display: flex;
+      flex-wrap: wrap;
+
+      img {
+        margin: 0 10px 10px 0;
+        max-width: 200px;
+        max-height: 150px;
+      }
+    }
 
     ul {
       list-style: none;
@@ -108,10 +141,14 @@ const processImages = (_md: string, _html: HTMLElement, item: RecordItem) => {
             margin-right: 10px;
           }
         }
+      }
+    }
 
-        .add-new {
-          width: 80px;
-        }
+    .btns {
+      gap: 10px;
+
+      button {
+        width: 80px;
       }
     }
   }
