@@ -26,7 +26,7 @@ export default async function () {
 
     await processBlogItem(result.pwd, async ({ decryptedItem, decryptedMd, mdPath, type }) => {
       // 替换item里的图片
-      const newItem = JSON.parse(subImg(JSON.stringify(decryptedItem, null, 2), mdPath));
+      const newItem = JSON.parse(subImg(JSON.stringify(decryptedItem), mdPath));
       Object.assign(decryptedItem, newItem);
       // 替换markdown里的图片
       const newMd = subImg(decryptedMd, mdPath);
@@ -39,7 +39,7 @@ export default async function () {
       });
     }, ({ decryptedItemList, jsonPath }) => {
       // 写入json，json本身是不加密的
-      fs.writeFileSync(jsonPath, JSON.stringify(decryptedItemList, null, 2));
+      fs.writeFileSync(jsonPath, JSON.stringify(decryptedItemList));
     });
   });
 }

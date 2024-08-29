@@ -171,7 +171,7 @@ const doUpload = async () => {
   createCommit(`Update ${HeaderTabs.find(i => i.url === activeRoute)!.name}-${newItem.id}`, [
     {
       path: `public/rebuild/json${activeRoute}.json`,
-      content: JSON.stringify(replaceOld(newItem), null, 2)
+      content: JSON.stringify(replaceOld(newItem))
     },
     {
       path: `public/rebuild${activeRoute}/${newItem.id}.md`,

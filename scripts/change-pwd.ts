@@ -27,7 +27,7 @@ export default async function () {
       });
     }, ({ decryptedItemList, jsonPath }) => {
       // 写入json，json本身是不加密的
-      fs.writeFileSync(jsonPath, JSON.stringify(decryptedItemList, null, 2));
+      fs.writeFileSync(jsonPath, JSON.stringify(decryptedItemList));
     });
   });
 }

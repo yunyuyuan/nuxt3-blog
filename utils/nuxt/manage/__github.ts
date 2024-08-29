@@ -27,7 +27,7 @@ export function deleteList (
   import.meta.hot!.send(rebuildEvent, {
     additions: [{
       path: `public/rebuild/json${folder}.json`,
-      content: JSON.stringify(newList, null, 2)
+      content: JSON.stringify(newList)
     }],
     deletions: dels.map(item => ({
       path: `public/rebuild${folder}/${item.id}.md`

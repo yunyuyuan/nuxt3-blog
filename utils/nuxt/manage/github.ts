@@ -163,7 +163,7 @@ export function deleteList (
     [
       {
         path: `public/rebuild/json${folder}.json`,
-        content: JSON.stringify(newList, null, 2)
+        content: JSON.stringify(newList)
       }
     ],
     dels.map(item => ({

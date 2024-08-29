@@ -43,7 +43,7 @@ onMounted(() => {
           {{ year.year }}
           <span class="size">( {{ year.items.length }} {{ $t('items') }} )</span>
         </h2>
-        <div v-if="currentYear==year.year" class="contain flex">
+        <div v-show="currentYear==year.year" class="contain flex">
           <div v-for="item in year.items" v-show="item._show" :key="item.id" class="item flexc">
             <b :title="formatTime(item.time)">{{
               formatTime(item.time, 'month')
@@ -54,6 +54,7 @@ onMounted(() => {
               :to="'/records/' + item.id"
             >
               <the-lazy-img
+                v-if="currentYear==year.year"
                 alt="cover"
                 :src="item.images[0]?.src ?? 'no-poster'"
                 :retry="false"
