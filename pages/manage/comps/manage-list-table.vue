@@ -3,7 +3,7 @@ import { deleteList } from "ls:~/utils/nuxt/manage/github";
 import { type CommonItem } from "~/utils/common";
 import { formatTime, useStatusText, useManageList } from "~/utils/nuxt";
 
-const { targetTab, list, customFilter } = await useManageList<T>();
+const { targetTab, list, originList, customFilter } = await useManageList<T>();
 
 const props = defineProps<{
   colPrefix: string;
@@ -53,10 +53,7 @@ function changeSelect (item: CommonItem) {
 function deleteSelect () {
   showConfirmModal.value = false;
   toggleProcessing();
-  const newList = list.map((item) => {
-    delete (item as any)._show;
-    return item;
-  }).filter((item) => {
+  const newList = originList.filter((item) => {
     return (
       selectedList.find(selected => selected.id === item.id) === undefined
     );

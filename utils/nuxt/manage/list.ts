@@ -36,6 +36,7 @@ export async function useManageList<T extends CommonItem> () {
   };
 
   return {
+    originList: list,
     list: resultList,
     targetTab,
     customFilter
