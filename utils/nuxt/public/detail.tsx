@@ -98,7 +98,7 @@ export async function useContentPage<T extends common.CommonItem> () {
           item.visitors = data;
         }
       });
-    }, { immediate: true }, isAuthor => isAuthor !== null, "once");
+    }, { immediate: true }, isAuthor => isAuthor !== null, "cancelAfterUntil");
   }
 
   const htmlInserted = ref<boolean>(false);

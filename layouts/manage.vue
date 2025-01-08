@@ -2,7 +2,7 @@
 import SvgIcon from "~/components/svg-icon.vue";
 import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
 import UploadImage from "~/pages/manage/comps/upload-image.vue";
-import { rmLocalStorage, setLocalStorage, translateT, isAuthor, notify, translate, isDev, calcRocketUrl } from "~/utils/nuxt";
+import { rmLocalStorage, setLocalStorage, translateT, isAuthor as checkIsAuthor, notify, translate, isDev, calcRocketUrl, watchUntil } from "~/utils/nuxt";
 import { GithubTokenKey, HeaderTabs } from "~/utils/common";
 
 const pageLoading = useLoading();
@@ -11,6 +11,7 @@ const pageLoading = useLoading();
 const showUploadImage = ref(false);
 const githubToken = useGithubToken();
 const encryptor = useEncryptor();
+const isAuthor = useIsAuthor();
 const allPassed = computed(() => !!githubToken && encryptor.passwdCorrect.value);
 
 const activeRoute = computed(() => {
@@ -125,7 +126,7 @@ const modalOk = () => {
     return;
   }
   checkingToken.value = true;
-  isAuthor(inputToken.value)
+  checkIsAuthor(inputToken.value)
     .then((res) => {
       notify({
         title: res ? translate("token-verified") : translate("token-unverified"),
@@ -148,6 +149,14 @@ const modalOk = () => {
       checkingToken.value = false;
     });
 };
+
+onMounted(() => {
+  watchUntil(isAuthor, (isAuthor) => {
+    if (!isAuthor) {
+      showModal.value = true;
+    }
+  }, { immediate: true }, isAuthor => isAuthor !== null, "cancelAfterUntil");
+});
 </script>
 
 <template>
