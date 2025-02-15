@@ -1,4 +1,4 @@
-import * as types from "./types";
+import type * as types from "./types";
 
 /**
  * 三种类型的数据加解密

@@ -43,7 +43,10 @@ if (inBrowser) {
 </script>
 
 <template>
-  <svg class="--icon-svg common-svg" aria-hidden="true">
+  <svg
+    class="--icon-svg common-svg"
+    aria-hidden="true"
+  >
     <use :href="icon" />
   </svg>
 </template>

@@ -22,7 +22,7 @@ export function createCommit (
 export function deleteList (
   newList: CommonItem[],
   dels: CommonItem[]
-): Promise<boolean | void> {
+): Promise<boolean> {
   const folder = useCurrentTab().url;
   import.meta.hot!.send(rebuildEvent, {
     additions: [{

@@ -27,7 +27,10 @@ initViewer(root);
 </script>
 
 <template>
-  <div ref="root" class="manage-record-detail">
+  <div
+    ref="root"
+    class="manage-record-detail"
+  >
     <manage-content-edit :process-with-content="processImages">
       <template #images="{ disabled, item }">
         <span :class="{invalid: item.images.some(img => !img.src)}">
@@ -35,7 +38,10 @@ initViewer(root);
           <svg-icon name="images" />
         </span>
         <div class="input-images flexc">
-          <div v-if="!editing" class="images">
+          <div
+            v-if="!editing"
+            class="images"
+          >
             <the-lazy-img
               v-for="(img, idx) in item.images"
               :key="idx"
@@ -47,7 +53,11 @@ initViewer(root);
             />
           </div>
           <ul v-else>
-            <li v-for="(img, idx) in item.images" :key="img.id" class="flex">
+            <li
+              v-for="(img, idx) in item.images"
+              :key="img.id"
+              class="flex"
+            >
               <input
                 v-model="img.src"
                 class="input-src"

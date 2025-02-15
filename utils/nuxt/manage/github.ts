@@ -154,7 +154,7 @@ export async function createCommit (
 export function deleteList (
   newList: CommonItem[],
   dels: CommonItem[]
-): Promise<boolean | void> {
+): Promise<boolean> {
   const commitInfo =
     dels.length === 1 ? `'${dels[0].id}'` : `${dels.length} items`;
   const folder = useCurrentTab().url;

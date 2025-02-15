@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from "vue";
-import { type NotifyType } from "~/utils/nuxt";
+import type { NotifyType } from "~/utils/nuxt";
 
 defineProps({
   type: { type: String as PropType<NotifyType>, default: "success" },
@@ -25,9 +25,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <transition name="wipe" @after-leave="animationend">
-    <div v-show="visible" class="notification" :class="type">
-      <b v-if="title" :class="{ 'not-content': !description }">{{ title }}</b>
+  <transition
+    name="wipe"
+    @after-leave="animationend"
+  >
+    <div
+      v-show="visible"
+      class="notification"
+      :class="type"
+    >
+      <b
+        v-if="title"
+        :class="{ 'not-content': !description }"
+      >{{ title }}</b>
       <span>{{ description }}</span>
       <a @click="clickClose">
         <svg-icon name="close" />

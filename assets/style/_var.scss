@@ -1,5 +1,5 @@
 @use "sass:color";
-@import "./theme";
+@use "theme" as *;
 
 $background: #fafafa;
 $background-dark: #23272e;
@@ -38,7 +38,7 @@ $font-code: "Fira Code", serif;
   //     @content;
   //   }
   // }
-  @media screen and (max-width: 768px) {
+  @media screen and (width <= 768px) {
     @content;
   }
 }

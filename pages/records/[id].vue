@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { formatTime, useContentPage, useComment, translate, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
-import { type RecordItem } from "~/utils/common";
+import type { RecordItem } from "~/utils/common";
 import Visitors from "~/utils/nuxt/public/visitors";
 
 const { item, writeDate, htmlContent, markdownRef } = await useContentPage<RecordItem>();
@@ -11,7 +11,10 @@ initViewer(root);
 </script>
 
 <template>
-  <div ref="root" class="record-detail">
+  <div
+    ref="root"
+    class="record-detail"
+  >
     <div class="images">
       <the-lazy-img
         v-for="img,idx in item.images"
@@ -23,13 +26,20 @@ initViewer(root);
         :title="img.alt"
       />
     </div>
-    <div class="text" :class="{'has-comment': item.showComments}">
+    <div
+      class="text"
+      :class="{'has-comment': item.showComments}"
+    >
       <div class="header flex">
         <writeDate />
         <Visitors :visitors="item.visitors" />
       </div>
       <div class="article-container">
-        <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
+        <article
+          ref="markdownRef"
+          class="--markdown"
+          v-html="htmlContent"
+        />
       </div>
     </div>
   </div>

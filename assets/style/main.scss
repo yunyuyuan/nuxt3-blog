@@ -1,9 +1,9 @@
-// @import "source-code-pro";
-// @import "source-han-sans";
-// @import "lxgwwenkai";
-@import "fira-code";
-@import "markdown";
-@import "code-style";
+// @use "source-code-pro";
+// @use "source-han-sans";
+// @use "lxgwwenkai";
+@use "fira-code";
+@use "markdown";
+@use "code-style";
 
 html {
   scroll-behavior: smooth;

@@ -2,8 +2,8 @@
 import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
 import type { Ref } from "vue";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
-// eslint-disable-next-line no-unused-vars
-import { type CommonItem, HeaderTabs, getEncryptedBlocks, getNowStamp, processEncryptDecrypt, escapeNewLine } from "~/utils/common";
+ 
+import { type CommonItem, HeaderTabs, getEncryptedBlocks, getNowStamp, processEncryptDecrypt, escapeNewLine, type AllKeys } from "~/utils/common";
 import { notify, deepClone, translate, getLocalStorage, rmLocalStorage, compareMd, loadOrDumpDraft, randomId, useManageContent } from "~/utils/nuxt";
 
 const props = defineProps<{
@@ -12,7 +12,9 @@ const props = defineProps<{
   processWithContent?:(_md: string, _html: HTMLElement, _item: T) => void;
 }>();
 
-const slots = Object.keys(useSlots()).filter(key => !key.startsWith("_"));
+const slots = defineSlots<Record<AllKeys, (_: {name: string, item: T, disabled: boolean }) => void>>();
+
+const slotsRow = computed(() => Object.keys(slots).filter(key => !key.startsWith("_")));
 
 const {
   statusText, processing, toggleProcessing,
@@ -222,13 +224,28 @@ onMounted(() => {
 <template>
   <div class="manage-content-header flex">
     <div class="draft flex">
-      <common-button theme="default" size="small" :disabled="!hasDraft" @click="loadDraft">
+      <common-button
+        theme="default"
+        size="small"
+        :disabled="!hasDraft"
+        @click="loadDraft"
+      >
         {{ $t('load-draft') }}
       </common-button>
-      <common-button theme="default" size="small" class="load-draft" @click="dumpDraft">
+      <common-button
+        theme="default"
+        size="small"
+        class="load-draft"
+        @click="dumpDraft"
+      >
         {{ $t('save-draft') }}
       </common-button>
-      <common-button theme="default" size="small" :disabled="!hasDraft" @click="delDraft">
+      <common-button
+        theme="default"
+        size="small"
+        :disabled="!hasDraft"
+        @click="delDraft"
+      >
         {{ $t('delete-draft') }}
       </common-button>
     </div>
@@ -253,11 +270,21 @@ onMounted(() => {
       {{ $T('del') }}
     </common-button>
   </div>
-  <div class="manage-content-base-info flexc" :title="item.encrypt && !decrypted ? $t('need-decrypt') : ''" :data-title="$TT('base-info')">
-    <span v-if="isNew" class="new flex">
+  <div
+    class="manage-content-base-info flexc"
+    :title="item.encrypt && !decrypted ? $t('need-decrypt') : ''"
+    :data-title="$TT('base-info')"
+  >
+    <span
+      v-if="isNew"
+      class="new flex"
+    >
       <svg-icon name="new" />
     </span>
-    <div ref="baseInfo" class="info detail">
+    <div
+      ref="baseInfo"
+      class="info detail"
+    >
       <span>
         <b>{{ $t('encrypt') }}</b>
         <svg-icon name="encrypt" />
@@ -277,10 +304,18 @@ onMounted(() => {
         :title="$t('show-comments')"
         @change="item.showComments = $event"
       />
-      <slot v-for="slot in slots" :name="slot" :item="item" :disabled="!decrypted" />
+      <slot
+        v-for="slot in slotsRow"
+        :name="slot"
+        :item="item"
+        :disabled="!decrypted"
+      />
     </div>
   </div>
-  <div class="manage-content-md-info" :data-title="$TT('content')">
+  <div
+    class="manage-content-md-info"
+    :data-title="$TT('content')"
+  >
     <client-only>
       <md-editor
         v-model="inputMarkdown"
@@ -312,9 +347,15 @@ onMounted(() => {
     </template>
     <template #body>
       <p>{{ $TT('base-info') }}</p>
-      <span ref="previewInfoEl" class="language-json info">{{ previewInfo }}</span>
+      <span
+        ref="previewInfoEl"
+        class="language-json info"
+      >{{ previewInfo }}</span>
       <p>{{ $TT('content') }}</p>
-      <span ref="previewMdEl" class="language-markdown md">{{ previewContent }}</span>
+      <span
+        ref="previewMdEl"
+        class="language-markdown md"
+      >{{ previewContent }}</span>
     </template>
   </common-modal>
 </template>

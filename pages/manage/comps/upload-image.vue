@@ -163,17 +163,28 @@ onUnmounted(() => {
   >
     <template #title>
       {{ $t('upload-image') }}&nbsp;Supported by
-      <a target="_blank" href="https://doc.sm.ms/">sm.ms</a>
+      <a
+        target="_blank"
+        href="https://doc.sm.ms/"
+      >sm.ms</a>
       <svg-icon name="question" />
       &
-      <a target="_blank" href="https://tinypng.com/developers">tinypng</a>
+      <a
+        target="_blank"
+        href="https://tinypng.com/developers"
+      >tinypng</a>
       <svg-icon name="question" />
     </template>
     <template #body>
       <div class="flexc">
         <div class="result flex">
           <span>{{ $t('upload-result') }}: </span>
-          <input ref="resultInput" v-model="resultUrl" :placeholder="$t('no-result')" readonly>
+          <input
+            ref="resultInput"
+            v-model="resultUrl"
+            :placeholder="$t('no-result')"
+            readonly
+          >
         </div>
         <label
           class="flex"
@@ -183,28 +194,53 @@ onUnmounted(() => {
           @dragover.prevent="!dragIn && (dragIn = true)"
           @drop.prevent="dropImg"
         >
-          <input type="file" accept="image/*" @change="setImage">
-          <div v-if="dragIn" class="cover" />
-          <div v-if="!img" class="flexc">
+          <input
+            type="file"
+            accept="image/*"
+            @change="setImage"
+          >
+          <div
+            v-if="dragIn"
+            class="cover"
+          />
+          <div
+            v-if="!img"
+            class="flexc"
+          >
             <svg-icon name="add" />
             <span>{{ $t('select-image') }}</span>
           </div>
-          <img v-else class="s100" :src="imgUrl">
+          <img
+            v-else
+            class="s100"
+            :src="imgUrl"
+          >
         </label>
         <div class="flexc footer">
           <div class="flex">
-            <input v-model="smmsToken" :placeholder="$t('please-input') + ' smms API token'">
+            <input
+              v-model="smmsToken"
+              :placeholder="$t('please-input') + ' smms API token'"
+            >
             <span @click="saveToken('smms-token', smmsToken)">
               <svg-icon name="save" />
             </span>
           </div>
           <div class="flex">
-            <input v-model="tinyPngToken" :placeholder="`(${$t('optional')})${$t('please-input')} tinyPng API token`">
+            <input
+              v-model="tinyPngToken"
+              :placeholder="`(${$t('optional')})${$t('please-input')} tinyPng API token`"
+            >
             <span @click="saveToken('tinypng-token', tinyPngToken)">
               <svg-icon name="save" />
             </span>
           </div>
-          <common-button icon="upload" :loading="uploading" :disabled="!img || !smmsToken" @click="doUpload">
+          <common-button
+            icon="upload"
+            :loading="uploading"
+            :disabled="!img || !smmsToken"
+            @click="doUpload"
+          >
             {{ $t('upload') }}
           </common-button>
         </div>

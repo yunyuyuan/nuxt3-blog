@@ -11,7 +11,10 @@ useCommonSEOTitle(computed(() => translate("markdown-ref") + config.SEO_title));
 
 <template>
   <client-only>
-    <md-editor v-model="inputMarkdown" :single="true" />
+    <md-editor
+      v-model="inputMarkdown"
+      :single="true"
+    />
   </client-only>
 </template>
 

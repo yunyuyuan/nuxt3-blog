@@ -1,5 +1,6 @@
 import fs from "fs";
-import { processBlogItem, encryptAndWriteMd, encrypt, promptTask, ImgMap, getAbsolutePath } from "./utils";
+import type { ImgMap} from "./utils";
+import { processBlogItem, encryptAndWriteMd, encrypt, promptTask, getAbsolutePath } from "./utils";
 
 export default async function () {
   await promptTask([{

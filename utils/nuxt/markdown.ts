@@ -13,20 +13,21 @@ export async function parseMarkdown (text: string) {
   marked.use({
     gfm: true,
     renderer: {
-      heading (text, level, raw, slugger) {
-        const url = slugger.slug(raw);
+      heading ({ depth, tokens }) {
+        const text = this.parser.parseInline(tokens);
+        const url = encodeURI(text);
 
         const menuItem: typeof menuItems[number] = {
-          size: level < 3 ? "big" : "small",
+          size: depth < 3 ? "big" : "small",
           // the "raw" param is not real raw, weird
-          // text: escapeHtml(raw),
-          text: text.replace(/<\/?[^>]+(>|$)/g, ""),
-          url
+          text: escapeHtml(text),
+          // text: text.replace(/<\/?[^>]+(>|$)/g, ""),
+          url: url
         };
         menuItems.push(menuItem);
-        return `<h${level}><sup class="fake-head" id="${url}"></sup><a class="header-link" href="#${url}">${text}</a></h${level}>`;
+        return `<h${depth}><sup class="fake-head" id="${url}"></sup><a class="header-link" href="#${url}">${text}</a></h${depth}>`;
       },
-      image (href, _, text) {
+      image ({ href, text }) {
         // sticker
         if (text === "sticker") {
           const matcher = href?.match(/^(.*?)\/(\d*)$/);
@@ -50,18 +51,20 @@ export async function parseMarkdown (text: string) {
           h ? `height: ${h} !important;` : ""
         }" src="${href}"/><small class="desc">${marked.parseInline(alt_)}</small></span>`;
       },
-      code (code, language, escaped) {
-        if (isPrerender) {
+      code ({text, lang, escaped}) {
+        if (isPrerender && hljs) {
           // 在这里parse
-          initHljs(hljs!);
-          code = (language ? hljs!.highlight(code, {
-            language: language
-          }) : hljs.highlightAuto(code)).value;
+          initHljs(hljs);
+          text = (
+            lang ? hljs.highlight(text, {
+              language: lang
+            }) : hljs.highlightAuto(text)
+          ).value;
         } else {
           // 先escape，留在afterInsertHtml里parse
-          code = escaped ? code : escapeHtml(code);
+          text = escaped ? text : escapeHtml(text);
         }
-        return `<pre><div></div><small></small><code class="language-${language} ${isPrerender ? "hljs" : ""}">${code}</code></pre>`;
+        return `<pre><div><small></small></div><code class="language-${lang} ${isPrerender ? "hljs" : ""}">${text}</code></pre>`;
       }
     },
     extensions: [
@@ -388,10 +391,12 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
   nextTick(async () => {
     // hljs
     mdEl.querySelectorAll<HTMLElement>("pre>code").forEach(async (el) => {
-      const lang = el.parentElement!.querySelector<HTMLElement>(":scope > small")!;
-      const language = el.className.replace(/^.*?language-([^ ]+).*?$/, "$1");
+      const lang = el.parentElement!.querySelector<HTMLElement>(":scope > div > small")!;
+      const language = el.className.replace(/^.*?language-(\S*).*?$/, (_, lang) => {
+        return lang;
+      });
       const hljs = initHljs((await import("highlight.js")).default);
-      lang.innerText = (hljs.getLanguage(language) || { name: language }).name!;
+      lang.innerText = language ? (hljs.getLanguage(language) || { name: language }).name! : " ";
       if (!el.classList.contains("hljs")) {
         hljs.highlightElement(el);
       }
@@ -432,7 +437,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
     mdEl.querySelectorAll("pre:not(.processed-pre)").forEach(async (el: Element) => {
       el.classList.add("processed-pre");
       const actions = document.createElement("span");
-      el.insertBefore(actions, el.children[0]);
+      el.children[0].appendChild(actions);
       const themeBtn = createSvgIcon("code-theme", (span) => {
         span.classList.add("code-theme");
         actions.appendChild(span);
@@ -469,7 +474,7 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
     });
     const pangu = (await import("pangu")).default;
     pangu.spacingElementByClassName("--markdown");
-    htmlInserted && (htmlInserted.value = true);
+    if (htmlInserted) { htmlInserted.value = true; };
   });
   return destroyFns;
 }

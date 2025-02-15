@@ -37,14 +37,32 @@ onMounted(() => {
 <template>
   <div class="record-list">
     <ul v-if="years.length">
-      <li v-for="year in years" v-show="year.items.some(item => item._show)" :key="year.year">
-        <h2 class="flex" @click="currentYear = currentYear == year.year ? undefined : year.year">
-          <svg-icon :style="{transform: currentYear==year.year ? 'rotate(180deg)' : ''}" name="up" />
+      <li
+        v-for="year in years"
+        v-show="year.items.some(item => item._show)"
+        :key="year.year"
+      >
+        <h2
+          class="flex"
+          @click="currentYear = currentYear == year.year ? undefined : year.year"
+        >
+          <svg-icon
+            :style="{transform: currentYear==year.year ? 'rotate(180deg)' : ''}"
+            name="up"
+          />
           {{ year.year }}
           <span class="size">( {{ year.items.length }} {{ $t('items') }} )</span>
         </h2>
-        <div v-show="currentYear==year.year" class="contain flex">
-          <div v-for="item in year.items" v-show="item._show" :key="item.id" class="item flexc">
+        <div
+          v-show="currentYear==year.year"
+          class="contain flex"
+        >
+          <div
+            v-for="item in year.items"
+            v-show="item._show"
+            :key="item.id"
+            class="item flexc"
+          >
             <b :title="formatTime(item.time)">{{
               formatTime(item.time, 'month')
             }}</b>
@@ -64,7 +82,10 @@ onMounted(() => {
         </div>
       </li>
     </ul>
-    <div v-else class="empty">
+    <div
+      v-else
+      class="empty"
+    >
       {{ $T('nothing-here') }}
     </div>
   </div>

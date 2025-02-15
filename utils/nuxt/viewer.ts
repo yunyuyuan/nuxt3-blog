@@ -26,7 +26,7 @@ function useMutationObserver (
 /**
  * viewerjs
  */
-export function initViewer (el: Ref<HTMLElement | undefined>): Ref<HTMLElement> | void {
+export function initViewer (el: Ref<HTMLElement | undefined>): Ref<HTMLElement> | undefined {
   if (!inBrowser) { return; }
   let viewerContainer;
   let viewer: Viewer;

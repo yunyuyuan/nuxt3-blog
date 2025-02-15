@@ -60,6 +60,7 @@ for (const b of [
 export default defineNuxtConfig({
   devtools: { enabled: false },
   telemetry: false,
+
   app: {
     head: {
       meta: [
@@ -78,7 +79,12 @@ export default defineNuxtConfig({
       title: config.title
     }
   },
+
   css: ["~/assets/style/main.scss", "~/node_modules/katex/dist/katex.min.css", "~/node_modules/viewerjs/dist/viewer.css"],
+  modules: [
+    "@nuxt/eslint"
+  ],
+
   runtimeConfig: {
     public: {
       stickers,
@@ -89,6 +95,7 @@ export default defineNuxtConfig({
       githubBranch
     }
   },
+
   nitro: {
     prerender: {
       crawlLinks: true,
@@ -103,14 +110,16 @@ export default defineNuxtConfig({
       }
     }
   },
+
   experimental: {
     /**
      * Need payload to cache the data from useAsyncData, but why?
      * https://github.com/nuxt/nuxt/blob/main/packages/nuxt/src/app/plugins/payload.client.ts#L27
      */
     // payloadExtraction: false
-    inlineSSRStyles: false
+    inlineSSRStyles: false,
   },
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   vite: {
@@ -123,7 +132,11 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: "@use 'sass:math';@use 'sass:color';@import 'assets/style/var';"
+          additionalData: `
+            @use 'sass:math';
+            @use 'sass:color';
+            @use '@/assets/style/var' as *;
+          `
         }
       }
     },
@@ -131,6 +144,7 @@ export default defineNuxtConfig({
       // minify: false
     }
   },
+
   hooks: {
     "vite:extendConfig" (config, { isClient }) {
       if (isClient) {
@@ -150,5 +164,7 @@ export default defineNuxtConfig({
     "nitro:build:public-assets" (nitro) {
       generateSiteMap(nitro.options.output.publicDir);
     }
-  }
+  },
+
+  compatibilityDate: "2025-02-15"
 });

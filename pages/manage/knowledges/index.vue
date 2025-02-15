@@ -25,7 +25,10 @@ const searchFn = (item: KnowledgeItem, s: string) => item.title.includes(s);
       col-prefix="knowledge-"
       :search-fn="searchFn"
     >
-      <template v-if="!!filterType" #filter>
+      <template
+        v-if="!!filterType"
+        #filter
+      >
         <span
           class="filter-type flex"
           :title="$t(KnowledgeTabsList.find((i) => i.key === filterType)!.name)"
@@ -35,7 +38,10 @@ const searchFn = (item: KnowledgeItem, s: string) => item.title.includes(s);
         </span>
       </template>
       <template #title="{ data: title, dataUrl }">
-        <nuxt-link no-prefetch :to="dataUrl">
+        <nuxt-link
+          no-prefetch
+          :to="dataUrl"
+        >
           {{ title }}
         </nuxt-link>
       </template>

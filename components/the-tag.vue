@@ -15,7 +15,11 @@ const emit = defineEmits(["click"]);
   >
     <slot />
   </span>
-  <nuxt-link v-else class="common-tag" :to="href">
+  <nuxt-link
+    v-else
+    class="common-tag"
+    :to="href"
+  >
     <slot />
   </nuxt-link>
 </template>

@@ -20,14 +20,23 @@ const paragraphs = [
 
 <template>
   <div class="about flexc">
-    <img :src="bg" alt="bg">
+    <img
+      :src="bg"
+      alt="bg"
+    >
     <div class="flexc paragraphs">
-      <p v-for="p,idx in paragraphs" :key="idx">
+      <p
+        v-for="p,idx in paragraphs"
+        :key="idx"
+      >
         {{ p }}
       </p>
     </div>
     <div class="status">
-      Last built &lt;<a target="_blank" :href="commitUrl">{{ commitSha.substring(0, 8) }}</a>&gt; succeeded at
+      Last built &lt;<a
+        target="_blank"
+        :href="commitUrl"
+      >{{ commitSha.substring(0, 8) }}</a>&gt; succeeded at
       <time>{{ buildTime }}</time>
     </div>
   </div>
