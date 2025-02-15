@@ -54,9 +54,9 @@ export async function parseMarkdown (text: string) {
         if (isPrerender) {
           // 在这里parse
           initHljs(hljs!);
-          code = hljs!.highlight(code, {
-            language: language!
-          }, true).value;
+          code = (language ? hljs!.highlight(code, {
+            language: language
+          }) : hljs.highlightAuto(code)).value;
         } else {
           // 先escape，留在afterInsertHtml里parse
           code = escaped ? code : escapeHtml(code);
