@@ -7,7 +7,10 @@ const emit = defineEmits(["change"]);
 </script>
 
 <template>
-  <label class="common-checkbox" :class="{ disabled, checked: checked }">
+  <label
+    class="common-checkbox"
+    :class="{ disabled, checked: checked }"
+  >
     <input
       type="checkbox"
       :checked="checked"
@@ -26,7 +29,7 @@ const emit = defineEmits(["change"]);
 
   display: block;
   cursor: pointer;
-  border: 1px solid fade-out($theme-color, 0.7);
+  border: 1px solid color.scale($theme-color, $alpha: -70%);
 
   &:hover {
     box-shadow: 0 0 5px rgb(210 250 255 / 20%);

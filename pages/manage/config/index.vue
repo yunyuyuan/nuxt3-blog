@@ -59,12 +59,20 @@ onBeforeUnmount(() => {
   <div class="manage-config w100 flexc">
     <div class="header flex">
       <span>{{ !modified ? $t('not-modified') : statusText }}</span>
-      <common-button icon="upload" :disabled="!canCommit || !modified" :loading="processing" @click="doUpload">
+      <common-button
+        icon="upload"
+        :disabled="!canCommit || !modified"
+        :loading="processing"
+        @click="doUpload"
+      >
         {{ $t('update') }}
       </common-button>
     </div>
     <div class="editor-container w100">
-      <div ref="editorRef" class="content s100" />
+      <div
+        ref="editorRef"
+        class="content s100"
+      />
     </div>
   </div>
 </template>

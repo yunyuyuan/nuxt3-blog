@@ -28,7 +28,7 @@ const listenAnchor = () => {
     }
     // 未找到
     activeAnchor.value = menuItems.value[0]?.url;
-  } catch {}
+  } catch { /* empty */ }
 };
 
 if (!isPrerender) {
@@ -60,11 +60,20 @@ initViewer(root);
 </script>
 
 <template>
-  <div ref="root" class="article-detail">
-    <div class="captain w100" :class="{'has-comment': item.showComments}">
+  <div
+    ref="root"
+    class="article-detail"
+  >
+    <div
+      class="captain w100"
+      :class="{'has-comment': item.showComments}"
+    >
       <div class="article-container">
         <h1>{{ item.title }}</h1>
-        <div ref="viewerContainer" class="html-container">
+        <div
+          ref="viewerContainer"
+          class="html-container"
+        >
           <article
             ref="markdownRef"
             class="--markdown"
@@ -86,12 +95,23 @@ initViewer(root);
           <Visitors :visitors="item.visitors" />
         </div>
       </div>
-      <div v-if="menuItems.length" class="menu flexc" :class="{compact: hideMenu}">
-        <span class="toggle flex" :title="$t((hideMenu ? 'unfold':'fold')+'-menu')" @click="hideMenu = !hideMenu">
+      <div
+        v-if="menuItems.length"
+        class="menu flexc"
+        :class="{compact: hideMenu}"
+      >
+        <span
+          class="toggle flex"
+          :title="$t((hideMenu ? 'unfold':'fold')+'-menu')"
+          @click="hideMenu = !hideMenu"
+        >
           <svg-icon name="up" />
         </span>
         <ol>
-          <li v-for="(anchor, idx) in menuItems" :key="idx">
+          <li
+            v-for="(anchor, idx) in menuItems"
+            :key="idx"
+          >
             <a
               :href="'#'+anchor.url"
               :class="[anchor.size, { active: activeAnchor === anchor.url }]"
@@ -408,7 +428,7 @@ initViewer(root);
   }
 }
 
-@media screen and (max-width: 1100px) {
+@media screen and (width <= 1100px) {
   .article-detail {
     >.captain {
       > .menu {

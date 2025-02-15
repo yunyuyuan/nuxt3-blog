@@ -74,7 +74,10 @@ const close = () => {
 <template>
   <client-only>
     <teleport :to="`#${ModalContainerId}`">
-      <transition name="modal" @after-enter="setFocus">
+      <transition
+        name="modal"
+        @after-enter="setFocus"
+      >
         <div
           v-show="modelValue"
           ref="root"
@@ -85,17 +88,29 @@ const close = () => {
           @keyup.enter="ok"
           @keyup.escape="close"
         >
-          <div class="bg" @click.self="maskClosable ? close() : null" />
-          <div class="inner flexc" :style="`width: ${modalWidth}px`">
+          <div
+            class="bg"
+            @click.self="maskClosable ? close() : null"
+          />
+          <div
+            class="inner flexc"
+            :style="`width: ${modalWidth}px`"
+          >
             <div class="modal-title flex">
               <h3>
                 <template v-if="modalTitle">
                   {{ modalTitle }}
                 </template>
-                <slot v-else name="title" />
+                <slot
+                  v-else
+                  name="title"
+                />
               </h3>
             </div>
-            <a class="flex modal-close" @click="close">
+            <a
+              class="flex modal-close"
+              @click="close"
+            >
               <svg-icon name="close" />
             </a>
             <div class="modal-body">
@@ -104,7 +119,10 @@ const close = () => {
               </p>
               <slot name="body" />
             </div>
-            <div v-if="showOk || showCancel" class="modal-foot flex">
+            <div
+              v-if="showOk || showCancel"
+              class="modal-foot flex"
+            >
               <common-button
                 v-if="showOk"
                 class="ok"
@@ -114,7 +132,11 @@ const close = () => {
               >
                 {{ $TT('ok') }}
               </common-button>
-              <common-button v-if="showCancel" theme="default" @click="close">
+              <common-button
+                v-if="showCancel"
+                theme="default"
+                @click="close"
+              >
                 {{ $T('cancel') }}
               </common-button>
             </div>
@@ -128,10 +150,7 @@ const close = () => {
 <style lang="scss">
 .common-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   outline: none;
   z-index: $z-index-modal;
   transition: $common-transition;
@@ -148,10 +167,7 @@ const close = () => {
 
   > .bg {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: rgb(0 0 0 / 35%);
 
     @include dark-mode {
@@ -273,7 +289,7 @@ const close = () => {
   }
 }
 
-@media screen and (max-height: 480px) {
+@media screen and (height <= 480px) {
   .common-modal {
     >.inner {
       margin-top: 12px;

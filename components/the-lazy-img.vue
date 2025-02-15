@@ -152,10 +152,20 @@ const attr = ViewerAttr;
     :title="title"
     @click="containerClick"
   >
-    <img v-if="isPrerender && !isEncryptedImg" :src="props.src" :alt="alt">
-    <span v-if="isImgErr || isImgLoading" class="svg flexc s100">
+    <img
+      v-if="isPrerender && !isEncryptedImg"
+      :src="props.src"
+      :alt="alt"
+    >
+    <span
+      v-if="isImgErr || isImgLoading"
+      class="svg flexc s100"
+    >
       <svg-icon :name="isImgErr ? 'img-error' : 'loading'" />
-      <span v-show="retry && isImgErr" class="tips">{{ useNuxtApp().$t('click-to-retry') }}</span>
+      <span
+        v-show="retry && isImgErr"
+        class="tips"
+      >{{ useNuxtApp().$t('click-to-retry') }}</span>
     </span>
     <img
       v-if="isShowImg"

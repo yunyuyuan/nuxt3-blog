@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T extends CommonItem">
 import { deleteList } from "ls:~/utils/nuxt/manage/github";
-import { type CommonItem } from "~/utils/common";
+import type { CommonItem } from "~/utils/common";
 import { formatTime, useStatusText, useManageList } from "~/utils/nuxt";
 
 const { targetTab, list, originList, customFilter } = await useManageList<T>();
@@ -66,13 +66,23 @@ function deleteSelect () {
 
 <template>
   <div class="manage-list-head flex">
-    <input v-model="searchValue" :placeholder="$T('input-text-to-search')">
-    <div v-if="slots.filter" class="filter flex">
+    <input
+      v-model="searchValue"
+      :placeholder="$T('input-text-to-search')"
+    >
+    <div
+      v-if="slots.filter"
+      class="filter flex"
+    >
       <slot name="filter" />
     </div>
     <del style="margin: 0 auto;" />
     <span class="status">{{ statusText }}</span>
-    <common-button class="add-item" icon="add" @click="newItem">
+    <common-button
+      class="add-item"
+      icon="add"
+      @click="newItem"
+    >
       {{ $T('new') }}
     </common-button>
     <common-button
@@ -108,7 +118,10 @@ function deleteSelect () {
         {{ $T('select') }}
       </div>
     </li>
-    <div v-if="!searchedList.length" class="flex empty">
+    <div
+      v-if="!searchedList.length"
+      class="flex empty"
+    >
       {{ $t('nothing-here') }}
     </div>
     <li
@@ -135,8 +148,14 @@ function deleteSelect () {
       <div class="col col-time">
         <span>{{ formatTime(item.time) }}</span>
       </div>
-      <div class="col col-lock" :title="item.encrypt ? $t('has-encrypted') : undefined">
-        <svg-icon v-if="item.encrypt" name="lock" />
+      <div
+        class="col col-lock"
+        :title="item.encrypt ? $t('has-encrypted') : undefined"
+      >
+        <svg-icon
+          v-if="item.encrypt"
+          name="lock"
+        />
       </div>
       <div class="col col-check">
         <common-checkbox

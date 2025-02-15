@@ -146,12 +146,22 @@ initViewer(markdownRef);
 </script>
 
 <template>
-  <div ref="root" :class="['manage-md-editor', 'flexc', currentView]">
-    <div v-if="props.loading" class="md-loading flex">
+  <div
+    ref="root"
+    :class="['manage-md-editor', 'flexc', currentView]"
+  >
+    <div
+      v-if="props.loading"
+      class="md-loading flex"
+    >
       <svg-icon name="loading" />
     </div>
     <div class="editor-head flex">
-      <a class="add-sticker" :title="$t('add-sticker')" @click="showStickers = true">
+      <a
+        class="add-sticker"
+        :title="$t('add-sticker')"
+        @click="showStickers = true"
+      >
         <img src="/sticker/yellow-face/18.png">
         <common-dropdown v-model:show="showStickers">
           <div class="s100 flex">
@@ -171,7 +181,10 @@ initViewer(markdownRef);
                   transform: stickerTranslateY,
                 }"
               >
-                <div v-for="k in stickersTab" :key="k">
+                <div
+                  v-for="k in stickersTab"
+                  :key="k"
+                >
                   <div>
                     <span
                       v-for="idx in stickersList[k]"
@@ -188,15 +201,27 @@ initViewer(markdownRef);
           </div>
         </common-dropdown>
       </a>
-      <nuxt-link v-if="!single" :title="$t('markdown-ref')" :to="'/manage/md-ref'" target="_blank">
+      <nuxt-link
+        v-if="!single"
+        :title="$t('markdown-ref')"
+        :to="'/manage/md-ref'"
+        target="_blank"
+      >
         <svg-icon name="markdown" />
       </nuxt-link>
-      <a class="preview-contents" :title="$t('contents')" @click="currentMenu.length && (showPreviewContents = true)">
+      <a
+        class="preview-contents"
+        :title="$t('contents')"
+        @click="currentMenu.length && (showPreviewContents = true)"
+      >
         <svg-icon name="preview-contents" />
         <common-dropdown v-model:show="showPreviewContents">
           <div class="s100 flex">
             <ol>
-              <li v-for="(anchor, idx) in currentMenu" :key="idx">
+              <li
+                v-for="(anchor, idx) in currentMenu"
+                :key="idx"
+              >
                 <a
                   :class="[anchor.size, 'flex']"
                   :title="anchor.text"
@@ -208,7 +233,12 @@ initViewer(markdownRef);
           </div>
         </common-dropdown>
       </a>
-      <a v-if="!single" class="preview" :title="$t('preview')" @click="emit('preview')"><svg-icon name="preview" /></a>
+      <a
+        v-if="!single"
+        class="preview"
+        :title="$t('preview')"
+        @click="emit('preview')"
+      ><svg-icon name="preview" /></a>
       <a
         class="split"
         :title="$t('toggle-view-mode')"
@@ -235,9 +265,18 @@ initViewer(markdownRef);
       >
         <div ref="editorContainer" />
       </div>
-      <div ref="resizeRef" class="resizer" @touchstart="startResize" @mousedown.left="startResize" />
+      <div
+        ref="resizeRef"
+        class="resizer"
+        @touchstart="startResize"
+        @mousedown.left="startResize"
+      />
       <div class="righr-side">
-        <article ref="markdownRef" class="--markdown" v-html="currentHtml" />
+        <article
+          ref="markdownRef"
+          class="--markdown"
+          v-html="currentHtml"
+        />
       </div>
     </div>
   </div>

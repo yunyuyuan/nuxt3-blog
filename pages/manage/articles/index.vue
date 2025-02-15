@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ManageListTable from "~/pages/manage/comps/manage-list-table.vue";
-import { type ArticleItem } from "~/utils/common";
+import type { ArticleItem } from "~/utils/common";
 
 const searchTag = reactive(new Set<string>());
 const toggleTag = (tag: string) => {
@@ -29,7 +29,10 @@ const searchFn = (item: ArticleItem, s: string) => item.title.includes(s);
       :registry-filter="registryFilter"
       :search-fn="searchFn"
     >
-      <template v-if="searchTag.size" #filter>
+      <template
+        v-if="searchTag.size"
+        #filter
+      >
         <div class="filter-tag">
           <the-tag
             v-for="tag in searchTag"
@@ -42,7 +45,10 @@ const searchFn = (item: ArticleItem, s: string) => item.title.includes(s);
         </div>
       </template>
       <template #title="{ data: title, dataUrl }">
-        <nuxt-link no-prefetch :to="dataUrl">
+        <nuxt-link
+          no-prefetch
+          :to="dataUrl"
+        >
           {{ title }}
         </nuxt-link>
       </template>

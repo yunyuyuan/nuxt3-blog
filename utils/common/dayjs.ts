@@ -4,7 +4,7 @@ import utc from "dayjs/plugin/utc.js";
 import timezone from "dayjs/plugin/timezone";
 import isToday from "dayjs/plugin/isToday.js";
 
-/* eslint-disable import/no-named-as-default-member */
+ 
 dayjs.extend(weekOfYear);
 dayjs.extend(utc);
 dayjs.extend(timezone);

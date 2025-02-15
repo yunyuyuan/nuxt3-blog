@@ -1,14 +1,15 @@
 import fs from "fs";
 import colors from "colors";
 import CryptoJS from "crypto-js";
-import { CommonItem, DecryptFunction, processEncryptDecrypt, HeaderTabUrl, getEncryptedBlocks, escapeNewLine } from "../../utils/common";
+import type { CommonItem, DecryptFunction, HeaderTabUrl} from "../../utils/common";
+import { processEncryptDecrypt, getEncryptedBlocks, escapeNewLine } from "../../utils/common";
 import { getRebuildPath } from ".";
 
-// eslint-disable-next-line require-await
+ 
 export async function encrypt (s: string, pwd: string): Promise<string> {
   return CryptoJS.AES.encrypt(s, pwd).toString();
 }
-// eslint-disable-next-line require-await
+ 
 export async function decrypt (s: string, pwd: string): Promise<string> {
   const result = CryptoJS.AES.decrypt(s, pwd).toString(CryptoJS.enc.Utf8);
   if (!result) {

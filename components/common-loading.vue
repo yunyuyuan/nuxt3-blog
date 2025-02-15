@@ -10,7 +10,10 @@ const isFirstLoad = useFirstLoad();
 </script>
 
 <template>
-  <div :class="{hide: !showInFirst && isFirstLoad}" class="common-loading flexc">
+  <div
+    :class="{hide: !showInFirst && isFirstLoad}"
+    class="common-loading flexc"
+  >
     <svg-icon name="loading" />
     <span>{{ $T('loading') }}...</span>
   </div>

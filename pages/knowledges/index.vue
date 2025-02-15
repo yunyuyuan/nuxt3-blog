@@ -36,7 +36,12 @@ function goTo (tab?: string) {
 <template>
   <div class="knowledge-list">
     <nav>
-      <span v-for="tab in tabs" :key="tab.key + hackKey" :class="{ active: tab.active }" @click="goTo(tab.key)">
+      <span
+        v-for="tab in tabs"
+        :key="tab.key + hackKey"
+        :class="{ active: tab.active }"
+        @click="goTo(tab.key)"
+      >
         {{ $T(tab.name) }}
         <b>{{ getFilteredListLength(tab.key) }}</b>
       </span>
@@ -55,7 +60,10 @@ function goTo (tab?: string) {
           <time :title="formatTime(item.time)">{{ literalTime(item.time) }}</time>
         </nuxt-link>
       </div>
-      <div v-else class="empty">
+      <div
+        v-else
+        class="empty"
+      >
         {{ $T('nothing-here') }}
       </div>
     </div>

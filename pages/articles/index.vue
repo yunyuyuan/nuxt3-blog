@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type ArticleItem } from "~/utils/common";
+import type { ArticleItem } from "~/utils/common";
 import { formatTime, literalTime, useHackKey, useListPage } from "~/utils/nuxt";
 import Visitors from "~/utils/nuxt/public/visitors";
 
@@ -23,7 +23,7 @@ const tags = computed<string[]>(() => {
   try {
     const tags = useRoute().query.tag as string;
     return tags ? (tags.split(",") as string[]) : [];
-  } catch (e) {
+  } catch (_e) {
     return [];
   }
 });
@@ -64,9 +64,19 @@ const toggleTags = (tag: string) => {
       </span>
     </div>
     <div class="body flexc">
-      <ul v-if="filteredList.length" class="w100">
-        <li v-for="item in filteredList" v-show="item._show" :key="item.id">
-          <nuxt-link no-prefetch :to="'/articles/' + String(item.id)">
+      <ul
+        v-if="filteredList.length"
+        class="w100"
+      >
+        <li
+          v-for="item in filteredList"
+          v-show="item._show"
+          :key="item.id"
+        >
+          <nuxt-link
+            no-prefetch
+            :to="'/articles/' + String(item.id)"
+          >
             <b>{{ item.title }}</b>
             <div class="foot flex">
               <span :title="formatTime(item.time)">{{
@@ -79,7 +89,10 @@ const toggleTags = (tag: string) => {
           </nuxt-link>
         </li>
       </ul>
-      <div v-else class="empty">
+      <div
+        v-else
+        class="empty"
+      >
         {{ $T('nothing-here') }}
       </div>
     </div>

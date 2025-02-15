@@ -17,7 +17,7 @@ clone:
 
 steps:
   - name: build_project
-    image: node:18
+    image: node:20
     volumes:
       - name: cache
         path: /drone/src/node_modules
@@ -87,7 +87,7 @@ clone:
 
 steps:
   - name: backup_img
-    image: node:18
+    image: node:20
     volumes:
       - name: cache
         path: /drone/src/node_modules

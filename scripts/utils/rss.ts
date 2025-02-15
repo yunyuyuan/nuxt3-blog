@@ -1,7 +1,8 @@
-import { ArticleItem, getNowDayjsString, escapeHtml } from "../../utils/common";
+import type { ArticleItem} from "../../utils/common";
+import { getNowDayjsString, escapeHtml } from "../../utils/common";
 import config from "../../config";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+ 
 interface INode {
   addChild (_: INode): void;
   toString(): string;

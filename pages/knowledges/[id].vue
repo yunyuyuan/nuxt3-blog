@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useContentPage, useComment, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
-import { type KnowledgeItem } from "~/utils/common";
+import type { KnowledgeItem } from "~/utils/common";
 import Visitors from "~/utils/nuxt/public/visitors";
 
 const { item, writeDate, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
@@ -11,8 +11,14 @@ initViewer(root);
 </script>
 
 <template>
-  <div ref="root" class="knowledge-detail">
-    <div class="captain flexc w100" :class="{'has-comment': item.showComments}">
+  <div
+    ref="root"
+    class="knowledge-detail"
+  >
+    <div
+      class="captain flexc w100"
+      :class="{'has-comment': item.showComments}"
+    >
       <div class="info">
         <div class="cover">
           <the-lazy-img
@@ -38,7 +44,10 @@ initViewer(root);
         </div>
       </div>
       <div class="divider">
-        <div v-if="item.type === 'game'" class="game">
+        <div
+          v-if="item.type === 'game'"
+          class="game"
+        >
           <div class="pacman">
             <span class="top" />
             <span class="bottom" />
@@ -47,17 +56,30 @@ initViewer(root);
           </div>
           <span />
         </div>
-        <div v-else-if="item.type === 'book'" class="book">
-          <img src="~/assets/image/book-divide.png" alt="book">
+        <div
+          v-else-if="item.type === 'book'"
+          class="book"
+        >
+          <img
+            src="~/assets/image/book-divide.png"
+            alt="book"
+          >
           <span />
         </div>
-        <div v-else class="film">
+        <div
+          v-else
+          class="film"
+        >
           <svg-icon name="film-roll" />
           <span />
         </div>
       </div>
       <div class="article-container">
-        <article ref="markdownRef" class="--markdown" v-html="htmlContent" />
+        <article
+          ref="markdownRef"
+          class="--markdown"
+          v-html="htmlContent"
+        />
       </div>
       <span class="foot flex">
         <Visitors :visitors="item.visitors" />

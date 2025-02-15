@@ -3,7 +3,7 @@ import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
 import { KnowledgeTabs, KnowledgeTabsList, type KnowledgeItem } from "~/utils/common";
 
 const typeSelectShow = ref(false);
-// eslint-disable-next-line @typescript-eslint/no-empty-function
+ 
 const processWithContent = (_md: string, _html: HTMLElement, _item: KnowledgeItem) => {};
 </script>
 
@@ -15,20 +15,40 @@ const processWithContent = (_md: string, _html: HTMLElement, _item: KnowledgeIte
           <b>{{ $T('title') }}</b>
           <svg-icon name="title" />
         </span>
-        <input v-model="item.title" :placeholder="$t('please-input')" :disabled="disabled">
+        <input
+          v-model="item.title"
+          :placeholder="$t('please-input')"
+          :disabled="disabled"
+        >
       </template>
       <template #type="{ disabled, item }">
         <span>
           <b>{{ $T('type') }}</b>
           <svg-icon name="type" />
         </span>
-        <div class="select" @click="!disabled && (typeSelectShow = true)">
-          <a tabindex="1" class="flex" :class="{active: typeSelectShow, disabled: disabled}">
+        <div
+          class="select"
+          @click="!disabled && (typeSelectShow = true)"
+        >
+          <a
+            tabindex="1"
+            class="flex"
+            :class="{active: typeSelectShow, disabled: disabled}"
+          >
             <b>{{ $T(KnowledgeTabsList.find((i) => i.key === item.type)!.name) }}</b>
             <svg-icon :name="item.type" />
           </a>
-          <common-dropdown v-model:show="typeSelectShow" class="flexc">
-            <div v-for="tp in KnowledgeTabs" :key="tp" class="flex" :class="{active: item.type===tp}" @click="item.type=tp;typeSelectShow=false">
+          <common-dropdown
+            v-model:show="typeSelectShow"
+            class="flexc"
+          >
+            <div
+              v-for="tp in KnowledgeTabs"
+              :key="tp"
+              class="flex"
+              :class="{active: item.type===tp}"
+              @click="item.type=tp;typeSelectShow=false"
+            >
               <span>{{ $T(KnowledgeTabsList.find((i) => i.key === tp)!.name) }}</span>
               <svg-icon :name="tp" />
             </div>
@@ -40,21 +60,33 @@ const processWithContent = (_md: string, _html: HTMLElement, _item: KnowledgeIte
           <b>{{ $T('link') }}</b>
           <svg-icon name="link" />
         </span>
-        <input v-model="item.link" :placeholder="$t('please-input')" :disabled="disabled">
+        <input
+          v-model="item.link"
+          :placeholder="$t('please-input')"
+          :disabled="disabled"
+        >
       </template>
       <template #cover="{ disabled, item }">
         <span :class="{ invalid: !item.cover }">
           <b>{{ $T('cover') }}</b>
           <svg-icon name="images" />
         </span>
-        <input v-model="item.cover" :placeholder="$t('please-input')" :disabled="disabled">
+        <input
+          v-model="item.cover"
+          :placeholder="$t('please-input')"
+          :disabled="disabled"
+        >
       </template>
       <template #summary="{ disabled, item }">
         <span :class="{ invalid: !item.summary }">
           <b>{{ $T('summary') }}</b>
           <svg-icon name="summary" />
         </span>
-        <textarea v-model="item.summary" :placeholder="$t('please-input')" :disabled="disabled" />
+        <textarea
+          v-model="item.summary"
+          :placeholder="$t('please-input')"
+          :disabled="disabled"
+        />
       </template>
     </manage-content-edit>
   </div>

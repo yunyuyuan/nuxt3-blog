@@ -89,7 +89,7 @@ export const useEncryptor = () => {
         throw new Error(translate("need-passwd"));
       }
       await callback(decrypt);
-    } catch (e) {
+    } catch (_e) {
       firstIsFailed();
       const cancel = watch(usePasswd, async (pwd) => {
         if (!pwd) {
@@ -98,7 +98,7 @@ export const useEncryptor = () => {
         try {
           await callback(decrypt);
           cancel();
-        } catch {}
+        } catch { /* empty */ }
       });
       cancelFnList.push(cancel);
     }

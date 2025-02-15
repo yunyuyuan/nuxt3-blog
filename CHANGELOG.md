@@ -1,3 +1,6 @@
+## 2025.02.15
+* Update all npm packages.
+
 ## 2024.07.23
 * Add **text-with-mask** markdown syntax.
 

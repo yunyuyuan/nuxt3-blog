@@ -2,7 +2,8 @@ import fs from "fs";
 import path from "path";
 import https from "https";
 import colors from "colors";
-import { ImgMap, getAbsolutePath } from "./utils";
+import type { ImgMap} from "./utils";
+import { getAbsolutePath } from "./utils";
 
 export default async function (user?: number, group?: number) {
   await downloadImages(JSON.parse(fs.readFileSync(getAbsolutePath("img.json")).toString()), user, group);

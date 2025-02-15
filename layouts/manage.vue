@@ -163,7 +163,10 @@ onMounted(() => {
   <div class="manage-background" />
   <div class="manage-container">
     <nav>
-      <span class="mobile-menu-toggler" @click="menuShow = true">
+      <span
+        class="mobile-menu-toggler"
+        @click="menuShow = true"
+      >
         <svg-icon :name="pageLoading.loadingState.value ? 'loading' : 'menu'" />
       </span>
       <manage-menu v-show="!isMobile" />
@@ -193,16 +196,30 @@ onMounted(() => {
     <template #body>
       <label class="manage-input-pwd">
         <b>Github Token
-          <svg-icon v-if="!!githubToken" name="correct" />
+          <svg-icon
+            v-if="!!githubToken"
+            name="correct"
+          />
         </b>
-        <input v-model="inputToken" :placeholder="$t('please-input')" data-focus :disabled="isDev">
+        <input
+          v-model="inputToken"
+          :placeholder="$t('please-input')"
+          data-focus
+          :disabled="isDev"
+        >
       </label>
       <label class="manage-input-pwd">
         <b>
           {{ $T('passwd') }}
-          <svg-icon v-if="encryptor.passwdCorrect.value" name="correct" />
+          <svg-icon
+            v-if="encryptor.passwdCorrect.value"
+            name="correct"
+          />
         </b>
-        <input v-model="inputPwd" :placeholder="$t('please-input')">
+        <input
+          v-model="inputPwd"
+          :placeholder="$t('please-input')"
+        >
       </label>
     </template>
   </common-modal>
@@ -237,10 +254,7 @@ $menu-width: 120px;
   > section {
     position: absolute;
     z-index: 2;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
 
     > div {
       $left: $menu-width + $padding-left;
@@ -259,10 +273,7 @@ $menu-width: 120px;
 .manage-background {
   position: fixed;
   z-index: 1;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: #fbfbfb;
 
   @include dark-mode {

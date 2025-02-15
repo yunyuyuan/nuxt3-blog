@@ -14,7 +14,12 @@ const copySvg = async (name: string) => {
 
 <template>
   <div class="svgs-list flex">
-    <span v-for="name in svgs" :key="name" class="svg-item flexc" @click="copySvg(name)">
+    <span
+      v-for="name in svgs"
+      :key="name"
+      class="svg-item flexc"
+      @click="copySvg(name)"
+    >
       <svg-icon :name="name" />
       <span>{{ name }}</span>
     </span>

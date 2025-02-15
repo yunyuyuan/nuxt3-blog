@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
-import { type ArticleItem } from "~/utils/common";
+import type { ArticleItem } from "~/utils/common";
 
 const allTags = reactive(new Set<string>());
 const showTagSelect = ref<boolean>(false);
@@ -10,7 +10,7 @@ const tagParentRef = ref<HTMLLabelElement>();
 const inputTags = ref<string>("");
 const inputTagsList = ref<string[]>([]);
 const calcTagsList = () => {
-  inputTagsList.value = !inputTags
+  inputTagsList.value = !inputTags.value
     ? []
     : Array.from(new Set(inputTags.value
       .split(",")
@@ -51,13 +51,20 @@ const processContent = (md: string, _html: HTMLElement, item: ArticleItem) => {
 
 <template>
   <div class="manage-article-detail">
-    <manage-content-edit :pre-process-item="preProcessItem" :process-with-content="processContent">
+    <manage-content-edit
+      :pre-process-item="preProcessItem"
+      :process-with-content="processContent"
+    >
       <template #title="{ disabled, item }">
         <span :class="{ invalid: !item.title }">
           <b>{{ $T('title') }}</b>
           <svg-icon name="title" />
         </span>
-        <input v-model="item.title" :placeholder="$t('please-input')" :disabled="disabled">
+        <input
+          v-model="item.title"
+          :placeholder="$t('please-input')"
+          :disabled="disabled"
+        >
       </template>
       <template #tags="{ disabled, item }">
         <span>
@@ -70,19 +77,37 @@ const processContent = (md: string, _html: HTMLElement, item: ArticleItem) => {
           class="input-tags flex"
           :class="{ disabled: disabled || item.encrypt }"
         >
-          <input v-model="inputTags" :disabled="disabled || item.encrypt" @focusin="showTagSelect = true">
+          <input
+            v-model="inputTags"
+            :disabled="disabled || item.encrypt"
+            @focusin="showTagSelect = true"
+          >
           <div class="placeholder s100 flex">
-            <span v-if="!inputTagsList.length || item.encrypt" class="text">{{ $t('input-tags') }}</span>
+            <span
+              v-if="!inputTagsList.length || item.encrypt"
+              class="text"
+            >{{ $t('input-tags') }}</span>
             <template v-if="!item.encrypt">
-              <the-tag v-for="tag in inputTagsList" :key="tag">
+              <the-tag
+                v-for="tag in inputTagsList"
+                :key="tag"
+              >
                 {{ tag }}
               </the-tag>
             </template>
           </div>
-          <common-dropdown v-model:show="showTagSelect" :parent="tagParentRef">
+          <common-dropdown
+            v-model:show="showTagSelect"
+            :parent="tagParentRef"
+          >
             <p>{{ $t('existed-tags') }}:</p>
             <div class="dropdown w100 flex">
-              <the-tag v-for="tag in allTags" :key="tag" :active="inputTagsList.includes(tag)" @click="toggleTag(tag)">
+              <the-tag
+                v-for="tag in allTags"
+                :key="tag"
+                :active="inputTagsList.includes(tag)"
+                @click="toggleTag(tag)"
+              >
                 {{ tag }}
               </the-tag>
             </div>

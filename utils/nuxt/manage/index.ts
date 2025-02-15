@@ -71,7 +71,7 @@ export function keysOfCommonItem (): AllKeys[] {
 /**
  * 草稿功能
  */
-export function loadOrDumpDraft (key: string, type: "load" | "dump", item: CommonItem, inputContent?: string): string | void {
+export function loadOrDumpDraft (key: string, type: "load" | "dump", item: CommonItem, inputContent?: string): string | undefined {
   if (type === "load") {
     const draft = JSON.parse(getLocalStorage(key)!);
     const content = draft.content ?? "";
@@ -82,7 +82,7 @@ export function loadOrDumpDraft (key: string, type: "load" | "dump", item: Commo
     });
     return content;
   } else {
-    const result = {
+    const result: Partial<CommonItem> & { content?: string } = {
       content: inputContent
     };
     for (const k of keysOfCommonItem()) {
