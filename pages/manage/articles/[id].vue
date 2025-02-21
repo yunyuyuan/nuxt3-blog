@@ -41,7 +41,7 @@ const preProcessItem = (item: ArticleItem, list: ArticleItem[]) => {
 };
 
 // 目前只有article类型需要根据内容计算item的`len`字段
-const processContent = (md: string, _html: HTMLElement, item: ArticleItem) => {
+const processContent = (md: string, item: ArticleItem) => {
   item.len = md.length;
   if (item.encrypt) {
     item.tags.splice(0, item.tags.length);

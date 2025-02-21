@@ -1,6 +1,6 @@
 import type { Axios } from "axios";
 import type { CommonItem } from "~/utils/common";
-import { useCurrentTab, translate, formatTime, notify, createCommitModal } from "~/utils/nuxt";
+import { getCurrentTab, translate, formatTime, notify, createCommitModal } from "~/utils/nuxt";
 import config from "~/config";
 
 let axios: Axios | null = null;
@@ -157,7 +157,7 @@ export function deleteList (
 ): Promise<boolean> {
   const commitInfo =
     dels.length === 1 ? `'${dels[0].id}'` : `${dels.length} items`;
-  const folder = useCurrentTab().url;
+  const folder = getCurrentTab().url;
   return createCommit(
     `Delete ${commitInfo} from ${folder}`,
     [

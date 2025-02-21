@@ -12,7 +12,7 @@ const editorRef = ref<HTMLElement>();
 const inputText = ref<string>(configString);
 const modified = computed(() => inputText.value !== configString);
 
-const { statusText, canCommit, processing, toggleProcessing } = useStatusText();
+const { statusText, canCommit, processing, toggleProcessing } = useStatusText(modified);
 
 const { themeMode } = useThemeMode();
 if (inBrowser) {
@@ -58,7 +58,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="manage-config w100 flexc">
     <div class="header flex">
-      <span>{{ !modified ? $t('not-modified') : statusText }}</span>
+      <span>{{ statusText }}</span>
       <common-button
         icon="upload"
         :disabled="!canCommit || !modified"

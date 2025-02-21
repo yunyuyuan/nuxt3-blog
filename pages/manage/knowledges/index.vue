@@ -3,27 +3,21 @@ import ManageListTable from "~/pages/manage/comps/manage-list-table.vue";
 import { type KnowledgeItem, type KnowledgeTab, KnowledgeTabsList } from "~/utils/common";
 
 const filterType = ref<KnowledgeTab>();
-const registryFilter = (customFilter: (_: (_item: KnowledgeItem) => boolean) => void) => {
-  watch(filterType, () => {
-    customFilter((item) => {
-      return !filterType.value || item.type === filterType.value;
-    });
-  });
-};
 
 const toggleFilterType = (type?: KnowledgeTab) => {
   filterType.value = filterType.value === type ? undefined : type;
 };
 
-const searchFn = (item: KnowledgeItem, s: string) => item.title.includes(s);
+const searchFn = (item: KnowledgeItem, s: string) => {
+  return item.title.includes(s) && (!filterType.value || item.type === filterType.value);
+};
 </script>
 
 <template>
   <div class="manage-knowledge">
     <manage-list-table
-      :registry-filter="registryFilter"
       col-prefix="knowledge-"
-      :search-fn="searchFn"
+      :filter-fn="searchFn"
     >
       <template
         v-if="!!filterType"

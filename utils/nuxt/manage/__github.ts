@@ -1,5 +1,5 @@
 import type { CommonItem } from "~/utils/common";
-import { notify, translate, devHotListen, useCurrentTab } from "~/utils/nuxt";
+import { notify, translate, devHotListen, getCurrentTab } from "~/utils/nuxt";
 import type { UpdateRebuild } from "~/vite-plugins/rebuild";
 import { rebuildEvent } from "~/vite-plugins/types";
 
@@ -23,7 +23,7 @@ export function deleteList (
   newList: CommonItem[],
   dels: CommonItem[]
 ): Promise<boolean> {
-  const folder = useCurrentTab().url;
+  const folder = getCurrentTab().url;
   import.meta.hot!.send(rebuildEvent, {
     additions: [{
       path: `public/rebuild/json${folder}.json`,

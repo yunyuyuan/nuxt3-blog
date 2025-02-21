@@ -2,7 +2,7 @@ import fs from "fs";
 import colors from "colors";
 import CryptoJS from "crypto-js";
 import type { CommonItem, DecryptFunction, HeaderTabUrl} from "../../utils/common";
-import { processEncryptDecrypt, getEncryptedBlocks, escapeNewLine } from "../../utils/common";
+import { encryptDecryptItem, getEncryptedBlocks, escapeNewLine } from "../../utils/common";
 import { getRebuildPath } from ".";
 
  
@@ -37,7 +37,7 @@ export function processBlogItem (
       let decryptedMd = escapeNewLine(fs.readFileSync(mdPath).toString());
       if (item.encrypt) {
         // 解密item
-        await processEncryptDecrypt(item, _decrypt, type);
+        await encryptDecryptItem(item, _decrypt, type);
         // 解密markdown
         decryptedMd = await _decrypt(decryptedMd);
       } else if (item.encryptBlocks?.length) {
@@ -63,7 +63,7 @@ export function processBlogItem (
 export async function encryptAndWriteMd ({ item, md, path, encrypt, type }: {item: CommonItem, md: string, path: string, encrypt: DecryptFunction, type: HeaderTabUrl}) {
   if (item.encrypt) {
     // 重新加密item
-    await processEncryptDecrypt(item, encrypt, type);
+    await encryptDecryptItem(item, encrypt, type);
     // 重新加密markdown
     const encryptedMd = await encrypt(md);
     fs.writeFileSync(path, encryptedMd);

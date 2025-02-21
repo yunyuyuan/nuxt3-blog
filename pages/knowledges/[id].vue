@@ -3,7 +3,7 @@ import { useContentPage, useComment, initViewer, useCommonSEOTitle } from "~/uti
 import type { KnowledgeItem } from "~/utils/common";
 import Visitors from "~/utils/nuxt/public/visitors";
 
-const { item, writeDate, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
+const { item, wroteDate: writeDate, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
 useCommonSEOTitle(computed(() => item.title));
 
 const { root } = useComment(item.showComments);

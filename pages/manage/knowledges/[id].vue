@@ -4,7 +4,7 @@ import { KnowledgeTabs, KnowledgeTabsList, type KnowledgeItem } from "~/utils/co
 
 const typeSelectShow = ref(false);
  
-const processWithContent = (_md: string, _html: HTMLElement, _item: KnowledgeItem) => {};
+const processWithContent = (_md: string, _item: KnowledgeItem) => {};
 </script>
 
 <template>

@@ -346,7 +346,7 @@ $common-box-shadow: 0 0 8px rgb(0 0 0 / 5%);
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: 6px 0;
+      padding: 4px 0;
 
       > span {
         position: absolute;
@@ -355,8 +355,8 @@ $common-box-shadow: 0 0 8px rgb(0 0 0 / 5%);
 
         >span {
           cursor: pointer;
-          width: 24px;
-          height: 24px;
+          width: 22px;
+          height: 22px;
           display: flex;
           align-items: center;
           justify-content: center;

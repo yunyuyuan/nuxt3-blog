@@ -1,5 +1,4 @@
 import { createApp, createVNode, render } from "vue";
-import type { Ref } from "vue";
 import { translate, notify, isPrerender } from "~/utils/nuxt";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
@@ -379,16 +378,16 @@ export async function parseMarkdown (text: string) {
       }
     ]
   });
-  const md = marked(text);
+  const md = await marked(text);
   return {
     menu: menuItems,
     md
   };
 }
 
-export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserted?: Ref<boolean>) {
-  const destroyFns: (()=>void)[] = [];
-  nextTick(async () => {
+export async function afterInsertHtml (mdEl: HTMLElement, forEdit = false) {
+  const destroyFns: CallableFunction[] = [];
+  await nextTick(async () => {
     // hljs
     mdEl.querySelectorAll<HTMLElement>("pre>code").forEach(async (el) => {
       const lang = el.parentElement!.querySelector<HTMLElement>(":scope > div > small")!;
@@ -428,10 +427,10 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
         });
         const alt = el.nextElementSibling!;
         vm.mount(el.parentElement!);
-          vm._container!.appendChild(alt);
-          destroyFns.push(() => {
-            vm.unmount();
-          });
+        vm._container!.appendChild(alt);
+        destroyFns.push(() => {
+          vm.unmount();
+        });
       });
     // copy button and theme button in <pre>
     mdEl.querySelectorAll("pre:not(.processed-pre)").forEach(async (el: Element) => {
@@ -474,7 +473,6 @@ export function afterInsertHtml (mdEl: HTMLElement, forEdit = false, htmlInserte
     });
     const pangu = (await import("pangu")).default;
     pangu.spacingElementByClassName("--markdown");
-    if (htmlInserted) { htmlInserted.value = true; };
   });
   return destroyFns;
 }

@@ -8,3 +8,4 @@ export * from "./utils";
 export * from "./viewer";
 export * from "./notify";
 export * from "./fetch";
+export * from "./localStorage";

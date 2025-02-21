@@ -1,87 +1,57 @@
 <script setup lang="ts" generic="T extends CommonItem">
 import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
-import type { Ref } from "vue";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
  
-import { type CommonItem, HeaderTabs, getEncryptedBlocks, getNowStamp, processEncryptDecrypt, escapeNewLine, type AllKeys } from "~/utils/common";
-import { notify, deepClone, translate, getLocalStorage, rmLocalStorage, compareMd, loadOrDumpDraft, randomId, useManageContent } from "~/utils/nuxt";
+import { type CommonItem, getEncryptedBlocks, getNowStamp, encryptDecryptItem, escapeNewLine } from "~/utils/common";
+import { notify, deepClone, translate, randomId } from "~/utils/nuxt";
+import { useManageContent } from "~/utils/nuxt/manage/detail";
+import { deleteItem, editItem } from "~/utils/nuxt/manage/edit";
 
 const props = defineProps<{
-  preProcessItem?:(_item: T, _list: T[]) => void;
+  preProcessItem?:(item: T, list: T[]) => void;
   /** 更新之前处理item，附带markdown信息 */
-  processWithContent?:(_md: string, _html: HTMLElement, _item: T) => void;
+  processWithContent?:(md: string, item: T) => void;
 }>();
 
-const slots = defineSlots<Record<AllKeys, (_: {name: string, item: T, disabled: boolean }) => void>>();
+const slots = defineSlots<Record<string, (_: { item: T, disabled: boolean }) => void>>();
 
 const slotsRow = computed(() => Object.keys(slots).filter(key => !key.startsWith("_")));
 
 const {
-  statusText, processing, toggleProcessing,
+  originList,
+  decryptedItem,
+  editingItem,
+  editingMd,
+  saveDraft,
+  deleteDraft,
+  applyDraft,
+  decrypted,
+
+  statusText,
+  processing,
+  toggleProcessing,
+
   hasDraft,
-  resetOriginItem,
-  resetDraftItem,
-  markdownModified,
-  markdownModifiedForDraft,
   canUpload,
   canDelete,
   targetTab,
-  list,
-  item,
   isNew,
-  decrypted,
-  blockDecrypted,
-  draftMarkdownContent,
-  markdownContent
 } = await useManageContent<T>();
 
-const activeRoute = targetTab.url;
 const encryptor = useEncryptor();
 
 if (props.preProcessItem) {
-  props.preProcessItem(item, list);
+  props.preProcessItem(editingItem.value, originList);
 }
 
 const currentOperate = ref<"upload" | "delete" | "">("");
 const showDeleteModal = ref(false);
 const showPreviewModal = ref(false);
 
-let markdownRef: Ref | null = null;
-const getHtml = (ref: Ref) => {
-  markdownRef = ref;
-};
-const inputMarkdown = ref("");
-watch(markdownContent, (text) => {
-  inputMarkdown.value = text;
-}, { immediate: true });
-watch([inputMarkdown, markdownContent], ([text, text1]) => {
-  markdownModified.value = !compareMd(text, text1);
-});
-watch([inputMarkdown, draftMarkdownContent], ([text, text1]) => {
-  markdownModifiedForDraft.value = !compareMd(text, text1);
-});
-
 const baseInfo = ref<HTMLElement>();
 const previewInfo = ref("");
 const previewContent = ref("");
 
-/** 更新list */
-const replaceOld = (newItem?: T) => {
-  const cloneList = list.map(item => deepClone(item));
-  if (!!newItem && isNew) {
-    // 更新item且是新增
-    cloneList.splice(0, 0, newItem);
-  } else if (newItem) {
-    cloneList.splice(
-      list.findIndex(i => i.id === item.id),
-      1,
-      newItem
-    );
-  } else {
-    cloneList.splice(list.findIndex(i => i.id === item.id), 1);
-  }
-  return cloneList;
-};
 const getUploadInfo = async () => {
   // 检查是否invalid
   const invalidInfo = baseInfo.value!.querySelectorAll<HTMLElement>("span.invalid");
@@ -95,11 +65,11 @@ const getUploadInfo = async () => {
     });
   }
   // 需要clone一份item，clone的item仅用于上传
-  const newItem = deepClone(item) as T;
-  let mdContent = escapeNewLine(inputMarkdown.value);
+  const newItem = deepClone(editingItem.value) as T;
+  let mdContent = escapeNewLine(editingMd.value);
   // 处理item
   if (props.processWithContent) {
-    props.processWithContent(mdContent, markdownRef!.value, newItem);
+    props.processWithContent(mdContent, newItem);
   }
   if (newItem.encrypt) {
     // 处理加密
@@ -109,11 +79,11 @@ const getUploadInfo = async () => {
         title: translate("need-passwd")
       });
     }
-    await processEncryptDecrypt(newItem, encryptor.encrypt, targetTab.url);
+    await encryptDecryptItem(newItem, encryptor.encrypt, targetTab.url);
     mdContent = await encryptor.encrypt(mdContent);
     // 整篇加密的markdown，不会再有加密块
     delete newItem.encryptBlocks;
-  } else if (item.encryptBlocks && !blockDecrypted.value) {
+  } else if (editingItem.value.encryptBlocks && !decrypted.value) {
     // 未解密，不处理
   } else {
     // encryptBlocks
@@ -132,7 +102,7 @@ const getUploadInfo = async () => {
     }
   }
   if (!newItem.id) {
-    newItem.id = randomId(list);
+    newItem.id = randomId(originList);
   }
   // 更新日期
   const nowTime = getNowStamp();
@@ -140,15 +110,16 @@ const getUploadInfo = async () => {
     newItem.time = nowTime;
   }
   newItem.modifyTime = nowTime;
-  // 删除_show和visitors
-  const _newItem = newItem;
-  delete (_newItem as any).visitors;
-  delete (_newItem as any)._show;
   return {
-    item: _newItem,
+    item: {
+      ...newItem,
+      _show: undefined,
+      visitors: undefined
+    },
     md: mdContent
   };
 };
+
 const previewInfoEl = ref();
 const previewMdEl = ref();
 const setPreviewInfo = async () => {
@@ -164,24 +135,25 @@ const setPreviewInfo = async () => {
     hljs.highlightElement(previewMdEl.value);
   });
 };
+
 const doUpload = async () => {
   const info = await getUploadInfo();
   if (!info) { return; }
   const { item: newItem, md } = info;
   currentOperate.value = "upload";
   toggleProcessing();
-  createCommit(`Update ${HeaderTabs.find(i => i.url === activeRoute)!.name}-${newItem.id}`, [
+  createCommit(`Update ${targetTab.name}-${newItem.id}`, [
     {
-      path: `public/rebuild/json${activeRoute}.json`,
-      content: JSON.stringify(replaceOld(newItem))
+      path: `public/rebuild/json${targetTab.url}.json`,
+      content: JSON.stringify(editItem(originList, newItem))
     },
     {
-      path: `public/rebuild${activeRoute}/${newItem.id}.md`,
+      path: `public/rebuild${targetTab.url}/${newItem.id}.md`,
       content: md
     }
   ]).then((success) => {
     if (success) {
-      resetOriginItem(inputMarkdown.value);
+      /** */
     }
   }).finally(() => {
     currentOperate.value = "";
@@ -193,32 +165,11 @@ const doDelete = () => {
   showDeleteModal.value = false;
   currentOperate.value = "delete";
   toggleProcessing();
-  deleteList(replaceOld(), [item]).finally(() => {
+  deleteList(deleteItem(originList, unref(editingItem)), [decryptedItem.value]).finally(() => {
     currentOperate.value = "";
     toggleProcessing();
   });
 };
-
-const draftPrefix = () => `draft-${activeRoute.substring(1)}-${isNew ? "new" : item.id}`;
-const loadDraft = () => {
-  inputMarkdown.value = loadOrDumpDraft(draftPrefix(), "load", item) as string;
-  resetDraftItem(inputMarkdown.value);
-};
-const dumpDraft = () => {
-  loadOrDumpDraft(draftPrefix(), "dump", item, inputMarkdown.value);
-  resetDraftItem(inputMarkdown.value);
-  hasDraft.value = true;
-};
-const delDraft = () => {
-  rmLocalStorage(draftPrefix());
-  notify({
-    title: translate("draft-deleted")
-  });
-  hasDraft.value = false;
-};
-onMounted(() => {
-  hasDraft.value = getLocalStorage(draftPrefix()) !== null;
-});
 </script>
 
 <template>
@@ -228,7 +179,7 @@ onMounted(() => {
         theme="default"
         size="small"
         :disabled="!hasDraft"
-        @click="loadDraft"
+        @click="applyDraft"
       >
         {{ $t('load-draft') }}
       </common-button>
@@ -236,7 +187,7 @@ onMounted(() => {
         theme="default"
         size="small"
         class="load-draft"
-        @click="dumpDraft"
+        @click="saveDraft"
       >
         {{ $t('save-draft') }}
       </common-button>
@@ -244,7 +195,7 @@ onMounted(() => {
         theme="default"
         size="small"
         :disabled="!hasDraft"
-        @click="delDraft"
+        @click="deleteDraft"
       >
         {{ $t('delete-draft') }}
       </common-button>
@@ -272,7 +223,7 @@ onMounted(() => {
   </div>
   <div
     class="manage-content-base-info flexc"
-    :title="item.encrypt && !decrypted ? $t('need-decrypt') : ''"
+    :title="editingItem.encrypt && !decrypted ? $t('need-decrypt') : ''"
     :data-title="$TT('base-info')"
   >
     <span
@@ -290,24 +241,24 @@ onMounted(() => {
         <svg-icon name="encrypt" />
       </span>
       <common-checkbox
-        :checked="item.encrypt"
-        :disabled="!decrypted || !blockDecrypted"
-        :title="!blockDecrypted ? $t('decrypt-blocks') : ''"
-        @change="item.encrypt = $event"
+        :checked="editingItem.encrypt"
+        :disabled="!decrypted"
+        :title="!decrypted ? $t('decrypt-blocks') : ''"
+        @change="editingItem.encrypt = $event"
       />
       <span>
         <b>{{ $t('show-comments') }}</b>
         <svg-icon name="comments" />
       </span>
       <common-checkbox
-        :checked="item.showComments"
+        :checked="editingItem.showComments"
         :title="$t('show-comments')"
-        @change="item.showComments = $event"
+        @change="editingItem.showComments = $event"
       />
       <slot
         v-for="slot in slotsRow"
         :name="slot"
-        :item="item"
+        :item="editingItem"
         :disabled="!decrypted"
       />
     </div>
@@ -318,10 +269,9 @@ onMounted(() => {
   >
     <client-only>
       <md-editor
-        v-model="inputMarkdown"
-        :get-html="getHtml"
-        :disabled="!decrypted || !blockDecrypted"
-        @preview="setPreviewInfo()"
+        v-model="editingMd"
+        :disabled="!decrypted"
+        @preview="setPreviewInfo"
       />
     </client-only>
   </div>
