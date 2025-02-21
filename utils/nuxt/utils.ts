@@ -1,5 +1,5 @@
-import type { WatchOptions } from "vue";
-import { type AllKeys, type CommonItem, HeaderTabs, githubRepoUrl, getUniqueId } from "~/utils/common";
+import type { WatchHandle, WatchOptions } from "vue";
+import { HeaderTabs, githubRepoUrl } from "~/utils/common";
 import { cmtRepCateId, cmtRepId, inBrowser, isDev } from "~/utils/nuxt";
 import config from "~/config";
 
@@ -12,7 +12,7 @@ export const useHackKey = () => {
   return key;
 };
 
-export function useCurrentTab () {
+export function getCurrentTab () {
   return HeaderTabs.find(tab => useRoute().path.includes(tab.url)) || HeaderTabs[0];
 }
 
@@ -26,7 +26,7 @@ export function useCommonSEOTitle (head: ComputedRef<string>, keys?: ComputedRef
         content: title
       }, {
         name: "keywords",
-        content: computed(() => `${head}${keys?.length ? ("," + keys?.join(",")) : ""},${config.SEO_keywords}`)
+        content: computed(() => `${head}${(Array.isArray(keys) && keys.length) ? ("," + keys?.join(",")) : ""},${config.SEO_keywords}`)
       }]
     });
     useSeoMeta({
@@ -39,12 +39,12 @@ export function useCommonSEOTitle (head: ComputedRef<string>, keys?: ComputedRef
 /**
  * 计算rocket的url
  */
-function calcRocketUrlSuffix (): boolean | string {
+export function calcRocketUrl () {
   const path = useRoute().path.substring(1) || "articles";
   const fromManage = path.startsWith("manage");
   const paths = (fromManage ? path.replace(/^manage\//, "") : path).split("/");
   if (paths[0] === "about") {
-    return false;
+    return githubRepoUrl;
   }
   const item = HeaderTabs.find(tab => tab.url.substring(1) === paths[0]);
   if (item) {
@@ -55,13 +55,6 @@ function calcRocketUrlSuffix (): boolean | string {
   }
   return "/";
 }
-export function calcRocketUrl () {
-  const url = calcRocketUrlSuffix();
-  if (typeof url === "boolean") {
-    return githubRepoUrl;
-  }
-  return url;
-}
 
 export function watchUntil (
   source: any,
@@ -70,7 +63,8 @@ export function watchUntil (
   until: ((_: any) => boolean) | "boolean" = () => true,
   type: "once" | "cancelAfterUntil" | "normalWhenUntil" = "normalWhenUntil"
 ) {
-  let cancel: ReturnType<typeof watch> = () => undefined;
+  // eslint-disable-next-line prefer-const
+  let cancel: WatchHandle;
   const callback = (value: any, old: any, cleanup: any) => {
     const fit = until === "boolean" ? !!value : until(value);
     if (fit) {
@@ -78,11 +72,11 @@ export function watchUntil (
     }
     switch (type) {
       case "once":
-        cancel();
+        cancel?.();
         break;
       case "cancelAfterUntil":
         if (fit) {
-          cancel();
+          cancel?.();
         }
         break;
       case "normalWhenUntil":
@@ -96,20 +90,21 @@ export function watchUntil (
 /**
  * 展示评论
  */
-const updateGiscusConfig = (config: object) => {
-  const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
-  if (!iframe) { return; }
-  iframe.contentWindow!.postMessage({
-    giscus: {
-      setConfig: config
-    }
-  }, "https://giscus.app");
-};
 export function useComment (hasComment: boolean) {
   const root = ref<HTMLElement>();
+  const updateGiscusConfig = (config: object) => {
+    const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+    if (!iframe) { return; }
+    iframe.contentWindow!.postMessage({
+      giscus: {
+        setConfig: config
+      }
+    }, "https://giscus.app");
+  };
+
   if (__NB_COMMENTING_ENABLED__) {
     onMounted(() => {
-      if (hasComment) {
+      if (hasComment && root.value) {
         const { themeMode } = useThemeMode();
         const getTheme = () => {
           return themeMode.value === "light" ? "light" : "dark_dimmed";
@@ -138,7 +133,7 @@ export function useComment (hasComment: boolean) {
         script.setAttribute("data-lang", getLang(useI18nCode().i18nCode.value));
         script.setAttribute("crossorigin", "anonymous");
         script.setAttribute("async", "");
-        root.value!.appendChild(script);
+        root.value.appendChild(script);
         watch(useI18nCode().i18nCode, (locale) => {
           updateGiscusConfig({
             lang: getLang(locale)
@@ -160,49 +155,6 @@ export function useComment (hasComment: boolean) {
  */
 export function deepClone<T extends object> (item: T): T {
   return JSON.parse(JSON.stringify(toRaw(item))) as T;
-}
-
-/**
- * 给item赋值, deepClone
- */
-export function assignItem<T extends CommonItem> (dest: T, src: T) {
-  for (const k of (Object.keys(src) as AllKeys[])) {
-    // deepClone一下
-    if (["tags"].includes(k)) {
-      dest[k].splice(0, dest[k].length, ...deepClone(src[k]));
-    } else if (k === "images") {
-      // images需要特殊处理，设置id
-      dest[k].splice(0, dest[k].length, ...src[k].map(img => ({
-        ...img,
-        id: getUniqueId()
-      })));
-    } else {
-      dest[k] = src[k];
-    }
-  }
-}
-
-/**
- * localStorage 操作
- */
-export function getLocalStorage<T extends string> (key: string): T | null {
-  if (inBrowser) {
-    const item = localStorage.getItem(key);
-    return item as T;
-  }
-  return null;
-}
-
-export function setLocalStorage (key: string, value: string) {
-  if (inBrowser) {
-    localStorage.setItem(key, value);
-  }
-}
-
-export function rmLocalStorage (key: string) {
-  if (inBrowser) {
-    localStorage.removeItem(key);
-  }
 }
 
 /**

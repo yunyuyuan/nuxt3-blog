@@ -89,7 +89,7 @@ export const useEncryptor = () => {
         throw new Error(translate("need-passwd"));
       }
       await callback(decrypt);
-    } catch (_e) {
+    } catch {
       firstIsFailed();
       const cancel = watch(usePasswd, async (pwd) => {
         if (!pwd) {
@@ -106,7 +106,7 @@ export const useEncryptor = () => {
 
   return {
     usePasswd,
-    passwdCorrect,
+    passwdCorrect: readonly(passwdCorrect),
     init,
     encrypt,
     decryptOrWatchToDecrypt

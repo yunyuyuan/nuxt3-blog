@@ -1,4 +1,4 @@
-import type { HeaderTabUrl, CommonItem, NeedsItem } from "./types";
+import type { HeaderTabUrl, ItemBase } from "./types";
 
 /**
  * 生成唯一id
@@ -11,8 +11,8 @@ export function getUniqueId (): typeof uniqueId {
 /**
  * 创建一个新item
  */
-export function createNewItem (url: HeaderTabUrl): CommonItem {
-  const baseInfo: NeedsItem = {
+export function createNewItem (url: HeaderTabUrl) {
+  const baseInfo: ItemBase = {
     id: 0,
     time: 0,
     modifyTime: 0,

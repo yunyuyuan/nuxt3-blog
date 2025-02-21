@@ -82,7 +82,8 @@ export default defineNuxtConfig({
 
   css: ["~/assets/style/main.scss", "~/node_modules/katex/dist/katex.min.css", "~/node_modules/viewerjs/dist/viewer.css"],
   modules: [
-    "@nuxt/eslint"
+    "@nuxt/eslint",
+    "@nuxt/test-utils/module"
   ],
 
   runtimeConfig: {

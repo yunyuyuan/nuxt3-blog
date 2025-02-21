@@ -1,31 +1,20 @@
 <script setup lang="ts" generic="T extends CommonItem">
 import { deleteList } from "ls:~/utils/nuxt/manage/github";
 import type { CommonItem } from "~/utils/common";
-import { formatTime, useStatusText, useManageList } from "~/utils/nuxt";
-
-const { targetTab, list, originList, customFilter } = await useManageList<T>();
+import { formatTime, useStatusText } from "~/utils/nuxt";
+import { useManageList } from "~/utils/nuxt/manage/list";
 
 const props = defineProps<{
   colPrefix: string;
-  registryFilter?:(_: (_: (_: T) => boolean) => void) => void,
-  searchFn:(_item: T, _search: string) => boolean;
+  filterFn: (item: T, search: string) => boolean;
 }>();
 
-if (props.registryFilter) {
-  props.registryFilter(customFilter);
-}
+const { targetTab, list, searchValue, searchedList, originList } = await useManageList<T>(props.filterFn);
 
 const slots = useSlots();
 const header = Object.keys(slots).filter(
   key => !key.startsWith("_") && !key.includes("filter")
 );
-
-const searchValue = ref<string>("");
-const searchedList = computed(() => {
-  return list.filter((item) => {
-    return props.searchFn(item, searchValue.value);
-  });
-});
 
 // 新建
 const newItem = () => {
@@ -126,7 +115,6 @@ function deleteSelect () {
     </div>
     <li
       v-for="item in searchedList"
-      v-show="item._show"
       :key="item.id"
       class="list-body"
     >

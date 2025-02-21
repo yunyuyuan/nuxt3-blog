@@ -3,24 +3,24 @@ export type EncryptBlock = {
   end: number;
 }
 
-export type NeedsItem = {
+export type ItemBase = {
   id: number;
   time: number;
   modifyTime: number;
   encrypt: boolean;
-  encryptBlocks?: EncryptBlock[] | null;
-  visitors: number;
-  _show: boolean;
+  encryptBlocks?: EncryptBlock[];
   showComments: boolean;
+  visitors?: number;
+  _show?: boolean;
 };
 
-export type ArticleItem = NeedsItem & {
+export type ArticleItem = ItemBase & {
   title: string;
   len: number;
   tags: string[];
 };
 
-export type RecordItem = NeedsItem & {
+export type RecordItem = ItemBase & {
   images: { src: string; alt: string, id?: number }[];
 };
 
@@ -32,7 +32,7 @@ export const KnowledgeTabsList = [
 export const KnowledgeTabs = KnowledgeTabsList.map(item => item.key);
 export type KnowledgeTab = typeof KnowledgeTabs[number];
 
-export type KnowledgeItem = NeedsItem & {
+export type KnowledgeItem = ItemBase & {
   title: string;
   type: KnowledgeTab;
   link: string;
@@ -42,38 +42,22 @@ export type KnowledgeItem = NeedsItem & {
 
 export type CommonItem = ArticleItem | RecordItem | KnowledgeItem;
 
-export type AllKeys = (keyof ArticleItem) | (keyof RecordItem) | (keyof KnowledgeItem);
-
 export const HeaderTabs = [
   {
     name: "articles",
     url: "/articles",
-    show: true
   },
   {
     name: "records",
     url: "/records",
-    show: true
   },
   {
     name: "knowledges",
     url: "/knowledges",
-    show: true
   }
 ] as const;
 
-export type HeaderTab = typeof HeaderTabs[number];
+export type HeaderTabUrl = typeof HeaderTabs[number]["url"];
 
-export const HeaderTabUrls = HeaderTabs.map(tab => tab.url);
-export type HeaderTabUrl = typeof HeaderTabUrls[number];
-export const Order = [
-  "title",
-  "tags",
-  "type",
-  "images",
-  "link",
-  "cover",
-  "summary"
-];
 
 export type DecryptFunction = (_s: string) => Promise<string>;

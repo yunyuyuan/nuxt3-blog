@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
-import type { Ref, PropType } from "vue";
 import type { editor as MonacoEditor } from "monaco-editor";
-import { afterInsertHtml, parseMarkdown, initViewer } from "~/utils/nuxt";
+import { initViewer } from "~/utils/nuxt";
+import { useMarkdownParser } from "~/utils/hooks/useMarkdownParser";
+import StickerPick from "./sticker-pick.vue";
 
 const props = defineProps({
   modelValue: { type: String, default: "" },
   disabled: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
   single: { type: Boolean, default: false },
-  getHtml: { type: Function as PropType<(_ref: Ref) => void>, default: () => null }
 });
 
 const emit = defineEmits(["update:modelValue", "preview"]);
@@ -20,19 +20,9 @@ let editor: MonacoEditor.IStandaloneCodeEditor;
 const currentView = ref<"edit" | "preview" | "both">("both");
 const currentText = ref("");
 
+const { htmlContent, markdownRef, menuItems } = useMarkdownParser({ mdValueRef: currentText, fromEdit: true });
+
 // sticker
-const stickersTranslate = {
-  aru: "阿鲁",
-  "yellow-face": "小黄脸"
-};
-const stickersList = toRaw(useRuntimeConfig().public.stickers);
-const stickersTab = Object.keys(stickersList);
-const currentStickerTab = ref(stickersTab[0]);
-const stickerTranslateY = computed(() => {
-  return `translateY(-${
-    (stickersTab.indexOf(currentStickerTab.value) * 100) / stickersTab.length
-  }%)`;
-});
 const showStickers = ref(false);
 const insertSticker = (text: string) => {
   if (editor) {
@@ -103,44 +93,19 @@ const initEditor = () => {
   });
 };
 
-watch(
-  () => props.modelValue,
-  (text) => {
-    if (editor && text !== editor.getModel()!.getValue()) {
-      editor.getModel()!.setValue(text);
-    }
+watch(() => props.modelValue, (text) => {
+  if (editor && text !== editor.getModel()!.getValue()) {
+    editor.getModel()!.setValue(text);
   }
-);
+});
 watch(() => props.loading, initEditor);
-watch(
-  () => props.disabled,
-  (readOnly) => {
-    editor?.updateOptions({ readOnly });
-  }
-);
-
-// md改变时，更新html
-const markdownRef = ref<HTMLElement>();
-let destroyFn: ReturnType<typeof afterInsertHtml>;
-const currentHtml = ref("");
-const currentMenu = ref<Awaited<ReturnType<typeof parseMarkdown>>["menu"]>([]);
-watch(currentText, async () => {
-  const result = (await parseMarkdown(currentText.value));
-  currentHtml.value = result.md;
-  currentMenu.value = result.menu;
-  setTimeout(() => {
-    if (markdownRef.value) {
-      destroyFn = afterInsertHtml(markdownRef.value, true);
-    }
-  });
-}, { immediate: true });
-// 把htmlRef元素传给parent
-props.getHtml(markdownRef);
+watch(() => props.disabled, (readOnly) => {
+  editor?.updateOptions({ readOnly });
+});
 
 onMounted(initEditor);
 onBeforeUnmount(() => {
   editor?.dispose();
-  destroyFn.forEach(fn => fn());
 });
 initViewer(markdownRef);
 </script>
@@ -164,41 +129,11 @@ initViewer(markdownRef);
       >
         <img src="/sticker/yellow-face/18.png">
         <common-dropdown v-model:show="showStickers">
-          <div class="s100 flex">
-            <div class="stickers-title flexc">
-              <span
-                v-for="k in stickersTab"
-                :key="k"
-                :class="{ active: currentStickerTab === k }"
-                @click="currentStickerTab = k"
-              >{{ stickersTranslate[k] }}</span>
-            </div>
-            <div class="stickers-container">
-              <div
-                class="inner"
-                :style="{
-                  height: `${stickersTab.length * 100}%`,
-                  transform: stickerTranslateY,
-                }"
-              >
-                <div
-                  v-for="k in stickersTab"
-                  :key="k"
-                >
-                  <div>
-                    <span
-                      v-for="idx in stickersList[k]"
-                      :key="idx"
-                      :title="`${k}/${idx}`"
-                      @click="insertSticker(`![sticker](${k}/${idx})`);showStickers=false"
-                    >
-                      <img :src="`/sticker/${k}/${idx}.png`">
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <StickerPick
+            v-model="showStickers"
+            class="s100"
+            @insert-sticker="insertSticker"
+          />
         </common-dropdown>
       </a>
       <nuxt-link
@@ -212,14 +147,14 @@ initViewer(markdownRef);
       <a
         class="preview-contents"
         :title="$t('contents')"
-        @click="currentMenu.length && (showPreviewContents = true)"
+        @click="menuItems.length && (showPreviewContents = true)"
       >
         <svg-icon name="preview-contents" />
         <common-dropdown v-model:show="showPreviewContents">
           <div class="s100 flex">
             <ol>
               <li
-                v-for="(anchor, idx) in currentMenu"
+                v-for="(anchor, idx) in menuItems"
                 :key="idx"
               >
                 <a
@@ -275,7 +210,7 @@ initViewer(markdownRef);
         <article
           ref="markdownRef"
           class="--markdown"
-          v-html="currentHtml"
+          v-html="htmlContent"
         />
       </div>
     </div>

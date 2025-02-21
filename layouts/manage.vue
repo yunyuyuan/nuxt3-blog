@@ -2,7 +2,8 @@
 import SvgIcon from "~/components/svg-icon.vue";
 import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
 import UploadImage from "~/pages/manage/comps/upload-image.vue";
-import { rmLocalStorage, setLocalStorage, translateT, isAuthor as checkIsAuthor, notify, translate, isDev, calcRocketUrl, watchUntil } from "~/utils/nuxt";
+import { rmLocalStorage, setLocalStorage, translateT, notify, translate, isDev, calcRocketUrl, watchUntil } from "~/utils/nuxt";
+import { isAuthor as checkIsAuthor} from "~/utils/nuxt/manage/github";
 import { GithubTokenKey, HeaderTabs } from "~/utils/common";
 
 const pageLoading = useLoading();

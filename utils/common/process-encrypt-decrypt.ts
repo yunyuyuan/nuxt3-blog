@@ -3,12 +3,12 @@ import type * as types from "./types";
 /**
  * 三种类型的数据加解密
  */
-export async function processEncryptDecrypt (
+export async function encryptDecryptItem (
   item: types.CommonItem,
-  fn: (_s: string) => Promise<string>,
-  type: types.HeaderTabUrl
+  fn: types.DecryptFunction,
+  url: types.HeaderTabUrl
 ) {
-  switch (type) {
+  switch (url) {
     case "/articles":
       item = item as types.ArticleItem;
       item.title = await fn(item.title);

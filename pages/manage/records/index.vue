@@ -9,7 +9,7 @@ const searchFn = (item: RecordItem, s:string) => !item.images.length || item.ima
   <div class="manage-record">
     <manage-list-table
       col-prefix="record-"
-      :search-fn="searchFn"
+      :filter-fn="searchFn"
     >
       <template #images="{ data: images, dataUrl }">
         <nuxt-link

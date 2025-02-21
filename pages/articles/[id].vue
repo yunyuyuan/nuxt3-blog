@@ -1,9 +1,19 @@
 <script setup lang="ts">
 import { addScrollListener, rmScrollListener, type ArticleItem } from "~/utils/common";
-import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerender, useContentPage, useComment, watchUntil, useCommonSEOTitle } from "~/utils/nuxt";
+import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerender, useContentPage, useComment, useCommonSEOTitle } from "~/utils/nuxt";
 import Visitors from "~/utils/nuxt/public/visitors";
 
-const { item, writeDate, menuItems, htmlContent, markdownRef, htmlInserted } = await useContentPage<ArticleItem>();
+const { item, wroteDate: writeDate, menuItems, htmlContent, markdownRef } = await useContentPage<ArticleItem>(() => {
+  const hash = useRoute().hash;
+  if (hash) {
+    window.scrollTo({
+      top: document
+        .getElementById(hash.slice(1))
+        ?.getBoundingClientRect().y
+    });
+  }
+});
+
 useCommonSEOTitle(computed(() => item.title), computed(() => item.tags));
 const activeAnchor = ref<string>();
 
@@ -16,7 +26,7 @@ watch(hideMenu, (hide) => {
   }
 });
 
-const listenAnchor = () => {
+const onScroll = () => {
   try {
     const links = Array.from(markdownRef.value!.querySelectorAll<HTMLLinkElement>("h1>a, h2>a, h3>a, h4>a, h5>a, h6>a")).reverse();
     for (const link of links) {
@@ -33,26 +43,17 @@ const listenAnchor = () => {
 
 if (!isPrerender) {
   onMounted(() => {
-    const hash = useRoute().hash;
     nextTick(() => {
-      if (hash) {
-        watchUntil(htmlInserted, () => {
-          window.scrollTo({
-            top: document
-              .getElementById(hash.slice(1))
-              ?.getBoundingClientRect().y
-          });
-        }, { immediate: true }, "boolean", "cancelAfterUntil");
-      } else {
-        listenAnchor();
+      if (!useRoute().hash) {
+        onScroll();
       }
-      addScrollListener(listenAnchor);
+      addScrollListener(onScroll);
     });
   });
 }
 
 onBeforeUnmount(() => {
-  rmScrollListener(listenAnchor);
+  rmScrollListener(onScroll);
 });
 
 const { root } = useComment(item.showComments);

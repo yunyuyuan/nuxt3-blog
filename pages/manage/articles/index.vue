@@ -10,24 +10,19 @@ const toggleTag = (tag: string) => {
     searchTag.add(tag);
   }
 };
-const registryFilter = (customFilter: (_: (_item: ArticleItem) => boolean) => void) => {
-  watch(searchTag, () =>
-    customFilter((item) => {
-      return !!(
-        !searchTag.size || (item.tags.length && Array.from(searchTag).every(tag => item.tags.includes(tag)))
-      );
-    })
+
+const searchFn = (item: ArticleItem, s: string) => {
+  return item.title.includes(s) && Boolean(
+    !searchTag.size || (item.tags.length && Array.from(searchTag).every(tag => item.tags.includes(tag)))
   );
 };
-const searchFn = (item: ArticleItem, s: string) => item.title.includes(s);
 </script>
 
 <template>
   <div class="manage-article">
     <manage-list-table
       col-prefix="article-"
-      :registry-filter="registryFilter"
-      :search-fn="searchFn"
+      :filter-fn="searchFn"
     >
       <template
         v-if="searchTag.size"

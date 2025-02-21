@@ -3,7 +3,7 @@ import { formatTime, useContentPage, useComment, translate, initViewer, useCommo
 import type { RecordItem } from "~/utils/common";
 import Visitors from "~/utils/nuxt/public/visitors";
 
-const { item, writeDate, htmlContent, markdownRef } = await useContentPage<RecordItem>();
+const { item, wroteDate: writeDate, htmlContent, markdownRef } = await useContentPage<RecordItem>();
 useCommonSEOTitle(computed(() => `${translate("records")}: ${formatTime(item.time, "date")}`));
 
 const { root } = useComment(item.showComments);

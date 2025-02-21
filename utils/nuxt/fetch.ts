@@ -28,7 +28,6 @@ export const fetchMd = async (tab: HeaderTabUrl, id: string) => {
 };
 
 declare global {
-  // eslint-disable-next-line no-unused-vars
   interface Window {
     NBCache: Record<string, any>;
   }

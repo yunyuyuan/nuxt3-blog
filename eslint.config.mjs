@@ -16,21 +16,11 @@ export default withNuxt(
       "prefer-promise-reject-errors": "off",
       "no-multi-spaces": ["error"],
       "no-undef": "off",
-      "no-unused-vars": [
-        "error",
-        {
-          vars: "all",
-          args: "after-used",
-          ignoreRestSiblings: false,
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
-          caughtErrorsIgnorePattern: "^_"
-        }
-      ],
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["error"],
       "@typescript-eslint/no-var-requires": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
-      "@typescript-eslint/no-unused-vars": "off",
       "typescript-config/strict": "off",
       "vue/multi-word-component-names": "off",
       "vue/no-multiple-template-root": "off",

@@ -29,6 +29,7 @@
   "devDependencies": {
     "@eslint/js": "^9.20.0",
     "@nuxt/eslint": "1.0.1",
+    "@nuxt/test-utils": "^3.15.4",
     "@types/crypto-js": "^4.1.1",
     "@types/gulp": "^4.0.9",
     "@types/headroom.js": "^0.12.2",
@@ -38,11 +39,13 @@
     "@types/multiparty": "^4.2.1",
     "@types/pangu": "^4.0.0",
     "@types/prompts": "^2.4.4",
+    "@vue/test-utils": "^2.4.6",
     "colors": "^1.4.0",
     "eslint": "^9.20.1",
     "eslint-plugin-vue": "^9.32.0",
     "form-data": "^4.0.0",
     "gulp": "^5.0.0",
+    "happy-dom": "^17.1.0",
     "husky": "^9.1.0",
     "lint-staged": "^15.4.1",
     "lodash": "^4.17.21",
@@ -59,7 +62,8 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.24.0",
-    "vite-plugin-eslint": "^1.6.0"
+    "vite-plugin-eslint": "^1.6.0",
+    "vitest": "^3.0.5"
   },
   "husky": {
     "hooks": {
