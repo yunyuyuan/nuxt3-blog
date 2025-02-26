@@ -32,7 +32,7 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       sameSha: computed(() => {
-        return useCorrectSha().value === useRuntimeConfig().app.NUXT_ENV_CURRENT_GIT_SHA;
+        return useCorrectSha().value === __NB_CURRENT_GIT_SHA__;
       })
     }
   };

@@ -92,8 +92,7 @@ export default defineNuxtConfig({
       svgs: isDev ? svgs : []
     },
     app: {
-      NUXT_ENV_CURRENT_GIT_SHA: execSync("git rev-parse HEAD").toString().trim(),
-      githubBranch
+      githubBranch,
     }
   },
 
@@ -128,7 +127,9 @@ export default defineNuxtConfig({
     define: {
       __NB_MONGODB_ENABLED__: !!import.meta.env.MONGODB_URI || !!import.meta.env.MONGODB_USER,
       __NB_COMMENTING_ENABLED__: !!(config.CommentRepoId || import.meta.env.CommentRepoId) && !!(config.CommentDiscussionCategoryId || import.meta.env.CommentDiscussionCategoryId),
-      __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString())
+      __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString()),
+      __NB_CURRENT_GIT_SHA__: JSON.stringify(execSync("git rev-parse HEAD").toString().trim()),
+      __NB_VITESTING__: process.env.VITESTING === "true"
     },
     css: {
       preprocessorOptions: {

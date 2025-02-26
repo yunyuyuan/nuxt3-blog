@@ -44,6 +44,10 @@ const props = defineProps({
   onOk: {
     type: Function,
     default: undefined
+  },
+  testId: {
+    type: String,
+    default: undefined
   }
 });
 
@@ -108,7 +112,7 @@ const close = () => {
               </h3>
             </div>
             <a
-              class="flex modal-close"
+              class="modal-close flex"
               @click="close"
             >
               <svg-icon name="close" />
@@ -128,6 +132,7 @@ const close = () => {
                 class="ok"
                 :loading="loading"
                 :theme="confirmTheme"
+                :data-testid="testId"
                 @click="ok"
               >
                 {{ $TT('ok') }}

@@ -23,7 +23,7 @@ async function post (data: string, token_?: string) {
 }
 
 function encodeB64 (str: string) {
-  return btoa(unescape(encodeURIComponent(str)));
+  return __NB_VITESTING__ ? str : btoa(unescape(encodeURIComponent(str)));
 }
 
 /** @description 是否管理员 */

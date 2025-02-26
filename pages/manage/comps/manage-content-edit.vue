@@ -153,7 +153,7 @@ const doUpload = async () => {
     }
   ]).then((success) => {
     if (success) {
-      /** */
+      useUnsavedContent().value = false;
     }
   }).finally(() => {
     currentOperate.value = "";
@@ -252,6 +252,7 @@ const doDelete = () => {
       </span>
       <common-checkbox
         :checked="editingItem.showComments"
+        :disabled="!decrypted"
         :title="$t('show-comments')"
         @change="editingItem.showComments = $event"
       />

@@ -22,6 +22,7 @@ registerEndpoint("/rebuild/json/articles.json", () => [
     time: 0,
     modifyTime: 0,
     encrypt: false,
+    encryptBlocks: [{"start":86,"end":130},{"start":15,"end":59}],
     showComments: false,
     title: "test",
     len: 1234,
