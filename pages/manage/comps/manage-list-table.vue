@@ -9,48 +9,53 @@ const props = defineProps<{
   filterFn: (item: T, search: string) => boolean;
 }>();
 
-const { targetTab, list, searchValue, searchedList, originList } = await useManageList<T>(props.filterFn);
+const { targetTab, list, originList, decryptedList } = await useManageList<T>();
+
+const searchValue = ref("");
+
+const searchedList = computed(() => {
+  return decryptedList.value.filter((item) => {
+    return props.filterFn(item, searchValue.value);
+  });
+});
 
 const slots = useSlots();
 const header = Object.keys(slots).filter(
   key => !key.startsWith("_") && !key.includes("filter")
 );
 
-// 新建
 const newItem = () => {
   navigateTo((`/manage${targetTab.url}/new`));
 };
 
-// 删除
 const showConfirmModal = ref<boolean>(false);
 const selectedList = reactive<CommonItem[]>([]);
 
-// status
 const { statusText, canCommit, processing, toggleProcessing } = useStatusText();
 
 watch([list, searchValue], () => {
   selectedList.splice(0, selectedList.length);
 });
 
-function changeSelect (item: CommonItem) {
+const newListToUpdate = computed(() => originList.filter((item) => 
+  selectedList.find(selected => selected.id === item.id) === undefined
+));
+
+const changeSelect = (item: CommonItem) => {
   if (selectedList.includes(item)) {
     selectedList.splice(selectedList.indexOf(item), 1);
   } else {
     selectedList.push(item);
   }
-}
-function deleteSelect () {
+};
+
+const deleteSelect = () => {
   showConfirmModal.value = false;
   toggleProcessing();
-  const newList = originList.filter((item) => {
-    return (
-      selectedList.find(selected => selected.id === item.id) === undefined
-    );
-  });
-  deleteList(newList, selectedList).finally(() => {
+  return deleteList(newListToUpdate.value, selectedList).finally(() => {
     toggleProcessing();
   });
-}
+};
 </script>
 
 <template>
@@ -61,7 +66,7 @@ function deleteSelect () {
     >
     <div
       v-if="slots.filter"
-      class="filter flex"
+      class="flex"
     >
       <slot name="filter" />
     </div>
@@ -109,7 +114,7 @@ function deleteSelect () {
     </li>
     <div
       v-if="!searchedList.length"
-      class="flex empty"
+      class="empty flex"
     >
       {{ $t('nothing-here') }}
     </div>
@@ -129,7 +134,7 @@ function deleteSelect () {
       >
         <slot
           :name="key"
-          :data="item[key]"
+          :data="item[key as keyof T]"
           :data-url="`/manage${targetTab.url}/${item.id}`"
         />
       </div>

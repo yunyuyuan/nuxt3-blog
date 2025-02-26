@@ -84,7 +84,8 @@ export function createCommitModal () {
     const vm = createVNode(CommonModal, {
       modelValue: true,
       modalTitle: translateT("warning"),
-      modalContent: translate("commit-id-not-correct-confirm")
+      modalContent: translate("commit-id-not-correct-confirm"),
+      testId: "force-commit-confirm"
     });
     vm.props!.onOk = () => {
       render(null, container);
