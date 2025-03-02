@@ -1,5 +1,5 @@
 import config from "../../../config";
-import type { HeaderTabUrl } from "../../common";
+import type { HeaderTabUrl } from "../../common/types";
 import { getCollection } from "./mongodb";
 
 type VisitorsDb = {

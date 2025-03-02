@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
-import type { ArticleItem } from "~/utils/common";
+import type { ArticleItem } from "~/utils/common/types";
 
 const allTags = reactive(new Set<string>());
 const showTagSelect = ref<boolean>(false);
 const tagParentRef = ref<HTMLLabelElement>();
 
 // 输入的tag和实际上传的tag不同，上传的tag需要去重
-const inputTags = ref<string>("");
+const inputTags = ref("");
 const inputTagsList = ref<string[]>([]);
 const calcTagsList = () => {
   inputTagsList.value = !inputTags.value
@@ -27,15 +27,17 @@ const toggleTag = (tag: string) => {
   calcTagsList();
 };
 
-const preProcessItem = (item: ArticleItem, list: ArticleItem[]) => {
-  list.forEach(item => item.tags.forEach(t => allTags.add(t)));
-  watch(item.tags, (tags) => {
+const preProcessItem = (editingItem: Ref<ArticleItem>, originList: ArticleItem[]) => {
+  originList.forEach(item => item.tags.forEach(t => allTags.add(t)));
+
+  watch(editingItem.value.tags, (tags) => {
     inputTags.value = tags.join(",");
     calcTagsList();
   }, { immediate: true });
+  
   watch(inputTagsList, (tags) => {
-    if (tags && !item.encrypt) {
-      item.tags.splice(0, item.tags.length, ...tags);
+    if (tags && !editingItem.value.encrypt) {
+      editingItem.value.tags.splice(0, editingItem.value.tags.length, ...tags);
     }
   });
 };
@@ -62,6 +64,7 @@ const processContent = (md: string, item: ArticleItem) => {
         </span>
         <input
           v-model="item.title"
+          data-testid="item-title-input"
           :placeholder="$t('please-input')"
           :disabled="disabled"
         >
@@ -79,6 +82,7 @@ const processContent = (md: string, item: ArticleItem) => {
         >
           <input
             v-model="inputTags"
+            data-testid="item-tags-input"
             :disabled="disabled || item.encrypt"
             @focusin="showTagSelect = true"
           >

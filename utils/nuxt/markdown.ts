@@ -1,8 +1,12 @@
 import { createApp, createVNode, render } from "vue";
-import { translate, notify, isPrerender } from "~/utils/nuxt";
+import { isPrerender } from "~/utils/nuxt/constants";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import svgIconVue from "~/components/svg-icon.vue";
-import { escapeHtml, initHljs, toggleCodeBlockTheme, ViewerAttr } from "~/utils/common";
+import { ViewerAttr } from "../common/constants";
+import { initHljs } from "../common/hljs";
+import { escapeHtml, toggleCodeBlockTheme } from "../common/utils";
+import { translate } from "./i18n";
+import { notify } from "./notify";
 
 export async function parseMarkdown (text: string) {
   const hljs = isPrerender ? (await import("highlight.js")).default : null;
@@ -51,7 +55,7 @@ export async function parseMarkdown (text: string) {
         }" src="${href}"/><small class="desc">${marked.parseInline(alt_)}</small></span>`;
       },
       code ({text, lang, escaped}) {
-        if (isPrerender && hljs) {
+        if (hljs) {
           // 在这里parse
           initHljs(hljs);
           text = (
@@ -450,8 +454,8 @@ export async function afterInsertHtml (mdEl: HTMLElement, forEdit = false) {
       copyBtn.title = "copy";
       const ClipboardJS = (await import("clipboard")).default;
       const clipboard = new ClipboardJS(copyBtn, {
-        target: function (trigger) {
-          return trigger.parentElement!.parentElement!.querySelector("code")!;
+        target: function (trigger: HTMLElement) {
+          return trigger.parentElement!.parentElement!.parentElement!.querySelector("code")!;
         }
       }).on("success", (e) => {
         e.clearSelection();

@@ -1,7 +1,9 @@
 import { createVNode, render } from "vue";
-import { type CommonItem, ModalContainerId, escapeNewLine, type RecordItem } from "~/utils/common";
-import { translate, translateT } from "~/utils/nuxt";
+import type { CommonItem, RecordItem } from "~/utils/common/types";
+import { translate, translateT } from "~/utils/nuxt/i18n";
 import CommonModal from "~/components/common-modal.vue";
+import { escapeNewLine } from "~/utils/common/utils";
+import { ModalContainerId } from "~/utils/common/constants";
 
 export function randomId (exist: CommonItem[] = []) {
   const ids = exist.map(item => item.id);
@@ -36,7 +38,7 @@ export function useStatusText (modifiedRef?: Readonly<Ref<boolean>>, decryptedRe
       return translate("please-input-token-first");
     }
 
-    if (decryptedRef?.value) {
+    if (decryptedRef && !decryptedRef.value) {
       return translate("need-decrypt");
     }
 
@@ -85,7 +87,6 @@ export function createCommitModal () {
       modelValue: true,
       modalTitle: translateT("warning"),
       modalContent: translate("commit-id-not-correct-confirm"),
-      testId: "force-commit-confirm"
     });
     vm.props!.onOk = () => {
       render(null, container);

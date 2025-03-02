@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { notify, translateT } from "~/utils/nuxt";
+import { translateT } from "~/utils/nuxt/i18n";
+import { notify } from "~/utils/nuxt/notify";
+
 
 const svgs = useRuntimeConfig().public.svgs;
 

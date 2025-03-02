@@ -1,8 +1,9 @@
 import fs from "fs";
 import colors from "colors";
 import CryptoJS from "crypto-js";
-import type { CommonItem, DecryptFunction, HeaderTabUrl} from "../../utils/common";
-import { encryptDecryptItem, getEncryptedBlocks, escapeNewLine } from "../../utils/common";
+import type { CommonItem, DecryptFunction, HeaderTabUrl} from "../../utils/common/types";
+import { escapeNewLine } from "../../utils/common/utils";
+import { encryptDecryptItem, getEncryptedBlocks } from "../../utils/common/process-encrypt-decrypt";
 import { getRebuildPath } from ".";
 
  

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
-import { KnowledgeTabs, KnowledgeTabsList, type KnowledgeItem } from "~/utils/common";
+import { KnowledgeTabs, KnowledgeTabsList, type KnowledgeItem } from "~/utils/common/types";
 
 const typeSelectShow = ref(false);
  

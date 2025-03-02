@@ -1,7 +1,7 @@
 import Viewer from "viewerjs";
 import type { Ref } from "vue";
-import { inBrowser } from "~/utils/nuxt";
-import { ViewerAttr } from "~/utils/common";
+import { inBrowser } from "~/utils/nuxt/constants";
+import { ViewerAttr } from "~/utils/common/constants";
 
 function useMutationObserver (
   target: HTMLElement,

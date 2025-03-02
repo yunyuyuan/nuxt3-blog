@@ -1,5 +1,5 @@
 import config from "../../../config";
-import type { HeaderTabUrl } from "../../common";
+import type { HeaderTabUrl } from "../../common/types";
 
 const request = async (path: string, data: any) => {
   if (!process.env.MONGODB_PWD || !process.env.MONGODB_USER) {

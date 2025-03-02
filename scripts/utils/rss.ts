@@ -1,5 +1,6 @@
-import type { ArticleItem} from "../../utils/common";
-import { getNowDayjsString, escapeHtml } from "../../utils/common";
+import type { ArticleItem} from "../../utils/common/types";
+import { escapeHtml } from "../../utils/common/utils";
+import { getNowDayjsString } from "../../utils/common/dayjs";
 import config from "../../config";
 
  

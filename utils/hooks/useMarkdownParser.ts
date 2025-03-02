@@ -1,32 +1,36 @@
 import { afterInsertHtml, parseMarkdown } from "../nuxt/markdown";
-import { useUnmount } from "./useUnmount";
 
 type useMarkdownParserProps = {
   mdValueRef: Ref<string>,
   fromEdit?: boolean,
   onAfterInsertHtml?: CallableFunction,
+  destroyFns?: CallableFunction[],
 }
 
-export const useMarkdownParser = ({ mdValueRef, fromEdit, onAfterInsertHtml }: useMarkdownParserProps) => {
+export const useMarkdownParser = async ({ mdValueRef, fromEdit, onAfterInsertHtml, destroyFns }: useMarkdownParserProps) => {
   const markdownRef = ref<HTMLElement>();
 
   const htmlContent = ref("");
   const menuItems = ref<Awaited<ReturnType<typeof parseMarkdown>>["menu"]>([]);
-  
-  const destroyFns = useUnmount();
 
-  watch(mdValueRef, async (md) => {
+  const parse = async (md: string) => {
     const result = await parseMarkdown(md);
     htmlContent.value = result.md;
     menuItems.value = result.menu;
-  }, { immediate: true });
+  };
+
+  watch(mdValueRef, async (md) => {
+    parse(md);
+  });
+  
+  await parse(mdValueRef.value);
   
   watch(htmlContent, () => {
     setTimeout(async () => {
       if (markdownRef.value) {
         const fns = await afterInsertHtml(markdownRef.value, fromEdit);
         onAfterInsertHtml?.();
-        destroyFns.splice(0, destroyFns.length, ...fns);
+        destroyFns?.splice(0, destroyFns.length, ...fns);
       }
     });
   }, { immediate: true });

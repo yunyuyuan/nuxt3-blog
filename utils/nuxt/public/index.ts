@@ -1,5 +1,5 @@
 import axios from "axios";
-import { isPrerender, inBrowser } from "~/utils/nuxt";
+import { isPrerender, inBrowser } from "~/utils/nuxt/constants";
 
 export function DBOperate<T = any> (
   { apiPath, query, callback }:
@@ -15,6 +15,3 @@ export function DBOperate<T = any> (
     axios.post(`/api${apiPath}`, query).then(res => cb(res.data));
   }
 }
-
-export * from "./list";
-export * from "./detail";

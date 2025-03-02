@@ -1,8 +1,9 @@
 <script setup lang="ts" generic="T extends CommonItem">
 import { deleteList } from "ls:~/utils/nuxt/manage/github";
-import type { CommonItem } from "~/utils/common";
-import { formatTime, useStatusText } from "~/utils/nuxt";
+import type { CommonItem } from "~/utils/common/types";
+import { useStatusText } from "~/utils/nuxt/manage";
 import { useManageList } from "~/utils/nuxt/manage/list";
+import { formatTime } from "~/utils/nuxt/format-time";
 
 const props = defineProps<{
   colPrefix: string;
@@ -84,12 +85,16 @@ const deleteSelect = () => {
       theme="danger"
       :disabled="!canCommit || !selectedList.length"
       :loading="processing"
+      data-testid="list-delete-btn"
       @click="showConfirmModal = true"
     >
       {{ $T('del') }}
     </common-button>
   </div>
-  <ul class="manage-list-table">
+  <ul
+    class="manage-list-table"
+    data-testid="list-items"
+  >
     <li class="list-head">
       <div class="col col-id">
         ID
@@ -119,7 +124,7 @@ const deleteSelect = () => {
       {{ $t('nothing-here') }}
     </div>
     <li
-      v-for="item in searchedList"
+      v-for="item,idx in searchedList"
       :key="item.id"
       class="list-body"
     >
@@ -153,6 +158,7 @@ const deleteSelect = () => {
       <div class="col col-check">
         <common-checkbox
           :checked="selectedList.includes(item)"
+          :test-id="`list-item-check-${idx}`"
           @change="changeSelect(item)"
         />
       </div>
@@ -161,6 +167,7 @@ const deleteSelect = () => {
   <common-modal
     v-model="showConfirmModal"
     confirm-theme="danger"
+    test-id="confirm-list-delete"
     @confirm="deleteSelect"
   >
     <template #title>

@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { type RecordItem, getNowDayjs } from "~/utils/common";
-import { formatTime, useListPage } from "~/utils/nuxt";
+import { getNowDayjs } from "~/utils/common/dayjs";
+import type { RecordItem } from "~/utils/common/types";
+import { useListPage } from "~/utils/nuxt/public/list";
+import { formatTime } from "~/utils/nuxt/format-time";
+
 
 const recordList = await useListPage<RecordItem>();
 

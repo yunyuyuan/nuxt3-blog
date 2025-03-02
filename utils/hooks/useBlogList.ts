@@ -1,5 +1,7 @@
-import { encryptDecryptItem, type CommonItem, type HeaderTabUrl } from "../common";
-import { deepClone, fetchList } from "../nuxt";
+import { encryptDecryptItem } from "../common/process-encrypt-decrypt";
+import type { CommonItem, HeaderTabUrl } from "../common/types";
+import { fetchList } from "../nuxt/fetch";
+import { deepClone } from "../nuxt/utils";
 
 export const useBlogList = async <T extends CommonItem>(url: HeaderTabUrl, decryptId?: T["id"]) => {
   const encryptor = useEncryptor();

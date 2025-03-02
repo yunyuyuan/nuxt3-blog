@@ -1,6 +1,8 @@
-import { type CommonItem } from "~/utils/common";
+import { type CommonItem } from "~/utils/common/types";
 import { useBlogList } from "~/utils/hooks/useBlogList";
-import { DBOperate, getCurrentTab, translateT, useCommonSEOTitle } from "~/utils/nuxt";
+import { DBOperate } from ".";
+import { translateT } from "../i18n";
+import { getCurrentTab, useCommonSEOTitle } from "../utils";
 
 /**
  * 列表页面通用功能
@@ -19,7 +21,7 @@ export async function useListPage<T extends CommonItem> () {
     query: { type: targetTab.url },
     callback: (data) => {
       decryptedList.value.forEach((item) => {
-        item.visitors = data.find(i => i.nid === item.id)?.nvisitors || 0;
+        item._visitors = data.find(i => i.nid === item.id)?.nvisitors || 0;
       });
     }
   });

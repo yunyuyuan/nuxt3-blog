@@ -4,7 +4,8 @@ import { execSync } from "child_process";
 import { generateSiteMap } from "./scripts/generate";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
-import { getNowDayjsString } from "./utils/common";
+import { getNowDayjsString } from "./utils/common/dayjs";
+import { ThemeModeKey } from "./utils/common/constants";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -21,6 +22,7 @@ fs.readdirSync("./public/sticker").forEach((dir) => {
 const svgs = fs.readdirSync("./assets/svg").map(file => file.replace(/\.svg$/, ""));
 
 const scripts = [];
+scripts.push(`(function(){const e=localStorage.getItem("${ThemeModeKey}")||"light";document.documentElement.classList.add(\`\${e}-mode\`);document.documentElement.setAttribute("code-theme",e)})();`);
 const cfAnalyzeId = config.CloudflareAnalyze || process.env.CloudflareAnalyze;
 const msAnalyzeId = config.MSClarityId || process.env.MSClarityId;
 if (cfAnalyzeId && !isDev) {
@@ -112,16 +114,13 @@ export default defineNuxtConfig({
   },
 
   experimental: {
-    /**
-     * Need payload to cache the data from useAsyncData, but why?
-     * https://github.com/nuxt/nuxt/blob/main/packages/nuxt/src/app/plugins/payload.client.ts#L27
-     */
-    // payloadExtraction: false
-    inlineSSRStyles: false,
+    payloadExtraction: false
   },
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  features: {
+    inlineStyles: false
+  },
+
   vite: {
     plugins: isDev ? allPlugins : buildPlugins,
     define: {
@@ -165,6 +164,7 @@ export default defineNuxtConfig({
     },
     "nitro:build:public-assets" (nitro) {
       generateSiteMap(nitro.options.output.publicDir);
+      fs.rmSync(path.join(nitro.options.output.publicDir, "e2e"), { recursive: true });
     }
   },
 

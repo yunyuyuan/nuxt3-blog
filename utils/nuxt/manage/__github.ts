@@ -1,7 +1,9 @@
-import type { CommonItem } from "~/utils/common";
-import { notify, translate, devHotListen, getCurrentTab } from "~/utils/nuxt";
+import type { CommonItem } from "~/utils/common/types";
+import { notify } from "~/utils/nuxt/notify";
 import type { UpdateRebuild } from "~/vite-plugins/rebuild";
 import { rebuildEvent } from "~/vite-plugins/types";
+import { translate } from "../i18n";
+import { getCurrentTab, devHotListen } from "../utils";
 
 export function isAuthor (): never {
   throw new Error("Can't do that");

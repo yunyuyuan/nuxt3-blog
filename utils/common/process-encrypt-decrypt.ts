@@ -37,7 +37,7 @@ export async function getEncryptedBlocks (md: string, encrypt: types.DecryptFunc
   md: string,
   blocks: types.EncryptBlock[]
 }> {
-  const reg = /(^|\n)\[encrypt]\n([\s\S]+?)\n\[\/encrypt]/gd;
+  const reg = new RegExp(/(^|\n)\[encrypt]\n([\s\S]+?)\n\[\/encrypt]/, "gd");
   let matcher;
   const encryptBlocks: types.EncryptBlock[] = [];
   while (true) {

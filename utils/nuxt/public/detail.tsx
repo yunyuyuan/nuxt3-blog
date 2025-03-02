@@ -1,10 +1,14 @@
-import { formatTime, DBOperate, translate, getCurrentTab, watchUntil, literalTime } from "~/utils/nuxt";
+import { formatTime, literalTime } from "~/utils/nuxt/format-time";
 import config from "~/config";
 import "./detail.scss";
 import SvgIcon from "~/components/svg-icon.vue";
 import { useBlogItem } from "~/utils/hooks/useBlogItem";
 import { useMarkdownParser } from "~/utils/hooks/useMarkdownParser";
 import type { CommonItem } from "~/utils/common/types";
+import { DBOperate } from ".";
+import { translate } from "../i18n";
+import { getCurrentTab, watchUntil } from "../utils";
+import { useUnmount } from "~/utils/hooks/useUnmount";
 
 /**
  * 详情页面通用功能
@@ -16,13 +20,11 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
 
   const id = useRoute().params.id as string;
   
-  const { decryptedItem, decryptedMd } = await useBlogItem<T>(Number(id), targetTab.url);
-  
-  if (!decryptedItem.value) {
-    throw ""
-  }
+  const destroyFns = useUnmount();
 
-  const { htmlContent, markdownRef, menuItems } = useMarkdownParser({ mdValueRef: decryptedMd, onAfterInsertHtml })
+  const { decryptedItem, decryptedMd } = await useBlogItem<T>(Number(id), targetTab.url);
+
+  const { htmlContent, markdownRef, menuItems } = await useMarkdownParser({ mdValueRef: decryptedMd, onAfterInsertHtml, destroyFns })
 
   if (decryptedItem.value) {
     watchUntil(isAuthor, () => {
@@ -34,7 +36,7 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
           inc: config.MongoDb.visitFromOwner || !githubToken.value
         },
         callback: (data) => {
-          decryptedItem.value!.visitors = data;
+          decryptedItem.value!._visitors = data;
         }
       });
     }, { immediate: true }, isAuthor => isAuthor !== null, "cancelAfterUntil");

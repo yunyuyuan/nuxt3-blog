@@ -1,50 +1,57 @@
-import { createPage, setup } from "@nuxt/test-utils/e2e";
 import { describe, expect, it } from "vitest";
-import { mockGithubGraphApi, timeout } from "../utils";
-
+import { createListPage, setupTestEnvironment } from "./test-helpers";
+import type { ArticleItem } from "~/utils/common/types";
 
 describe("List Editing", async () => {
-  await setup({
-    host: "http://localhost:3000",
-  });
+  await setupTestEnvironment();
 
-  it("Showing Works", async () => {
-    const page = await createPage("/manage/articles");
+  it("Deleting works", async () => {
+    const { listPage } = await createListPage("/manage/articles");
 
-    const deleteBtn = await page.locator(".manage-list-head button.danger");
+    const deleteBtn = await listPage.getByTestId("list-delete-btn");
     expect(deleteBtn).not.toBeNull();
     expect(await deleteBtn.isDisabled()).toBe(true);
-
-    const list = await page.locator("ul.manage-list-table");
-    expect(list).not.toBeNull();
     
-    const items = await list.locator("li.list-body").all();
-    const length = items.length;
-    
-    if (length > 0) {
-      (await items[0].locator(".common-checkbox")).click();
-      await timeout();
-      expect(await deleteBtn.isDisabled()).toBe(false);
+    await listPage.selectItemByIndex(0);
+    expect(await deleteBtn.isDisabled()).toBe(false);
 
-      const requestDataPromise = await mockGithubGraphApi(page);
-      await deleteBtn.click();
-      
-      while (true) {
-        const confirmBtn = await page.locator(".common-modal:not([style]) .modal-foot button.ok");
-        if (confirmBtn) {
-          await page.screenshot({ path: "screenshot.png"});
-          await confirmBtn.click();
-        } else {
-          break;
-        }
-      }
-  
-      await timeout();
-      const actualPostData = await requestDataPromise;
-      expect(actualPostData).not.toContain("1111");
-      expect(actualPostData).toContain("U2FsdGVkX18wyEu7vCLMOGilOsG2cQdWY+kvi3b+AZE=");
-    }
-  }, {
-    timeout: 10000
+    await listPage.deleteSelectedItems();
+
+    const additionList = JSON.parse(listPage.requestAdditions[0].content || "") as ArticleItem[];
+    expect(additionList.find(i => i.id === 1111)).toBeUndefined();
+    expect(additionList.find(i => i.encryptBlocks?.length)).toBeDefined();
+    expect(additionList.find(i => i.encrypt && i.title === "U2FsdGVkX18wyEu7vCLMOGilOsG2cQdWY+kvi3b+AZE=")).toBeDefined();
+    
+    const deletionItem = listPage.requestDeletions[0].path || "";
+    expect(deletionItem).toContain("1111.md");
+  });
+
+  it("Deleting works after entering password", async () => {
+    const { listPage } = await createListPage("/manage/articles");
+
+    const deleteBtn = await listPage.getByTestId("list-delete-btn");
+    expect(deleteBtn).not.toBeNull();
+    expect(await deleteBtn.isDisabled()).toBe(true);
+    
+    const listItemsText = await listPage.getListItemsText();
+    expect(listItemsText).toContain("U2FsdGVkX18wyEu7vCLMOGilOsG2cQdWY+kvi3b+AZE=");
+    
+    await listPage.enterPassword();
+    
+    const updatedListItemsText = await listPage.getListItemsText();
+    expect(updatedListItemsText).not.toContain("U2FsdGVkX18wyEu7vCLMOGilOsG2cQdWY+kvi3b+AZE=");
+
+    await listPage.selectItemByIndex(0);
+    expect(await deleteBtn.isDisabled()).toBe(false);
+
+    await listPage.deleteSelectedItems();
+
+    const additionList = JSON.parse(listPage.requestAdditions[0].content || "") as ArticleItem[];
+    expect(additionList.find(i => i.id === 1111)).toBeUndefined();
+    expect(additionList.find(i => i.encryptBlocks?.length)).toBeDefined();
+    expect(additionList.find(i => i.encrypt && i.title === "U2FsdGVkX18wyEu7vCLMOGilOsG2cQdWY+kvi3b+AZE=")).toBeDefined();
+    
+    const deletionItem = listPage.requestDeletions[0].path || "";
+    expect(deletionItem).toContain("1111.md");
   });
 });

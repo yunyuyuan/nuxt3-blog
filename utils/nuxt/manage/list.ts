@@ -1,6 +1,7 @@
-import type { CommonItem } from "~/utils/common";
+import type { CommonItem } from "~/utils/common/types";
 import { useBlogList } from "~/utils/hooks/useBlogList";
-import { getCurrentTab, translate, useCommonSEOTitle } from "~/utils/nuxt";
+import { translate } from "../i18n";
+import { getCurrentTab, useCommonSEOTitle } from "../utils";
 
 /**
  * 管理页面列表通用功能

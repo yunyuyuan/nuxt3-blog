@@ -1,9 +1,11 @@
-import { GithubTokenKey, type I18nCode, I18nStoreKey, toggleCodeBlockTheme } from "~/utils/common";
 import { useState } from "#app";
 
-import { getLocalStorage, loadI18nJson, setLocalStorage } from "~/utils/nuxt";
 import config from "~/config";
-const ThemeModeKey = "theme-mode";
+import { GithubTokenKey, I18nStoreKey, ThemeModeKey } from "~/utils/common/constants";
+import type { I18nCode } from "~/utils/common/locales";
+import { toggleCodeBlockTheme } from "~/utils/common/utils";
+import { loadI18nJson } from "~/utils/nuxt/i18n";
+import { getLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
 
 // avoid loading during SSG
 export const useFirstLoad = () => useState("first-loaded", () => true);
@@ -15,17 +17,26 @@ export const useIsAuthor = () => useState<null | boolean>("is-author", () => nul
 export const useCorrectSha = () => useState("correct-sha", () => "");
 export const useUnsavedContent = () => useState("unsaved-content", () => false);
 export const useThemeMode = () => {
-  const themeMode = useState<"light" | "dark">(ThemeModeKey, () => "light");
-  themeMode.value = getLocalStorage(ThemeModeKey) || "light";
+  const themeMode = useState<"light" | "dark" | "">(ThemeModeKey, () => "");
+  // 首次加载的时候，不进行动画
+  const shouldAnimate = useState(`${ThemeModeKey}-animate`, () => false);
+
+  const toggleThemeMode = () => {
+    shouldAnimate.value = true;
+    document.documentElement.classList.remove(`${themeMode.value}-mode`);
+    themeMode.value = themeMode.value === "light" ? "dark" : "light";
+    document.documentElement.classList.add(`${themeMode.value}-mode`);
+    setLocalStorage(ThemeModeKey, themeMode.value);
+    toggleCodeBlockTheme(themeMode.value);
+  };
+
+  onMounted(() => {
+    themeMode.value = getLocalStorage(ThemeModeKey) || "light";
+  });
   return {
     themeMode,
-    toggleThemeMode: () => {
-      document.documentElement.classList.remove(`${themeMode.value}-mode`);
-      themeMode.value = themeMode.value === "light" ? "dark" : "light";
-      document.documentElement.classList.add(`${themeMode.value}-mode`);
-      setLocalStorage(ThemeModeKey, themeMode.value);
-      toggleCodeBlockTheme(themeMode.value);
-    }
+    shouldAnimate,
+    toggleThemeMode
   };
 };
 

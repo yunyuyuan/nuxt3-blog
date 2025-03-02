@@ -1,8 +1,8 @@
-import { deepClone } from "~/utils/nuxt";
+import { deepClone } from "~/utils/nuxt/utils";
 import { beforeEach, describe, expect, it } from "vitest";
-import type { ArticleItem, HeaderTabUrl } from "../common";
+import type { ArticleItem, HeaderTabUrl } from "../common/types";
 import { useDraft } from "./useDraft";
-import { getLocalStorage } from "../nuxt";
+import { getLocalStorage } from "../nuxt/localStorage";
 
 const TestItem: ArticleItem = {
   id: 1234,

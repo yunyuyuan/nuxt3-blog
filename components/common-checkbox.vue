@@ -1,7 +1,11 @@
 <script setup lang="ts">
 defineProps({
   checked: Boolean,
-  disabled: Boolean
+  disabled: Boolean,
+  testId: {
+    type: String,
+    default: undefined,
+  },
 });
 const emit = defineEmits(["change"]);
 </script>
@@ -10,6 +14,7 @@ const emit = defineEmits(["change"]);
   <label
     class="common-checkbox"
     :class="{ disabled, checked: checked }"
+    :data-testid="testId"
   >
     <input
       type="checkbox"

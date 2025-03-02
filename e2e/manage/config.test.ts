@@ -1,32 +1,17 @@
-import { createPage, setup } from "@nuxt/test-utils/e2e";
 import { describe, expect, it } from "vitest";
-import { confirmForceCommit, mockGithubGraphApi, timeout } from "../utils";
-
+import { createConfigPage, setupTestEnvironment } from "./test-helpers";
 
 describe("Config Editing", async () => {
-  await setup({
-    host: "http://localhost:3000",
-  });
+  await setupTestEnvironment();
 
   it("Editing Works", async () => {
-    const page = await createPage("/manage/config");
+    const { configPage } = await createConfigPage("/manage/config");
 
-    const btn = await page.locator(".manage-config button.primary");
-    expect(btn).not.toBeNull();
+    const btn = await configPage.getByTestId("update-config-btn");
+    expect(await btn.isDisabled()).toBe(true);
     
-    const monacoEditor = page.locator(".monaco-editor").nth(0);
-    await monacoEditor.click();
-    await page.keyboard.press("Meta+KeyA");
-    await page.keyboard.type("{test-config}");
-    await nextTick();
-    expect(await btn.isDisabled()).toBe(false);
-
-    const requestDataRef = await mockGithubGraphApi(page);
-    await btn.click();
+    await configPage.updateConfig("{test-config}");
     
-    await confirmForceCommit(page);
-
-    await timeout();
-    expect(unref(requestDataRef)).toContain("{test-config}");
+    expect(configPage.requestAdditions[0].content).toContain("{test-config}");
   });
 });

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const showStickers = defineModel<boolean>();
+const showStickers = defineModel<boolean>({ required: true });
 
 const emits = defineEmits({
   insertSticker: (_: string) => true,

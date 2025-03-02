@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { StyleValue, PropType, CSSProperties } from "vue";
-import { ViewerAttr, addScrollListener, rmScrollListener } from "~/utils/common";
-import { isPrerender, watchUntil } from "~/utils/nuxt";
+import { ViewerAttr } from "~/utils/common/constants";
+import { addScrollListener, rmScrollListener } from "~/utils/common/scroll-event";
+import { isPrerender } from "~/utils/nuxt/constants";
+import { watchUntil } from "~/utils/nuxt/utils";
 
 const props = defineProps({
   src: { type: String, required: true },

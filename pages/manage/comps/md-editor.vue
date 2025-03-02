@@ -2,9 +2,10 @@
 import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
 import type { editor as MonacoEditor } from "monaco-editor";
-import { initViewer } from "~/utils/nuxt";
+import { initViewer } from "~/utils/nuxt/viewer";
 import { useMarkdownParser } from "~/utils/hooks/useMarkdownParser";
 import StickerPick from "./sticker-pick.vue";
+import { useUnmount } from "~/utils/hooks/useUnmount";
 
 const props = defineProps({
   modelValue: { type: String, default: "" },
@@ -20,7 +21,9 @@ let editor: MonacoEditor.IStandaloneCodeEditor;
 const currentView = ref<"edit" | "preview" | "both">("both");
 const currentText = ref("");
 
-const { htmlContent, markdownRef, menuItems } = useMarkdownParser({ mdValueRef: currentText, fromEdit: true });
+const destroyFns = useUnmount();
+
+const { htmlContent, markdownRef, menuItems } = await useMarkdownParser({ mdValueRef: currentText, fromEdit: true, destroyFns });
 
 // sticker
 const showStickers = ref(false);
@@ -206,7 +209,10 @@ initViewer(markdownRef);
         @touchstart="startResize"
         @mousedown.left="startResize"
       />
-      <div class="righr-side">
+      <div
+        class="righr-side"
+        data-testid="rendered-markdown"
+      >
         <article
           ref="markdownRef"
           class="--markdown"
