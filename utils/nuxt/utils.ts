@@ -4,15 +4,6 @@ import { githubRepoUrl } from "../common/constants";
 import { HeaderTabs } from "../common/types";
 import { cmtRepId, cmtRepCateId, isDev, inBrowser } from "./constants";
 
-// XXX 在mount时更新一下key，防止SSG里v-for产生的元素，在client里被vue忽略
-export const useHackKey = () => {
-  const key = ref(1);
-  onMounted(() => {
-    key.value += 1;
-  });
-  return key;
-};
-
 export function getCurrentTab () {
   return HeaderTabs.find(tab => useRoute().path.includes(tab.url)) || HeaderTabs[0];
 }

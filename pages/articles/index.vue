@@ -2,14 +2,13 @@
 import type { ArticleItem } from "~/utils/common/types";
 import { useListPage } from "~/utils/nuxt/public/list";
 import Visitors from "~/utils/nuxt/public/visitors";
-import { useHackKey } from "~/utils/nuxt/utils";
 import { formatTime, literalTime } from "~/utils/nuxt/format-time";
+import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
 
 definePageMeta({
   alias: "/"
 });
 
-const hackKey = useHackKey();
 const articlesList = await useListPage<ArticleItem>();
 
 const articleTagList = new Map<string, number>();
@@ -21,10 +20,9 @@ watch(articlesList, () => {
   });
 }, { immediate: true });
 
-const tags = computed<string[]>(() => {
+const tags = useRouteQuery("tag", (tags) => {
   try {
-    const tags = useRoute().query.tag as string;
-    return tags ? (tags.split(",") as string[]) : [];
+    return tags ? tags.split(",") : [];
   } catch {
     return [];
   }
@@ -54,7 +52,7 @@ const toggleTags = (tag: string) => {
       <div class="tags flex">
         <the-tag
           v-for="[tag, count] in articleTagList"
-          :key="tag+hackKey"
+          :key="tag"
           :active="tags.includes(tag)"
           @click="toggleTags(tag)"
         >

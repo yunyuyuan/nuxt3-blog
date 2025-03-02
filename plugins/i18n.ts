@@ -1,11 +1,10 @@
+import config from "~/config";
 import { type I18nCode, i18nLocales } from "~/utils/common/locales";
-import { translate, translateT, translateTT } from "~/utils/nuxt/i18n";
+import { getI18nJson, translate, translateT, translateTT } from "~/utils/nuxt/i18n";
 
 export default defineNuxtPlugin(async (app) => {
-  app.provide("i18nMessages", ref<Partial<Record<I18nCode, Record<string, string>>>>({}));
-  const { i18nCode, changeI18n } = useI18nCode();
-  await changeI18n(i18nCode.value);
   app.hook("vue:setup", () => {
+    const { i18nCode } = useI18nCode();
     useHead({
       htmlAttrs: computed(() => {
         return {
@@ -16,6 +15,9 @@ export default defineNuxtPlugin(async (app) => {
   });
   return {
     provide: {
+      i18nMessages: ref({
+        [config.defaultLang as I18nCode]: await getI18nJson(config.defaultLang as I18nCode)
+      }),
       t: (...args: Parameters<typeof translate>) => translate(...args),
       T: (...args: Parameters<typeof translate>) => translateT(...args),
       TT: (...args: Parameters<typeof translate>) => translateTT(...args)

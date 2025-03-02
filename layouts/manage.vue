@@ -168,29 +168,29 @@ onMounted(() => {
 
 <template>
   <div class="manage-background" />
-  <div class="manage-container">
-    <nav>
-      <span
-        class="mobile-menu-toggler"
-        @click="menuShow = true"
-      >
-        <svg-icon :name="pageLoading.loadingState.value ? 'loading' : 'menu'" />
-      </span>
-      <manage-menu v-if="!isMobile" />
-      <div v-else>
-        <common-dropdown v-model:show="menuShow">
-          <manage-menu />
-        </common-dropdown>
-      </div>
-    </nav>
-    <section>
-      <div>
-        <client-only>
+  <client-only>
+    <div class="manage-container">
+      <nav>
+        <span
+          class="mobile-menu-toggler"
+          @click="menuShow = true"
+        >
+          <svg-icon :name="pageLoading.loadingState.value ? 'loading' : 'menu'" />
+        </span>
+        <manage-menu v-if="!isMobile" />
+        <div v-else>
+          <common-dropdown v-model:show="menuShow">
+            <manage-menu />
+          </common-dropdown>
+        </div>
+      </nav>
+      <section>
+        <div>
           <nuxt-page />
-        </client-only>
-      </div>
-    </section>
-  </div>
+        </div>
+      </section>
+    </div>
+  </client-only>
   <common-modal
     v-model="showModal"
     :loading="checkingToken"

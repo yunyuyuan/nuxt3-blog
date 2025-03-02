@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { type KnowledgeItem, KnowledgeTabs, KnowledgeTabsList } from "~/utils/common/types";
 import { useListPage } from "~/utils/nuxt/public/list";
-import { useHackKey } from "~/utils/nuxt/utils";
 import { formatTime, literalTime } from "~/utils/nuxt/format-time";
-
-
-const hackKey = useHackKey();
+import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
 
 const knowledgeList = await useListPage<KnowledgeItem>();
 
-const currentTab = computed(() => (useRoute().query.type as string) || "");
+const currentTab = useRouteQuery("type");
 const isAll = computed(
   () => !(KnowledgeTabs as string[]).includes(currentTab.value)
 );
@@ -27,13 +24,17 @@ const filteredList = computed(() => {
 });
 const filteredListEmpty = computed(() => !filteredList.value.some(i => i._show));
 
-function getFilteredListLength (tab?: string) {
-  return knowledgeList.filter(item => item._show && (!tab || item.type === tab)).length;
-}
-function goTo (tab?: string) {
-  navigateTo({ query: { type: tab } }, { replace: true });
-}
+const tabLengthMap = computed(() => {
+  const map = new Map<string, number>();
+  tabs.value.forEach(tab => {
+    map.set(tab.key, knowledgeList.filter(item => item._show && (!tab.key || item.type === tab.key)).length);
+  });
+  return map;
+});
 
+const goTo = (tab?: string) => {
+  navigateTo({ query: { type: tab } }, { replace: true });
+};
 </script>
 
 <template>
@@ -41,12 +42,14 @@ function goTo (tab?: string) {
     <nav>
       <span
         v-for="tab in tabs"
-        :key="tab.key + hackKey"
+        :key="tab.key"
         :class="{ active: tab.active }"
         @click="goTo(tab.key)"
       >
         {{ $T(tab.name) }}
-        <b>{{ getFilteredListLength(tab.key) }}</b>
+        <client-only>
+          <b>{{ tabLengthMap.get(tab.key) }}</b>
+        </client-only>
       </span>
     </nav>
     <div class="body flexc">
