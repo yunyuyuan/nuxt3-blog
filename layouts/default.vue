@@ -5,11 +5,9 @@ import config from "~/config";
 import {i18nLocales, type I18nCode } from "~/utils/common/locales";
 import { HeaderTabs } from "~/utils/common/types";
 import { githubRepoUrl } from "~/utils/common/constants";
-import { inBrowser, } from "~/utils/nuxt/constants";
 import { translateT } from "~/utils/nuxt/i18n";
-import { useHackKey, calcRocketUrl } from "~/utils/nuxt/utils";
+import { calcRocketUrl } from "~/utils/nuxt/utils";
 
-const hackKey = useHackKey();
 const { i18nCode, changeI18n } = useI18nCode();
 const { themeMode, shouldAnimate: themeAnimate, toggleThemeMode } = useThemeMode();
 const pageLoading = useLoading();
@@ -17,7 +15,7 @@ const route = useRoute();
 const activeRoute = computed(() => {
   return route.path.split("/")[1] || HeaderTabs[0].url.substring(1);
 });
-const footerDomain = inBrowser ? window.location.hostname : "";
+const footerDomain = ref("");
 
 // mobile menu
 const isMobile = useIsMobile();
@@ -52,7 +50,7 @@ const LayoutMenu = defineComponent({
     </div>
 });
 
-const showI18n = ref<boolean>(false);
+const showI18n = ref(false);
 const setLocale = (locale: I18nCode) => {
   changeI18n(locale);
   showI18n.value = false;
@@ -69,6 +67,7 @@ const openEdit = computed(() => {
 let headroom: undefined | Headroom;
 const headerRef = ref();
 onMounted(async () => {
+  footerDomain.value = window.location.hostname;
   const Headroom = (await import("headroom.js")).default;
   headroom = new Headroom(headerRef.value, {
     offset: 48
@@ -123,14 +122,16 @@ const inputPwd = ref(encryptor.usePasswd.value);
         <svg-icon name="i18n" />
         <common-dropdown v-model:show="showI18n">
           <div class="i18n-select">
-            <div
-              v-for="locale of i18nLocales"
-              :key="locale.code + hackKey"
-              :class="{ active: i18nCode===locale.code}"
-              @click="setLocale(locale.code)"
-            >
-              {{ locale.name }}
-            </div>
+            <client-only>
+              <div
+                v-for="locale of i18nLocales"
+                :key="locale.code"
+                :class="{ active: i18nCode === locale.code}"
+                @click="setLocale(locale.code)"
+              >
+                {{ locale.name }}
+              </div>
+            </client-only>
           </div>
         </common-dropdown>
       </a>

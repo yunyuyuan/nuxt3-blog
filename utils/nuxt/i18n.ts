@@ -1,11 +1,15 @@
 import capitalize from "lodash/capitalize";
 import type { I18nCode } from "~/utils/common/locales";
 
+export async function getI18nJson (code: I18nCode) {
+  const json = await import(`../../i18n/${code}.json?raw`);
+  return JSON.parse(json.default) as Record<string, string>;
+}
+
 export async function loadI18nJson (code: I18nCode) {
   const messages = useNuxtApp().$i18nMessages;
   if (!messages.value[code]) {
-    const json = await import(`../../i18n/${code}.json?raw`);
-    messages.value[code] = JSON.parse(json.default);
+    messages.value[code] = await getI18nJson(code);
   }
 }
 

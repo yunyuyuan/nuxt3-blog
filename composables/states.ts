@@ -42,7 +42,9 @@ export const useThemeMode = () => {
 
 export const useI18nCode = () => {
   const i18nCode = useState<I18nCode>(I18nStoreKey, () => config.defaultLang as any);
-  i18nCode.value = getLocalStorage(I18nStoreKey) || config.defaultLang as any;
+  onMounted(() => {
+    i18nCode.value = getLocalStorage(I18nStoreKey) || i18nCode.value;
+  });
   return {
     i18nCode,
     changeI18n: async (code: I18nCode) => {
