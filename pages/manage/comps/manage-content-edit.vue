@@ -1,17 +1,24 @@
 <script setup lang="ts" generic="T extends CommonItem">
 import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
+import { getNowStamp } from "~/utils/common/dayjs";
+import { encryptDecryptItem, getEncryptedBlocks } from "~/utils/common/process-encrypt-decrypt";
+import type { CommonItem } from "~/utils/common/types";
+import { escapeNewLine } from "~/utils/common/utils";
+import { translate } from "~/utils/nuxt/i18n";
+import { randomId } from "~/utils/nuxt/manage";
  
-import { type CommonItem, getEncryptedBlocks, getNowStamp, encryptDecryptItem, escapeNewLine } from "~/utils/common";
-import { notify, deepClone, translate, randomId } from "~/utils/nuxt";
-import { useManageContent } from "~/utils/nuxt/manage/detail";
-import { deleteItem, editItem } from "~/utils/nuxt/manage/edit";
+import { useManageContent, deleteItem, editItem } from "~/utils/nuxt/manage/detail";
+import { notify } from "~/utils/nuxt/notify";
+import { deepClone } from "~/utils/nuxt/utils";
 
 const props = defineProps<{
-  preProcessItem?:(item: T, list: T[]) => void;
+  preProcessItem?:(editingItem: Ref<T>, originList: T[]) => void;
   /** 更新之前处理item，附带markdown信息 */
   processWithContent?:(md: string, item: T) => void;
 }>();
+
+const encryptor = useEncryptor();
 
 const slots = defineSlots<Record<string, (_: { item: T, disabled: boolean }) => void>>();
 
@@ -38,11 +45,7 @@ const {
   isNew,
 } = await useManageContent<T>();
 
-const encryptor = useEncryptor();
-
-if (props.preProcessItem) {
-  props.preProcessItem(editingItem.value, originList);
-}
+props.preProcessItem?.(editingItem, originList);
 
 const currentOperate = ref<"upload" | "delete" | "">("");
 const showDeleteModal = ref(false);
@@ -83,10 +86,8 @@ const getUploadInfo = async () => {
     mdContent = await encryptor.encrypt(mdContent);
     // 整篇加密的markdown，不会再有加密块
     delete newItem.encryptBlocks;
-  } else if (editingItem.value.encryptBlocks && !decrypted.value) {
-    // 未解密，不处理
   } else {
-    // encryptBlocks
+    // encryptBlocks maybe
     const { md, blocks } = await getEncryptedBlocks(mdContent, encryptor.encrypt);
     mdContent = md;
     if (blocks.length) {
@@ -101,12 +102,10 @@ const getUploadInfo = async () => {
       });
     }
   }
-  if (!newItem.id) {
-    newItem.id = randomId(originList);
-  }
   // 更新日期
   const nowTime = getNowStamp();
   if (isNew) {
+    newItem.id = randomId(originList);
     newItem.time = nowTime;
   }
   newItem.modifyTime = nowTime;
@@ -114,7 +113,7 @@ const getUploadInfo = async () => {
     item: {
       ...newItem,
       _show: undefined,
-      visitors: undefined
+      _visitors: undefined
     },
     md: mdContent
   };
@@ -205,6 +204,7 @@ const doDelete = () => {
       icon="upload"
       :disabled="!canUpload || currentOperate === 'delete' || !decrypted"
       :loading="processing && currentOperate === 'upload'"
+      data-testid="item-upload-btn"
       @click="doUpload"
     >
       {{ $T(isNew ? "publish" : "update") }}
@@ -216,6 +216,7 @@ const doDelete = () => {
       icon="delete"
       :disabled="!canDelete || currentOperate === 'upload'"
       :loading="processing && currentOperate === 'delete'"
+      data-testid="item-delete-btn"
       @click="showDeleteModal = true"
     >
       {{ $T('del') }}
@@ -244,6 +245,7 @@ const doDelete = () => {
         :checked="editingItem.encrypt"
         :disabled="!decrypted"
         :title="!decrypted ? $t('decrypt-blocks') : ''"
+        test-id="item-encrypt-checkbox"
         @change="editingItem.encrypt = $event"
       />
       <span>
@@ -254,6 +256,7 @@ const doDelete = () => {
         :checked="editingItem.showComments"
         :disabled="!decrypted"
         :title="$t('show-comments')"
+        test-id="item-show-comment-checkbox"
         @change="editingItem.showComments = $event"
       />
       <slot
@@ -279,6 +282,7 @@ const doDelete = () => {
   <common-modal
     v-model="showDeleteModal"
     confirm-theme="danger"
+    test-id="confirm-item-delete"
     @confirm="doDelete"
   >
     <template #title>

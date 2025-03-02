@@ -3,7 +3,7 @@
 @use "assets/style/var" as *;
 
 @mixin with-theme-dark() {
-  @at-root body[code-theme=dark] {
+  @at-root html[code-theme=dark] {
     @content;
   }
 }

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import type { ArticleItem } from "~/utils/common";
-import { formatTime, literalTime, useHackKey, useListPage } from "~/utils/nuxt";
+import type { ArticleItem } from "~/utils/common/types";
+import { useListPage } from "~/utils/nuxt/public/list";
 import Visitors from "~/utils/nuxt/public/visitors";
+import { useHackKey } from "~/utils/nuxt/utils";
+import { formatTime, literalTime } from "~/utils/nuxt/format-time";
 
 definePageMeta({
   alias: "/"
@@ -23,7 +25,7 @@ const tags = computed<string[]>(() => {
   try {
     const tags = useRoute().query.tag as string;
     return tags ? (tags.split(",") as string[]) : [];
-  } catch (_e) {
+  } catch {
     return [];
   }
 });
@@ -84,7 +86,7 @@ const toggleTags = (tag: string) => {
               }}</span>
               <b />
               <span>{{ item.len }} {{ $t('words-num') }}</span>
-              <Visitors :visitors="item.visitors" />
+              <Visitors :visitors="item._visitors" />
             </div>
           </nuxt-link>
         </li>

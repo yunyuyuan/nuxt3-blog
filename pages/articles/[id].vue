@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { addScrollListener, rmScrollListener, type ArticleItem } from "~/utils/common";
-import { getLocalStorage, rmLocalStorage, setLocalStorage, initViewer, isPrerender, useContentPage, useComment, useCommonSEOTitle } from "~/utils/nuxt";
+import { addScrollListener, rmScrollListener } from "~/utils/common/scroll-event";
+import type { ArticleItem } from "~/utils/common/types";
+import { getLocalStorage, setLocalStorage, rmLocalStorage } from "~/utils/nuxt/localStorage";
+import { useContentPage } from "~/utils/nuxt/public/detail";
 import Visitors from "~/utils/nuxt/public/visitors";
+import { useCommonSEOTitle, useComment } from "~/utils/nuxt/utils";
+import { initViewer } from "~/utils/nuxt/viewer";
 
 const { item, wroteDate: writeDate, menuItems, htmlContent, markdownRef } = await useContentPage<ArticleItem>(() => {
   const hash = useRoute().hash;
@@ -41,16 +45,14 @@ const onScroll = () => {
   } catch { /* empty */ }
 };
 
-if (!isPrerender) {
-  onMounted(() => {
-    nextTick(() => {
-      if (!useRoute().hash) {
-        onScroll();
-      }
-      addScrollListener(onScroll);
-    });
+onMounted(() => {
+  nextTick(() => {
+    if (!useRoute().hash) {
+      onScroll();
+    }
+    addScrollListener(onScroll);
   });
-}
+});
 
 onBeforeUnmount(() => {
   rmScrollListener(onScroll);
@@ -93,7 +95,7 @@ initViewer(root);
             </the-tag>
           </div>
           <writeDate />
-          <Visitors :visitors="item.visitors" />
+          <Visitors :visitors="item._visitors" />
         </div>
       </div>
       <div

@@ -1,13 +1,17 @@
 <script setup lang="tsx">
 import type Headroom from "headroom.js";
 import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
-import { inBrowser, isPrerender, calcRocketUrl, translateT, useHackKey } from "~/utils/nuxt";
-import { i18nLocales, githubRepoUrl, type I18nCode, HeaderTabs } from "~/utils/common";
 import config from "~/config";
+import {i18nLocales, type I18nCode } from "~/utils/common/locales";
+import { HeaderTabs } from "~/utils/common/types";
+import { githubRepoUrl } from "~/utils/common/constants";
+import { inBrowser, } from "~/utils/nuxt/constants";
+import { translateT } from "~/utils/nuxt/i18n";
+import { useHackKey, calcRocketUrl } from "~/utils/nuxt/utils";
 
 const hackKey = useHackKey();
 const { i18nCode, changeI18n } = useI18nCode();
-const { themeMode, toggleThemeMode } = useThemeMode();
+const { themeMode, shouldAnimate: themeAnimate, toggleThemeMode } = useThemeMode();
 const pageLoading = useLoading();
 const route = useRoute();
 const activeRoute = computed(() => {
@@ -62,11 +66,6 @@ const openEdit = computed(() => {
   return calcRocketUrl();
 });
 
-const toggleTheme = () => {
-  toggleThemeMode();
-  isFirst.value = false;
-};
-
 let headroom: undefined | Headroom;
 const headerRef = ref();
 onMounted(async () => {
@@ -83,7 +82,6 @@ onBeforeUnmount(() => {
 const encryptor = useEncryptor();
 const showPwdModal = ref(false);
 const inputPwd = ref(encryptor.usePasswd.value);
-const isFirst = ref(true);
 </script>
 
 <template>
@@ -92,9 +90,8 @@ const isFirst = ref(true);
     :class="{'in-about': inAbout, 'no-margin': route.path === '/records'}"
   >
     <div
-      v-if="!isPrerender"
       class="mode-bg"
-      :class="[themeMode, {active: !isFirst}]"
+      :class="[themeMode, { themeAnimate }]"
     />
     <nav
       id="header"
@@ -139,11 +136,10 @@ const isFirst = ref(true);
       </a>
       <sub />
       <a
-        v-if="!isPrerender"
         class="mode"
-        :class="themeMode"
+        :class="[themeMode, { themeAnimate }]"
         :title="$t('switch-mode', [$t(`mode-${themeMode === 'light' ? 'dark' : 'light'}`)])"
-        @click="toggleTheme"
+        @click="toggleThemeMode"
       >
         <span>
           <svg-icon name="mode-dark" />
@@ -292,7 +288,7 @@ const isFirst = ref(true);
     right: 50px;
     border-radius: 50%;
 
-    &.active {
+    &.themeAnimate {
       animation-duration: $animation-duration * 2;
       animation-timing-function: $animation-function;
       animation-fill-mode: forwards;
@@ -496,7 +492,10 @@ const isFirst = ref(true);
       display: flex;
       flex-direction: column;
       height: 100%;
-      transition: all $animation-duration cubic-bezier(0, -0.01, 0.23, 1.56);
+
+      &.themeAnimate {
+        transition: all $animation-duration cubic-bezier(0, -0.01, 0.23, 1.56);
+      }
 
       svg {
         flex-shrink: 0;
@@ -604,7 +603,7 @@ const isFirst = ref(true);
   z-index: $z-index-footer;
 
   .middle {
-    font-size: f-size(0.6);
+    font-size: f-size(0.7);
     color: #7c7c7c;
 
     @include dark-mode {

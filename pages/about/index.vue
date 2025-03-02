@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { translateT, useCommonSEOTitle } from "~/utils/nuxt";
+import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import bg from "~/assets/image/outerwilds.jpg";
 import config from "~/config";
+import { translateT } from "~/utils/nuxt/i18n";
 
 useCommonSEOTitle(computed(() => translateT("about")));
 

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { useContentPage, useComment, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
-import type { KnowledgeItem } from "~/utils/common";
+import type { KnowledgeItem } from "~/utils/common/types";
+import { useContentPage } from "~/utils/nuxt/public/detail";
 import Visitors from "~/utils/nuxt/public/visitors";
+import { useCommonSEOTitle, useComment } from "~/utils/nuxt/utils";
+import { initViewer } from "~/utils/nuxt/viewer";
 
 const { item, wroteDate: writeDate, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
 useCommonSEOTitle(computed(() => item.title));
@@ -82,7 +84,7 @@ initViewer(root);
         />
       </div>
       <span class="foot flex">
-        <Visitors :visitors="item.visitors" />
+        <Visitors :visitors="item._visitors" />
         <writeDate />
       </span>
     </div>

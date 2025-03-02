@@ -1,5 +1,6 @@
-import { translate } from "~/utils/nuxt";
-import { getLocaleByCode, getNowDayjs } from "~/utils/common";
+import { translate } from "~/utils/nuxt/i18n";
+import { getNowDayjs } from "~/utils/common/dayjs";
+import { getLocaleByCode } from "../common/locales";
 
 export function formatTime (stamp?: number, type: "full" | "date" | "month" = "full") {
   return computed(() => {

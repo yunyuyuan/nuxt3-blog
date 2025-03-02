@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { SvgContainerId } from "~/utils/common";
-import { inBrowser } from "~/utils/nuxt";
+import { SvgContainerId } from "~/utils/common/constants";
+import { inBrowser } from "~/utils/nuxt/constants";
 
 const props = defineProps({
   name: { type: String, required: true }

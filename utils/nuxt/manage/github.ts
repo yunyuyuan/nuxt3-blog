@@ -1,7 +1,11 @@
 import type { Axios } from "axios";
-import type { CommonItem } from "~/utils/common";
-import { getCurrentTab, translate, formatTime, notify, createCommitModal } from "~/utils/nuxt";
+import type { CommonItem } from "~/utils/common/types";
 import config from "~/config";
+import { createCommitModal } from ".";
+import { formatTime } from "../format-time";
+import { translate } from "../i18n";
+import { notify } from "../notify";
+import { getCurrentTab } from "../utils";
 
 let axios: Axios | null = null;
 
@@ -23,7 +27,7 @@ async function post (data: string, token_?: string) {
 }
 
 function encodeB64 (str: string) {
-  return __NB_VITESTING__ ? str : btoa(unescape(encodeURIComponent(str)));
+  return btoa(unescape(encodeURIComponent(str)));
 }
 
 /** @description 是否管理员 */
@@ -77,6 +81,10 @@ export async function createCommit (
   deletions: { path: string }[] = []
 ): Promise<boolean> {
   const correctSha = useCorrectSha().value;
+  if (__NB_VITESTING__) {
+    await post(JSON.stringify({ additions, deletions }));
+    return true;
+  }
   if (!useNuxtApp().$sameSha.value && !(await createCommitModal())) {
     throw new Error("Interrupt by user");
   }

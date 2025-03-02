@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import axios from "axios";
 import FormData from "form-data";
-import { getLocalStorage, setLocalStorage, notify, translate } from "~/utils/nuxt";
+import { translate } from "~/utils/nuxt/i18n";
+import { getLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
+import { notify } from "~/utils/nuxt/notify";
 
 const props = defineProps({
   modelValue: Boolean

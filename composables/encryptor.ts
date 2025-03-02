@@ -1,6 +1,8 @@
 import type cryptoJS from "crypto-js";
-import { notify, isPrerender, translate } from "~/utils/nuxt";
-import type { DecryptFunction } from "~/utils/common";
+import { notify } from "~/utils/nuxt/notify";
+import type { DecryptFunction } from "~/utils/common/types";
+import { translate } from "~/utils/nuxt/i18n";
+import { useUnmount } from "~/utils/hooks/useUnmount";
 
 let CryptoJS: typeof cryptoJS;
 
@@ -16,10 +18,7 @@ export const useEncryptor = () => {
   /** 同一个错误密码只会提示一次错误信息 */
   const incorrectPwd = useState<string>("incorrect-passwd", () => "");
 
-  const cancelFnList: (() => void)[] = [];
-  onBeforeUnmount(() => {
-    cancelFnList.forEach(fn => fn());
-  });
+  const destroyFns = useUnmount();
 
   const encrypt: DecryptFunction = async (s: string) => {
     if (!s) {
@@ -79,11 +78,6 @@ export const useEncryptor = () => {
     callback: (_decrypt: DecryptFunction) => Promise<void>,
     firstIsFailed: () => any = () => undefined
   ): Promise<void> => {
-    // prerender时默认解密失败，且不再监听
-    if (isPrerender) {
-      firstIsFailed();
-      return;
-    }
     try {
       if (!usePasswd.value) {
         throw new Error(translate("need-passwd"));
@@ -100,7 +94,7 @@ export const useEncryptor = () => {
           cancel();
         } catch { /* empty */ }
       });
-      cancelFnList.push(cancel);
+      destroyFns.push(cancel);
     }
   };
 

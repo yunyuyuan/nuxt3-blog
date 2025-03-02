@@ -2,9 +2,14 @@
 import SvgIcon from "~/components/svg-icon.vue";
 import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
 import UploadImage from "~/pages/manage/comps/upload-image.vue";
-import { rmLocalStorage, setLocalStorage, translateT, notify, translate, isDev, calcRocketUrl, watchUntil } from "~/utils/nuxt";
 import { isAuthor as checkIsAuthor} from "~/utils/nuxt/manage/github";
-import { GithubTokenKey, HeaderTabs } from "~/utils/common";
+import { GithubTokenKey } from "~/utils/common/constants";
+import { HeaderTabs } from "~/utils/common/types";
+import { translate, translateT } from "~/utils/nuxt/i18n";
+import { rmLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
+import { notify } from "~/utils/nuxt/notify";
+import { calcRocketUrl, watchUntil } from "~/utils/nuxt/utils";
+import { isDev } from "~/utils/nuxt/constants";
 
 const pageLoading = useLoading();
 
@@ -68,6 +73,7 @@ const ManageMenu = defineComponent({
       <div
         title={(!useCorrectSha().value || useNuxtApp().$sameSha.value) ? (allPassed.value ? translate("all-verified") : translate("token-and-passwd")) : translate("commit-id-not-correct")}
         class={{ warning: useCorrectSha().value && !useNuxtApp().$sameSha.value }}
+        data-testid="show-token-password-btn"
         onClick={() => { showModal.value = true; }}
       >
         <svg-icon
@@ -170,8 +176,8 @@ onMounted(() => {
       >
         <svg-icon :name="pageLoading.loadingState.value ? 'loading' : 'menu'" />
       </span>
-      <manage-menu v-show="!isMobile" />
-      <div v-show="isMobile">
+      <manage-menu v-if="!isMobile" />
+      <div v-else>
         <common-dropdown v-model:show="menuShow">
           <manage-menu />
         </common-dropdown>
@@ -188,6 +194,7 @@ onMounted(() => {
   <common-modal
     v-model="showModal"
     :loading="checkingToken"
+    test-id="token-password-confirm"
     @confirm="modalOk"
     @cancel="inputToken = githubToken"
   >
@@ -219,6 +226,7 @@ onMounted(() => {
         </b>
         <input
           v-model="inputPwd"
+          data-testid="password-input"
           :placeholder="$t('please-input')"
         >
       </label>

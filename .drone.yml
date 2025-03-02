@@ -104,8 +104,8 @@ steps:
         from_secret: NB_IMG_REGEX
     commands:
       - npm i -g pnpm
-      - pnpm genimg
-      - pnpm downimg
+      - pnpm local:generate-img-map
+      - pnpm local:download-img
 
 
 volumes:

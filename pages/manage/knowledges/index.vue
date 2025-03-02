@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ManageListTable from "~/pages/manage/comps/manage-list-table.vue";
-import { type KnowledgeItem, type KnowledgeTab, KnowledgeTabsList } from "~/utils/common";
+import { type KnowledgeItem, type KnowledgeTab, KnowledgeTabsList } from "~/utils/common/types";
 
 const filterType = ref<KnowledgeTab>();
 

@@ -1,13 +1,8 @@
-import { initScrollTrigger, SvgContainerId, NotificationContainerId, ModalContainerId } from "~/utils/common";
+import { SvgContainerId, NotificationContainerId, ModalContainerId } from "~/utils/common/constants";
+import { initScrollTrigger } from "~/utils/common/scroll-event";
 
 export default defineNuxtPlugin(() => {
   initScrollTrigger();
-  // init theme
-  document.body.setAttribute(
-    "code-theme",
-    localStorage.getItem("code-theme") || "light"
-  );
-  document.documentElement.classList.add(`${useThemeMode().themeMode.value}-mode`);
 
   const fragment = new DocumentFragment();
 

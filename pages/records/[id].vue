@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { formatTime, useContentPage, useComment, translate, initViewer, useCommonSEOTitle } from "~/utils/nuxt";
-import type { RecordItem } from "~/utils/common";
+import type { RecordItem } from "~/utils/common/types";
+import { formatTime } from "~/utils/nuxt/format-time";
+import { translate } from "~/utils/nuxt/i18n";
+import { useContentPage } from "~/utils/nuxt/public/detail";
 import Visitors from "~/utils/nuxt/public/visitors";
+import { useCommonSEOTitle, useComment } from "~/utils/nuxt/utils";
+import { initViewer } from "~/utils/nuxt/viewer";
 
 const { item, wroteDate: writeDate, htmlContent, markdownRef } = await useContentPage<RecordItem>();
 useCommonSEOTitle(computed(() => `${translate("records")}: ${formatTime(item.time, "date")}`));
@@ -32,7 +36,7 @@ initViewer(root);
     >
       <div class="header flex">
         <writeDate />
-        <Visitors :visitors="item.visitors" />
+        <Visitors :visitors="item._visitors" />
       </div>
       <div class="article-container">
         <article

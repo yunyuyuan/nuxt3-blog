@@ -3,7 +3,10 @@ import { createCommit } from "ls:~/utils/nuxt/manage/github";
 import type { editor as Editor } from "monaco-editor";
 import configString from "~/config.ts?raw";
 import config from "~/config";
-import { inBrowser, useStatusText, translate, useCommonSEOTitle } from "~/utils/nuxt";
+import { inBrowser } from "~/utils/nuxt/constants";
+import { translate } from "~/utils/nuxt/i18n";
+import { useStatusText } from "~/utils/nuxt/manage";
+import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 
 useCommonSEOTitle(computed(() => translate("config-manage") + config.SEO_title));
 
@@ -63,6 +66,7 @@ onBeforeUnmount(() => {
         icon="upload"
         :disabled="!canCommit || !modified"
         :loading="processing"
+        data-testid="update-config-btn"
         @click="doUpload"
       >
         {{ $t('update') }}

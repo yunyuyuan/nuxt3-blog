@@ -1,4 +1,4 @@
-import { translate } from "~/utils/nuxt";
+import { translate } from "~/utils/nuxt/i18n";
 
 export default function Visitors (props: { visitors?: number }) {
   return (

@@ -1,4 +1,4 @@
-import { isDev } from "~/utils/nuxt";
+import { isDev } from "~/utils/nuxt/constants";
 import { allHotEvent } from "~/vite-plugins/types";
 
 // HACK need `import.meta.hot.off()`

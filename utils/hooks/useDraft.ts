@@ -1,5 +1,6 @@
-import type { CommonItem, HeaderTabUrl } from "../common";
-import { compareItem, compareMd, getLocalStorage, rmLocalStorage, setLocalStorage } from "../nuxt";
+import type { CommonItem, HeaderTabUrl } from "../common/types";
+import { getLocalStorage, setLocalStorage, rmLocalStorage } from "../nuxt/localStorage";
+import { compareItem, compareMd } from "../nuxt/manage";
 
 export interface UseDraftProps<T extends CommonItem> {
   originItem: Readonly<Ref<T>>,

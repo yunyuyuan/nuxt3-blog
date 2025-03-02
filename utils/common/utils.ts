@@ -17,7 +17,7 @@ export function createNewItem (url: HeaderTabUrl) {
     time: 0,
     modifyTime: 0,
     _show: true,
-    visitors: 0,
+    _visitors: 0,
     showComments: false,
     encrypt: false
   };
@@ -61,8 +61,8 @@ export function escapeNewLine (s: string) {
 }
 
 export function toggleCodeBlockTheme (theme?: string) {
-  const body = document.body;
-  theme = theme || (body.getAttribute("code-theme") === "light" ? "dark" : "light");
-  body.setAttribute("code-theme", theme);
+  const html = document.documentElement;
+  theme = theme || (html.getAttribute("code-theme") === "light" ? "dark" : "light");
+  html.setAttribute("code-theme", theme);
   localStorage.setItem("code-theme", theme);
 }

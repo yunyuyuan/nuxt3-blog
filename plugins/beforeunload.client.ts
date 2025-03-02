@@ -1,4 +1,4 @@
-import { translateT } from "~/utils/nuxt";
+import { translateT } from "~/utils/nuxt/i18n";
 
 export default defineNuxtPlugin(() => {
   const unSavedContent = useUnsavedContent();

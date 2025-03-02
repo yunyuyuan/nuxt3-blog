@@ -10,7 +10,7 @@ export type ItemBase = {
   encrypt: boolean;
   encryptBlocks?: EncryptBlock[];
   showComments: boolean;
-  visitors?: number;
+  _visitors?: number;
   _show?: boolean;
 };
 

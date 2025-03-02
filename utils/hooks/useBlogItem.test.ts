@@ -1,6 +1,6 @@
 import { registerEndpoint } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it } from "vitest";
-import type { ArticleItem } from "../common";
+import type { ArticleItem } from "../common/types";
 import { useBlogItem } from "./useBlogItem";
 
 const timeout = () => new Promise((resolve) => {

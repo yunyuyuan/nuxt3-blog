@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
-import { type RecordItem, getUniqueId } from "~/utils/common";
-import { initViewer } from "~/utils/nuxt";
+import type { RecordItem } from "~/utils/common/types";
+import { getUniqueId } from "~/utils/common/utils";
+import { initViewer } from "~/utils/nuxt/viewer";
 
 const editing = ref(true);
 const root = ref<HTMLElement>();

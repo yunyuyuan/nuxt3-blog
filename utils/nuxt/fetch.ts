@@ -1,8 +1,10 @@
 import fs from "fs";
-import { type CommonItem, type HeaderTabUrl, escapeNewLine } from "~/utils/common";
-import { inBrowser } from "~/utils/nuxt";
+import type { CommonItem, HeaderTabUrl } from "~/utils/common/types";
+import { inBrowser } from "~/utils/nuxt/constants";
+import { escapeNewLine } from "../common/utils";
 
-const magicFetch = async<T = any>(path: string, transform: (_: string) => T): Promise<T | undefined> => {
+const magicFetch = async<T = any>(_path: string, transform: (_: string) => T): Promise<T | undefined> => {
+  const path = __NB_VITESTING__ ? `e2e/${_path}` : _path;
   if (inBrowser) {
     if (!window.NBCache) {
       window.NBCache = {};
