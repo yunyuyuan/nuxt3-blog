@@ -1,11 +1,11 @@
 import { afterInsertHtml, parseMarkdown } from "../nuxt/markdown";
 
 type useMarkdownParserProps = {
-  mdValueRef: Ref<string>,
-  fromEdit?: boolean,
-  onAfterInsertHtml?: CallableFunction,
-  destroyFns?: CallableFunction[],
-}
+  mdValueRef: Ref<string>;
+  fromEdit?: boolean;
+  onAfterInsertHtml?: CallableFunction;
+  destroyFns?: CallableFunction[];
+};
 
 export const useMarkdownParser = async ({ mdValueRef, fromEdit, onAfterInsertHtml, destroyFns }: useMarkdownParserProps) => {
   const markdownRef = ref<HTMLElement>();
@@ -22,9 +22,9 @@ export const useMarkdownParser = async ({ mdValueRef, fromEdit, onAfterInsertHtm
   watch(mdValueRef, async (md) => {
     parse(md);
   });
-  
+
   await parse(mdValueRef.value);
-  
+
   watch(htmlContent, () => {
     setTimeout(async () => {
       if (markdownRef.value) {

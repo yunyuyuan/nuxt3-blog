@@ -1,15 +1,15 @@
+import { translate } from "../i18n";
+import { getCurrentTab, devHotListen } from "../utils";
 import type { CommonItem } from "~/utils/common/types";
 import { notify } from "~/utils/nuxt/notify";
 import type { UpdateRebuild } from "~/vite-plugins/rebuild";
 import { rebuildEvent } from "~/vite-plugins/types";
-import { translate } from "../i18n";
-import { getCurrentTab, devHotListen } from "../utils";
 
-export function isAuthor (): never {
+export function isAuthor(): never {
   throw new Error("Can't do that");
 }
 
-export function createCommit (
+export function createCommit(
   _commit = "",
   additions: { path: string; content: string }[] = [],
   deletions: { path: string }[] = []
@@ -21,7 +21,7 @@ export function createCommit (
   return listenServer();
 }
 
-export function deleteList (
+export function deleteList(
   newList: CommonItem[],
   dels: CommonItem[]
 ): Promise<boolean> {
@@ -38,7 +38,7 @@ export function deleteList (
   return listenServer();
 }
 
-function listenServer (): Promise<boolean> {
+function listenServer(): Promise<boolean> {
   return new Promise((resolve, reject) => {
     devHotListen(rebuildEvent, (data) => {
       if (typeof data === "boolean") {

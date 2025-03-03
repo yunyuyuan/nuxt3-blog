@@ -2,7 +2,7 @@
 import type Headroom from "headroom.js";
 import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
 import config from "~/config";
-import {i18nLocales, type I18nCode } from "~/utils/common/locales";
+import { i18nLocales, type I18nCode } from "~/utils/common/locales";
 import { HeaderTabs } from "~/utils/common/types";
 import { githubRepoUrl } from "~/utils/common/constants";
 import { translateT } from "~/utils/nuxt/i18n";
@@ -17,21 +17,15 @@ const activeRoute = computed(() => {
 });
 const footerDomain = ref("");
 
-// mobile menu
-const isMobile = useIsMobile();
 const menuShow = ref<boolean>(false);
-watch(isMobile, () => {
-  setTimeout(() => {
-    menuShow.value = false;
-  });
-});
+
 const LayoutMenu = defineComponent({
   // XXX why need?
   components: {
     "nuxt-link": NuxtLink
   },
-  render: () =>
-    <div class={`layout-menu flex ${isMobile.value ? "in-mobile" : ""}`}>
+  render: () => (
+    <div class="layout-menu flex">
       {
         HeaderTabs.map(item => (
           <nuxt-link
@@ -48,7 +42,7 @@ const LayoutMenu = defineComponent({
         ))
       }
     </div>
-});
+  ) });
 
 const showI18n = ref(false);
 const setLocale = (locale: I18nCode) => {
@@ -86,7 +80,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
 <template>
   <div
     id="default-layout"
-    :class="{'in-about': inAbout, 'no-margin': route.path === '/records'}"
+    :class="{ 'in-about': inAbout, 'no-margin': route.path === '/records' }"
   >
     <div
       class="mode-bg"
@@ -100,13 +94,13 @@ const inputPwd = ref(encryptor.usePasswd.value);
       <del class="space-left" />
       <span
         class="mobile-menu-toggler"
-        :class="{active: menuShow}"
+        :class="{ active: menuShow }"
         @click="menuShow = true"
       >
         <svg-icon name="menu" />
       </span>
-      <layout-menu v-show="!isMobile" />
-      <div v-show="isMobile">
+      <layout-menu class="menu-pc" />
+      <div class="menu-mobile">
         <common-dropdown
           v-model:show="menuShow"
           wrap-class="menu-dropdown"
@@ -126,7 +120,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
               <div
                 v-for="locale of i18nLocales"
                 :key="locale.code"
-                :class="{ active: i18nCode === locale.code}"
+                :class="{ active: i18nCode === locale.code }"
                 @click="setLocale(locale.code)"
               >
                 {{ locale.name }}
@@ -169,7 +163,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
         </nuxt-link>
         <div
           class="pwd flex"
-          :class="{valid: encryptor.passwdCorrect.value}"
+          :class="{ valid: encryptor.passwdCorrect.value }"
           :title="$t('passwd')"
           @click="showPwdModal = true"
         >
@@ -192,7 +186,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
     <span
       v-show="!!pageLoading.loadingState.value"
       class="loading"
-      :style="{width: `${pageLoading.loadingState.value}%`}"
+      :style="{ width: `${pageLoading.loadingState.value}%` }"
     />
     <section id="body">
       <slot />
@@ -341,11 +335,23 @@ const inputPwd = ref(encryptor.usePasswd.value);
   }
 
   .layout-menu {
-    &.in-mobile {
+    &.menu-mobile {
       box-shadow: 0 0 10px #3c3c3c8a;
 
       @include dark-mode {
         box-shadow: 0 0 10px #b4b4b48a;
+      }
+
+      display: none;
+
+      @include mobile {
+        display: unset;
+      }
+    }
+
+    &.menu-pc {
+      @include mobile {
+        display: none;
       }
     }
 
@@ -727,5 +733,4 @@ const inputPwd = ref(encryptor.usePasswd.value);
     }
   }
 }
-
 </style>

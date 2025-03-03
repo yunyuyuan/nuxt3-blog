@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import https from "https";
 import colors from "colors";
-import type { ImgMap} from "./utils";
+import type { ImgMap } from "./utils";
 import { getAbsolutePath } from "./utils";
 
 export default async function (user?: number, group?: number) {
@@ -11,13 +11,13 @@ export default async function (user?: number, group?: number) {
 
 const imgsPath = getAbsolutePath("imgs");
 
-function sleep () {
+function sleep() {
   return new Promise<void>((resolve) => {
     setTimeout(resolve, Math.floor(Math.random() * (3000 + 1)) + 2000);
   });
 }
 
-async function downloadImages (json: ImgMap, user?: number, group?: number) {
+async function downloadImages(json: ImgMap, user?: number, group?: number) {
   const urls = Object.keys(json);
 
   if (!fs.existsSync(imgsPath)) {
@@ -49,7 +49,7 @@ async function downloadImages (json: ImgMap, user?: number, group?: number) {
   console.log(colors.bold("Downloaded " + colors.green(succeedCount + "/" + urls.length + " items")));
 }
 
-function downloadImage (url: string, user?: number, group?: number) {
+function downloadImage(url: string, user?: number, group?: number) {
   return new Promise<boolean | null>((resolve, reject) => {
     const fileName = path.join(imgsPath, url.replace(/^.*?([^/]*)$/, "$1"));
     if (fs.existsSync(fileName)) {

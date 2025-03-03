@@ -16,7 +16,7 @@ const props = defineProps({
   /** 内部图片样式 */
   imgStyle: { type: String, default: "" },
   /** 加载错误时的大小 */
-  errSize: { type: Object as PropType<{height: string, width: string}|null>, default: null },
+  errSize: { type: Object as PropType<{ height: string; width: string } | null>, default: null },
   /** 显示“点击重试”按钮 */
   retry: { type: Boolean, default: true },
   title: { type: String, default: "" }
@@ -54,27 +54,27 @@ const containerStyle = computed<StyleValue>(() => {
   // 图片在视图外 | 图片出错 | 图片加载中，使用containerSize
   return props.containerSize
     ? {
-      width: props.containerSize[0],
-      height: props.containerSize[1]
-    } as CSSProperties
+        width: props.containerSize[0],
+        height: props.containerSize[1]
+      } as CSSProperties
     : "";
 });
 
 const root = ref<HTMLElement>();
 
-function containerClick () {
+function containerClick() {
   if (props.retry && imgState.value === "error") {
     imgState.value = "loading";
   }
 }
-function loadFinish (error: boolean) {
+function loadFinish(error: boolean) {
   if (isEncryptedImg.value) {
     return;
   }
   imgState.value = error ? "error" : "loaded";
 }
 let watchEncrypt: ReturnType<typeof watch> | null = null;
-function refreshView () {
+function refreshView() {
   if (isBlankSrc.value) {
     return;
   }
@@ -97,11 +97,11 @@ function refreshView () {
     const contractY = root.value!.getBoundingClientRect().y - winHeight;
     const contractX = root.value!.getBoundingClientRect().x - winWidth;
     if ((
-      contractY < 0 &&
-      contractY > -winHeight - height.value &&
-      contractX < 0 &&
-      contractX > -winWidth - width.value) ||
-      props.noLazy
+      contractY < 0
+      && contractY > -winHeight - height.value
+      && contractX < 0
+      && contractX > -winWidth - width.value)
+    || props.noLazy
     ) {
       // outerView -> loading
       imgState.value = "loading";

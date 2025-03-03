@@ -9,13 +9,13 @@ describe("Item Converting", async () => {
 
     const uploadBtn = await itemPage.getByTestId("item-upload-btn");
     expect(await uploadBtn.isDisabled()).toBe(true);
-    
+
     await itemPage.fillItemDetails("new title", "newtag", "[encrypt]\nnew content\n[/encrypt]");
-    
+
     await itemPage.enterPassword();
 
     await itemPage.uploadItem();
-      
+
     await itemPage.verifyItemListInResponse({
       expectedLength: 3,
       shouldFindItem: { encrypt: false, title: "new title", tags: ["newtag"] },
@@ -31,15 +31,15 @@ describe("Item Converting", async () => {
 
     const uploadBtn = await itemPage.getByTestId("item-upload-btn");
     expect(await uploadBtn.isDisabled()).toBe(true);
-    
+
     await itemPage.toggleEncrypted();
-    
+
     await itemPage.fillItemDetails("new title", undefined, "new content");
-    
+
     await itemPage.enterPassword();
 
     await itemPage.uploadItem();
-      
+
     await itemPage.verifyItemListInResponse({
       expectedLength: 3,
       shouldNotFindItem: i => i.title === "new title",
@@ -50,19 +50,18 @@ describe("Item Converting", async () => {
     await itemPage.verifyItemContentInResponse(undefined, "new content");
   });
 
-
   it("Block-Encrypt to No-Encrypt", async () => {
     const { itemPage } = await createItemPage("/manage/articles/2222");
 
     const uploadBtn = await itemPage.getByTestId("item-upload-btn");
     expect(await uploadBtn.isDisabled()).toBe(true);
-    
+
     await itemPage.enterPassword();
 
     await itemPage.fillItemDetails("new title", "newtag", "new content");
 
     await itemPage.uploadItem();
-      
+
     await itemPage.verifyItemListInResponse({
       expectedLength: 3,
       shouldFindItem: { encrypt: false, title: "new title", tags: ["newtag"] },
@@ -78,15 +77,15 @@ describe("Item Converting", async () => {
 
     const uploadBtn = await itemPage.getByTestId("item-upload-btn");
     expect(await uploadBtn.isDisabled()).toBe(true);
-    
+
     await itemPage.enterPassword();
 
     await itemPage.fillItemDetails("new title", undefined, "new content");
-    
+
     await itemPage.toggleEncrypted();
 
     await itemPage.uploadItem();
-      
+
     await itemPage.verifyItemListInResponse({
       expectedLength: 3,
       shouldNotFindItem: i => i.title === "new title",
@@ -97,21 +96,20 @@ describe("Item Converting", async () => {
     await itemPage.verifyItemContentInResponse(undefined, "new content");
   });
 
-
   it("Encrypt to No-Encrypt", async () => {
     const { itemPage } = await createItemPage("/manage/articles/3333");
 
     const uploadBtn = await itemPage.getByTestId("item-upload-btn");
     expect(await uploadBtn.isDisabled()).toBe(true);
-    
+
     await itemPage.enterPassword();
-    
+
     await itemPage.toggleEncrypted();
 
     await itemPage.fillItemDetails("new title", "newtag", "new content");
 
     await itemPage.uploadItem();
-    
+
     await itemPage.verifyItemListInResponse({
       expectedLength: 3,
       shouldFindItem: { encrypt: false, title: "new title", tags: ["newtag"] },
@@ -127,15 +125,15 @@ describe("Item Converting", async () => {
 
     const uploadBtn = await itemPage.getByTestId("item-upload-btn");
     expect(await uploadBtn.isDisabled()).toBe(true);
-    
+
     await itemPage.enterPassword();
-    
+
     await itemPage.toggleEncrypted();
 
     await itemPage.fillItemDetails("new title", "newtag", "[encrypt]\nnew content\n[/encrypt]");
 
     await itemPage.uploadItem();
-    
+
     await itemPage.verifyItemListInResponse({
       expectedLength: 3,
       shouldFindItem: { encrypt: false, title: "new title", tags: ["newtag"] },

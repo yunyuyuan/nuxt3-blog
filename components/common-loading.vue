@@ -11,7 +11,7 @@ const isFirstLoad = useFirstLoad();
 
 <template>
   <div
-    :class="{hide: !showInFirst && isFirstLoad}"
+    :class="{ hide: !showInFirst && isFirstLoad }"
     class="common-loading flexc"
   >
     <svg-icon name="loading" />

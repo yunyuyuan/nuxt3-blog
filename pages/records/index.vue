@@ -4,7 +4,6 @@ import type { RecordItem } from "~/utils/common/types";
 import { useListPage } from "~/utils/nuxt/public/list";
 import { formatTime } from "~/utils/nuxt/format-time";
 
-
 const recordList = await useListPage<RecordItem>();
 
 const currentYear = useState<number | undefined>("record-expand", () => undefined);
@@ -50,7 +49,7 @@ onMounted(() => {
           @click="currentYear = currentYear == year.year ? undefined : year.year"
         >
           <svg-icon
-            :style="{transform: currentYear==year.year ? 'rotate(180deg)' : ''}"
+            :style="{ transform: currentYear==year.year ? 'rotate(180deg)' : '' }"
             name="up"
           />
           {{ year.year }}

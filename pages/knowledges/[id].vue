@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { KnowledgeItem } from "~/utils/common/types";
+import { useComment } from "~/utils/nuxt/public";
 import { useContentPage } from "~/utils/nuxt/public/detail";
 import Visitors from "~/utils/nuxt/public/visitors";
-import { useCommonSEOTitle, useComment } from "~/utils/nuxt/utils";
+import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
 const { item, wroteDate: writeDate, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
@@ -19,7 +20,7 @@ initViewer(root);
   >
     <div
       class="captain flexc w100"
-      :class="{'has-comment': item.showComments}"
+      :class="{ 'has-comment': item.showComments }"
     >
       <div class="info">
         <div class="cover">

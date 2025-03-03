@@ -18,15 +18,15 @@ const request = async (path: string, data: any) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      email: process.env.MONGODB_USER,
-      password: process.env.MONGODB_PWD
+      "email": process.env.MONGODB_USER,
+      "password": process.env.MONGODB_PWD
     },
     body: requestData
   });
   return res as any;
 };
 
-export async function getVisitors (type: HeaderTabUrl) {
+export async function getVisitors(type: HeaderTabUrl) {
   const res = await request("/action/find", {
     filter: {
       ntype: type
@@ -36,7 +36,7 @@ export async function getVisitors (type: HeaderTabUrl) {
   return res.documents;
 }
 
-export async function increaseVisitors ({ id, type, inc }: {id: number, type: HeaderTabUrl, inc?: boolean}) {
+export async function increaseVisitors({ id, type, inc }: { id: number; type: HeaderTabUrl; inc?: boolean }) {
   const preset = {
     nid: id,
     ntype: type

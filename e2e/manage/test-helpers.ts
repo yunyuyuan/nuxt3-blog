@@ -5,7 +5,7 @@ import { ManageConfigPage } from "../page-objects/manage/ConfigPage";
 
 export const setupTestEnvironment = async () => {
   await setup({
-    host: "http://localhost:13000",
+    host: "http://localhost:13000"
   });
 };
 

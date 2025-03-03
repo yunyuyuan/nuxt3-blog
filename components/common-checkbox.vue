@@ -4,8 +4,8 @@ defineProps({
   disabled: Boolean,
   testId: {
     type: String,
-    default: undefined,
-  },
+    default: undefined
+  }
 });
 const emit = defineEmits(["change"]);
 </script>

@@ -2,7 +2,7 @@
 import ManageListTable from "~/pages/manage/comps/manage-list-table.vue";
 import type { RecordItem } from "~/utils/common/types";
 
-const searchFn = (item: RecordItem, s:string) => !item.images.length || item.images.some(img => img.alt.includes(s));
+const searchFn = (item: RecordItem, s: string) => !item.images.length || item.images.some(img => img.alt.includes(s));
 </script>
 
 <template>
@@ -17,14 +17,14 @@ const searchFn = (item: RecordItem, s:string) => !item.images.length || item.ima
           :to="dataUrl"
         >
           <the-lazy-img
-            v-for="img,idx in (images.length ? images : [{alt: '', src: 'no-poster'}])"
+            v-for="img, idx in (images.length ? images : [{ alt: '', src: 'no-poster' }])"
             :key="idx"
             :container-size="[50, 50]"
             :alt="img.alt"
             :src="img.src"
             :title="img.alt"
             :retry="false"
-            :err-size="{width: '100px', height: '100px'}"
+            :err-size="{ width: '100px', height: '100px' }"
           />
         </nuxt-link>
       </template>

@@ -9,11 +9,11 @@ describe("Item Editing", async () => {
 
     const uploadBtn = await itemPage.getByTestId("item-upload-btn");
     expect(await uploadBtn.isDisabled()).toBe(true);
-    
+
     await itemPage.fillItemDetails("new title", "newtag", "new content");
 
     await itemPage.uploadItem();
-      
+
     await itemPage.verifyItemListInResponse({
       expectedLength: 3,
       shouldFindItem: { encrypt: false, title: "new title", tags: ["newtag"] },
@@ -33,11 +33,11 @@ describe("Item Editing", async () => {
     expect(await itemPage.isElementDisabled("item-title-input")).toBe(true);
 
     await itemPage.enterPassword();
-    
+
     await itemPage.fillItemDetails("new title", "newtag", "[encrypt]\nnew content\n[/encrypt]");
 
     await itemPage.uploadItem();
-      
+
     await itemPage.verifyItemListInResponse({
       expectedLength: 3,
       shouldFindItem: { encrypt: false, title: "new title", tags: ["newtag"] },
@@ -53,15 +53,15 @@ describe("Item Editing", async () => {
 
     const uploadBtn = await itemPage.getByTestId("item-upload-btn");
     expect(await uploadBtn.isDisabled()).toBe(true);
-    
+
     expect(await itemPage.isElementDisabled("item-title-input")).toBe(true);
 
     await itemPage.enterPassword();
-    
+
     await itemPage.fillItemDetails("new title", undefined, "new content");
 
     await itemPage.uploadItem();
-      
+
     await itemPage.verifyItemListInResponse({
       expectedLength: 3,
       shouldFindItem: { encrypt: true, tags: [] },

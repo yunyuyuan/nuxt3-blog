@@ -2,9 +2,9 @@ import https from "https";
 import FormData from "form-data";
 import tinify from "tinify";
 
-export async function smmsUpload (
+export async function smmsUpload(
   { token, tinyPngToken, file }:
-  {token?: string, tinyPngToken?: string, file: any}
+  { token?: string; tinyPngToken?: string; file: any }
 ) {
   if (!token) {
     throw new Error("Need token");
@@ -19,7 +19,8 @@ export async function smmsUpload (
       const source = tinify.fromBuffer(buffer);
       buffer = await source.toBuffer();
       size = Buffer.byteLength(buffer);
-    } catch (e: any) {
+    }
+    catch (e: any) {
       throw new Error(`Error from tinypng: ${e.toString()}`);
     }
   }
@@ -42,7 +43,7 @@ export async function smmsUpload (
   });
   const response = await uploadFile({
     headers: {
-      Authorization: token,
+      "Authorization": token,
       "Content-Length": len.toString(),
       "Content-Type": `multipart/form-data; boundary=${formData.getBoundary()}`
     },
@@ -61,9 +62,9 @@ export async function smmsUpload (
   return response;
 }
 
-function uploadFile ({ headers, formData }: {
-  headers: any,
-  formData: any,
+function uploadFile({ headers, formData }: {
+  headers: any;
+  formData: any;
 }) {
   const url = "https://sm.ms/api/v2/upload";
 
@@ -83,7 +84,8 @@ function uploadFile ({ headers, formData }: {
       res.on("end", () => {
         if (res.statusCode === 200) {
           resolve(JSON.parse(responseData));
-        } else {
+        }
+        else {
           reject(responseData);
         }
       });

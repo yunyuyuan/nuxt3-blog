@@ -7,20 +7,20 @@ import type { CommonItem } from "~/utils/common/types";
 import { escapeNewLine } from "~/utils/common/utils";
 import { translate } from "~/utils/nuxt/i18n";
 import { randomId } from "~/utils/nuxt/manage";
- 
+
 import { useManageContent, deleteItem, editItem } from "~/utils/nuxt/manage/detail";
 import { notify } from "~/utils/nuxt/notify";
 import { deepClone } from "~/utils/nuxt/utils";
 
 const props = defineProps<{
-  preProcessItem?:(editingItem: Ref<T>, originList: T[]) => void;
+  preProcessItem?: (editingItem: Ref<T>, originList: T[]) => void;
   /** 更新之前处理item，附带markdown信息 */
-  processWithContent?:(md: string, item: T) => void;
+  processWithContent?: (md: string, item: T) => void;
 }>();
 
 const encryptor = useEncryptor();
 
-const slots = defineSlots<Record<string, (_: { item: T, disabled: boolean }) => void>>();
+const slots = defineSlots<Record<string, (_: { item: T; disabled: boolean }) => void>>();
 
 const slotsRow = computed(() => Object.keys(slots).filter(key => !key.startsWith("_")));
 
@@ -42,7 +42,7 @@ const {
   canUpload,
   canDelete,
   targetTab,
-  isNew,
+  isNew
 } = await useManageContent<T>();
 
 props.preProcessItem?.(editingItem, originList);
@@ -123,7 +123,9 @@ const previewInfoEl = ref();
 const previewMdEl = ref();
 const setPreviewInfo = async () => {
   const info = await getUploadInfo();
-  if (!info) { return; }
+  if (!info) {
+    return;
+  }
   const { item, md } = info;
   previewInfo.value = JSON.stringify(item, null, 4);
   previewContent.value = md;
@@ -137,7 +139,9 @@ const setPreviewInfo = async () => {
 
 const doUpload = async () => {
   const info = await getUploadInfo();
-  if (!info) { return; }
+  if (!info) {
+    return;
+  }
   const { item: newItem, md } = info;
   currentOperate.value = "upload";
   toggleProcessing();

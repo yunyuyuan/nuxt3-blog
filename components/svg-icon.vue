@@ -6,7 +6,7 @@ const props = defineProps({
   name: { type: String, required: true }
 });
 
-const svgContents = import.meta.glob<{default: string}>("../assets/svg/*.svg", { query: "?raw" });
+const svgContents = import.meta.glob<{ default: string }>("../assets/svg/*.svg", { query: "?raw" });
 
 const icon = ref<string>("");
 

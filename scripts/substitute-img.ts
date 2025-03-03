@@ -1,5 +1,5 @@
 import fs from "fs";
-import type { ImgMap} from "./utils";
+import type { ImgMap } from "./utils";
 import { processBlogItem, encryptAndWriteMd, encrypt, promptTask, getAbsolutePath } from "./utils";
 
 export default async function () {

@@ -2,9 +2,10 @@
 import type { RecordItem } from "~/utils/common/types";
 import { formatTime } from "~/utils/nuxt/format-time";
 import { translate } from "~/utils/nuxt/i18n";
+import { useComment } from "~/utils/nuxt/public";
 import { useContentPage } from "~/utils/nuxt/public/detail";
 import Visitors from "~/utils/nuxt/public/visitors";
-import { useCommonSEOTitle, useComment } from "~/utils/nuxt/utils";
+import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
 const { item, wroteDate: writeDate, htmlContent, markdownRef } = await useContentPage<RecordItem>();
@@ -21,7 +22,7 @@ initViewer(root);
   >
     <div class="images">
       <the-lazy-img
-        v-for="img,idx in item.images"
+        v-for="img, idx in item.images"
         :key="idx"
         viewer
         :alt="img.alt"
@@ -32,7 +33,7 @@ initViewer(root);
     </div>
     <div
       class="text"
-      :class="{'has-comment': item.showComments}"
+      :class="{ 'has-comment': item.showComments }"
     >
       <div class="header flex">
         <writeDate />

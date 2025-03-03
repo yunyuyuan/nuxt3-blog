@@ -1,8 +1,8 @@
-import { deepClone } from "~/utils/nuxt/utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { ArticleItem, HeaderTabUrl } from "../common/types";
-import { useDraft } from "./useDraft";
 import { getLocalStorage } from "../nuxt/localStorage";
+import { useDraft } from "./useDraft";
+import { deepClone } from "~/utils/nuxt/utils";
 
 const TestItem: ArticleItem = {
   id: 1234,
@@ -12,7 +12,7 @@ const TestItem: ArticleItem = {
   showComments: true,
   title: "test",
   len: 2000,
-  tags: ["tag1", "tag2"],
+  tags: ["tag1", "tag2"]
 };
 
 const TestMd = "test";
@@ -39,7 +39,7 @@ describe("Test Draft", () => {
 
   it("save draft should success", () => {
     const refs = createTestRefs();
-    const { draftKey, hasDraft, saveDraft } = useDraft({ 
+    const { draftKey, hasDraft, saveDraft } = useDraft({
       originItem: refs.originItem,
       editingItem: refs.editingItem,
       originMd: refs.originMd,
@@ -53,14 +53,14 @@ describe("Test Draft", () => {
 
   it("hasDraft should be false when draft be deleted", () => {
     const refs = createTestRefs();
-    const { draftKey, hasDraft, saveDraft, deleteDraft } = useDraft({ 
+    const { draftKey, hasDraft, saveDraft, deleteDraft } = useDraft({
       originItem: refs.originItem,
       editingItem: refs.editingItem,
       originMd: refs.originMd,
       editingMd: refs.editingMd,
       url: refs.url
     });
-    
+
     saveDraft();
     deleteDraft();
     expect(hasDraft.value).toBeFalsy();
@@ -69,7 +69,7 @@ describe("Test Draft", () => {
 
   it("apply should successful", () => {
     const refs = createTestRefs();
-    const { saveDraft, applyDraft } = useDraft({ 
+    const { saveDraft, applyDraft } = useDraft({
       originItem: refs.originItem,
       editingItem: refs.editingItem,
       originMd: refs.originMd,
@@ -87,14 +87,14 @@ describe("Test Draft", () => {
 
   it("canSaveLeave should work", () => {
     const refs = createTestRefs();
-    const { canSaveLeave, saveDraft, applyDraft, deleteDraft } = useDraft({ 
+    const { canSaveLeave, saveDraft, applyDraft, deleteDraft } = useDraft({
       originItem: refs.originItem,
       editingItem: refs.editingItem,
       originMd: refs.originMd,
       editingMd: refs.editingMd,
       url: refs.url
     });
-    
+
     expect(canSaveLeave.value).toBeTruthy();
     refs.editingItem.value.title = "changed";
     expect(canSaveLeave.value).toBeFalsy();

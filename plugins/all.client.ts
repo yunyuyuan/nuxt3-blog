@@ -27,7 +27,7 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       sameSha: computed(() => {
-        return useCorrectSha().value === __NB_CURRENT_GIT_SHA__;
+        return useRemoteLatestSha().value === __NB_CURRENT_GIT_SHA__;
       })
     }
   };

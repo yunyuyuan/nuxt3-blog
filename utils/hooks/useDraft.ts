@@ -3,11 +3,11 @@ import { getLocalStorage, setLocalStorage, rmLocalStorage } from "../nuxt/localS
 import { compareItem, compareMd } from "../nuxt/manage";
 
 export interface UseDraftProps<T extends CommonItem> {
-  originItem: Readonly<Ref<T>>,
-  originMd: Readonly<Ref<string>>,
-  editingItem: Ref<T>,
-  editingMd: Ref<string>,
-  url: HeaderTabUrl,
+  originItem: Readonly<Ref<T>>;
+  originMd: Readonly<Ref<string>>;
+  editingItem: Ref<T>;
+  editingMd: Ref<string>;
+  url: HeaderTabUrl;
 }
 
 export const useDraft = <T extends CommonItem>({
@@ -30,11 +30,11 @@ export const useDraft = <T extends CommonItem>({
   const sameWithOrigin = computed(() => {
     return compareItem(originItem.value, editingItem.value) && compareMd(originMd.value, editingMd.value);
   });
-  
+
   const canSaveLeave = computed(() => {
     return sameWithDraft.value || sameWithOrigin.value;
   });
-  
+
   const loadDraft = () => {
     const draft = getLocalStorage(draftKey.value);
     if (draft) {
@@ -42,7 +42,7 @@ export const useDraft = <T extends CommonItem>({
         const { content, ...rest } = JSON.parse(draft);
         draftMd.value = content;
         draftItem.value = rest;
-      } catch {/**  */}
+      } catch { /**  */ }
     } else {
       draftMd.value = "";
       draftItem.value = undefined;
@@ -67,7 +67,7 @@ export const useDraft = <T extends CommonItem>({
     }
     editingMd.value = draftMd.value;
   };
-  
+
   loadDraft();
 
   return {

@@ -27,7 +27,7 @@ const paragraphs = [
     >
     <div class="flexc paragraphs">
       <p
-        v-for="p,idx in paragraphs"
+        v-for="p, idx in paragraphs"
         :key="idx"
       >
         {{ p }}

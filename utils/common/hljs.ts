@@ -1,6 +1,6 @@
 import type highlight from "highlight.js";
 
-export function initHljs (hljs: typeof highlight) {
+export function initHljs(hljs: typeof highlight) {
   hljs.registerLanguage("vue", hljs => ({
     subLanguage: "xml",
     contains: [

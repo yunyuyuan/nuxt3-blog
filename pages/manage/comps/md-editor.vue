@@ -2,16 +2,16 @@
 import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
 import type { editor as MonacoEditor } from "monaco-editor";
+import StickerPick from "./sticker-pick.vue";
 import { initViewer } from "~/utils/nuxt/viewer";
 import { useMarkdownParser } from "~/utils/hooks/useMarkdownParser";
-import StickerPick from "./sticker-pick.vue";
 import { useUnmount } from "~/utils/hooks/useUnmount";
 
 const props = defineProps({
   modelValue: { type: String, default: "" },
   disabled: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
-  single: { type: Boolean, default: false },
+  single: { type: Boolean, default: false }
 });
 
 const emit = defineEmits(["update:modelValue", "preview"]);
@@ -181,8 +181,8 @@ initViewer(markdownRef);
         class="split"
         :title="$t('toggle-view-mode')"
         @click="
-          currentView =
-            currentView == 'both'
+          currentView
+            = currentView == 'both'
               ? 'edit'
               : currentView == 'edit'
                 ? 'preview'

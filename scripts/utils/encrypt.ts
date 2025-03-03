@@ -1,17 +1,16 @@
 import fs from "fs";
 import colors from "colors";
 import CryptoJS from "crypto-js";
-import type { CommonItem, DecryptFunction, HeaderTabUrl} from "../../utils/common/types";
+import type { CommonItem, DecryptFunction, HeaderTabUrl } from "../../utils/common/types";
 import { escapeNewLine } from "../../utils/common/utils";
 import { encryptDecryptItem, getEncryptedBlocks } from "../../utils/common/process-encrypt-decrypt";
 import { getRebuildPath } from ".";
 
- 
-export async function encrypt (s: string, pwd: string): Promise<string> {
+export async function encrypt(s: string, pwd: string): Promise<string> {
   return CryptoJS.AES.encrypt(s, pwd).toString();
 }
- 
-export async function decrypt (s: string, pwd: string): Promise<string> {
+
+export async function decrypt(s: string, pwd: string): Promise<string> {
   const result = CryptoJS.AES.decrypt(s, pwd).toString(CryptoJS.enc.Utf8);
   if (!result) {
     console.error(colors.red("Password incorrect"));
@@ -20,12 +19,12 @@ export async function decrypt (s: string, pwd: string): Promise<string> {
   return result;
 }
 
-export function processBlogItem (
+export function processBlogItem(
   pwd: string,
   /** 单个item回调 */
-  itemCb: (_: {decryptedItem: CommonItem, decryptedMd: string, type: HeaderTabUrl, mdPath: string}) => any | Promise<any>,
+  itemCb: (_: { decryptedItem: CommonItem; decryptedMd: string; type: HeaderTabUrl; mdPath: string }) => any | Promise<any>,
   /** 整个json回调 */
-  jsonCb: (_: {decryptedItemList: CommonItem[], type: HeaderTabUrl, jsonPath: string}) => any | Promise<any> = () => null
+  jsonCb: (_: { decryptedItemList: CommonItem[]; type: HeaderTabUrl; jsonPath: string }) => any | Promise<any> = () => null
 ) {
   const _decrypt = (s: string) => decrypt(s, pwd);
 
@@ -61,7 +60,7 @@ export function processBlogItem (
 /**
  * 重新加密md并写入文件，同时处理item里的encrypted blocks
  */
-export async function encryptAndWriteMd ({ item, md, path, encrypt, type }: {item: CommonItem, md: string, path: string, encrypt: DecryptFunction, type: HeaderTabUrl}) {
+export async function encryptAndWriteMd({ item, md, path, encrypt, type }: { item: CommonItem; md: string; path: string; encrypt: DecryptFunction; type: HeaderTabUrl }) {
   if (item.encrypt) {
     // 重新加密item
     await encryptDecryptItem(item, encrypt, type);

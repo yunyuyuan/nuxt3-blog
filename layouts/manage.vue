@@ -2,7 +2,7 @@
 import SvgIcon from "~/components/svg-icon.vue";
 import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
 import UploadImage from "~/pages/manage/comps/upload-image.vue";
-import { isAuthor as checkIsAuthor} from "~/utils/nuxt/manage/github";
+import { isAuthor as checkIsAuthor } from "~/utils/nuxt/manage/github";
 import { GithubTokenKey } from "~/utils/common/constants";
 import { HeaderTabs } from "~/utils/common/types";
 import { translate, translateT } from "~/utils/nuxt/i18n";
@@ -26,14 +26,8 @@ const activeRoute = computed(() => {
 const travel = computed(() => {
   return calcRocketUrl();
 });
-// mobile menu
-const isMobile = useIsMobile();
+
 const menuShow = ref<boolean>(false);
-watch(isMobile, () => {
-  setTimeout(() => {
-    menuShow.value = false;
-  });
-});
 
 const ManageMenu = defineComponent({
   components: {
@@ -51,7 +45,7 @@ const ManageMenu = defineComponent({
         </li>
         <li>
           <nuxt-link
-            to='/manage/config'
+            to="/manage/config"
             class={{ active: activeRoute.value.startsWith("/config") }}
           >
             { translateT("config") }
@@ -71,8 +65,8 @@ const ManageMenu = defineComponent({
         }
       </ul>
       <div
-        title={(!useCorrectSha().value || useNuxtApp().$sameSha.value) ? (allPassed.value ? translate("all-verified") : translate("token-and-passwd")) : translate("commit-id-not-correct")}
-        class={{ warning: useCorrectSha().value && !useNuxtApp().$sameSha.value }}
+        title={(!useRemoteLatestSha().value || useNuxtApp().$sameSha.value) ? (allPassed.value ? translate("all-verified") : translate("token-and-passwd")) : translate("commit-id-not-correct")}
+        class={{ warning: useRemoteLatestSha().value && !useNuxtApp().$sameSha.value }}
         data-testid="show-token-password-btn"
         onClick={() => { showModal.value = true; }}
       >
@@ -85,16 +79,20 @@ const ManageMenu = defineComponent({
         <svg-icon name="rocket" />
       </nuxt-link>
       {
-        isDev &&
-      <nuxt-link title="svgs" to="/manage/all-svg" target="_blank">
-        SVG
-      </nuxt-link>
+        isDev
+        && (
+          <nuxt-link title="svgs" to="/manage/all-svg" target="_blank">
+            SVG
+          </nuxt-link>
+        )
       }
       {
-        (pageLoading.loadingState.value && !isMobile.value)
-          ? <div>
-            <svg-icon name="loading"/>
-          </div>
+        pageLoading.loadingState.value
+          ? (
+              <div>
+                <svg-icon name="loading" />
+              </div>
+            )
           : null
       }
     </div>
@@ -177,8 +175,8 @@ onMounted(() => {
         >
           <svg-icon :name="pageLoading.loadingState.value ? 'loading' : 'menu'" />
         </span>
-        <manage-menu v-if="!isMobile" />
-        <div v-else>
+        <manage-menu class="menu-pc" />
+        <div class="menu-mobile">
           <common-dropdown v-model:show="menuShow">
             <manage-menu />
           </common-dropdown>
@@ -291,6 +289,20 @@ $menu-width: 120px;
 }
 
 .manage-menu {
+  &.menu-mobile {
+    display: none;
+
+    @include mobile {
+      display: unset;
+    }
+  }
+
+  &.menu-pc {
+    @include mobile {
+      display: none;
+    }
+  }
+
   ul {
     padding: 10px 0;
     width: 100%;

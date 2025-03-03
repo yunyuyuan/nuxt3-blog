@@ -3,16 +3,16 @@ import type { HeaderTabUrl } from "../../common/types";
 import { getCollection } from "./mongodb";
 
 type VisitorsDb = {
-  nid: number,
-  ntype: HeaderTabUrl,
-  nvisitors?: number,
-}
+  nid: number;
+  ntype: HeaderTabUrl;
+  nvisitors?: number;
+};
 
 const sqlOptions = {
   projection: { _id: 0, nid: 1, nvisitors: 1 }
 };
 
-export async function getVisitors (type: HeaderTabUrl) {
+export async function getVisitors(type: HeaderTabUrl) {
   const collection = await getCollection<VisitorsDb>();
   const query: Partial<VisitorsDb> = {
     ntype: type
@@ -21,7 +21,7 @@ export async function getVisitors (type: HeaderTabUrl) {
   return await results.toArray();
 }
 
-export async function increaseVisitors ({ id, type, inc }: {id: number, type: HeaderTabUrl, inc?: boolean}) {
+export async function increaseVisitors({ id, type, inc }: { id: number; type: HeaderTabUrl; inc?: boolean }) {
   const collection = await getCollection<VisitorsDb>();
   const preset: VisitorsDb = {
     nid: id,
@@ -35,7 +35,8 @@ export async function increaseVisitors ({ id, type, inc }: {id: number, type: He
   }, sqlOptions);
   if (result) {
     return result.nvisitors! + incN;
-  } else {
+  }
+  else {
     await collection.insertOne({
       ...preset,
       nvisitors: config.MongoDb.initialVisitors

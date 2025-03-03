@@ -10,14 +10,16 @@ import { getLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
 // avoid loading during SSG
 export const useFirstLoad = () => useState("first-loaded", () => true);
 
-export const useIsMobile = () => useState("is-mobile", () => false);
-
 export const useGithubToken = () => useState(GithubTokenKey, () => "");
 export const useIsAuthor = () => useState<null | boolean>("is-author", () => null);
-export const useCorrectSha = () => useState("correct-sha", () => "");
+export const useRemoteLatestSha = () => useState("remote-latest-sha", () => "");
 export const useUnsavedContent = () => useState("unsaved-content", () => false);
 export const useThemeMode = () => {
   const themeMode = useState<"light" | "dark" | "">(ThemeModeKey, () => "");
+  onMounted(() => {
+    themeMode.value = getLocalStorage(ThemeModeKey) || "light";
+  });
+
   // 首次加载的时候，不进行动画
   const shouldAnimate = useState(`${ThemeModeKey}-animate`, () => false);
 
@@ -29,10 +31,6 @@ export const useThemeMode = () => {
     setLocalStorage(ThemeModeKey, themeMode.value);
     toggleCodeBlockTheme(themeMode.value);
   };
-
-  onMounted(() => {
-    themeMode.value = getLocalStorage(ThemeModeKey) || "light";
-  });
   return {
     themeMode,
     shouldAnimate,
