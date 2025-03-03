@@ -13,9 +13,9 @@ const calcTagsList = () => {
   inputTagsList.value = !inputTags.value
     ? []
     : Array.from(new Set(inputTags.value
-      .split(",")
-      .map(tag => tag.trim())
-      .filter(tag => !/^\s*$/.test(tag))));
+        .split(",")
+        .map(tag => tag.trim())
+        .filter(tag => !/^\s*$/.test(tag))));
 };
 watch(inputTags, () => calcTagsList());
 const toggleTag = (tag: string) => {
@@ -34,7 +34,7 @@ const preProcessItem = (editingItem: Ref<ArticleItem>, originList: ArticleItem[]
     inputTags.value = tags.join(",");
     calcTagsList();
   }, { immediate: true });
-  
+
   watch(inputTagsList, (tags) => {
     if (tags && !editingItem.value.encrypt) {
       editingItem.value.tags.splice(0, editingItem.value.tags.length, ...tags);

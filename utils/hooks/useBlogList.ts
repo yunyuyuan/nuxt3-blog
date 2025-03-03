@@ -9,7 +9,7 @@ export const useBlogList = async <T extends CommonItem>(url: HeaderTabUrl, decry
   const originList = await fetchList<T>(url);
 
   const decryptedList = ref(deepClone(originList)) as Ref<T[]>;
-  
+
   await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
     for (const item of decryptedList.value) {
       if (item.encrypt && (!decryptId || item.id === decryptId)) {
@@ -17,9 +17,9 @@ export const useBlogList = async <T extends CommonItem>(url: HeaderTabUrl, decry
       }
     }
   });
-  
+
   return {
     originList,
-    decryptedList,
+    decryptedList
   };
 };

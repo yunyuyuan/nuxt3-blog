@@ -1,15 +1,15 @@
+import { translate } from "../i18n";
+import { getCurrentTab, useCommonSEOTitle, deepClone } from "../utils";
+import { useStatusText } from ".";
 import type { CommonItem } from "~/utils/common/types";
 import { createNewItem } from "~/utils/common/utils";
 import { useBlogItem } from "~/utils/hooks/useBlogItem";
 import { useDraft } from "~/utils/hooks/useDraft";
-import { useStatusText } from ".";
-import { translate } from "../i18n";
-import { getCurrentTab, useCommonSEOTitle, deepClone } from "../utils";
 
 /**
  * 管理页面详情编辑通用功能
  */
-export async function useManageContent<T extends CommonItem> () {
+export async function useManageContent<T extends CommonItem>() {
   const itemId = useRoute().params.id as string;
   const targetTab = getCurrentTab();
 
@@ -27,10 +27,10 @@ export async function useManageContent<T extends CommonItem> () {
     originItem = createNewItem(targetTab.url) as T;
     decryptedItem = readonly(ref(deepClone(originItem))) as Readonly<Ref<T>>;
   }
-  
+
   const editingItem = ref() as Ref<T>;
   const editingMd = ref("");
-  
+
   watch(decryptedMd, (decryptedMd) => {
     editingMd.value = decryptedMd;
   }, { immediate: true });
@@ -53,7 +53,7 @@ export async function useManageContent<T extends CommonItem> () {
   );
   const canUpload = computed(() => canCommit.value && !sameWithOrigin.value);
 
-  watch(canSaveLeave, canSaveLeave => {
+  watch(canSaveLeave, (canSaveLeave) => {
     useUnsavedContent().value = !canSaveLeave;
   });
 
@@ -80,11 +80,10 @@ export async function useManageContent<T extends CommonItem> () {
     decryptedList,
     decryptedItem,
     decryptedMd,
-    
-    decrypted: successDecrypt,
+
+    decrypted: successDecrypt
   };
 }
-
 
 export const editItem = <T extends CommonItem>(originList: Readonly<T[]>, item: T) => {
   const cloneList = originList.map(item => deepClone(item));

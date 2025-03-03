@@ -26,7 +26,7 @@ const filteredListEmpty = computed(() => !filteredList.value.some(i => i._show))
 
 const tabLengthMap = computed(() => {
   const map = new Map<string, number>();
-  tabs.value.forEach(tab => {
+  tabs.value.forEach((tab) => {
     map.set(tab.key, knowledgeList.filter(item => item._show && (!tab.key || item.type === tab.key)).length);
   });
   return map;

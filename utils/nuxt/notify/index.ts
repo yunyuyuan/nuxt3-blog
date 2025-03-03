@@ -10,7 +10,7 @@ export type NotifyOption = {
   description?: string;
 };
 
-export function notify (options: NotifyOption) {
+export function notify(options: NotifyOption) {
   const container = document.createElement("div");
   const vm = createVNode(notification, options);
   vm.props!.onDestroy = () => {

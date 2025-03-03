@@ -3,7 +3,7 @@ import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
 import { KnowledgeTabs, KnowledgeTabsList, type KnowledgeItem } from "~/utils/common/types";
 
 const typeSelectShow = ref(false);
- 
+
 const processWithContent = (_md: string, _item: KnowledgeItem) => {};
 </script>
 
@@ -33,7 +33,7 @@ const processWithContent = (_md: string, _item: KnowledgeItem) => {};
           <a
             tabindex="1"
             class="flex"
-            :class="{active: typeSelectShow, disabled: disabled}"
+            :class="{ active: typeSelectShow, disabled: disabled }"
           >
             <b>{{ $T(KnowledgeTabsList.find((i) => i.key === item.type)!.name) }}</b>
             <svg-icon :name="item.type" />
@@ -46,7 +46,7 @@ const processWithContent = (_md: string, _item: KnowledgeItem) => {};
               v-for="tp in KnowledgeTabs"
               :key="tp"
               class="flex"
-              :class="{active: item.type===tp}"
+              :class="{ active: item.type===tp }"
               @click="item.type=tp;typeSelectShow=false"
             >
               <span>{{ $T(KnowledgeTabsList.find((i) => i.key === tp)!.name) }}</span>

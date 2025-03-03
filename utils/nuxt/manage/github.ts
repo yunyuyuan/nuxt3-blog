@@ -1,15 +1,15 @@
 import type { Axios } from "axios";
-import type { CommonItem } from "~/utils/common/types";
-import config from "~/config";
-import { createCommitModal } from ".";
 import { formatTime } from "../format-time";
 import { translate } from "../i18n";
 import { notify } from "../notify";
 import { getCurrentTab } from "../utils";
+import { createCommitModal } from ".";
+import config from "~/config";
+import type { CommonItem } from "~/utils/common/types";
 
 let axios: Axios | null = null;
 
-async function post (data: string, token_?: string) {
+async function post(data: string, token_?: string) {
   const token = token_ || useGithubToken().value;
   if (!token) {
     throw new Error(translate("need-token"));
@@ -26,12 +26,12 @@ async function post (data: string, token_?: string) {
   );
 }
 
-function encodeB64 (str: string) {
+function encodeB64(str: string) {
   return btoa(unescape(encodeURIComponent(str)));
 }
 
 /** @description 是否管理员 */
-export async function isAuthor (token: string): Promise<boolean> {
+export async function isAuthor(token: string): Promise<boolean> {
   const result = await post(
     `query {
     viewer {
@@ -62,7 +62,7 @@ export async function isAuthor (token: string): Promise<boolean> {
       // token 验证成功
       useGithubToken().value = token;
       // 更新 commit id
-      useCorrectSha().value = result.data.data.repository.defaultBranchRef.target.history.nodes[0].oid;
+      useRemoteLatestSha().value = result.data.data.repository.defaultBranchRef.target.history.nodes[0].oid;
     }
     return verified;
   }
@@ -75,12 +75,12 @@ export async function isAuthor (token: string): Promise<boolean> {
  * @param deletions 删除内容
  * @returns 是否执行成功，失败会自动notify
  */
-export async function createCommit (
+export async function createCommit(
   commit = "",
   additions: { path: string; content: string }[] = [],
   deletions: { path: string }[] = []
 ): Promise<boolean> {
-  const correctSha = useCorrectSha().value;
+  const correctSha = useRemoteLatestSha().value;
   if (__NB_VITESTING__) {
     await post(JSON.stringify({ additions, deletions }));
     return true;
@@ -159,12 +159,12 @@ export async function createCommit (
  * @param dels 删除的CommonItem[]
  * @returns 是否执行成功
  */
-export function deleteList (
+export function deleteList(
   newList: CommonItem[],
   dels: CommonItem[]
 ): Promise<boolean> {
-  const commitInfo =
-    dels.length === 1 ? `'${dels[0].id}'` : `${dels.length} items`;
+  const commitInfo
+    = dels.length === 1 ? `'${dels[0].id}'` : `${dels.length} items`;
   const folder = getCurrentTab().url;
   return createCommit(
     `Delete ${commitInfo} from ${folder}`,

@@ -3,8 +3,6 @@ export default {
 
   githubName: "yunyuyuan", // 必须修改，github账户名
 
-
-
   /** -------------------------------------------------以下可选修改----------------------------------------------------- */
 
   title: "yun yu yuan", // 网站标题
@@ -25,7 +23,6 @@ export default {
   },
   themeColor: "#2aa0bb", // 主题色
   defaultLang: "zh", // default language, "zh" and "en" are supported currently
-
 
   /** -------------------------------------------------注意----------------------------------------------------- */
 

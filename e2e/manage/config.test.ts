@@ -9,9 +9,9 @@ describe("Config Editing", async () => {
 
     const btn = await configPage.getByTestId("update-config-btn");
     expect(await btn.isDisabled()).toBe(true);
-    
+
     await configPage.updateConfig("{test-config}");
-    
+
     expect(configPage.requestAdditions[0].content).toContain("{test-config}");
   });
 });

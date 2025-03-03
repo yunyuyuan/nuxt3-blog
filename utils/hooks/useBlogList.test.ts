@@ -1,7 +1,7 @@
 import { registerEndpoint } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it } from "vitest";
-import { useBlogList } from "./useBlogList";
 import type { ArticleItem } from "../common/types";
+import { useBlogList } from "./useBlogList";
 
 const timeout = () => new Promise((resolve) => {
   setTimeout(resolve, 16);
@@ -16,18 +16,18 @@ registerEndpoint("/rebuild/json/articles.json", () => [
     showComments: true,
     title: "test",
     len: 1234,
-    tags: ["tag1", "tag2"],
-  },{
+    tags: ["tag1", "tag2"]
+  }, {
     id: 2222,
     time: 0,
     modifyTime: 0,
     encrypt: false,
-    encryptBlocks: [{"start":86,"end":130},{"start":15,"end":59}],
+    encryptBlocks: [{ start: 86, end: 130 }, { start: 15, end: 59 }],
     showComments: false,
     title: "test",
     len: 1234,
-    tags: ["tag1", "tag2"],
-  },{
+    tags: ["tag1", "tag2"]
+  }, {
     id: 3333,
     time: 0,
     modifyTime: 0,
@@ -35,8 +35,8 @@ registerEndpoint("/rebuild/json/articles.json", () => [
     showComments: false,
     title: "U2FsdGVkX18wyEu7vCLMOGilOsG2cQdWY+kvi3b+AZE=",
     len: 1234,
-    tags: [],
-  },
+    tags: []
+  }
 ] as ArticleItem[]);
 
 describe("useBlogList", () => {

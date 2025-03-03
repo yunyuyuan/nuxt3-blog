@@ -5,7 +5,7 @@ import CommonModal from "~/components/common-modal.vue";
 import { escapeNewLine } from "~/utils/common/utils";
 import { ModalContainerId } from "~/utils/common/constants";
 
-export function randomId (exist: CommonItem[] = []) {
+export function randomId(exist: CommonItem[] = []) {
   const ids = exist.map(item => item.id);
   let len = ids.length ? Math.max(...ids).toString().length : 4;
   if (ids.length > 10 ** (len - 1) * 0.6) {
@@ -25,7 +25,7 @@ export function randomId (exist: CommonItem[] = []) {
   }
 }
 
-export function useStatusText (modifiedRef?: Readonly<Ref<boolean>>, decryptedRef?: Readonly<Ref<boolean>>) {
+export function useStatusText(modifiedRef?: Readonly<Ref<boolean>>, decryptedRef?: Readonly<Ref<boolean>>) {
   const processing = ref(false);
   const toggleProcessing = () => {
     processing.value = !processing.value;
@@ -42,8 +42,8 @@ export function useStatusText (modifiedRef?: Readonly<Ref<boolean>>, decryptedRe
       return translate("need-decrypt");
     }
 
-    return (!modifiedRef || modifiedRef.value) ? 
-      (processing.value ? translate("performing-request") : "")
+    return (!modifiedRef || modifiedRef.value)
+      ? (processing.value ? translate("performing-request") : "")
       : translate("not-modified");
   });
   return { toggleProcessing, processing, statusText, canCommit };
@@ -56,7 +56,7 @@ export function compareItem<T extends CommonItem>(item1: T, item2: T) {
     const value1 = item1[k];
     const value2 = item2[k];
     if (k === "images") {
-      if (JSON.stringify((value1 as RecordItem["images"]).map(img => ({ ...img, id: 0 }))) 
+      if (JSON.stringify((value1 as RecordItem["images"]).map(img => ({ ...img, id: 0 })))
         !== JSON.stringify((value2 as RecordItem["images"]).map(img => ({ ...img, id: 0 })))) {
         diff = true;
       }
@@ -73,20 +73,20 @@ export function compareItem<T extends CommonItem>(item1: T, item2: T) {
 /**
  * 比较markdown
  */
-export function compareMd (s1: string, s2: string) {
+export function compareMd(s1: string, s2: string) {
   return escapeNewLine(s1).trim() === escapeNewLine(s2).trim();
 }
 
 /**
  * commit id 不一致
  */
-export function createCommitModal () {
+export function createCommitModal() {
   return new Promise<boolean>((resolve) => {
     const container = document.createElement("div");
     const vm = createVNode(CommonModal, {
       modelValue: true,
       modalTitle: translateT("warning"),
-      modalContent: translate("commit-id-not-correct-confirm"),
+      modalContent: translate("commit-id-not-correct-confirm")
     });
     vm.props!.onOk = () => {
       render(null, container);

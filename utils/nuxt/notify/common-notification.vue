@@ -11,11 +11,11 @@ const emit = defineEmits(["destroy"]);
 
 const visible = ref<boolean>(false);
 
-function clickClose () {
+function clickClose() {
   visible.value = false;
 }
 
-function animationend () {
+function animationend() {
   emit("destroy");
 }
 

@@ -68,6 +68,6 @@ export const useBlogItem = async <T extends CommonItem>(id: T["id"], url: Header
     originItem,
     decryptedItem,
     originMd,
-    decryptedMd,
+    decryptedMd
   };
 };

@@ -2,17 +2,17 @@ import type { NuxtPage } from "@nuxt/test-utils";
 
 export class ManageBasePage {
   protected requestDataRef = ref<{
-    additions: { path: string; content: string }[],
-    deletions: { path: string }[]
+    additions: { path: string; content: string }[];
+    deletions: { path: string }[];
   }>();
 
   constructor(protected page: NuxtPage) {
-    page.route("https://api.github.com/graphql", async route => {
+    page.route("https://api.github.com/graphql", async (route) => {
       this.requestDataRef.value = JSON.parse(route.request().postDataJSON().query);
       await route.fulfill({ json: { data: {} } });
     });
   }
-  
+
   get requestAdditions() {
     return unref(this.requestDataRef)?.additions || [];
   }
@@ -20,7 +20,7 @@ export class ManageBasePage {
   get requestDeletions() {
     return unref(this.requestDataRef)?.deletions || [];
   }
-  
+
   async screenShot() {
     await this.page.screenshot({ path: "screenshot.png" });
   }
@@ -28,7 +28,7 @@ export class ManageBasePage {
   async waitForTimeout(ms = 200) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
-    });  
+    });
   }
 
   async getByTestId(testId: string) {

@@ -23,7 +23,7 @@ const hasSlot = computed(() => typeof useSlots().default === "function");
   <button
     class="common-button"
     :disabled="disabled"
-    :class="[size, theme, {loading}]"
+    :class="[size, theme, { loading }]"
     @click="loading ? null : emit('click', $event)"
   >
     <svg-icon

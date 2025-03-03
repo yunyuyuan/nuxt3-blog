@@ -27,9 +27,9 @@ const cfAnalyzeId = config.CloudflareAnalyze || process.env.CloudflareAnalyze;
 const msAnalyzeId = config.MSClarityId || process.env.MSClarityId;
 if (cfAnalyzeId && !isDev) {
   scripts.push({
-    src: "https://static.cloudflareinsights.com/beacon.min.js",
-    async: false,
-    defer: true,
+    "src": "https://static.cloudflareinsights.com/beacon.min.js",
+    "async": false,
+    "defer": true,
     "data-cf-beacon": `{"token": "${cfAnalyzeId}"}`
   });
 }
@@ -60,8 +60,11 @@ for (const b of [
 // const prefix = "monaco-editor/esm/vs";
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
+  modules: [
+    "@nuxt/eslint",
+    "@nuxt/test-utils/module"
+  ],
   devtools: { enabled: false },
-  telemetry: false,
 
   app: {
     head: {
@@ -83,10 +86,6 @@ export default defineNuxtConfig({
   },
 
   css: ["~/assets/style/main.scss", "~/node_modules/katex/dist/katex.min.css", "~/node_modules/viewerjs/dist/viewer.css"],
-  modules: [
-    "@nuxt/eslint",
-    "@nuxt/test-utils/module"
-  ],
 
   runtimeConfig: {
     public: {
@@ -94,9 +93,18 @@ export default defineNuxtConfig({
       svgs: isDev ? svgs : []
     },
     app: {
-      githubBranch,
+      githubBranch
     }
   },
+
+  features: {
+    inlineStyles: false
+  },
+
+  experimental: {
+    payloadExtraction: false
+  },
+  compatibilityDate: "2025-02-15",
 
   nitro: {
     prerender: {
@@ -111,14 +119,6 @@ export default defineNuxtConfig({
         }
       }
     }
-  },
-
-  experimental: {
-    payloadExtraction: false
-  },
-
-  features: {
-    inlineStyles: false
   },
 
   vite: {
@@ -145,16 +145,17 @@ export default defineNuxtConfig({
       // minify: false
     }
   },
+  telemetry: false,
 
   hooks: {
-    "vite:extendConfig" (config, { isClient }) {
+    "vite:extendConfig"(config, { isClient }) {
       if (isClient) {
         (config.build?.rollupOptions?.output as any).manualChunks = {
           // markdown: ["highlight.js", "katex", "marked"]
         };
       }
     },
-    "nitro:build:before" (nitro) {
+    "nitro:build:before"(nitro) {
       const apiPath = path.join(__dirname, "utils", "api");
       if (["node-server"].includes(nitro.options.preset)) {
         for (const file of fs.readdirSync(path.join(apiPath, "db-tcp"))) {
@@ -162,11 +163,20 @@ export default defineNuxtConfig({
         }
       }
     },
-    "nitro:build:public-assets" (nitro) {
+    "nitro:build:public-assets"(nitro) {
       generateSiteMap(nitro.options.output.publicDir);
       fs.rmSync(path.join(nitro.options.output.publicDir, "e2e"), { recursive: true });
     }
   },
 
-  compatibilityDate: "2025-02-15"
+  eslint: {
+    config: {
+      stylistic: {
+        quotes: "double",
+        commaDangle: "never",
+        semi: true,
+        braceStyle: "1tbs"
+      }
+    }
+  }
 });

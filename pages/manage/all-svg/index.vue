@@ -2,7 +2,6 @@
 import { translateT } from "~/utils/nuxt/i18n";
 import { notify } from "~/utils/nuxt/notify";
 
-
 const svgs = useRuntimeConfig().public.svgs;
 
 const copySvg = async (name: string) => {

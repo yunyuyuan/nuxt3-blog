@@ -8,6 +8,7 @@ import { notify } from "~/utils/nuxt/notify";
 export default defineNuxtPlugin(() => {
   if (isDev) {
     useGithubToken().value = "LocalServer";
+    useRemoteLatestSha().value = __NB_CURRENT_GIT_SHA__;
     useIsAuthor().value = true;
     return;
   }

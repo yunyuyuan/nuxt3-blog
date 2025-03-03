@@ -1,7 +1,7 @@
 export type EncryptBlock = {
   start: number;
   end: number;
-}
+};
 
 export type ItemBase = {
   id: number;
@@ -21,7 +21,7 @@ export type ArticleItem = ItemBase & {
 };
 
 export type RecordItem = ItemBase & {
-  images: { src: string; alt: string, id?: number }[];
+  images: { src: string; alt: string; id?: number }[];
 };
 
 export const KnowledgeTabsList = [
@@ -45,19 +45,18 @@ export type CommonItem = ArticleItem | RecordItem | KnowledgeItem;
 export const HeaderTabs = [
   {
     name: "articles",
-    url: "/articles",
+    url: "/articles"
   },
   {
     name: "records",
-    url: "/records",
+    url: "/records"
   },
   {
     name: "knowledges",
-    url: "/knowledges",
+    url: "/knowledges"
   }
 ] as const;
 
 export type HeaderTabUrl = typeof HeaderTabs[number]["url"];
-
 
 export type DecryptFunction = (_s: string) => Promise<string>;

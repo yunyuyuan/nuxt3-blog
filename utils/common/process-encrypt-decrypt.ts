@@ -3,7 +3,7 @@ import type * as types from "./types";
 /**
  * 三种类型的数据加解密
  */
-export async function encryptDecryptItem (
+export async function encryptDecryptItem(
   item: types.CommonItem,
   fn: types.DecryptFunction,
   url: types.HeaderTabUrl
@@ -33,9 +33,9 @@ export async function encryptDecryptItem (
 /**
  * 先加密block，然后获取这些block的start和end位置
  */
-export async function getEncryptedBlocks (md: string, encrypt: types.DecryptFunction): Promise<{
-  md: string,
-  blocks: types.EncryptBlock[]
+export async function getEncryptedBlocks(md: string, encrypt: types.DecryptFunction): Promise<{
+  md: string;
+  blocks: types.EncryptBlock[];
 }> {
   const reg = new RegExp(/(^|\n)\[encrypt]\n([\s\S]+?)\n\[\/encrypt]/, "gd");
   let matcher;

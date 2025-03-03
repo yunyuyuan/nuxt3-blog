@@ -11,7 +11,7 @@ describe("List Editing", async () => {
     const deleteBtn = await listPage.getByTestId("list-delete-btn");
     expect(deleteBtn).not.toBeNull();
     expect(await deleteBtn.isDisabled()).toBe(true);
-    
+
     await listPage.selectItemByIndex(0);
     expect(await deleteBtn.isDisabled()).toBe(false);
 
@@ -21,7 +21,7 @@ describe("List Editing", async () => {
     expect(additionList.find(i => i.id === 1111)).toBeUndefined();
     expect(additionList.find(i => i.encryptBlocks?.length)).toBeDefined();
     expect(additionList.find(i => i.encrypt && i.title === "U2FsdGVkX18wyEu7vCLMOGilOsG2cQdWY+kvi3b+AZE=")).toBeDefined();
-    
+
     const deletionItem = listPage.requestDeletions[0].path || "";
     expect(deletionItem).toContain("1111.md");
   });
@@ -32,12 +32,12 @@ describe("List Editing", async () => {
     const deleteBtn = await listPage.getByTestId("list-delete-btn");
     expect(deleteBtn).not.toBeNull();
     expect(await deleteBtn.isDisabled()).toBe(true);
-    
+
     const listItemsText = await listPage.getListItemsText();
     expect(listItemsText).toContain("U2FsdGVkX18wyEu7vCLMOGilOsG2cQdWY+kvi3b+AZE=");
-    
+
     await listPage.enterPassword();
-    
+
     const updatedListItemsText = await listPage.getListItemsText();
     expect(updatedListItemsText).not.toContain("U2FsdGVkX18wyEu7vCLMOGilOsG2cQdWY+kvi3b+AZE=");
 
@@ -50,7 +50,7 @@ describe("List Editing", async () => {
     expect(additionList.find(i => i.id === 1111)).toBeUndefined();
     expect(additionList.find(i => i.encryptBlocks?.length)).toBeDefined();
     expect(additionList.find(i => i.encrypt && i.title === "U2FsdGVkX18wyEu7vCLMOGilOsG2cQdWY+kvi3b+AZE=")).toBeDefined();
-    
+
     const deletionItem = listPage.requestDeletions[0].path || "";
     expect(deletionItem).toContain("1111.md");
   });

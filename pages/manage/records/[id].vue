@@ -34,7 +34,7 @@ initViewer(root);
   >
     <manage-content-edit :process-with-content="processImages">
       <template #images="{ disabled, item }">
-        <span :class="{invalid: item.images.some(img => !img.src)}">
+        <span :class="{ invalid: item.images.some(img => !img.src) }">
           <b>{{ $T('images') }}</b>
           <svg-icon name="images" />
         </span>

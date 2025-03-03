@@ -2,9 +2,10 @@
 import { addScrollListener, rmScrollListener } from "~/utils/common/scroll-event";
 import type { ArticleItem } from "~/utils/common/types";
 import { getLocalStorage, setLocalStorage, rmLocalStorage } from "~/utils/nuxt/localStorage";
+import { useComment } from "~/utils/nuxt/public";
 import { useContentPage } from "~/utils/nuxt/public/detail";
 import Visitors from "~/utils/nuxt/public/visitors";
-import { useCommonSEOTitle, useComment } from "~/utils/nuxt/utils";
+import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
 const { item, wroteDate: writeDate, menuItems, htmlContent, markdownRef } = await useContentPage<ArticleItem>(() => {
@@ -69,7 +70,7 @@ initViewer(root);
   >
     <div
       class="captain w100"
-      :class="{'has-comment': item.showComments}"
+      :class="{ 'has-comment': item.showComments }"
     >
       <div class="article-container">
         <h1>{{ item.title }}</h1>
@@ -101,7 +102,7 @@ initViewer(root);
       <div
         v-if="menuItems.length"
         class="menu flexc"
-        :class="{compact: hideMenu}"
+        :class="{ compact: hideMenu }"
       >
         <span
           class="toggle flex"

@@ -2,11 +2,11 @@
 const showStickers = defineModel<boolean>({ required: true });
 
 const emits = defineEmits({
-  insertSticker: (_: string) => true,
+  insertSticker: (_: string) => true
 });
 
 const stickersTranslate = {
-  aru: "阿鲁",
+  "aru": "阿鲁",
   "yellow-face": "小黄脸"
 } as const;
 const stickersList = toRaw(useRuntimeConfig().public.stickers);
@@ -34,7 +34,7 @@ const stickerTranslateY = computed(() => {
         class="inner"
         :style="{
           height: `${stickersTab.length * 100}%`,
-          transform: stickerTranslateY,
+          transform: stickerTranslateY
         }"
       >
         <div

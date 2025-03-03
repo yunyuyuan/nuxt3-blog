@@ -1,7 +1,7 @@
-import withNuxt from "./.nuxt/eslint.config.mjs";
 import pluginVue from "eslint-plugin-vue";
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import withNuxt from "./.nuxt/eslint.config.mjs";
 
 export default withNuxt(
   eslint.configs.recommended,
@@ -10,9 +10,8 @@ export default withNuxt(
   {
     files: ["**/*.ts", "**/*.vue"],
     rules: {
-      quotes: ["error", "double"],
-      semi: ["error", "always"],
-      indent: ["error", 2, { SwitchCase: 1 }],
+      "quotes": ["error", "double"],
+      "semi": ["error", "always"],
       "prefer-promise-reject-errors": "off",
       "no-multi-spaces": ["error"],
       "no-undef": "off",

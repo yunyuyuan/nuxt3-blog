@@ -4,7 +4,7 @@ import colors from "colors";
 import type { PromptObject } from "prompts";
 import prompts from "prompts";
 
-export async function promptTask<const T extends PromptObject & {name: string}> (params: T[], cb: (_: Record<T["name"], any>) => any|Promise<any>) {
+export async function promptTask<const T extends PromptObject & { name: string }>(params: T[], cb: (_: Record<T["name"], any>) => any | Promise<any>) {
   let canceled = false;
   const response = await prompts(params, {
     onCancel: () => {
@@ -18,15 +18,15 @@ export async function promptTask<const T extends PromptObject & {name: string}> 
   }
 }
 
-export function getAbsolutePath (...s: string[]) {
+export function getAbsolutePath(...s: string[]) {
   return path.join(__dirname, "..", "..", ...s);
 }
 
-export function getRebuildPath (...s: string[]) {
+export function getRebuildPath(...s: string[]) {
   return getAbsolutePath("public", "rebuild", ...s);
 }
 
-export async function runCmd (command: string) {
+export async function runCmd(command: string) {
   return await new Promise<void>((resolve, reject) => {
     cmd.exec(command, {
       maxBuffer: 1024 * 1024 * 5
@@ -40,15 +40,14 @@ export async function runCmd (command: string) {
   });
 }
 
-export function nbLog (s: string, head = "generate") {
-   
+export function nbLog(s: string, head = "generate") {
   console.log(`[${colors.blue.bold(head)}] ${colors.green(s)}`);
 }
 
 export type ImgMap = Record<string, {
-  newUrl: string,
-  appearIn: string[]
-}>
+  newUrl: string;
+  appearIn: string[];
+}>;
 
 export * from "./encrypt";
 export * from "./rss";

@@ -38,7 +38,7 @@ watch([list, searchValue], () => {
   selectedList.splice(0, selectedList.length);
 });
 
-const newListToUpdate = computed(() => originList.filter((item) => 
+const newListToUpdate = computed(() => originList.filter(item =>
   selectedList.find(selected => selected.id === item.id) === undefined
 ));
 
@@ -124,7 +124,7 @@ const deleteSelect = () => {
       {{ $t('nothing-here') }}
     </div>
     <li
-      v-for="item,idx in searchedList"
+      v-for="item, idx in searchedList"
       :key="item.id"
       class="list-body"
     >
