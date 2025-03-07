@@ -1,3 +1,6 @@
+import { BookOpen, Film, Gamepad2 } from "lucide-vue-next";
+import type { FunctionalComponent } from "vue";
+
 export type EncryptBlock = {
   start: number;
   end: number;
@@ -39,6 +42,18 @@ export type KnowledgeItem = ItemBase & {
   cover: string;
   summary: string;
 };
+
+export const KnowledgeIconMap = {
+  game: Gamepad2,
+  film: Film,
+  book: BookOpen
+} as Record<KnowledgeTab, FunctionalComponent>;
+
+export const KnowledgeColorMap = {
+  game: "bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300",
+  film: "bg-rose-100 text-rose-500 dark:bg-rose-900/30 dark:text-rose-400",
+  book: "bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300"
+} as Record<KnowledgeTab, string>;
 
 export type CommonItem = ArticleItem | RecordItem | KnowledgeItem;
 

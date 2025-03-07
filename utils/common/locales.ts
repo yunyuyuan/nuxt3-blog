@@ -1,7 +1,7 @@
 export const i18nLocales = [
   {
     code: "en",
-    iso: "en-US",
+    iso: "en",
     file: "en.json",
     name: "English",
     formatFull: "MM/DD/YYYY HH:mm:ss",
@@ -10,12 +10,12 @@ export const i18nLocales = [
   },
   {
     code: "zh",
-    iso: "zh-CN",
+    iso: "cn",
     file: "zh.json",
     name: "中文",
     formatFull: "YYYY-MM-DD HH:mm:ss",
     formatDate: "YYYY-MM-DD",
-    formatMonth: "MM.DD"
+    formatMonth: "MM-DD"
   }
 ] as const;
 

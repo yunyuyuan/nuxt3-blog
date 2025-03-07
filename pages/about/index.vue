@@ -1,144 +1,66 @@
 <script setup lang="ts">
+import { ArrowLeft } from "lucide-vue-next";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import bg from "~/assets/image/outerwilds.jpg";
 import config from "~/config";
-import { translateT } from "~/utils/nuxt/i18n";
+import { translate } from "~/utils/nuxt/i18n";
 
-useCommonSEOTitle(computed(() => translateT("about")));
+definePageMeta({
+  layout: "blank"
+});
+
+useCommonSEOTitle(computed(() => translate("about")));
 
 const commitSha = __NB_CURRENT_GIT_SHA__;
 const commitUrl = computed(() => `https://github.com/${config.githubName}/${config.githubRepo}/commit/${commitSha}`);
 const buildTime = __NB_BUILD_TIME__;
 
-const paragraphs = [
-  "幽深宇宙已岁逾百亿，惟闪烁星光点缀生机",
-  "我常仰望浩瀚天际，思念在同一颗星球的你",
-  "想，那转瞬的迷人流星，也许就是你的回眸",
-  "光坠之地，吾之忧祈",
-  "——2021.12.4"
-];
+const paragraphs = config.about;
 </script>
 
 <template>
-  <div class="about flexc">
+  <div class="fixed inset-0 z-0">
+    <div class="absolute inset-0 z-10 bg-gradient-to-b from-black/60 to-black/30" />
     <img
       :src="bg"
-      alt="bg"
+      alt="background"
+      class="size-full object-cover object-right"
     >
-    <div class="flexc paragraphs">
-      <p
-        v-for="p, idx in paragraphs"
-        :key="idx"
-      >
-        {{ p }}
+  </div>
+
+  <div class="fixed left-6 top-6 z-50">
+    <a
+      href="/"
+      class="flex items-center space-x-2 text-white transition hover:text-primary-300"
+    >
+      <ArrowLeft class="size-5" />
+      <span>{{ $t('back-home') }}</span>
+    </a>
+  </div>
+
+  <main class="relative z-20 flex min-h-screen flex-col items-center justify-center px-4 py-16 max-md:px-6 lg:px-8">
+    <div class="w-full max-w-2xl rounded-2xl bg-white/90 p-8 shadow-xl backdrop-blur-md dark:bg-dark-800/90 max-md:p-12">
+      <div class="space-y-4 text-center text-dark-700 dark:text-dark-300">
+        <p
+          v-for="p, idx in paragraphs"
+          :key="idx"
+        >
+          {{ p }}
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="absolute bottom-0 left-0 z-20 w-full py-3">
+    <div class="container mx-auto px-4 text-center">
+      <p class="text-sm text-white/70">
+        Last built &lt;<a
+          target="_blank"
+          :href="commitUrl"
+          class="text-primary-300 transition hover:text-primary-500"
+        >{{ commitSha.substring(0, 8) }}</a>&gt; succeeded at
+        <time>{{ buildTime }}</time>
       </p>
     </div>
-    <div class="status">
-      Last built &lt;<a
-        target="_blank"
-        :href="commitUrl"
-      >{{ commitSha.substring(0, 8) }}</a>&gt; succeeded at
-      <time>{{ buildTime }}</time>
-    </div>
-  </div>
+  </footer>
 </template>
-
-<style lang="scss">
-#default-layout.in-about {
-  #header {
-    background: rgb(255 255 255 / 5%);
-    backdrop-filter: blur(1px);
-  }
-
-  #body {
-    padding-top: 0;
-
-    .about {
-      width: 100vw;
-      height: 100vh;
-      padding-bottom: $footer-height;
-      position: fixed;
-      left: 0;
-      top: 0;
-
-      img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: right;
-        z-index: 1;
-      }
-
-      .paragraphs {
-        position: relative;
-        z-index: 2;
-        padding-top: 100px + $header-height;
-        justify-content: center;
-
-        p {
-          font-size: f-size();
-          letter-spacing: 0.8px;
-          color: white;
-          font-weight: 300;
-
-          &:not(:last-of-type) {
-            margin-bottom: 20px;
-          }
-        }
-      }
-
-      .status {
-        color: #eee;
-        opacity: 0.5;
-        font-size: f-size(0.75);
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        z-index: 1;
-        transition: $common-transition;
-
-        &:hover {
-          opacity: 1;
-        }
-
-        time {
-          color: #ffb350;
-        }
-      }
-    }
-  }
-
-  #footer {
-    position: fixed;
-    width: 100%;
-    left: 0;
-    bottom: 20px;
-    z-index: $z-index-footer;
-
-    .middle {
-      color: #a1a1a1;
-    }
-
-    &:hover {
-      .middle {
-        color: #e7e7e7;
-      }
-    }
-  }
-
-  #footer,
-  #body .about {
-    a[href] {
-      color: $theme-color;
-      transition: $common-transition;
-
-      &:hover {
-        color: $theme-color-lighten;
-      }
-    }
-  }
-}
-</style>

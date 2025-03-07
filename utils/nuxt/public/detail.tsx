@@ -1,12 +1,8 @@
-import { formatTime, literalTime } from "~/utils/nuxt/format-time";
 import config from "~/config";
-import "./detail.scss";
-import SvgIcon from "~/components/svg-icon.vue";
 import { useBlogItem } from "~/utils/hooks/useBlogItem";
 import { useMarkdownParser } from "~/utils/hooks/useMarkdownParser";
 import type { CommonItem } from "~/utils/common/types";
 import { DBOperate } from ".";
-import { translate } from "../i18n";
 import { getCurrentTab, watchUntil } from "../utils";
 import { useUnmount } from "~/utils/hooks/useUnmount";
 
@@ -22,7 +18,7 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
   
   const destroyFns = useUnmount();
 
-  const { decryptedItem, decryptedMd } = await useBlogItem<T>(Number(id), targetTab.url);
+  const { originList, decryptedItem, decryptedMd } = await useBlogItem<T>(Number(id), targetTab.url);
 
   const { htmlContent, markdownRef, menuItems } = await useMarkdownParser({ mdValueRef: decryptedMd, onAfterInsertHtml, destroyFns })
 
@@ -43,34 +39,10 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
   }
 
   return {
+    originList,
     item: decryptedItem.value,
     htmlContent,
-    wroteDate: wroteDate(decryptedItem.value.time, decryptedItem.value.modifyTime),
     menuItems,
     markdownRef
   };
-}
-
-function wroteDate (time: number, modifyTime: number) {
-  const fuzzyMode = ref(true);
-  return defineComponent({
-    render: () => (
-      <div class="write-date flex" onClick={() => (fuzzyMode.value = !fuzzyMode.value)}>
-        <SvgIcon name="write" />
-        <div class="flexc">
-          {
-            fuzzyMode.value &&
-              <span>{ literalTime(time) }</span>
-          }
-          {
-            !fuzzyMode.value &&
-              <>
-                <span>{translate("created-at")}: {formatTime(time)}</span>
-                <span>{translate("updated-at")}: {formatTime(modifyTime)}</span>
-              </>
-          }
-        </div>
-      </div>
-    )
-  });
 }

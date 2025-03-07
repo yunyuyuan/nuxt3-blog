@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { StyleValue, PropType, CSSProperties } from "vue";
+import { Loader2, CircleX } from "lucide-vue-next";
 import { ViewerAttr } from "~/utils/common/constants";
 import { addScrollListener, rmScrollListener } from "~/utils/common/scroll-event";
 import { isPrerender } from "~/utils/nuxt/constants";
@@ -150,7 +151,10 @@ const attr = ViewerAttr;
     ref="root"
     class="--lazy-img"
     :style="containerStyle"
-    :class="{ loading: isImgLoading, err: isImgErr }"
+    :class="twMerge(
+      'relative inline-flex overflow-hidden',
+      isImgErr && 'cursor-pointer'
+    )"
     :title="title"
     @click="containerClick"
   >
@@ -161,13 +165,22 @@ const attr = ViewerAttr;
     >
     <span
       v-if="isImgErr || isImgLoading"
-      class="svg flexc s100"
+      class="absolute left-0 top-0 flex size-full flex-col items-center justify-center bg-white/40"
     >
-      <svg-icon :name="isImgErr ? 'img-error' : 'loading'" />
+      <CircleX
+        v-if="isImgErr"
+        class="size-6 text-red-500"
+      />
+      <Loader2
+        v-else
+        class="size-6 animate-spin text-dark-600"
+      />
       <span
         v-show="retry && isImgErr"
-        class="tips"
-      >{{ useNuxtApp().$t('click-to-retry') }}</span>
+        class="text-xs text-red-500"
+      >
+        {{ useNuxtApp().$t('click-to-retry') }}
+      </span>
     </span>
     <img
       v-if="isShowImg"
@@ -181,33 +194,3 @@ const attr = ViewerAttr;
     >
   </span>
 </template>
-
-<style lang="scss">
-.--lazy-img {
-  overflow: hidden;
-  position: relative;
-  display: inline-flex;
-
-  &.err {
-    cursor: pointer;
-  }
-
-  .svg {
-    background: rgba(#fff, 0.5);
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    svg {
-      @include square(30px);
-    }
-  }
-
-  .tips {
-    font-size: f-size(0.65);
-    height: f-size(0.65);
-    color: #f44;
-  }
-}
-</style>

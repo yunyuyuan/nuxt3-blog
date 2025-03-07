@@ -9,7 +9,7 @@ import { useBlogList } from "~/utils/hooks/useBlogList";
 export async function useManageList<T extends CommonItem>() {
   const targetTab = getCurrentTab();
 
-  useCommonSEOTitle(computed(() => translate("list-manage", [targetTab.name])));
+  useCommonSEOTitle(computed(() => translate("list-manage", [translate(targetTab.name)])));
 
   const { decryptedList, originList } = await useBlogList<T>(targetTab.url);
 

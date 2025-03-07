@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="T extends CommonItem">
 import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
+import { FolderOpen, Lock, MessageCircleMore, Save, Trash2, Upload } from "lucide-vue-next";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 import { getNowStamp } from "~/utils/common/dayjs";
 import { encryptDecryptItem, getEncryptedBlocks } from "~/utils/common/process-encrypt-decrypt";
@@ -57,7 +58,7 @@ const previewContent = ref("");
 
 const getUploadInfo = async () => {
   // 检查是否invalid
-  const invalidInfo = baseInfo.value!.querySelectorAll<HTMLElement>("span.invalid");
+  const invalidInfo = baseInfo.value!.querySelectorAll<HTMLElement>(".form-item-invalid");
   if (invalidInfo.length) {
     return notify({
       type: "error",
@@ -145,135 +146,141 @@ const doUpload = async () => {
   const { item: newItem, md } = info;
   currentOperate.value = "upload";
   toggleProcessing();
-  createCommit(`Update ${targetTab.name}-${newItem.id}`, [
-    {
-      path: `public/rebuild/json${targetTab.url}.json`,
-      content: JSON.stringify(editItem(originList, newItem))
-    },
-    {
-      path: `public/rebuild${targetTab.url}/${newItem.id}.md`,
-      content: md
-    }
-  ]).then((success) => {
+  try {
+    const success = await createCommit(`Update ${targetTab.name}-${newItem.id}`, [
+      {
+        path: `public/rebuild/json${targetTab.url}.json`,
+        content: JSON.stringify(editItem(originList, newItem))
+      },
+      {
+        path: `public/rebuild${targetTab.url}/${newItem.id}.md`,
+        content: md
+      }
+    ]);
     if (success) {
       useUnsavedContent().value = false;
     }
-  }).finally(() => {
+  } finally {
     currentOperate.value = "";
     toggleProcessing();
-  });
+  }
 };
 
-const doDelete = () => {
+const doDelete = async () => {
   showDeleteModal.value = false;
   currentOperate.value = "delete";
   toggleProcessing();
-  deleteList(deleteItem(originList, unref(editingItem)), [decryptedItem.value]).finally(() => {
+  try {
+    await deleteList(deleteItem(originList, unref(editingItem)), [decryptedItem.value]);
+  } finally {
     currentOperate.value = "";
     toggleProcessing();
-  });
+  }
 };
 </script>
 
 <template>
-  <div class="manage-content-header flex">
-    <div class="draft flex">
-      <common-button
-        theme="default"
-        size="small"
-        :disabled="!hasDraft"
-        @click="applyDraft"
-      >
-        {{ $t('load-draft') }}
-      </common-button>
-      <common-button
-        theme="default"
-        size="small"
-        class="load-draft"
-        @click="saveDraft"
-      >
-        {{ $t('save-draft') }}
-      </common-button>
-      <common-button
-        theme="default"
-        size="small"
-        :disabled="!hasDraft"
-        @click="deleteDraft"
-      >
-        {{ $t('delete-draft') }}
-      </common-button>
+  <main class="!bg-transparent !shadow-none">
+    <div :class="twMerge($style.box, 'mb-6 flex flex-wrap items-center justify-between gap-3')">
+      <div class="flex flex-wrap items-center gap-2">
+        <CommonButton
+          size="small"
+          :disabled="!hasDraft"
+          :icon="FolderOpen"
+          @click="applyDraft"
+        >
+          {{ $t('load-draft') }}
+        </CommonButton>
+        <CommonButton
+          size="small"
+          :icon="Save"
+          @click="saveDraft"
+        >
+          {{ $t('save-draft') }}
+        </CommonButton>
+        <CommonButton
+          size="small"
+          :disabled="!hasDraft"
+          :icon="Trash2"
+          @click="deleteDraft"
+        >
+          {{ $t('delete-draft') }}
+        </CommonButton>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <span class="ml-2 text-sm text-red-500">{{ statusText }}</span>
+        <CommonButton
+          :icon="Upload"
+          :disabled="!canUpload || currentOperate === 'delete' || !decrypted"
+          :loading="processing && currentOperate === 'upload'"
+          data-testid="item-upload-btn"
+          theme="primary"
+          @click="doUpload"
+        >
+          {{ $t(isNew ? "publish" : "update") }}
+        </CommonButton>
+        <CommonButton
+          v-if="!isNew"
+          theme="danger"
+          :icon="Trash2"
+          :disabled="!canDelete || currentOperate === 'upload'"
+          :loading="processing && currentOperate === 'delete'"
+          data-testid="item-delete-btn"
+          @click="showDeleteModal = true"
+        >
+          {{ $t('del') }}
+        </CommonButton>
+      </div>
     </div>
-    <span class="status">{{ statusText }}</span>
-    <common-button
-      icon="upload"
-      :disabled="!canUpload || currentOperate === 'delete' || !decrypted"
-      :loading="processing && currentOperate === 'upload'"
-      data-testid="item-upload-btn"
-      @click="doUpload"
-    >
-      {{ $T(isNew ? "publish" : "update") }}
-    </common-button>
-    <common-button
-      v-if="!isNew"
-      class="delete"
-      theme="danger"
-      icon="delete"
-      :disabled="!canDelete || currentOperate === 'upload'"
-      :loading="processing && currentOperate === 'delete'"
-      data-testid="item-delete-btn"
-      @click="showDeleteModal = true"
-    >
-      {{ $T('del') }}
-    </common-button>
-  </div>
-  <div
-    class="manage-content-base-info flexc"
-    :title="editingItem.encrypt && !decrypted ? $t('need-decrypt') : ''"
-    :data-title="$TT('base-info')"
-  >
-    <span
-      v-if="isNew"
-      class="new flex"
-    >
-      <svg-icon name="new" />
-    </span>
+
     <div
       ref="baseInfo"
-      class="info detail"
+      :class="twMerge($style.box, $style.form)"
+      :title="editingItem.encrypt && !decrypted ? $t('need-decrypt') : ''"
     >
-      <span>
-        <b>{{ $t('encrypt') }}</b>
-        <svg-icon name="encrypt" />
-      </span>
-      <common-checkbox
-        :checked="editingItem.encrypt"
-        :disabled="!decrypted"
-        :title="!decrypted ? $t('decrypt-blocks') : ''"
-        test-id="item-encrypt-checkbox"
-        @change="editingItem.encrypt = $event"
-      />
-      <span>
-        <b>{{ $t('show-comments') }}</b>
-        <svg-icon name="comments" />
-      </span>
-      <common-checkbox
-        :checked="editingItem.showComments"
-        :disabled="!decrypted"
-        :title="$t('show-comments')"
-        test-id="item-show-comment-checkbox"
-        @change="editingItem.showComments = $event"
-      />
-      <slot
-        v-for="slot in slotsRow"
-        :name="slot"
-        :item="editingItem"
-        :disabled="!decrypted"
-      />
+      <div class="mb-4 flex gap-6 border-b border-dark-200 pb-4 dark:border-dark-700">
+        <div class="!flex-row items-center !gap-3">
+          <span>
+            <Lock class="inline-block size-5" />
+            {{ $t('encrypt') }}
+          </span>
+          <common-checkbox
+            :checked="editingItem.encrypt"
+            :disabled="!decrypted"
+            :title="!decrypted ? $t('decrypt-blocks') : ''"
+            test-id="item-encrypt-checkbox"
+            @change="editingItem.encrypt = $event"
+          />
+        </div>
+        <div class="!flex-row items-center !gap-3">
+          <span>
+            <MessageCircleMore class="inline-block size-5" />
+            {{ $t('show-comments') }}
+          </span>
+          <common-checkbox
+            :checked="editingItem.showComments"
+            :disabled="!decrypted"
+            :title="$t('show-comments')"
+            test-id="item-show-comment-checkbox"
+            @change="editingItem.showComments = $event"
+          />
+        </div>
+      </div>
+
+      <div class="mt-4 space-y-4">
+        <slot
+          v-for="slot in slotsRow"
+          :name="slot"
+          :item="editingItem"
+          :disabled="!decrypted"
+        />
+      </div>
     </div>
-  </div>
+  </main>
+
   <div
-    class="manage-content-md-info"
-    :data-title="$TT('content')"
+    :class="$style.box"
   >
     <client-only>
       <md-editor
@@ -283,6 +290,7 @@ const doDelete = () => {
       />
     </client-only>
   </div>
+
   <common-modal
     v-model="showDeleteModal"
     confirm-theme="danger"
@@ -290,298 +298,61 @@ const doDelete = () => {
     @confirm="doDelete"
   >
     <template #title>
-      {{ $T('confirm-delete') }}
+      {{ $t('confirm-delete') }}
     </template>
   </common-modal>
+
   <common-modal
     v-model="showPreviewModal"
     :show-ok="false"
     :show-cancel="false"
-    modal-width="1000"
+    modal-width="720px"
     wrap-class="preview-modal"
     @confirm="showPreviewModal = false"
   >
     <template #title>
-      {{ $T('preview') }}
+      {{ $t('preview') }}
     </template>
     <template #body>
-      <p>{{ $TT('base-info') }}</p>
-      <span
-        ref="previewInfoEl"
-        class="language-json info"
-      >{{ previewInfo }}</span>
-      <p>{{ $TT('content') }}</p>
-      <span
-        ref="previewMdEl"
-        class="language-markdown md"
-      >{{ previewContent }}</span>
+      <div :class="$style.preview">
+        <p>{{ $t('base-info') }}</p>
+        <span ref="previewInfoEl">{{ previewInfo }}</span>
+        <p>{{ $t('content') }}</p>
+        <span ref="previewMdEl">{{ previewContent }}</span>
+      </div>
     </template>
   </common-modal>
 </template>
 
-<style lang="scss">
-.manage-content {
-  &-header {
-    padding: 20px 0 10px;
-    border-bottom: 1px solid rgb(220 220 220);
-
-    .status {
-      font-size: f-size(0.75);
-      margin: 0 15px 0 auto;
-      color: #b80000;
-
-      @include dark-mode {
-        color: #ffa6a6;
-      }
-    }
-
-    .draft {
-      margin-right: auto;
-      align-self: stretch;
-      align-items: flex-end;
-
-      .load-draft {
-        margin: 0 6px;
-      }
-    }
-
-    .delete {
-      margin-left: 12px;
-    }
-  }
-
-  $border: rgb(216 216 216);
-  $border-dark: rgb(53 53 53);
-  $bg-dark: rgb(39 39 39);
-
-  &-base-info > .detail,
-  &-md-info > .manage-md-editor {
-    border-radius: 0 4px 4px;
-    box-shadow: 0 0 15px rgb(0 0 0 / 7%);
-    border: 1px solid $border;
-
-    @include dark-mode {
-      box-shadow: 0 0 15px rgb(255 255 255 / 10%);
-      border-color: $border-dark;
-    }
-  }
-
-  &-base-info,
-  &-md-info {
-    position: relative;
-
-    &::before {
-      content: attr(data-title);
-      display: block;
-      background: white;
-      color: #4d4d4d;
-
-      @include dark-mode {
-        background: $bg-dark;
-        color: #fdfdfd;
-      }
-
-      padding: 7px 16px;
-      position: absolute;
-      top: 1px;
-      left: 0;
-      font-size: f-size(0.85);
-      border-radius: 3px 3px 0 0;
-      border: 1px solid $border;
-
-      @include dark-mode {
-        border-color: $border-dark;
-      }
-
-      border-bottom: none;
-      transform: translateY(-100%);
-      z-index: 2;
-    }
-  }
-
-  &-base-info {
-    margin: 40px 0 50px;
-    position: relative;
-
-    > .new {
-      position: absolute;
-      right: 0;
-      top: 0;
-      transform: translateY(-100%);
-
-      > svg {
-        @include square(36px);
-
-        fill: $theme-color-darken;
-
-        @include dark-mode {
-          fill: $theme-color-lighten;
-        }
-      }
-    }
-
-    > .info {
-      width: 100%;
-      background: white;
-
-      @include dark-mode {
-        background: $bg-dark;
-      }
-
-      padding: 24px 10px;
-      box-sizing: border-box;
-      z-index: 1;
-      display: grid;
-      align-items: center;
-      grid-template-columns: auto 1fr;
-      grid-auto-rows: auto;
-      grid-gap: 15px 0;
-
-      > span {
-        height: 30px;
-        margin: 0 12px 0 8px;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-
-        b {
-          position: relative;
-          font-size: f-size(0.8);
-          font-weight: 600;
-          color: #222;
-        }
-
-        @include dark-mode {
-          b {
-            color: white;
-          }
-        }
-
-        &.invalid b::before {
-          content: "*";
-          color: red;
-          font-size: f-size(0.9);
-          left: 0;
-          position: absolute;
-          transform: translateX(-100%);
-        }
-
-        svg {
-          @include square(18px);
-
-          fill: $theme-color;
-          margin-left: 8px;
-
-          @include dark-mode {
-            fill: $theme-color-lighten;
-          }
-        }
-      }
-
-      input,
-      textarea {
-        font-size: f-size(0.88);
-        padding: 6px;
-        flex-grow: 1;
-        max-width: 500px;
-        min-width: 100px;
-      }
-
-      textarea {
-        resize: vertical;
-        max-width: 800px;
-        height: 200px;
-      }
-    }
-
-    >.common-loading {
-      position: absolute;
-      border-radius: 0 4px 4px;
-      background: rgb(255 255 255 / 60%);
-
-      @include dark-mode {
-        background: rgb(255 255 255 / 20%);
-      }
-
-      justify-content: center;
-      top: 0;
-      left: 0;
-      z-index: 2;
-
-      @include square;
-    }
-  }
-
-  &-md-info {
-    margin-bottom: 30px;
-  }
+<style module>
+.box {
+  @apply p-4 bg-white dark:bg-dark-800 shadow-md rounded-lg;
 }
 
-.preview-modal {
-  .modal-body {
-    > p {
-      background: $theme-color;
-      color: white;
-      font-size: f-size();
-      padding: 6px;
-      text-align: center;
-    }
+.form {
+  @apply my-6;
 
-    > span {
-      display: block;
-      padding: 8px;
-      overflow-x: auto;
-      border: 1px solid rgb(187 187 187);
+  :global(>div >div) {
+    @apply flex flex-col gap-2;
 
-      &.info {
-        white-space: pre;
-        padding-bottom: 30px;
-        margin-bottom: 30px;
-        font-family: $font-code;
-      }
-
-      &.md {
-        white-space: pre-line;
-        word-break: break-word;
+    >span:first-of-type {
+      @apply flex items-center gap-1 after:content-[":"] text-sm text-dark-600 dark:text-dark-300;
+      svg {
+        @apply opacity-70;
       }
     }
   }
 }
 
-@include mobile {
-  .manage-content {
-    &-header {
-      position: relative;
-      flex-wrap: wrap;
+.preview {
+  @apply flex flex-col gap-2;
 
-      .status {
-        position: absolute;
-        margin: 0;
-        right: 0;
-        top: 0;
-        transform: translateY(-50%);
-      }
-    }
+  > p {
+    @apply py-1 bg-primary-200 dark:bg-primary-700 text-center text-sm sticky -top-4 rounded;
+  }
 
-    &-base-info > .detail {
-      >span {
-        margin: 0 12px 0 8px;
-      }
-
-      input,
-      textarea,
-      select {
-        max-width: unset;
-        min-width: unset;
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      select {
-        width: 100px;
-      }
-    }
+  > span {
+    @apply whitespace-pre-wrap break-all mt-1 p-2;
   }
 }
 </style>

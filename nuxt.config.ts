@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
+import { hash as cryptoHash } from "crypto";
 import { generateSiteMap } from "./scripts/generate";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
@@ -9,20 +10,14 @@ import { ThemeModeKey } from "./utils/common/constants";
 
 const isDev = process.env.NODE_ENV === "development";
 
-// themeColor
-fs.writeFileSync("./assets/style/_theme.scss", `$theme: ${config.themeColor};`);
-
 // stickers
 const stickers: Record<string, any> = {};
 fs.readdirSync("./public/sticker").forEach((dir) => {
   stickers[dir] = fs.readdirSync(`./public/sticker/${dir}`).length;
 });
 
-// svgs
-const svgs = fs.readdirSync("./assets/svg").map(file => file.replace(/\.svg$/, ""));
-
 const scripts = [];
-scripts.push(`(function(){const e=localStorage.getItem("${ThemeModeKey}")||"light";document.documentElement.classList.add(\`\${e}-mode\`);document.documentElement.setAttribute("code-theme",e)})();`);
+scripts.push(`(function(){const e=localStorage.getItem("${ThemeModeKey}")||"light";document.documentElement.classList.add(e)})();`);
 const cfAnalyzeId = config.CloudflareAnalyze || process.env.CloudflareAnalyze;
 const msAnalyzeId = config.MSClarityId || process.env.MSClarityId;
 if (cfAnalyzeId && !isDev) {
@@ -62,8 +57,17 @@ for (const b of [
 export default defineNuxtConfig({
   modules: [
     "@nuxt/eslint",
-    "@nuxt/test-utils/module"
+    "@nuxt/test-utils/module",
+    "@nuxtjs/tailwindcss"
   ],
+  imports: {
+    presets: [
+      {
+        from: "tailwind-merge",
+        imports: ["twMerge"]
+      }
+    ]
+  },
   devtools: { enabled: false },
 
   app: {
@@ -84,13 +88,11 @@ export default defineNuxtConfig({
       title: config.title
     }
   },
-
-  css: ["~/assets/style/main.scss", "~/node_modules/katex/dist/katex.min.css", "~/node_modules/viewerjs/dist/viewer.css"],
+  css: ["~/assets/style/main.css", "~/node_modules/katex/dist/katex.min.css", "~/node_modules/viewerjs/dist/viewer.css"],
 
   runtimeConfig: {
     public: {
-      stickers,
-      svgs: isDev ? svgs : []
+      stickers
     },
     app: {
       githubBranch
@@ -131,18 +133,26 @@ export default defineNuxtConfig({
       __NB_VITESTING__: process.env.VITESTING === "true"
     },
     css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `
-            @use 'sass:math';
-            @use 'sass:color';
-            @use '@/assets/style/var' as *;
-          `
+      modules: {
+        generateScopedName: (name, css) => {
+          if (name === "dark") return "dark";
+          const hash = cryptoHash("sha1", css).substring(0, 5);
+
+          return `_${name}_${hash}`;
         }
       }
     },
     build: {
       // minify: false
+    }
+  },
+
+  postcss: {
+    plugins: {
+      "postcss-import": {},
+      "tailwindcss/nesting": "postcss-nesting",
+      "tailwindcss": {},
+      "autoprefixer": {}
     }
   },
   telemetry: false,
@@ -157,7 +167,7 @@ export default defineNuxtConfig({
     },
     "nitro:build:before"(nitro) {
       const apiPath = path.join(__dirname, "utils", "api");
-      if (["node-server"].includes(nitro.options.preset)) {
+      if (["node-server"].includes(nitro.options.preset) && !!import.meta.env.MONGODB_URI) {
         for (const file of fs.readdirSync(path.join(apiPath, "db-tcp"))) {
           fs.renameSync(path.join(apiPath, "db-tcp", file), path.join(apiPath, "db", file));
         }
@@ -178,5 +188,8 @@ export default defineNuxtConfig({
         braceStyle: "1tbs"
       }
     }
+  },
+  tailwindcss: {
+    cssPath: "~/assets/style/tailwind.css"
   }
 });

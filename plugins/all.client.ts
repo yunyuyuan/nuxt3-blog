@@ -1,8 +1,14 @@
-import { SvgContainerId, NotificationContainerId, ModalContainerId } from "~/utils/common/constants";
+import { SvgContainerId, NotificationContainerId, ModalContainerId, ThemeModeKey, I18nStoreKey } from "~/utils/common/constants";
 import { initScrollTrigger } from "~/utils/common/scroll-event";
+import { getLocalStorage } from "~/utils/nuxt/localStorage";
 
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin((app) => {
   initScrollTrigger();
+
+  app.hook("page:finish", () => {
+    useThemeMode().themeMode.value = getLocalStorage(ThemeModeKey) || "light";
+    useI18nCode().changeI18n(getLocalStorage(I18nStoreKey) || useI18nCode().i18nCode.value);
+  });
 
   const fragment = new DocumentFragment();
 
@@ -24,11 +30,4 @@ export default defineNuxtPlugin(() => {
   fragment.appendChild(svgContainer);
 
   document.body.appendChild(fragment);
-  return {
-    provide: {
-      sameSha: computed(() => {
-        return useRemoteLatestSha().value === __NB_CURRENT_GIT_SHA__;
-      })
-    }
-  };
 });

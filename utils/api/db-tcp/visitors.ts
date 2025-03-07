@@ -35,8 +35,7 @@ export async function increaseVisitors({ id, type, inc }: { id: number; type: He
   }, sqlOptions);
   if (result) {
     return result.nvisitors! + incN;
-  }
-  else {
+  } else {
     await collection.insertOne({
       ...preset,
       nvisitors: config.MongoDb.initialVisitors

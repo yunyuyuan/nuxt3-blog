@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .form-item-invalid {
+    @apply before:content-['*'] text-red-400 dark:text-red-500;
+  }
+  .icon-button {
+    @apply size-10 transition flex items-center justify-center overflow-hidden cursor-pointer;
+    @apply rounded-full text-dark-500 dark:text-dark-400 hover:bg-dark-100 dark:hover:bg-dark-700;
+  }
+}

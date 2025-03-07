@@ -1,105 +1,56 @@
 <script setup lang="ts">
-defineProps({
-  href: { type: String, default: "" },
-  active: Boolean
+withDefaults(defineProps<{
+  href?: string;
+  num?: number;
+  active?: boolean;
+}>(), {
+  href: "",
+  num: -1
 });
+
 const emit = defineEmits(["click"]);
 </script>
 
 <template>
   <span
     v-if="!href"
-    class="common-tag"
-    :class="{ active }"
+    :class="[$style.tag, { [$style.active]: active }]"
     @click="emit('click', $event)"
   >
     <slot />
+    <span
+      v-if="num >= 0"
+      :class="$style.num"
+    >{{ num }}</span>
   </span>
   <nuxt-link
     v-else
-    class="common-tag"
+    :class="[$style.tag, { [$style.active]: active }]"
     :to="href"
   >
     <slot />
+    <span
+      v-if="num >= 0"
+      :class="$style.num"
+    >{{ num }}</span>
   </nuxt-link>
 </template>
 
-<style scoped lang="scss">
-$size: 1.7rem;
-$color: #eaeaea;
-$color-dark: #1e1e1e;
+<style module>
+.tag {
+  @apply px-3 py-1.5 rounded-full text-sm font-medium flex items-center transition cursor-pointer;
+  @apply bg-dark-100 text-dark-800 dark:bg-dark-800 dark:text-dark-200 hover:bg-dark-200 dark:hover:bg-dark-700;
+}
 
-.common-tag {
-  user-select: none;
-  background: $color;
-  border-radius: 4px;
-  color: #626262;
-  display: inline-flex;
-  align-items: center;
-  height: $size;
-  padding: 0 8px;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.1s linear;
-  font-size: math.div($size, 2);
-  line-height: math.div($size, 2);
-  text-decoration: none;
-  word-break: keep-all;
+.active {
+  @apply bg-primary-200 dark:bg-primary-900 dark:text-primary-200 hover:bg-primary-300;
 
-  @include dark-mode {
-    background: $color-dark;
-    color: #fff;
+  .num {
+    @apply bg-primary-300 dark:bg-primary-800 text-primary-800 dark:text-primary-200;
   }
+}
 
-  // &:after,
-  // &:before {
-  //   content: "";
-  //   background: #fff;
-  //   position: absolute;
-  //   transition: all 0.1s linear;
-  // }
-
-  // &:before {
-  //   border-radius: 10px;
-  //   box-shadow: inset 0 1px rgb(0 0 0 / 25%);
-  //   left: 8px;
-  //   @include square(6px);
-  //   top: math.div($size, 2);
-  //   transform: translateY(-50%);
-  // }
-
-  // &:after {
-  //   border-bottom: math.div($size, 2) solid transparent;
-  //   border-left: 10px solid $color;
-  //   border-top: math.div($size, 2) solid transparent;
-  //   right: 0;
-  //   top: 0;
-  // }
-
-  &:hover {
-    background: #d7d7d7;
-
-    @include dark-mode {
-      background: #535353;
-    }
-
-    &::after {
-      border-left-color: #d7d7d7;
-    }
-  }
-
-  &.active {
-    background: $theme-color;
-    color: white;
-
-    @include dark-mode {
-      background: $theme-color-lighten;
-      color: black;
-    }
-
-    &::after {
-      border-left-color: $theme-color;
-    }
-  }
+.num {
+  @apply ml-1.5 bg-dark-200 dark:bg-dark-700 text-dark-700 dark:text-dark-300 rounded-full px-2 py-0.5 text-xs;
 }
 </style>

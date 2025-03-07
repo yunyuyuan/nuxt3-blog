@@ -110,6 +110,10 @@
   "words-num": "字",
   "years-ago": "{0}年前",
   "show-comments": "展示评论",
-  "items": "项",
-  "edit": "编辑"
+  "edit": "编辑",
+  "menu": "目录",
+  "comments": "评论",
+  "relativeArticles": "相关文章",
+  "back-home": "返回首页",
+  "save": "保存"
 }

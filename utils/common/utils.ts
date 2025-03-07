@@ -1,4 +1,4 @@
-import type { HeaderTabUrl, ItemBase } from "./types";
+import type { ArticleItem, HeaderTabUrl, ItemBase, KnowledgeItem, RecordItem } from "./types";
 
 /**
  * 生成唯一id
@@ -28,12 +28,12 @@ export function createNewItem(url: HeaderTabUrl) {
         len: 0,
         tags: [],
         ...baseInfo
-      };
+      } as ArticleItem;
     case "/records":
       return {
         images: [],
         ...baseInfo
-      };
+      } as RecordItem;
     case "/knowledges":
       return {
         title: "",
@@ -42,27 +42,20 @@ export function createNewItem(url: HeaderTabUrl) {
         cover: "",
         type: "book",
         ...baseInfo
-      };
+      } as KnowledgeItem;
   }
 }
 
-export function escapeHtml(s: string) {
+export function escapeHtml(s: string, inUrl = false) {
   return s.toString()
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
+    .replace(/&/g, inUrl ? "-" : "&amp;")
+    .replace(/</g, inUrl ? "-" : "&lt;")
+    .replace(/>/g, inUrl ? "-" : "&gt;")
+    .replace(/"/g, inUrl ? "-" : "&quot;")
+    .replace(/'/g, inUrl ? "-" : "&apos;");
 }
 
 // 用在两个地方：提交时，获取时
 export function escapeNewLine(s: string) {
   return s.replace(/\r\n/g, "\n");
-}
-
-export function toggleCodeBlockTheme(theme?: string) {
-  const html = document.documentElement;
-  theme = theme || (html.getAttribute("code-theme") === "light" ? "dark" : "light");
-  html.setAttribute("code-theme", theme);
-  localStorage.setItem("code-theme", theme);
 }

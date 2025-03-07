@@ -1,16 +1,20 @@
 <script setup lang="ts">
-const props = defineProps({
-  show: Boolean,
-  parent: { type: Object, default: null },
-  wrapClass: { type: String, default: "" }
+const props = withDefaults(defineProps<{
+  parent?: any;
+  wrapClass?: string;
+}>(), {
+  parent: null,
+  wrapClass: ""
 });
 
-const emit = defineEmits(["update:show", "open"]);
+const show = defineModel<boolean>("show", { required: true });
+
+const emit = defineEmits(["open"]);
 
 const animating = ref(false);
-watch(() => props.show, (show) => {
-  if (show && animating.value) {
-    emit("update:show", false);
+watch(show, (v) => {
+  if (v && animating.value) {
+    show.value = false;
   }
 });
 
@@ -26,7 +30,7 @@ const afterOpen = () => {
       }
       curr = curr.parentElement;
     }
-    emit("update:show", false);
+    show.value = false;
     document.removeEventListener("mousedown", fn);
   };
   document.addEventListener("mousedown", fn);
@@ -43,46 +47,34 @@ const afterOpen = () => {
     <div
       v-show="show && !animating"
       ref="innerRef"
-      class="common-dropdown"
-      :class="wrapClass"
+      :class="twMerge(
+        $style.dropdown,
+        wrapClass
+      )"
     >
       <slot />
     </div>
   </transition>
 </template>
 
-<style lang="scss">
-.common-dropdown {
-  background: white;
-  box-shadow: 0 0 16px rgb(0 0 0 / 30%);
+<style module>
+.dropdown {
+  @apply absolute top-full z-dropdown origin-top;
+  @apply rounded-lg shadow-md transition border border-solid border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-800 opacity-100;
 
-  @include dark-mode {
-    background: $background-dark;
-    border-color: rgb(77 77 77);
-    box-shadow: 0 0 16px rgb(85 85 85 / 20%);
-  }
-
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  transition: $common-transition;
-  position: absolute;
-  top: 100%;
-  z-index: $z-index-dropdown;
   transform: scaleY(1) translateY(5px);
-  transform-origin: top;
-  opacity: 1;
 
-  &.slide-enter-from {
+  &:global(.slide-enter-from) {
     transform: scaleY(0.2) translateY(5px);
     opacity: 0;
   }
 
-  &.slide-enter-to {
+  &:global(.slide-enter-to) {
     transform: scaleY(1) translateY(5px);
     opacity: 1;
   }
 
-  &.slide-leave-active {
+  &:global(.slide-leave-active) {
     transform: scaleY(0.2) translateY(5px);
     opacity: 0;
   }

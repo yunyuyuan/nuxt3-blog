@@ -1,7 +1,7 @@
 import { type CommonItem } from "~/utils/common/types";
 import { useBlogList } from "~/utils/hooks/useBlogList";
 import { DBOperate } from ".";
-import { translateT } from "../i18n";
+import { translate } from "../i18n";
 import { getCurrentTab, useCommonSEOTitle } from "../utils";
 
 /**
@@ -12,7 +12,7 @@ export async function useListPage<T extends CommonItem> () {
   const encryptor = useEncryptor();
   const targetTab = getCurrentTab();
 
-  useCommonSEOTitle(computed(() => translateT(targetTab.name)));
+  useCommonSEOTitle(computed(() => translate(targetTab.name)));
 
   const { decryptedList } = await useBlogList<T>(targetTab.url);
 

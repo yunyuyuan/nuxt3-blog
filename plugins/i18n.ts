@@ -1,6 +1,6 @@
 import config from "~/config";
 import { type I18nCode, i18nLocales } from "~/utils/common/locales";
-import { getI18nJson, translate, translateT, translateTT } from "~/utils/nuxt/i18n";
+import { getI18nJson, translate } from "~/utils/nuxt/i18n";
 
 export default defineNuxtPlugin(async (app) => {
   app.hook("vue:setup", () => {
@@ -18,9 +18,7 @@ export default defineNuxtPlugin(async (app) => {
       i18nMessages: ref({
         [config.defaultLang as I18nCode]: await getI18nJson(config.defaultLang as I18nCode)
       }),
-      t: (...args: Parameters<typeof translate>) => translate(...args),
-      T: (...args: Parameters<typeof translate>) => translateT(...args),
-      TT: (...args: Parameters<typeof translate>) => translateTT(...args)
+      t: (...args: Parameters<typeof translate>) => translate(...args)
     }
   };
 });

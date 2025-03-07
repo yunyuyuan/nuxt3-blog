@@ -1,3 +1,10 @@
+## 2025.03.08
+* Migrate to tailwindcss, remove SASS.
+
+## 2025.03.02
+* Refactor hooks.
+* Add testing.
+
 ## 2025.02.15
 * Update all npm packages.
 

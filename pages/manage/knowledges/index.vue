@@ -1,75 +1,40 @@
 <script setup lang="ts">
 import ManageListTable from "~/pages/manage/comps/manage-list-table.vue";
-import { type KnowledgeItem, type KnowledgeTab, KnowledgeTabsList } from "~/utils/common/types";
-
-const filterType = ref<KnowledgeTab>();
-
-const toggleFilterType = (type?: KnowledgeTab) => {
-  filterType.value = filterType.value === type ? undefined : type;
-};
+import { KnowledgeColorMap, KnowledgeIconMap, type KnowledgeItem, KnowledgeTabsList } from "~/utils/common/types";
 
 const searchFn = (item: KnowledgeItem, s: string) => {
-  return item.title.includes(s) && (!filterType.value || item.type === filterType.value);
+  return item.title.includes(s);
 };
 </script>
 
 <template>
-  <div class="manage-knowledge">
-    <manage-list-table
-      col-prefix="knowledge-"
-      :filter-fn="searchFn"
-    >
-      <template
-        v-if="!!filterType"
-        #filter
-      >
-        <span
-          class="filter-type flex"
-          :title="$t(KnowledgeTabsList.find((i) => i.key === filterType)!.name)"
-          @click="toggleFilterType(filterType)"
-        >
-          <svg-icon :name="filterType!" />
-        </span>
-      </template>
-      <template #title="{ data: title, dataUrl }">
+  <manage-list-table :filter-fn="searchFn">
+    <template #title="{ item: { title }, dataUrl }">
+      <td>
         <nuxt-link
           no-prefetch
           :to="dataUrl"
+          class="block break-all p-2 text-base text-dark-950 hover:text-primary-700 dark:text-dark-200 dark:hover:text-primary-400"
         >
           {{ title }}
         </nuxt-link>
-      </template>
-      <template #type="{ data: type }">
+      </td>
+    </template>
+    <template #type="{ item: { type } }">
+      <td>
         <span
-          class="filter-type"
           :title="$t(KnowledgeTabsList.find((i) => i.key === type)!.name)"
-          @click="toggleFilterType(type)"
+          :class="twMerge(
+            'inline-flex items-center rounded-full bg-blue-100 p-1.5 font-medium',
+            KnowledgeColorMap[type]
+          )"
         >
-          <svg-icon :name="type" />
+          <component
+            :is="KnowledgeIconMap[type]"
+            class="size-5"
+          />
         </span>
-      </template>
-    </manage-list-table>
-  </div>
+      </td>
+    </template>
+  </manage-list-table>
 </template>
-
-<style lang="scss">
-.manage-knowledge {
-  .knowledge-title {
-    flex-basis: 45%;
-    font-weight: bold;
-    font-size: f-size();
-  }
-
-  .knowledge-type {
-    flex-basis: 15%;
-  }
-
-  .filter-type {
-    cursor: pointer;
-
-    svg {
-      @include square(30px);
-    }
-  }
-}
-</style>
