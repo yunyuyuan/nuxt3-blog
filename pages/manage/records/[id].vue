@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { ArrowUp, Edit, Eye, Image, Plus, Trash } from "lucide-vue-next";
 import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
 import type { RecordItem } from "~/utils/common/types";
 import { getUniqueId } from "~/utils/common/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
 const editing = ref(true);
-const root = ref<HTMLElement>();
+const imagesEl = ref<HTMLElement>();
 
 const moveUpImg = (idx: number, item: RecordItem) => {
   item.images.splice(idx - 1, 2, item.images[idx], item.images[idx - 1]);
@@ -18,30 +19,30 @@ const addImg = (item: RecordItem) => {
 };
 
 const processImages = (md: string, item: RecordItem) => {
-  // 删除id
   item.images.forEach((img) => {
     delete img.id;
   });
 };
 
-initViewer(root);
+initViewer(imagesEl);
 </script>
 
 <template>
-  <div
-    ref="root"
-    class="manage-record-detail"
+  <manage-content-edit
+    :process-with-content="processImages"
   >
-    <manage-content-edit :process-with-content="processImages">
-      <template #images="{ disabled, item }">
-        <span :class="{ invalid: item.images.some(img => !img.src) }">
-          <b>{{ $T('images') }}</b>
-          <svg-icon name="images" />
+    <template #images="{ disabled, item }">
+      <div>
+        <span :class="item.images.some(img => !img.src) && 'form-item-invalid'">
+          <Image class="size-5" />
+          {{ $t('images') }}
         </span>
-        <div class="input-images flexc">
+        <div
+          ref="imagesEl"
+        >
           <div
             v-if="!editing"
-            class="images"
+            class="flex flex-wrap gap-2"
           >
             <the-lazy-img
               v-for="(img, idx) in item.images"
@@ -49,142 +50,64 @@ initViewer(root);
               viewer
               :alt="img.alt"
               :src="img.src"
-              :container-size="['200px', '150px']"
               :title="img.alt"
+              class="size-48"
             />
           </div>
-          <ul v-else>
-            <li
+          <div
+            v-else
+            class="flex flex-col"
+          >
+            <div
               v-for="(img, idx) in item.images"
               :key="img.id"
-              class="flex"
+              class="mb-2 flex gap-2"
             >
               <input
                 v-model="img.src"
-                class="input-src"
+                class="max-w-[400px] shrink md:w-[40vw]"
                 :disabled="disabled"
                 placeholder="src"
               >
               <input
                 v-model="img.alt"
-                class="input-alt"
+                class="w-20"
                 :disabled="disabled"
                 placeholder="alt"
               >
-              <div class="flex">
-                <common-button
+              <div class="flex gap-1">
+                <button
                   v-if="idx !== 0"
                   :disabled="disabled"
-                  class="move-up"
-                  theme="default"
-                  size="small"
-                  icon="up"
+                  class="icon-button"
                   @click="moveUpImg(idx, item)"
-                />
-                <common-button
+                >
+                  <ArrowUp class="size-5" />
+                </button>
+                <button
                   :disabled="disabled"
-                  theme="danger"
-                  size="small"
-                  icon="delete"
+                  class="icon-button"
                   @click="rmImg(idx, item)"
-                />
+                >
+                  <Trash class="size-5 text-red-400 dark:text-red-600" />
+                </button>
               </div>
-            </li>
-          </ul>
-          <div class="btns flex">
-            <common-button
+            </div>
+          </div>
+          <div class="mt-2 flex gap-2">
+            <CommonButton
               :disabled="disabled"
-              icon="add"
+              :icon="Plus"
               @click="addImg(item)"
             />
-            <common-button
+            <CommonButton
               :disabled="disabled"
+              :icon="editing ? Eye : Edit"
               @click="editing = !editing"
-            >
-              {{ editing ? $t('preview') : $t('edit') }}
-            </common-button>
+            />
           </div>
         </div>
-      </template>
-    </manage-content-edit>
-  </div>
+      </div>
+    </template>
+  </manage-content-edit>
 </template>
-
-<style lang="scss">
-.manage-record-detail {
-  .input-images {
-    align-items: flex-start;
-
-    .images {
-      display: flex;
-      flex-wrap: wrap;
-
-      img {
-        margin: 0 10px 10px 0;
-        max-width: 200px;
-        max-height: 150px;
-      }
-    }
-
-    ul {
-      list-style: none;
-
-      li {
-        margin-bottom: 10px;
-
-        input {
-          flex-grow: 0;
-        }
-
-        .input-src {
-          width: 360px;
-          font-size: f-size(0.8);
-        }
-
-        .input-alt {
-          width: 100px;
-          font-size: f-size(0.8);
-          margin: 0 10px;
-        }
-
-        >div {
-          .move-up {
-            margin-right: 10px;
-          }
-        }
-      }
-    }
-
-    .btns {
-      gap: 10px;
-
-      button {
-        width: 80px;
-      }
-    }
-  }
-}
-
-@include mobile {
-  .manage-record-detail {
-    .input-images {
-      ul {
-        li {
-          .input-src {
-            width: 50%;
-            flex-grow: 1;
-          }
-
-          .input-alt {
-            width: 20%;
-          }
-
-          >div {
-            width: 70px;
-          }
-        }
-      }
-    }
-  }
-}
-</style>

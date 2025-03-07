@@ -1,8 +1,100 @@
 # Base
-#[https://github.github.com/gfm/](https://github.github.com/gfm/)
+#[https:\/\/github.github.com/gfm/](https://github.github.com/gfm/)
 ::: details github flavored markdown
 [html]<iframe src="https://github.github.com/gfm/" style="width: 100%;height: 80vh;" framespacing="0"></iframe>[/html]
 :::
+
+# Main Heading (H1)
+
+## Secondary Heading (H2)
+
+### Third Level Heading (H3)
+
+#### Fourth Level Heading (H4)
+
+##### Fifth Level Heading (H5)
+
+###### Sixth Level Heading (H6)
+
+## Basic Formatting
+
+**Bold text** and *italic text*
+
+***Bold and italic text***
+
+~~Strikethrough text~~
+
+> Blockquote text
+> 
+> Multiple paragraph blockquote
+
+## Lists
+
+### Unordered Lists
+- Item 1
+- Item 2
+  - Subitem 2.1
+  - Subitem 2.2
+- Item 3
+
+### Ordered Lists
+1. First item
+2. Second item
+   1. Subitem 2.1
+   2. Subitem 2.2
+3. Third item
+
+## Code
+
+Inline code: `var example = "hello";`
+
+Code block with syntax highlighting:
+
+```javascript
+function helloWorld() {
+  console.log("Hello, world!");
+  return true;
+}
+```
+
+## Links and Images
+
+[Link to GitHub](https://github.com)
+
+![Alt text for image](/favicon.png)
+
+## Tables
+
+| Header 1 | Header 2 | Header 3 |
+|----------|----------|----------|
+| Cell 1   | Cell 2   | Cell 3   |
+| Cell 4   | Cell 5   | Cell 6   |
+| Cell 7   | Cell 8   | Cell 9   |
+
+## Task Lists
+
+- [x] Completed task
+- [ ] Incomplete task
+- [ ] Another task
+
+## Horizontal Rule
+
+---
+
+## Escaping Characters
+
+\*This text is surrounded by asterisks but is not italic\*
+
+## HTML in Markdown
+
+<details>
+<summary>Click to expand</summary>
+This is hidden content that can be expanded.
+</details>
+
+---
+# ↑ End GFM ↑
+---
 
 # Additions
 ## 1. sticker

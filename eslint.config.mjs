@@ -1,4 +1,5 @@
 import pluginVue from "eslint-plugin-vue";
+import tailwind from "eslint-plugin-tailwindcss";
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import withNuxt from "./.nuxt/eslint.config.mjs";
@@ -7,8 +8,9 @@ export default withNuxt(
   eslint.configs.recommended,
   tseslint.configs.recommended,
   ...pluginVue.configs["flat/recommended"],
+  ...tailwind.configs["flat/recommended"],
   {
-    files: ["**/*.ts", "**/*.vue"],
+    files: ["**/*.ts", "**/*.tsx", "**/*.vue"],
     rules: {
       "quotes": ["error", "double"],
       "semi": ["error", "always"],

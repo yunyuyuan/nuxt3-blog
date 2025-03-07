@@ -2,19 +2,21 @@
 import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
 import type { editor as MonacoEditor } from "monaco-editor";
+import { Columns2, Loader2, Menu, SquareAsterisk, View } from "lucide-vue-next";
 import StickerPick from "./sticker-pick.vue";
 import { initViewer } from "~/utils/nuxt/viewer";
 import { useMarkdownParser } from "~/utils/hooks/useMarkdownParser";
 import { useUnmount } from "~/utils/hooks/useUnmount";
 
-const props = defineProps({
-  modelValue: { type: String, default: "" },
-  disabled: { type: Boolean, default: false },
-  loading: { type: Boolean, default: false },
-  single: { type: Boolean, default: false }
-});
+const props = defineProps<{
+  disabled?: boolean;
+  loading?: boolean;
+  single?: boolean;
+}>();
 
-const emit = defineEmits(["update:modelValue", "preview"]);
+const inputValue = defineModel<string>({ required: true });
+
+const emit = defineEmits(["preview"]);
 
 let editor: MonacoEditor.IStandaloneCodeEditor;
 
@@ -23,7 +25,11 @@ const currentText = ref("");
 
 const destroyFns = useUnmount();
 
-const { htmlContent, markdownRef, menuItems } = await useMarkdownParser({ mdValueRef: currentText, fromEdit: true, destroyFns });
+const { htmlContent, markdownRef, menuItems } = await useMarkdownParser({
+  mdValueRef: currentText,
+  fromEdit: true,
+  destroyFns
+});
 
 // sticker
 const showStickers = ref(false);
@@ -63,13 +69,16 @@ const stopResize = () => {
 const { themeMode } = useThemeMode();
 const editorContainer = ref<HTMLElement>();
 const initEditor = () => {
-  if (props.loading || editor || !editorContainer.value) {
+  if (props.loading || editor) {
     return;
   }
   import("monaco-editor").then((module) => {
-    currentText.value = props.modelValue;
-    editor = module.editor.create(editorContainer.value!, {
-      value: props.modelValue,
+    if (!editorContainer.value) {
+      return;
+    }
+    currentText.value = inputValue.value;
+    editor = module.editor.create(editorContainer.value, {
+      value: inputValue.value,
       language: "markdown",
       theme: "vs",
       wordWrap: "on",
@@ -89,14 +98,14 @@ const initEditor = () => {
     editor.onDidChangeModelContent(
       debounce(() => {
         const text = editor.getModel()!.getValue();
-        emit("update:modelValue", text);
+        inputValue.value = text;
         currentText.value = text;
       }, 500)
     );
   });
 };
 
-watch(() => props.modelValue, (text) => {
+watch(inputValue, (text) => {
   if (editor && text !== editor.getModel()!.getValue()) {
     editor.getModel()!.setValue(text);
   }
@@ -116,101 +125,130 @@ initViewer(markdownRef);
 <template>
   <div
     ref="root"
-    :class="['manage-md-editor', 'flexc', currentView]"
+    class="relative flex h-[98vh] flex-col"
   >
     <div
       v-if="props.loading"
-      class="md-loading flex"
+      class="absolute inset-0 flex items-center justify-center bg-dark-500/50"
     >
-      <svg-icon name="loading" />
+      <Loader2 class="size-6 animate-spin" />
     </div>
-    <div class="editor-head flex">
-      <a
-        class="add-sticker"
+    <div class="relative flex items-center justify-between gap-6 border-b border-dark-200 px-4 pb-2 dark:border-dark-700">
+      <button
         :title="$t('add-sticker')"
+        class="icon-button"
         @click="showStickers = true"
       >
-        <img src="/sticker/yellow-face/18.png">
-        <common-dropdown v-model:show="showStickers">
-          <StickerPick
-            v-model="showStickers"
-            class="s100"
-            @insert-sticker="insertSticker"
-          />
-        </common-dropdown>
-      </a>
+        <img
+          class="size-6"
+          src="/sticker/yellow-face/18.png"
+        >
+        <StickerPick
+          v-model="showStickers"
+          class=""
+          @insert-sticker="insertSticker"
+        />
+      </button>
       <nuxt-link
         v-if="!single"
         :title="$t('markdown-ref')"
         :to="'/manage/md-ref'"
         target="_blank"
+        class="icon-button"
       >
-        <svg-icon name="markdown" />
+        <SquareAsterisk class="size-6" />
       </nuxt-link>
-      <a
-        class="preview-contents"
+      <button
+        class="icon-button ml-auto"
         :title="$t('contents')"
         @click="menuItems.length && (showPreviewContents = true)"
       >
-        <svg-icon name="preview-contents" />
-        <common-dropdown v-model:show="showPreviewContents">
-          <div class="s100 flex">
+        <Menu class="size-6" />
+        <common-dropdown
+          v-model:show="showPreviewContents"
+          :wrap-class="$style.menuDropdown"
+        >
+          <div class="flex max-h-[50vh] w-32 max-w-full overflow-auto p-2">
             <ol>
               <li
                 v-for="(anchor, idx) in menuItems"
                 :key="idx"
               >
-                <a
-                  :class="[anchor.size, 'flex']"
+                <span
+                  :class="twMerge(
+                    'text-sm py-1',
+                    anchor.size === 'small' && 'text-xs'
+                  )"
                   :title="anchor.text"
                 >
                   <span v-html="anchor.text" />
-                </a>
+                </span>
               </li>
             </ol>
           </div>
         </common-dropdown>
-      </a>
-      <a
+      </button>
+      <button
         v-if="!single"
-        class="preview"
+        class="icon-button"
         :title="$t('preview')"
         @click="emit('preview')"
-      ><svg-icon name="preview" /></a>
-      <a
-        class="split"
+      >
+        <View class="size-6" />
+      </button>
+      <button
+        class="icon-button"
         :title="$t('toggle-view-mode')"
-        @click="
-          currentView
-            = currentView == 'both'
-              ? 'edit'
-              : currentView == 'edit'
-                ? 'preview'
-                : 'both'
+        @click="currentView = currentView == 'both' ? 'edit'
+          : currentView == 'edit'
+            ? 'preview'
+            : 'both'
         "
       >
-        <svg-icon name="split" />
-      </a>
+        <Columns2 class="size-6" />
+      </button>
     </div>
-    <div class="editor-body flex">
+    <div class="flex grow overflow-hidden border border-dark-200 dark:border-dark-700">
       <div
-        class="left-side"
+        :class="twMerge(
+          'w-1/2 min-w-24 h-full',
+          currentView === 'both' && '',
+          currentView === 'edit' && 'w-full',
+          currentView === 'preview' && 'hidden'
+        )"
         :style="
           currentView == 'both'
             ? `width: ${leftSideWidth ? `${leftSideWidth}px` : ''}`
             : ''
         "
       >
-        <div ref="editorContainer" />
+        <div
+          ref="editorContainer"
+          class="h-full"
+        />
       </div>
       <div
         ref="resizeRef"
-        class="resizer"
+        :class="twMerge(
+          'flex flex-col gap-1 items-center justify-center h-full w-2 shrink-0 cursor-ew-resize bg-dark-100 hover:bg-dark-200 dark:bg-dark-700 hover:dark:bg-dark-600',
+          currentView !== 'both' && 'hidden'
+        )"
         @touchstart="startResize"
         @mousedown.left="startResize"
-      />
+      >
+        <span
+          v-for="i in 3"
+          :key="i"
+          class="size-1 rounded-full bg-dark-400 dark:bg-dark-900"
+        />
+      </div>
       <div
-        class="righr-side"
+        :class="twMerge(
+          'w-1/2 min-w-24 h-full overflow-auto p-2',
+          currentView === 'both' && 'grow',
+          currentView === 'edit' && 'hidden',
+          currentView === 'preview' && 'w-full'
+        )"
         data-testid="rendered-markdown"
       >
         <article
@@ -223,323 +261,8 @@ initViewer(markdownRef);
   </div>
 </template>
 
-<style lang="scss">
-.manage-md-editor {
-  background: white;
-
-  @include dark-mode {
-    background: rgb(39 39 39);
-  }
-
-  position: relative;
-  height: 98vh;
-  align-items: stretch;
-
-  > .md-loading {
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    @include square;
-
-    background: rgb(0 0 0 / 30%);
-    z-index: 2;
-    justify-content: center;
-
-    svg {
-      @include square(60px);
-    }
-  }
-
-  &.edit {
-    .editor-body {
-      > .left-side {
-        width: 100%;
-        max-width: unset;
-      }
-
-      > .righr-side,
-      > .resizer {
-        display: none;
-      }
-    }
-  }
-
-  &.preview {
-    .editor-body {
-      > .left-side,
-      > .resizer {
-        display: none;
-      }
-
-      > .righr-side {
-        width: 100%;
-        max-width: unset;
-      }
-    }
-  }
-
-  >div {
-    width: 100%;
-  }
-
-  .editor-head {
-    background: #fefffe;
-
-    @include dark-mode {
-      background: rgb(39 39 39);
-    }
-
-    box-sizing: border-box;
-    position: relative;
-    padding: 8px 10px;
-    border-top-right-radius: 4px;
-
-    > a {
-      width: 42px;
-      height: 36px;
-      margin-right: 10px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 3px;
-      transition: $common-transition;
-      background: rgb(251 251 251);
-      border: 1px solid transparent;
-
-      @include dark-mode {
-        background: rgb(40 40 40);
-
-        svg {
-          fill: rgb(207 207 207);
-        }
-
-        &:hover {
-          background: rgb(29 29 29);
-        }
-
-        &:active {
-          border-color: rgb(0 0 0);
-        }
-      }
-
-      &:hover {
-        background: rgb(228 228 228);
-      }
-
-      &:active {
-        border-color: rgb(151 151 151);
-      }
-
-      svg,
-      img {
-        @include square(25px);
-      }
-
-      &.add-sticker {
-        .common-dropdown {
-          left: 10px;
-          overflow: hidden;
-          width: 400px;
-          height: 200px;
-          cursor: initial;
-
-          @include mobile {
-            width: calc(100% - 20px);
-          }
-
-          .stickers-title {
-            height: 100%;
-
-            span {
-              font-size: f-size(0.75);
-              padding: 0 5px;
-              word-break: break-all;
-              height: 50%;
-              display: flex;
-              align-items: center;
-              cursor: pointer;
-              transition: $common-transition;
-
-              @include dark-mode {
-                background: rgb(99 99 99);
-
-                &:hover {
-                  background: rgb(68 68 68);
-                }
-
-                &.active {
-                  background: rgb(26 26 26);
-                  color: white;
-                }
-              }
-
-              &:hover {
-                background: rgb(230 230 230);
-              }
-
-              &.active {
-                background: rgb(108 108 108);
-                color: white;
-              }
-            }
-          }
-
-          .stickers-container {
-            height: 100%;
-            overflow: hidden;
-
-            > .inner {
-              transition: $common-transition;
-              transform: translateY(0);
-
-              > div {
-                height: 200px;
-                overflow-y: auto;
-
-                > div {
-                  display: flex;
-                  flex-wrap: wrap;
-                  border: 1px solid #ddd;
-
-                  @include dark-mode {
-                    border-color: rgb(180 180 180);
-                  }
-
-                  border-right: none;
-                  border-bottom: none;
-
-                  span {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-
-                    @include square(42px);
-
-                    transition: $common-transition;
-                    border: 1px solid #ddd;
-
-                    @include dark-mode {
-                      border-color: rgb(117 117 117);
-                    }
-
-                    border-left: none;
-                    border-top: none;
-
-                    &:hover {
-                      background: rgb(228 228 228);
-
-                      @include dark-mode {
-                        background: rgb(140 140 140);
-                      }
-
-                      img {
-                        transform: scale(1.1);
-                      }
-                    }
-
-                    img {
-                      @include square(80%);
-
-                      object-fit: contain;
-                      transition: $common-transition;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-
-      &.preview-contents {
-        margin-left: auto;
-
-        .common-dropdown {
-          right: 10px;
-          overflow: auto;
-          max-width: 300px;
-          max-height: 90vh;
-          cursor: initial;
-
-          ol {
-            box-sizing: border-box;
-            list-style: none;
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-
-            li:not(:last-of-type) {
-              margin-bottom: 8px;
-            }
-
-            a {
-              &.small {
-                padding-left: 12px;
-                font-size: 0.9em;
-              }
-
-              span {
-                @include textoverflow(1);
-
-                white-space: nowrap;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-.editor-body {
-  border-top: 1px solid #e3e3e3;
-  height: calc(100% - 54px);
-
-  > div {
-    height: 100%;
-    max-width: calc(100% - 105px);
-  }
-
-  > .left-side {
-    width: 50%;
-    flex-shrink: 0;
-    min-width: 100px;
-
-    > div {
-      @include square;
-    }
-  }
-
-  > .resizer {
-    width: 4px;
-    background: rgb(200 200 200);
-    flex-shrink: 0;
-    cursor: ew-resize;
-
-    &:hover {
-      background: rgb(174 174 174);
-    }
-
-    @at-root body.resizing & {
-      background: rgb(124 124 124);
-    }
-  }
-
-  > .righr-side {
-    overflow: auto;
-    flex-grow: 1;
-    padding: 0 8px;
-    min-width: 100px;
-  }
-}
-
-@include mobile {
-  .manage-md-editor {
-    min-width: unset;
-    width: 100%;
-  }
+<style module>
+.menuDropdown {
+  @apply right-2;
 }
 </style>

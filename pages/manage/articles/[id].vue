@@ -1,30 +1,27 @@
 <script setup lang="ts">
+import { Captions, Tags } from "lucide-vue-next";
 import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
 import type { ArticleItem } from "~/utils/common/types";
 
 const allTags = reactive(new Set<string>());
-const showTagSelect = ref<boolean>(false);
+const showTagSelect = ref(false);
 const tagParentRef = ref<HTMLLabelElement>();
 
 // 输入的tag和实际上传的tag不同，上传的tag需要去重
 const inputTags = ref("");
-const inputTagsList = ref<string[]>([]);
-const calcTagsList = () => {
-  inputTagsList.value = !inputTags.value
-    ? []
-    : Array.from(new Set(inputTags.value
-        .split(",")
-        .map(tag => tag.trim())
-        .filter(tag => !/^\s*$/.test(tag))));
-};
-watch(inputTags, () => calcTagsList());
+const inputTagsList = computed(() => !inputTags.value
+  ? []
+  : Array.from(new Set(inputTags.value
+      .split(",")
+      .map(tag => tag.trim())
+      .filter(tag => !/^\s*$/.test(tag)))));
+
 const toggleTag = (tag: string) => {
   if (inputTagsList.value.includes(tag)) {
     inputTags.value = inputTags.value.replace(new RegExp(`,?\\s*${tag}(\\s*|,|$)`), "");
   } else {
     inputTags.value = inputTags.value.concat(`,${tag}`);
   }
-  calcTagsList();
 };
 
 const preProcessItem = (editingItem: Ref<ArticleItem>, originList: ArticleItem[]) => {
@@ -32,7 +29,6 @@ const preProcessItem = (editingItem: Ref<ArticleItem>, originList: ArticleItem[]
 
   watch(editingItem.value.tags, (tags) => {
     inputTags.value = tags.join(",");
-    calcTagsList();
   }, { immediate: true });
 
   watch(inputTagsList, (tags) => {
@@ -52,15 +48,15 @@ const processContent = (md: string, item: ArticleItem) => {
 </script>
 
 <template>
-  <div class="manage-article-detail">
-    <manage-content-edit
-      :pre-process-item="preProcessItem"
-      :process-with-content="processContent"
-    >
-      <template #title="{ disabled, item }">
-        <span :class="{ invalid: !item.title }">
-          <b>{{ $T('title') }}</b>
-          <svg-icon name="title" />
+  <manage-content-edit
+    :pre-process-item="preProcessItem"
+    :process-with-content="processContent"
+  >
+    <template #title="{ disabled, item }">
+      <div>
+        <span :class="!item.title && 'form-item-invalid'">
+          <Captions class="size-5" />
+          {{ $t('title') }}
         </span>
         <input
           v-model="item.title"
@@ -68,29 +64,34 @@ const processContent = (md: string, item: ArticleItem) => {
           :placeholder="$t('please-input')"
           :disabled="disabled"
         >
-      </template>
-      <template #tags="{ disabled, item }">
+      </div>
+    </template>
+    <template #tags="{ disabled, item }">
+      <div>
         <span>
-          <b>{{ $T('tags') }}</b>
-          <svg-icon name="tags" />
+          <Tags class="size-5" />
+          {{ $t('tags') }}
         </span>
         <div
           ref="tagParentRef"
           :title="item.encrypt ? $t('tags-not-allowed') : undefined"
-          class="input-tags flex"
+          class="relative flex"
           :class="{ disabled: disabled || item.encrypt }"
         >
           <input
             v-model="inputTags"
             data-testid="item-tags-input"
+            class="peer w-full py-3 !text-transparent focus:!text-inherit"
             :disabled="disabled || item.encrypt"
             @focusin="showTagSelect = true"
           >
-          <div class="placeholder s100 flex">
+          <div class="pointer-events-none absolute flex size-full items-center gap-1 overflow-auto break-keep px-2 peer-focus:opacity-0">
             <span
               v-if="!inputTagsList.length || item.encrypt"
-              class="text"
-            >{{ $t('input-tags') }}</span>
+              class="text-dark-400 dark:text-dark-700"
+            >
+              {{ $t('input-tags') }}
+            </span>
             <template v-if="!item.encrypt">
               <the-tag
                 v-for="tag in inputTagsList"
@@ -104,97 +105,27 @@ const processContent = (md: string, item: ArticleItem) => {
             v-model:show="showTagSelect"
             :parent="tagParentRef"
           >
-            <p>{{ $t('existed-tags') }}:</p>
-            <div class="dropdown w100 flex">
-              <the-tag
-                v-for="tag in allTags"
-                :key="tag"
-                :active="inputTagsList.includes(tag)"
-                @click="toggleTag(tag)"
-              >
-                {{ tag }}
-              </the-tag>
+            <div class="p-4">
+              <p class="mb-2 text-sm">
+                {{ $t('existed-tags') }}:
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <button
+                  v-for="tag in allTags"
+                  :key="tag"
+                  :class="twMerge(
+                    'rounded-md bg-dark-100 px-2 py-1 text-base hover:text-primary-600 dark:bg-dark-700 dark:hover:text-primary-400',
+                    inputTagsList.includes(tag) && '!bg-primary-100 dark:!bg-primary-600'
+                  )"
+                  @click="toggleTag(tag)"
+                >
+                  {{ tag }}
+                </button>
+              </div>
             </div>
           </common-dropdown>
         </div>
-      </template>
-    </manage-content-edit>
-  </div>
+      </div>
+    </template>
+  </manage-content-edit>
 </template>
-
-<style lang="scss">
-.manage-article-detail {
-  .input-tags {
-    position: relative;
-    width: 516px;
-    min-width: 100px;
-
-    input {
-      color: transparent;
-      background: transparent;
-      z-index: 2;
-
-      &:focus {
-        color: black;
-
-        @include dark-mode {
-          color: white;
-        }
-
-        & ~ .placeholder {
-          opacity: 0;
-        }
-      }
-
-      &:disabled {
-        background: rgb(0 0 0 / 5%);
-      }
-    }
-
-    .placeholder {
-      opacity: 1;
-      z-index: 1;
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-
-      >.text {
-        color: rgb(157 157 157);
-        font-size: f-size(0.8);
-        padding-left: 5px;
-      }
-
-      .common-tag {
-        margin-left: 5px;
-      }
-    }
-
-    .common-dropdown {
-      width: 100%;
-
-      > p {
-        font-size: f-size(0.75);
-        margin: 8px 0 0 8px;
-      }
-
-      .dropdown {
-        flex-wrap: wrap;
-        margin: 0 0 8px 8px;
-
-        .common-tag {
-          margin: 8px 8px 0 0;
-        }
-      }
-    }
-  }
-}
-
-@include mobile {
-  .manage-article-detail {
-    .input-tags {
-      width: 100%;
-    }
-  }
-}
-</style>

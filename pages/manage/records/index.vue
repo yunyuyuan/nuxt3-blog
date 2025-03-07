@@ -6,61 +6,45 @@ const searchFn = (item: RecordItem, s: string) => !item.images.length || item.im
 </script>
 
 <template>
-  <div class="manage-record">
-    <manage-list-table
-      col-prefix="record-"
-      :filter-fn="searchFn"
-    >
-      <template #images="{ data: images, dataUrl }">
+  <manage-list-table
+    :filter-fn="searchFn"
+  >
+    <template #images="{ item: { images }, dataUrl }">
+      <td>
         <nuxt-link
           no-prefetch
           :to="dataUrl"
+          :class="$style.a"
         >
           <the-lazy-img
-            v-for="img, idx in (images.length ? images : [{ alt: '', src: 'no-poster' }])"
+            v-for="img, idx in (images.length ? images : [{ alt: '', src: 'no-poster' }]).slice(0, 6)"
             :key="idx"
-            :container-size="[50, 50]"
             :alt="img.alt"
             :src="img.src"
             :title="img.alt"
             :retry="false"
-            :err-size="{ width: '100px', height: '100px' }"
+            :class="$style.img"
           />
         </nuxt-link>
-      </template>
-    </manage-list-table>
-  </div>
+      </td>
+    </template>
+  </manage-list-table>
 </template>
 
-<style lang="scss">
-.manage-record {
-  .record-images {
-    flex-basis: 60%;
+<style module>
+.a {
+  @apply flex flex-wrap gap-2 py-2;
 
-    a {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
+  &:hover .img img {
+    @apply scale-105;
+  }
+}
 
-      .--lazy-img {
-        margin-bottom: 6px;
-        transition: box-shadow $animation-duration $animation-function;
+.img {
+  @apply rounded-sm shadow size-20 justify-center;
 
-        &:not(:last-of-type) {
-          margin-right: 6px;
-        }
-      }
-
-      &:hover {
-        .--lazy-img {
-          box-shadow: 0 0 8px rgb(0 0 0 / 20%);
-        }
-      }
-
-      img {
-        height: 100px;
-      }
-    }
+  img {
+    @apply size-full object-cover duration-500;
   }
 }
 </style>

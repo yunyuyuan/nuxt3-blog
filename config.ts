@@ -21,8 +21,16 @@ export default {
     initialVisitors: 1, // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
     visitFromOwner: false // 网站拥有者访问时，是否增加浏览量
   },
-  themeColor: "#2aa0bb", // 主题色
+  themeColor: "cyan", // 主题色，参考 https://tailwindcss.com/docs/colors
+  themeColorDark: "neutral", // 主题色(夜间模式)
   defaultLang: "zh", // default language, "zh" and "en" are supported currently
+  about: [
+    "幽深宇宙已岁逾百亿，惟闪烁星光点缀生机",
+    "我常仰望浩瀚天际，思念在同一颗星球的你",
+    "想，那转瞬的迷人流星，也许就是你的回眸",
+    "光坠之地，吾之忧祈",
+    "——2021.12.4"
+  ],
 
   /** -------------------------------------------------注意----------------------------------------------------- */
 

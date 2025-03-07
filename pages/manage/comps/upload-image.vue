@@ -1,20 +1,12 @@
 <script setup lang="ts">
 import axios from "axios";
 import FormData from "form-data";
+import { Info, Plus, Save, Upload } from "lucide-vue-next";
 import { translate } from "~/utils/nuxt/i18n";
 import { getLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
 import { notify } from "~/utils/nuxt/notify";
 
-const props = defineProps({
-  modelValue: Boolean
-});
-
-const show = ref(false);
-watch(() => props.modelValue, (v) => {
-  show.value = v;
-});
-
-const emit = defineEmits(["confirm", "cancel", "update:modelValue"]);
+const show = defineModel<boolean>({ required: true });
 
 const dragIn = ref(false);
 const img = ref<File>();
@@ -35,6 +27,7 @@ const setImage = (e: Event) => {
   img.value = file;
 };
 const dropImg = (ev: DragEvent) => {
+  dragIn.value = false;
   let file: File | null;
 
   if (ev.dataTransfer?.items) {
@@ -119,17 +112,22 @@ const afterUpload = (res: any) => {
   }
 };
 
-const doUpload = () => {
+const doUpload = async () => {
   uploading.value = true;
-  const formData = new FormData();
-  formData.append("token", smmsToken.value);
-  formData.append("tinyPngToken", tinyPngToken.value);
-  formData.append("file", img.value);
-  axios({
-    url: "/api/smms/upload",
-    method: "post",
-    data: formData
-  }).then(res => afterUpload(res)).catch((err: Error) => afterUpload(err.message));
+  try {
+    const formData = new FormData();
+    formData.append("token", smmsToken.value);
+    formData.append("tinyPngToken", tinyPngToken.value);
+    formData.append("file", img.value);
+    const res = await axios({
+      url: "/api/smms/upload",
+      method: "post",
+      data: formData
+    });
+    afterUpload(res);
+  } catch (e) {
+    afterUpload(JSON.stringify(e));
+  }
 };
 
 const resultInput = ref<HTMLInputElement>();
@@ -161,36 +159,42 @@ onUnmounted(() => {
     wrap-class="upload-image"
     :show-ok="false"
     :show-cancel="false"
-    @update:model-value="emit('update:modelValue', $event)"
+    @update:model-value="show = $event"
   >
     <template #title>
-      {{ $t('upload-image') }}&nbsp;Supported by
+      {{ $t('upload-image') }}&nbsp;
       <a
+        class="underline"
         target="_blank"
         href="https://doc.sm.ms/"
-      >sm.ms</a>
-      <svg-icon name="question" />
+      >sm.ms
+        <Info class="inline-block size-4" /></a>
       &
       <a
+        class="underline"
         target="_blank"
         href="https://tinypng.com/developers"
-      >tinypng</a>
-      <svg-icon name="question" />
+      >tinypng
+        <Info class="inline-block size-4" /></a>
     </template>
     <template #body>
-      <div class="flexc">
-        <div class="result flex">
+      <div class="flex flex-col px-2">
+        <div class="flex items-center gap-1">
           <span>{{ $t('upload-result') }}: </span>
           <input
             ref="resultInput"
             v-model="resultUrl"
             :placeholder="$t('no-result')"
             readonly
+            class="grow"
           >
         </div>
         <label
-          class="flex"
-          :class="{ dragin: dragIn }"
+          :class="
+            twMerge(
+              'relative cursor-pointer my-4 py-2 flex h-48 w-full items-center justify-center rounded-lg border-2 border-dotted border-primary-400 text-primary-500 transition hover:text-primary-600',
+              dragIn && 'bg-dark-100 dark:bg-dark-700'
+            )"
           @dragleave="dragIn = false"
           @dragenter.prevent
           @dragover.prevent="!dragIn && (dragIn = true)"
@@ -199,171 +203,62 @@ onUnmounted(() => {
           <input
             type="file"
             accept="image/*"
+            class="hidden"
             @change="setImage"
           >
           <div
-            v-if="dragIn"
-            class="cover"
-          />
-          <div
             v-if="!img"
-            class="flexc"
+            class="flex flex-col items-center gap-1"
           >
-            <svg-icon name="add" />
+            <Plus class="size-8" />
             <span>{{ $t('select-image') }}</span>
           </div>
           <img
             v-else
-            class="s100"
+            class="size-full object-contain"
             :src="imgUrl"
           >
         </label>
-        <div class="flexc footer">
-          <div class="flex">
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center">
             <input
               v-model="smmsToken"
+              class="grow"
               :placeholder="$t('please-input') + ' smms API token'"
             >
-            <span @click="saveToken('smms-token', smmsToken)">
-              <svg-icon name="save" />
-            </span>
+            <button
+              class="ml-2 text-primary-600"
+              :title="$t('save')"
+              @click="saveToken('smms-token', smmsToken)"
+            >
+              <Save />
+            </button>
           </div>
-          <div class="flex">
+          <div class="flex items-center">
             <input
               v-model="tinyPngToken"
+              class="grow"
               :placeholder="`(${$t('optional')})${$t('please-input')} tinyPng API token`"
             >
-            <span @click="saveToken('tinypng-token', tinyPngToken)">
-              <svg-icon name="save" />
-            </span>
+            <button
+              class="ml-2 text-primary-600"
+              :title="$t('save')"
+              @click="saveToken('tinypng-token', tinyPngToken)"
+            >
+              <Save />
+            </button>
           </div>
-          <common-button
-            icon="upload"
+          <CommonButton
+            :icon="Upload"
             :loading="uploading"
             :disabled="!img || !smmsToken"
+            class="mt-2 self-center"
             @click="doUpload"
           >
             {{ $t('upload') }}
-          </common-button>
+          </CommonButton>
         </div>
       </div>
     </template>
   </common-modal>
 </template>
-
-<style lang="scss">
-.upload-image {
-  .modal-title {
-    a {
-      color: $theme-color;
-      font-size: f-size();
-    }
-
-    svg {
-      margin-left: 4px;
-      fill: $theme-color;
-
-      @include square(12px);
-    }
-  }
-
-  .modal-body > div {
-    justify-content: center;
-    max-width: 300px;
-    margin: auto;
-
-    .result {
-      width: 100%;
-
-      span {
-        font-size: f-size(0.75);
-      }
-
-      input {
-        padding: 4px;
-        flex-grow: 1;
-        width: 0;
-      }
-
-      margin-bottom: 10px;
-    }
-
-    label {
-      border-radius: 8px;
-      border: 1px dashed rgb(179 179 179);
-      justify-content: center;
-      cursor: pointer;
-      transition: $common-transition;
-      height: 200px;
-      width: 100%;
-      margin-bottom: 20px;
-      background: rgb(240 240 240);
-
-      @include dark-mode {
-        background: rgb(47 47 47);
-      }
-
-      &:hover {
-        border-color: rgb(59 59 59);
-      }
-
-      &.dragin {
-        background: rgb(228 228 228);
-      }
-
-      input {
-        display: none;
-      }
-
-      svg {
-        fill: $theme-color;
-
-        @include square(80px);
-      }
-
-      img {
-        object-fit: contain;
-      }
-
-      span {
-        margin-top: 10px;
-        font-size: f-size(0.75);
-        color: grey;
-      }
-    }
-
-    .footer {
-      width: 100%;
-
-      > div {
-        width: 100%;
-        margin-bottom: 8px;
-
-        > span {
-          cursor: pointer;
-          width: 20px;
-          height: 20px;
-
-          svg {
-            @include square;
-
-            fill: $theme-color-darken;
-          }
-        }
-      }
-
-      input {
-        font-size: f-size(0.75);
-        padding: 6px;
-        margin-right: 5px;
-        width: 0;
-        flex-grow: 1;
-      }
-
-      button {
-        margin-bottom: 10px;
-      }
-    }
-  }
-}
-</style>

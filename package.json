@@ -13,7 +13,6 @@
     "test:e2e": "vitest run --dir ./e2e",
     "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e",
     "eslint": "eslint --fix .",
-    "stylelint": "stylelint --fix --ignore-path .gitignore \"**/*.{css,scss,sass,vue}\"",
     "preview": "nuxt preview",
     "prepare": "husky"
   },
@@ -34,6 +33,7 @@
     "@eslint/js": "^9.20.0",
     "@nuxt/eslint": "1.0.1",
     "@nuxt/test-utils": "^3.15.4",
+    "@nuxtjs/tailwindcss": "^6.13.1",
     "@playwright/test": "^1.50.1",
     "@types/crypto-js": "^4.1.1",
     "@types/gulp": "^4.0.9",
@@ -48,6 +48,7 @@
     "colors": "^1.4.0",
     "cross-env": "^7.0.3",
     "eslint": "^9.20.1",
+    "eslint-plugin-tailwindcss": "^3.18.0",
     "eslint-plugin-vue": "^9.32.0",
     "form-data": "^4.0.0",
     "gulp": "^5.0.0",
@@ -55,16 +56,16 @@
     "husky": "^9.1.0",
     "lint-staged": "^15.4.1",
     "lodash": "^4.17.21",
+    "lucide-vue-next": "^0.477.0",
     "mongodb": "^6.0.0",
     "nuxt": "^3.9.3",
     "postcss-html": "^1.4.1",
+    "postcss-import": "^16.1.0",
+    "postcss-nesting": "^13.0.1",
     "prompts": "^2.4.2",
     "rollup-pluginutils": "^2.8.2",
-    "sass": "^1.43.4",
     "start-server-and-test": "^2.0.10",
-    "stylelint": "^16.8.2",
-    "stylelint-config-recommended-vue": "^1.4.0",
-    "stylelint-config-standard-scss": "^14.0.0",
+    "tailwind-merge": "^3.0.2",
     "tinify": "^1.7.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.7.3",
@@ -80,9 +81,6 @@
   "lint-staged": {
     "*.{ts,tsx,vue}": [
       "eslint --fix"
-    ],
-    "*.{scss,vue}": [
-      "stylelint --fix --ignore-path .gitignore"
     ]
   },
   "engines": {

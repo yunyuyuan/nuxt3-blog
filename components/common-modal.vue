@@ -1,58 +1,38 @@
 <script setup lang="ts">
-import type { PropType } from "vue";
+import { X } from "lucide-vue-next";
 import { ModalContainerId } from "~/utils/common/constants";
 
-const props = defineProps({
-  confirmTheme: {
-    type: String as PropType<"primary" | "danger">,
-    default: "primary"
-  },
-  modelValue: Boolean,
-  loading: Boolean,
-  wrapClass: {
-    type: String,
-    default: ""
-  },
-  showOk: {
-    type: Boolean,
-    default: true
-  },
-  showCancel: {
-    type: Boolean,
-    default: true
-  },
-  maskClosable: {
-    type: Boolean,
-    default: true
-  },
-  modalWidth: {
-    type: String,
-    default: "500"
-  },
-  modalTitle: {
-    type: String,
-    default: undefined
-  },
-  modalContent: {
-    type: String,
-    default: undefined
-  },
-  onClose: {
-    type: Function,
-    default: undefined
-  },
-  onOk: {
-    type: Function,
-    default: undefined
-  },
-  testId: {
-    type: String,
-    default: undefined
-  }
+const show = defineModel<boolean>({ required: true });
+
+const props = withDefaults(defineProps<{
+  confirmTheme?: "primary" | "danger";
+  loading?: boolean;
+  wrapClass?: string;
+  showOk?: boolean;
+  showCancel?: boolean;
+  maskClosable?: boolean;
+  modalWidth?: string;
+  modalTitle?: string;
+  modalContent?: string;
+  onClose?: CallableFunction;
+  onOk?: CallableFunction;
+  testId?: string;
+}>(), {
+  confirmTheme: "primary",
+  wrapClass: "",
+  showOk: true,
+  showCancel: true,
+  maskClosable: true,
+  modalWidth: "500px",
+  modalTitle: undefined,
+  modalContent: undefined,
+  onClose: undefined,
+  onOk: undefined,
+  testId: undefined
 });
 
 const root = ref<HTMLElement>();
-const emit = defineEmits(["confirm", "cancel", "update:modelValue"]);
+const emit = defineEmits(["confirm", "cancel"]);
 
 const setFocus = () => {
   if (root.value) {
@@ -71,7 +51,7 @@ const close = () => {
     return props.onClose();
   }
   emit("cancel");
-  emit("update:modelValue", false);
+  show.value = false;
 };
 </script>
 
@@ -83,25 +63,24 @@ const close = () => {
         @after-enter="setFocus"
       >
         <div
-          v-show="modelValue"
+          v-show="show"
           ref="root"
           role="document"
           tabindex="1"
-          class="common-modal"
-          :class="wrapClass"
+          :class="twMerge($style.modal, wrapClass)"
           @keyup.enter="ok"
           @keyup.escape="close"
         >
           <div
-            class="bg"
+            class="absolute inset-0 bg-dark-700/20 dark:bg-dark-700/50"
             @click.self="maskClosable ? close() : null"
           />
           <div
-            class="inner flexc"
-            :style="`width: ${modalWidth}px`"
+            :class="$style.inner"
+            :style="`width: ${modalWidth}`"
           >
-            <div class="modal-title flex">
-              <h3>
+            <div class="flex items-center justify-between border-b border-dark-200 pb-4 dark:border-dark-700">
+              <h3 class="text-lg font-medium text-dark-900 dark:text-white">
                 <template v-if="modalTitle">
                   {{ modalTitle }}
                 </template>
@@ -110,40 +89,41 @@ const close = () => {
                   name="title"
                 />
               </h3>
+              <button
+                class="text-dark-400 hover:text-dark-500 focus:outline-none dark:hover:text-dark-300"
+                @click="close"
+              >
+                <X class="size-5" />
+              </button>
             </div>
-            <a
-              class="modal-close flex"
-              @click="close"
-            >
-              <svg-icon name="close" />
-            </a>
-            <div class="modal-body">
+
+            <div class="overflow-auto pt-4">
               <p v-if="modalContent">
                 {{ modalContent }}
               </p>
               <slot name="body" />
             </div>
+
             <div
               v-if="showOk || showCancel"
-              class="modal-foot flex"
+              class="flex justify-end space-x-3 pt-3"
             >
-              <common-button
+              <CommonButton
                 v-if="showOk"
-                class="ok"
                 :loading="loading"
                 :theme="confirmTheme"
                 :data-testid="testId"
                 @click="ok"
               >
-                {{ $TT('ok') }}
-              </common-button>
-              <common-button
+                {{ $t('ok') }}
+              </CommonButton>
+              <CommonButton
                 v-if="showCancel"
                 theme="default"
                 @click="close"
               >
-                {{ $T('cancel') }}
-              </common-button>
+                {{ $t('cancel') }}
+              </CommonButton>
             </div>
           </div>
         </div>
@@ -152,159 +132,21 @@ const close = () => {
   </client-only>
 </template>
 
-<style lang="scss">
-.common-modal {
-  position: fixed;
-  inset: 0;
-  outline: none;
-  z-index: $z-index-modal;
-  transition: $common-transition;
-  opacity: 1;
+<style module>
+.modal {
+  @apply fixed inset-0 outline-none z-modal transition opacity-100;
 
-  &.modal-enter-from,
-  &.modal-leave-to {
-    opacity: 0;
+  &:global(.modal-enter-from),
+  &:global(.modal-leave-to) {
+    @apply opacity-0;
 
-    > .inner {
+    .inner {
       transform: translateY(-30px);
     }
   }
-
-  > .bg {
-    position: absolute;
-    inset: 0;
-    background: rgb(0 0 0 / 35%);
-
-    @include dark-mode {
-      background: rgb(0 0 0 / 50%);
-    }
-
-    z-index: 1;
-  }
-
-  > .inner {
-    z-index: 2;
-    background: white;
-
-    @include dark-mode {
-      background: $background-dark;
-    }
-
-    border-radius: 6px;
-    margin: auto;
-    padding: 18px 32px;
-    position: relative;
-    margin-top: 128px;
-    box-shadow: 0 0 20px rgb(0 0 0 / 30%);
-    transition: $common-transition;
-    align-items: stretch;
-
-    @include dark-mode {
-      box-shadow: 0 0 20px rgb(0 0 0 / 60%);
-    }
-
-    > .modal-title {
-      padding: 0 0 14px;
-      height: 32px;
-      border-bottom: 1px solid #e1e1e1;
-      color: rgb(55 55 55);
-
-      @include dark-mode {
-        color: #eee;
-      }
-    }
-
-    > .modal-close {
-      position: absolute;
-      cursor: pointer;
-      top: 23px;
-      right: 32px;
-      transition: $common-transition;
-      border-radius: 3px;
-
-      @include square(24px);
-
-      background: white;
-      justify-content: center;
-
-      @include dark-mode {
-        background: transparent;
-
-        > svg {
-          fill: white;
-        }
-
-        &:hover {
-          background: rgb(29 29 29);
-        }
-
-        &:active {
-          background: rgb(90 90 90);
-        }
-      }
-
-      &:hover {
-        background: rgb(240 240 240);
-      }
-
-      &:active {
-        background: rgb(221 221 221);
-
-        > svg {
-          fill: black;
-        }
-      }
-
-      > svg {
-        @include square(12px);
-
-        fill: #474747;
-        transition: $common-transition;
-      }
-    }
-
-    > .modal-body {
-      margin-top: 20px;
-      max-height: calc(100vh - 300px);
-      overflow: auto;
-    }
-
-    > .modal-foot {
-      justify-content: flex-end;
-      margin-top: 20px;
-
-      > .ok {
-        margin-right: 12px;
-      }
-    }
-  }
 }
 
-@include mobile {
-  .common-modal {
-    >.inner {
-      width: calc(95% - 32px) !important;
-      padding-left: 16px;
-      padding-right: 16px;
-
-      > .modal-close {
-        right: 16px;
-      }
-    }
-  }
-}
-
-@media screen and (height <= 480px) {
-  .common-modal {
-    >.inner {
-      margin-top: 12px;
-      max-height: calc(100vh - 64px);
-
-      > .modal-body {
-        max-height: unset;
-        height: unset;
-      }
-    }
-  }
+.inner {
+  @apply max-w-[98vw] relative mt-32 max-h-[calc(100vh_-_160px)] [@media(max-height:600px)]:mt-12 [@media(max-height:600px)]:max-h-[calc(100vh_-_80px)] z-[2] bg-white dark:bg-dark-800 rounded-2xl mx-auto px-8 py-6 max-md:p-4 shadow-md flex flex-col items-stretch transition;
 }
 </style>

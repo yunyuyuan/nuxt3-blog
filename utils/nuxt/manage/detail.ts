@@ -13,7 +13,7 @@ export async function useManageContent<T extends CommonItem>() {
   const itemId = useRoute().params.id as string;
   const targetTab = getCurrentTab();
 
-  useCommonSEOTitle(computed(() => translate("detail-manage", [targetTab.name])));
+  useCommonSEOTitle(computed(() => translate("detail-manage", [translate(targetTab.name)])));
 
   const isNew = itemId === "new";
 

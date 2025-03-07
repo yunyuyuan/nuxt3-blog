@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div id="left-side-layout">
+  <div>
     <slot />
   </div>
 </template>

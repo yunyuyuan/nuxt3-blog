@@ -3,7 +3,6 @@
 </p>
 <h1 align="center">💎Nuxt3-Blog</h1>
 
----
 
 [![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v3-%2300DC82?logo=nuxt.js)
 
@@ -52,14 +51,14 @@
 #### 特性
 - [ ] 404页面
 - [x] 在本地`npm run dev`下更新数据
-- [ ] 自动化测试
+- [x] 自动化测试
 - [x] 纯静态网站生成(SSG)
 - [ ] 插件系统
 - [x] 支持serverless function上传图片
 - [x] 数据库集成(浏览量统计)
 - [ ] algolia全站搜索
 - [x] 博客图片备份与迁移
-- [x] 密码修改(目前仅支持在`npm run dev`下修改)
+- [x] 密码修改(目前仅支持在本地使用npm脚本修改)
 
 
 #### 外观
@@ -80,23 +79,26 @@
 * `/assets`
   * `/image` vite引入的图片
   * `/style` 公共/功能样式
-  * `/svg` 所有svg文件，通过`/components/svg-icon.vue`动态加载
 * `/components` vue组件，被nuxt自动加载
 * `/composables` vue响应式，被nuxt自动加载
-* `/vite-plugins` vite插件
+* `/e2e` e2e测试
 * `/i18n` 国际化翻译文件
 * `/layouts` nuxt布局文件
+* `/middleware` nuxt路由守卫
 * `/pages` 所有网页视图
 * `/plugins` nuxt插件
 * `/public`
+  * `/e2e/rebuild` 用于e2e测试的假数据
   * `/rebuild` 所有博客数据
   * `/sticker` 所有表情图片
 * `/scripts` Gulp执行的脚本
 * `/server` api服务器(Nodejs)
 * `/utils`
   * `/api` `/server`调用的函数.
-  * `/nuxt` nuxt相关的功能代码
   * `/common` javascript相关的功能代码(不依赖vue或nuxt)
+  * `/hooks` 一些composable封装逻辑
+  * `/nuxt` nuxt相关的功能代码
+* `/vite-plugins` vite插件
 * `/config.ts` 博客配置，必须修改
 
 # Node脚本
@@ -104,14 +106,18 @@
 "scripts": {
   "build": "nuxt build", // 编译为ssr
   "dev": "nuxt dev", //开发
-  "generate": "nuxt generate", // 编译为static
-  "chpwd": "gulp change-passwd", // 全局修改密码
-  "genimg": "gulp generate-image-map", // 收集全站图片，输出到img.json
-  "downimg": "gulp download-image", // 读取img.json，下载所有图片到imgs/
-  "subimg": "gulp substitute-image", // 读取img.json，替换为新的图片（运行此脚本前，请先修改img.json里的newUrl为需要替换的url）
-  "lint": "eslint --fix --ext .ts,vue --ignore-path .gitignore .", //执行eslint
+  "dev-for-test": "cross-env NUXT_PORT=13000 VITESTING=\"true\" nuxt dev", //用于e2e测试
+  "generate": "nuxt generate", // 弃用了
+  "local:change-pwd": "gulp change-passwd", // 全局修改密码
+  "local:generate-img-map": "gulp generate-image-map", // 收集全站图片，输出到img.json
+  "local:download-img": "gulp download-image", // 读取img.json，下载所有图片到imgs/
+  "local:substitute-img": "gulp substitute-image", // 读取img.json，替换为新的图片（运行此脚本前，请先修改img.json里的newUrl为需要替换的url）
+  "test:unit": "vitest run --exclude ./e2e", // unit测试
+  "test:e2e": "vitest run --dir ./e2e", // e2e测试
+  "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e", // 运行测试服务并开始e2e测试
+  "eslint": "eslint --fix .", //执行eslint
   "preview": "nuxt preview", // 预览编译后的网站
-  "prepare": "husky install" // 安装husky
+  "prepare": "husky" // 安装husky
 }
 ```
 

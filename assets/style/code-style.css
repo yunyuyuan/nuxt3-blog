@@ -1,4 +1,4 @@
-html[code-theme="light"] .hljs {
+html.light .hljs {
   color: #24292e;
   background: #fff !important;
 
@@ -70,7 +70,7 @@ html[code-theme="light"] .hljs {
   }
 }
 
-html[code-theme="dark"] .hljs {
+html.dark .hljs {
   color: #abb2bf;
   background: #282c34 !important;
 

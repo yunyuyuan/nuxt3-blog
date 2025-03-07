@@ -2,88 +2,36 @@
 import ManageListTable from "~/pages/manage/comps/manage-list-table.vue";
 import type { ArticleItem } from "~/utils/common/types";
 
-const searchTag = reactive(new Set<string>());
-const toggleTag = (tag: string) => {
-  if (searchTag.has(tag)) {
-    searchTag.delete(tag);
-  } else {
-    searchTag.add(tag);
-  }
-};
-
 const searchFn = (item: ArticleItem, s: string) => {
-  return item.title.includes(s) && Boolean(
-    !searchTag.size || (item.tags.length && Array.from(searchTag).every(tag => item.tags.includes(tag)))
-  );
+  return item.title.includes(s);
 };
 </script>
 
 <template>
-  <div class="manage-article">
-    <manage-list-table
-      col-prefix="article-"
-      :filter-fn="searchFn"
-    >
-      <template
-        v-if="searchTag.size"
-        #filter
-      >
-        <div class="filter-tag">
-          <the-tag
-            v-for="tag in searchTag"
-            :key="tag"
-            :active="searchTag.has(tag)"
-            @click="toggleTag(tag)"
-          >
-            {{ tag }}
-          </the-tag>
-        </div>
-      </template>
-      <template #title="{ data: title, dataUrl }">
+  <manage-list-table :filter-fn="searchFn">
+    <template #title="{ item: { title }, dataUrl }">
+      <td>
         <nuxt-link
           no-prefetch
           :to="dataUrl"
+          class="block break-all p-2 text-base text-dark-950 hover:text-primary-700 dark:text-dark-200 dark:hover:text-primary-400"
         >
           {{ title }}
         </nuxt-link>
-      </template>
-      <template #tags="{ data: tags }">
-        <div>
-          <the-tag
+      </td>
+    </template>
+    <template #tags="{ item: { tags } }">
+      <td>
+        <div class="flex flex-wrap gap-1 text-sm">
+          <span
             v-for="tag in tags"
             :key="tag"
-            :active="searchTag.has(tag)"
-            @click="toggleTag(tag)"
+            class="rounded-lg bg-dark-100 px-1.5 py-0.5 text-dark-700 dark:bg-dark-700 dark:text-dark-300"
           >
             {{ tag }}
-          </the-tag>
+          </span>
         </div>
-      </template>
-    </manage-list-table>
-  </div>
+      </td>
+    </template>
+  </manage-list-table>
 </template>
-
-<style lang="scss">
-.manage-article {
-  .filter-tag {
-    .common-tag {
-      margin-right: 4px;
-    }
-  }
-
-  .article-title {
-    flex-basis: 40%;
-    font-weight: bold;
-    font-size: f-size();
-  }
-
-  .article-tags {
-    flex-basis: 20%;
-
-    .common-tag {
-      margin-right: 4px;
-      margin-bottom: 4px;
-    }
-  }
-}
-</style>

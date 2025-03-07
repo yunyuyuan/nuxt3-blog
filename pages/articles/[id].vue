@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { addScrollListener, rmScrollListener } from "~/utils/common/scroll-event";
 import type { ArticleItem } from "~/utils/common/types";
-import { getLocalStorage, setLocalStorage, rmLocalStorage } from "~/utils/nuxt/localStorage";
-import { useComment } from "~/utils/nuxt/public";
 import { useContentPage } from "~/utils/nuxt/public/detail";
-import Visitors from "~/utils/nuxt/public/visitors";
+import { Comments, Visitors, WroteDate } from "~/utils/nuxt/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
-const { item, wroteDate: writeDate, menuItems, htmlContent, markdownRef } = await useContentPage<ArticleItem>(() => {
+const { originList, item, menuItems, htmlContent, markdownRef } = await useContentPage<ArticleItem>(() => {
   const hash = useRoute().hash;
   if (hash) {
     window.scrollTo({
@@ -18,18 +16,14 @@ const { item, wroteDate: writeDate, menuItems, htmlContent, markdownRef } = awai
     });
   }
 });
+const relativeArticles = originList.filter(i => i.id !== item.id)
+  .map<{ count: number; item: ArticleItem }>(i => ({ item: i, count: i.tags.filter(t => item.tags.includes(t)).length }))
+  .filter(i => i && i.count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 5);
 
 useCommonSEOTitle(computed(() => item.title), computed(() => item.tags));
 const activeAnchor = ref<string>();
-
-const hideMenu = ref(!!getLocalStorage("hideMenu"));
-watch(hideMenu, (hide) => {
-  if (hide) {
-    setLocalStorage("hideMenu", "true");
-  } else {
-    rmLocalStorage("hideMenu");
-  }
-});
 
 const onScroll = () => {
   try {
@@ -59,34 +53,55 @@ onBeforeUnmount(() => {
   rmScrollListener(onScroll);
 });
 
-const { root } = useComment(item.showComments);
+const root = ref<HTMLElement>();
 initViewer(root);
 </script>
 
 <template>
   <div
     ref="root"
-    class="article-detail"
+    class="container mx-auto px-4 py-8 max-md:p-2 lg:px-8"
   >
-    <div
-      class="captain w100"
-      :class="{ 'has-comment': item.showComments }"
-    >
-      <div class="article-container">
-        <h1>{{ item.title }}</h1>
-        <div
-          ref="viewerContainer"
-          class="html-container"
-        >
-          <article
-            ref="markdownRef"
-            class="--markdown"
-            v-html="htmlContent"
-          />
+    <div class="flex w-full flex-col justify-center gap-6 lg:flex-row">
+      <aside
+        v-if="menuItems.length > 2"
+        class="order-2 shrink-0 max-xl:hidden lg:order-1 lg:w-52"
+      >
+        <div class="sticky top-16 max-h-[calc(100vh-120px)] overflow-y-auto rounded-lg bg-white p-4 shadow dark:bg-dark-800">
+          <h3 class="mb-4 text-lg font-medium text-dark-800 dark:text-dark-200">
+            {{ $t('menu') }}
+          </h3>
+          <nav class="space-y-1 text-sm">
+            <nuxt-link
+              v-for="(anchor, idx) in menuItems"
+              :key="idx"
+              :to="`#${anchor.url}`"
+              :class="twMerge(
+                $style.menuItem,
+                anchor.size === 'small' && $style.menuItemSmall,
+                activeAnchor === anchor.url && $style.menuItemActive
+              )"
+              :title="anchor.text"
+            >
+              <span v-html="anchor.text" />
+            </nuxt-link>
+          </nav>
         </div>
-        <div class="more-info flex">
-          <div class="tags flex">
-            <span>{{ $t('tags') }}:</span>
+      </aside>
+
+      <main class="order-1 shrink overflow-hidden rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-4 lg:order-2">
+        <h1 class="mb-4 text-2xl font-medium text-dark-900 dark:text-white">
+          {{ item.title }}
+        </h1>
+
+        <div class="mb-6 flex flex-wrap items-center gap-4 border-b pb-3 text-sm text-dark-600 dark:text-dark-400">
+          <div class="flex items-center gap-1">
+            <WroteDate :item="item" />
+          </div>
+          <div class="flex items-center">
+            <Visitors :visitors="item._visitors" />
+          </div>
+          <div class="flex flex-wrap gap-2">
             <the-tag
               v-for="tag in item.tags"
               :key="tag"
@@ -95,368 +110,54 @@ initViewer(root);
               {{ tag }}
             </the-tag>
           </div>
-          <writeDate />
-          <Visitors :visitors="item._visitors" />
         </div>
-      </div>
-      <div
-        v-if="menuItems.length"
-        class="menu flexc"
-        :class="{ compact: hideMenu }"
-      >
-        <span
-          class="toggle flex"
-          :title="$t((hideMenu ? 'unfold':'fold')+'-menu')"
-          @click="hideMenu = !hideMenu"
+
+        <article
+          ref="markdownRef"
+          :class="twMerge('--markdown', 'mb-8 pb-8 border-b border-dark-200 dark:border-dark-700 max-w-full')"
+          v-html="htmlContent"
+        />
+
+        <aside
+          v-if="relativeArticles.length"
+          class="mt-8"
         >
-          <svg-icon name="up" />
-        </span>
-        <ol>
-          <li
-            v-for="(anchor, idx) in menuItems"
-            :key="idx"
-          >
-            <a
-              :href="'#'+anchor.url"
-              :class="[anchor.size, { active: activeAnchor === anchor.url }]"
-              :title="anchor.text"
-            >
-              <span v-html="anchor.text" />
-            </a>
-          </li>
-        </ol>
-      </div>
+          <div class="rounded-lg border border-dark-300 p-4 dark:border-dark-600">
+            <h3 class="mb-4 text-lg font-medium text-dark-800 dark:text-dark-200">
+              {{ $t('relativeArticles') }}
+            </h3>
+            <div class="max-h-40 space-y-4 overflow-auto">
+              <nuxt-link
+                v-for="{ item: i } in relativeArticles"
+                :key="i.id"
+                :to="`/articles/${i.id}`"
+                class="block rounded-md bg-dark-50 p-3 transition hover:bg-dark-100 dark:bg-dark-700 dark:hover:bg-dark-600"
+              >
+                <h4 class="text-sm font-medium text-dark-900 dark:text-white">{{ i.title }}</h4>
+              </nuxt-link>
+            </div>
+          </div>
+        </aside>
+
+        <Comments
+          v-if="item.showComments"
+          class="mt-8"
+        />
+      </main>
     </div>
   </div>
 </template>
 
-<style lang="scss">
-.article-detail {
-  margin: 0 auto 60px;
-
-  >.captain {
-    display: flex;
-    align-items: flex-start;
-    margin: auto;
-
-    > .article-container {
-      position: relative;
-      width: 100%;
-
-      > h1 {
-        margin: 30px 0 40px;
-        text-align: center;
-        color: #1d1d1d;
-        word-break: break-word;
-        letter-spacing: 0.5px;
-        font-size: f-size(1.4);
-
-        @include dark-mode {
-          color: white;
-        }
-      }
-
-      >.common-loading {
-        width: 100%;
-        padding: 50px 0;
-      }
-
-      >.html-container {
-        position: relative;
-        z-index: 2;
-      }
-
-      >.more-info {
-        position: relative;
-        margin-top: 30px;
-        border-top: 1px solid #c7c7c7;
-
-        @include dark-mode {
-          border-color: rgb(190 190 190);
-        }
-
-        padding: 20px 0 0;
-        text-align: center;
-        font-size: f-size(0.75);
-
-        .tags {
-          flex-wrap: wrap;
-
-          span {
-            word-break: keep-all;
-            margin-right: 8px;
-          }
-
-          a {
-            margin: 0 8px 8px 0;
-
-            &:not(:last-of-type) {
-              margin-right: 8px;
-            }
-          }
-        }
-
-        .write-date {
-          margin-left: auto;
-        }
-
-        .visitors {
-          position: absolute;
-          right: 0;
-          top: 0;
-          background: $background;
-          padding: 0 10px;
-          transform: translateY(-50%);
-          margin-right: 8px;
-
-          @include dark-mode {
-            background: $background-dark;
-
-            svg {
-              fill: white;
-            }
-          }
-
-          svg {
-            margin-right: 5px;
-
-            @include square(15px);
-          }
-        }
-      }
-    }
-
-    > .menu {
-      position: sticky;
-      top: $header-height;
-      align-items: flex-end;
-      padding: 15px 0 55px;
-      margin-left: 20px;
-
-      // @at-root #default-layout #header:not(.headroom--pinned).headroom--not-top + #body & {
-      //   top: 0;
-      // }
-
-      >.toggle {
-        cursor: pointer;
-
-        &:hover > svg {
-          fill: #333;
-
-          @include dark-mode {
-            fill: rgb(247 247 247);
-          }
-        }
-
-        >svg {
-          @include square(20px);
-
-          transition: $common-transition;
-          fill: #777;
-
-          @include dark-mode {
-            fill: rgb(209 209 209);
-          }
-
-          transform: rotate(90deg);
-        }
-      }
-
-      ol {
-        padding: 20px 0 0 5px;
-        width: 150px;
-        list-style: none;
-
-        $mouse-out-color: #777;
-        $mouse-in-color: #4d4646;
-        $mouse-out-color-dark: rgb(226 226 226);
-        $mouse-in-color-dark: #fff;
-
-        &:hover {
-          a {
-            color: $mouse-in-color;
-
-            &::before {
-              background: $mouse-in-color;
-            }
-
-            &.small {
-              &::before {
-                border: 1px solid $mouse-in-color;
-              }
-            }
-
-            @include dark-mode {
-              color: $mouse-in-color-dark;
-
-              &::before {
-                background: $mouse-in-color-dark;
-              }
-            }
-          }
-        }
-
-        a {
-          text-decoration: none;
-          padding: 5px 5px 5px 18px;
-          display: flex;
-          align-items: center;
-          transition: $common-transition;
-          position: relative;
-          color: $mouse-out-color;
-          border-radius: 4px;
-          word-break: break-all;
-          margin-bottom: 9px;
-
-          span {
-            @include textoverflow(1);
-
-            white-space: nowrap;
-            line-height: f-size(1.2);
-            font-size: f-size(0.75);
-          }
-
-          @include dark-mode {
-            color: $mouse-out-color-dark;
-          }
-
-          &::before {
-            position: absolute;
-            content: "";
-            border-radius: 50%;
-
-            @include square(6px);
-
-            background: $mouse-out-color;
-
-            @include dark-mode {
-              background: $mouse-out-color-dark;
-            }
-
-            left: 5px;
-            flex-shrink: 0;
-            transition: $common-transition;
-          }
-
-          &.small {
-            span {
-              font-size: f-size(0.7);
-            }
-
-            padding-left: 32px;
-
-            &::before {
-              left: 16px;
-
-              @include square(7px);
-
-              background: transparent !important;
-              border: 1px solid $mouse-out-color;
-
-              @include dark-mode {
-                border-color: $mouse-out-color-dark;
-              }
-            }
-          }
-
-          &:hover {
-            background: #f5f5f5;
-            color: black;
-
-            @include dark-mode {
-              background: #2c2c2c;
-              color: white;
-
-              &::before {
-                background: white;
-                border-color: white;
-              }
-            }
-
-            &::before {
-              background: black;
-              border-color: black;
-            }
-          }
-
-          &.active {
-            $active-color: #006fff;
-            $active-color-dark: rgb(255 255 255);
-
-            background: #f0f6ff;
-            color: $active-color;
-
-            @include dark-mode {
-              color: $active-color-dark;
-              background: rgb(24 24 24);
-
-              &::before {
-                background: $active-color-dark;
-                border-color: $active-color-dark;
-              }
-            }
-
-            &::before {
-              background: $active-color;
-              border-color: $active-color;
-            }
-          }
-        }
-      }
-
-      &.compact {
-        >.toggle {
-          >svg {
-            transform: rotate(-90deg);
-          }
-        }
-
-        ol {
-          width: 30px;
-
-          a {
-            padding: 10px !important;
-
-            &::before {
-              left: 50% !important;
-              transform: translateX(-50%);
-            }
-
-            span {
-              display: none;
-            }
-          }
-        }
-      }
-    }
-  }
+<style module>
+.menuItem {
+  @apply block py-2 px-3 text-sm text-dark-700 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-700 hover:text-primary-600 dark:hover:text-primary-400 rounded-md font-medium;
 }
 
-@media screen and (width <= 1100px) {
-  .article-detail {
-    >.captain {
-      > .menu {
-        display: none;
-      }
-    }
-
-    .more-info {
-      padding: 8px 60px 10px;
-
-      .tags {
-        margin-left: 8px;
-      }
-
-      .write-date {
-        margin-right: 8px;
-      }
-    }
-  }
+.menuItemActive {
+  @apply text-primary-600 dark:text-primary-400;
 }
 
-@include mobile {
-  .article-detail {
-    margin: 0 8px;
-  }
+.menuItemSmall {
+  @apply py-1.5 px-3 pl-6 text-xs;
 }
 </style>

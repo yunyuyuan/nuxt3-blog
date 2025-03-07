@@ -1,6 +1,6 @@
 import { createVNode, render } from "vue";
 import type { CommonItem, RecordItem } from "~/utils/common/types";
-import { translate, translateT } from "~/utils/nuxt/i18n";
+import { translate } from "~/utils/nuxt/i18n";
 import CommonModal from "~/components/common-modal.vue";
 import { escapeNewLine } from "~/utils/common/utils";
 import { ModalContainerId } from "~/utils/common/constants";
@@ -85,7 +85,7 @@ export function createCommitModal() {
     const container = document.createElement("div");
     const vm = createVNode(CommonModal, {
       modelValue: true,
-      modalTitle: translateT("warning"),
+      modalTitle: translate("warning"),
       modalContent: translate("commit-id-not-correct-confirm")
     });
     vm.props!.onOk = () => {

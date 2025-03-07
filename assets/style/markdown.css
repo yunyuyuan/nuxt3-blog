@@ -1,0 +1,292 @@
+@import "./code-style.css";
+
+.--markdown {
+  @apply block break-words leading-[1.9] font-sans text-base font-normal text-dark-900 dark:text-dark-200;
+
+  & h1, & h2, & h3, & h4, & h5, & h6 {
+    @apply cursor-pointer block relative my-3;
+    
+    & sup {
+      @apply absolute -top-header;
+    }
+
+    & a.header-link {
+      @apply bg-transparent no-underline text-primary-700 dark:text-primary-400 flex;
+    }
+
+    &:hover {
+      @apply underline decoration-primary-700 dark:decoration-primary-400;
+    }
+  }
+
+  & h1 { @apply text-[1.3rem]; }
+  & h2 { @apply text-[1.25rem]; }
+  & h3 { @apply text-[1.2rem]; }
+  & h4 { @apply text-[1.15rem]; }
+  & h5, & h6 { @apply text-[1.1rem]; }
+
+  & hr {
+    @apply w-full h-px bg-dark-500 dark:bg-dark-300 my-8 border-none;
+  }
+
+  & p {
+    @apply whitespace-pre-line;
+  }
+
+  & a[href]:not(.header-link) {
+    @apply mx-1 hover:underline transition text-primary-700 dark:text-primary-400 inline-flex items-center leading-4 break-all;
+
+    &:active {
+      @apply text-primary-600 dark:text-primary-500;
+
+      &::after {
+        @apply bg-primary-600 dark:bg-primary-500;
+      }
+    }
+
+    & svg {
+      @apply size-3 ml-0.5 text-dark-600 dark:text-dark-300;
+    }
+  }
+
+  & img[alt="sticker"] {
+    @apply inline-block size-6 mx-0.5 object-contain;
+  }
+
+  & span.image-container {
+    @apply inline-flex flex-col items-center my-4 mx-[5%] w-[90%];
+
+    & .--lazy-img {
+      @apply max-w-full shadow;
+
+      &.loading,
+      &.err {
+        @apply size-[150px];
+      }
+    }
+
+    & svg {
+      @apply size-14;
+    }
+
+    &.just-height img {
+      @apply w-auto;
+    }
+
+    & img {
+      @apply w-full object-contain shadow;
+    }
+  }
+
+  & span.image-container,
+  & div.embed-media {
+    & > small {
+      @apply text-dark-500 dark:text-dark-300 text-sm mt-4 order-1;
+    }
+  }
+
+  & strong,
+  & em {
+    @apply mx-1;
+  }
+
+  & del {
+    @apply decoration-red-500;
+  }
+
+  & blockquote {
+    @apply border-l-2 border-primary-600 dark:border-primary-400 py-2 px-3 my-4 bg-dark-100 dark:bg-dark-800 rounded-r-lg;
+  }
+
+  & table {
+    @apply w-full my-4 mx-auto border border-dark-300 dark:border-dark-600 border-collapse;
+
+    & thead {
+      @apply bg-primary-50 dark:bg-dark-800 font-medium;
+
+      & th {
+        @apply py-1.5 text-sm;
+      }
+    }
+
+    & tbody {
+      @apply bg-white dark:bg-dark-900;
+
+      & tr {
+        @apply py-2;
+
+        &:nth-child(2n) {
+          @apply bg-dark-50 dark:bg-dark-900;
+        }
+      }
+    }
+  }
+
+  & ul,
+  & ol {
+    @apply pl-7;
+    all: revert;
+
+    & > li {
+      @apply relative my-2;
+    }
+  }
+
+  & code {
+    @apply font-mono font-medium tracking-normal;
+
+    &:not(.hljs) {
+      @apply rounded border border-black/10 dark:border-dark-500/40 text-xs font-normal mx-1 py-1 px-2;
+    }
+  }
+
+  & pre {
+    @apply my-5 rounded-lg border border-dark-200 dark:border-dark-700 shadow bg-dark-100/40 dark:bg-dark-700/40;
+
+    & > div {
+      @apply flex items-center justify-center py-1;
+
+      & > span {
+        @apply absolute right-2 cursor-pointer size-6 flex items-center justify-center p-1 transition rounded;
+        
+        &:hover {
+          @apply bg-dark-100 dark:bg-dark-700;
+
+          & svg {
+            @apply text-dark-950 dark:text-dark-200;
+          }
+        }
+
+        & svg {
+          @apply size-4 text-dark-600 dark:text-dark-400 transition;
+        }
+      }
+
+      & > small {
+        @apply font-mono text-xs text-dark-500 dark:text-dark-400 leading-5;
+      }
+    }
+
+    & > code.hljs {
+      @apply block break-keep py-2 px-3 border-t border-dark-200 dark:border-dark-700 rounded-b-lg max-h-[90vh] bg-white dark:bg-dark-900 text-sm font-normal overflow-auto;
+
+      @media (max-width: 768px) {
+        @apply py-2 px-3 text-xs;
+      }
+    }
+
+    &.theme-dark {
+      @apply bg-dark-800;
+    }
+  }
+
+  & fieldset {
+    @apply relative w-[98%] my-5 mx-[1%] pt-5 px-4 pb-2 rounded-sm border border-dark-300 dark:border-dark-700 transition;
+
+    &:hover {
+      @apply border-dark-500;
+    }
+
+    & * {
+      @apply relative;
+    }
+
+    & > legend {
+      @apply absolute text-xs h-6 -top-4 left-4 flex items-center bg-primary-400 rounded dark:bg-primary-600 text-white py-1.5 px-4;
+    }
+  }
+
+  & .encrypt-block {
+    @apply border border-dark-300 dark:border-dark-700 rounded-lg p-2 my-4;
+  }
+
+  & .container-block {
+    @apply my-4 rounded-lg p-2 px-4 border border-solid bg-dark-50 dark:bg-dark-800;
+
+    &.info,
+    &.details {
+      @apply border-dark-400/30 dark:border-dark-300/30 text-dark-700/75 dark:text-dark-300/75;
+    }
+
+    & > .container-title {
+      @apply font-medium;
+    }
+
+    &.details summary {
+      @apply cursor-pointer;
+    }
+
+    &.tip {
+      @apply border-emerald-500 text-emerald-600 dark:text-emerald-400;
+    }
+
+    &.warning {
+      @apply border-amber-600 text-amber-600 dark:text-amber-500;
+    }
+
+    &.danger {
+      @apply border-rose-500 text-rose-500 dark:text-rose-400;
+    }
+  }
+
+  & div.embed-media {
+    @apply max-w-[50rem] h-[30rem] flex flex-col items-center my-5 mx-auto;
+
+    @media (max-width: 768px) {
+      @apply py-2 px-3 text-xs;
+    }
+
+    & > iframe {
+      @apply w-full flex-grow shadow;
+    }
+
+    &.vanilla-video video {
+      @apply w-full h-0 object-contain flex-grow shadow;
+    }
+
+    &.vanilla-audio {
+      @apply h-auto;
+
+      & audio {
+        @apply w-full;
+      }
+    }
+  }
+
+  & .math-formula {
+    @apply relative;
+
+    &.block {
+      @apply flex flex-nowrap w-full overflow-x-auto;
+
+      &::before,
+      &::after {
+        @apply content-[""] m-auto;
+      }
+
+      & > div {
+        @apply my-4;
+      }
+    }
+
+    &.inline {
+      @apply mx-2;
+    }
+  }
+
+  & .text-with-mask {
+    @apply bg-black py-1 px-1.5 rounded text-black dark:text-black;
+
+    & * {
+      @apply text-black dark:text-black;
+    }
+
+    &:hover {
+      @apply text-white dark:text-white;
+
+      & * {
+        @apply text-white dark:text-white;
+      }
+    }
+  }
+}

@@ -3,9 +3,8 @@ import { useState } from "#app";
 import config from "~/config";
 import { GithubTokenKey, I18nStoreKey, ThemeModeKey } from "~/utils/common/constants";
 import type { I18nCode } from "~/utils/common/locales";
-import { toggleCodeBlockTheme } from "~/utils/common/utils";
 import { loadI18nJson } from "~/utils/nuxt/i18n";
-import { getLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
+import { setLocalStorage } from "~/utils/nuxt/localStorage";
 
 // avoid loading during SSG
 export const useFirstLoad = () => useState("first-loaded", () => true);
@@ -16,33 +15,22 @@ export const useRemoteLatestSha = () => useState("remote-latest-sha", () => "");
 export const useUnsavedContent = () => useState("unsaved-content", () => false);
 export const useThemeMode = () => {
   const themeMode = useState<"light" | "dark" | "">(ThemeModeKey, () => "");
-  onMounted(() => {
-    themeMode.value = getLocalStorage(ThemeModeKey) || "light";
-  });
-
-  // 首次加载的时候，不进行动画
-  const shouldAnimate = useState(`${ThemeModeKey}-animate`, () => false);
 
   const toggleThemeMode = () => {
-    shouldAnimate.value = true;
-    document.documentElement.classList.remove(`${themeMode.value}-mode`);
+    document.documentElement.classList.remove(themeMode.value);
     themeMode.value = themeMode.value === "light" ? "dark" : "light";
-    document.documentElement.classList.add(`${themeMode.value}-mode`);
+    document.documentElement.classList.add(themeMode.value);
     setLocalStorage(ThemeModeKey, themeMode.value);
-    toggleCodeBlockTheme(themeMode.value);
   };
   return {
     themeMode,
-    shouldAnimate,
     toggleThemeMode
   };
 };
 
 export const useI18nCode = () => {
   const i18nCode = useState<I18nCode>(I18nStoreKey, () => config.defaultLang as any);
-  onMounted(() => {
-    i18nCode.value = getLocalStorage(I18nStoreKey) || i18nCode.value;
-  });
+
   return {
     i18nCode,
     changeI18n: async (code: I18nCode) => {

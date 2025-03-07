@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { createCommit } from "ls:~/utils/nuxt/manage/github";
 import type { editor as Editor } from "monaco-editor";
+import { Upload } from "lucide-vue-next";
 import configString from "~/config.ts?raw";
 import config from "~/config";
 import { inBrowser } from "~/utils/nuxt/constants";
@@ -43,14 +44,16 @@ if (inBrowser) {
   });
 }
 
-const doUpload = () => {
+const doUpload = async () => {
   toggleProcessing();
-  createCommit("Update config.ts", [{
-    path: "config.ts",
-    content: inputText.value
-  }]).finally(() => {
+  try {
+    await createCommit("Update config.ts", [{
+      path: "config.ts",
+      content: inputText.value
+    }]);
+  } finally {
     toggleProcessing();
-  });
+  }
 };
 
 onBeforeUnmount(() => {
@@ -59,51 +62,25 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="manage-config w100 flexc">
-    <div class="header flex">
-      <span>{{ statusText }}</span>
-      <common-button
-        icon="upload"
+  <main class="flex h-full flex-col gap-2 px-2 py-4 shadow-md md:px-4">
+    <div class="flex items-center justify-end">
+      <span class="mr-4 text-sm text-red-500">{{ statusText }}</span>
+      <CommonButton
+        :icon="Upload"
         :disabled="!canCommit || !modified"
         :loading="processing"
         data-testid="update-config-btn"
+        theme="primary"
         @click="doUpload"
       >
         {{ $t('update') }}
-      </common-button>
+      </CommonButton>
     </div>
-    <div class="editor-container w100">
+    <div class="grow border border-dark-300 dark:border-dark-600">
       <div
         ref="editorRef"
-        class="content s100"
+        class="h-[calc(100vh_-_100px)]"
       />
     </div>
-  </div>
+  </main>
 </template>
-
-<style lang="scss">
-.manage-config {
-  height: calc(100% - 20px);
-
-  > .header {
-    align-self: flex-end;
-    margin: 20px 0;
-
-    > span {
-      font-size: f-size(0.75);
-      margin: 0 15px 0 auto;
-      color: #b80000;
-
-      @include dark-mode {
-        color: #ffa6a6;
-      }
-    }
-  }
-
-  .editor-container {
-    background: white;
-    height: 100%;
-    box-shadow: 0 0 12px rgb(0 0 0 / 10%);
-  }
-}
-</style>

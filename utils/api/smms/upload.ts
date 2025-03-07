@@ -19,8 +19,7 @@ export async function smmsUpload(
       const source = tinify.fromBuffer(buffer);
       buffer = await source.toBuffer();
       size = Buffer.byteLength(buffer);
-    }
-    catch (e: any) {
+    } catch (e: any) {
       throw new Error(`Error from tinypng: ${e.toString()}`);
     }
   }
@@ -84,8 +83,7 @@ function uploadFile({ headers, formData }: {
       res.on("end", () => {
         if (res.statusCode === 200) {
           resolve(JSON.parse(responseData));
-        }
-        else {
+        } else {
           reject(responseData);
         }
       });

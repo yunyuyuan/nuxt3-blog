@@ -1,10 +1,10 @@
-import { createApp, createVNode, render } from "vue";
+import { createApp, createVNode, render, type FunctionalComponent } from "vue";
+import { SquareArrowOutUpRight, Clipboard } from "lucide-vue-next";
 import { ViewerAttr } from "../common/constants";
 import { initHljs } from "../common/hljs";
-import { escapeHtml, toggleCodeBlockTheme } from "../common/utils";
+import { escapeHtml } from "../common/utils";
 import { translate } from "./i18n";
 import { notify } from "./notify";
-import svgIconVue from "~/components/svg-icon.vue";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 import { isPrerender } from "~/utils/nuxt/constants";
 
@@ -18,16 +18,13 @@ export async function parseMarkdown(text: string) {
     renderer: {
       heading({ depth, tokens }) {
         const text = this.parser.parseInline(tokens);
-        const url = encodeURI(text);
+        const url = escapeHtml(encodeURI(text), true);
 
-        const menuItem: typeof menuItems[number] = {
+        menuItems.push({
           size: depth < 3 ? "big" : "small",
-          // the "raw" param is not real raw, weird
-          text: escapeHtml(text),
-          // text: text.replace(/<\/?[^>]+(>|$)/g, ""),
-          url: url
-        };
-        menuItems.push(menuItem);
+          text,
+          url
+        });
         return `<h${depth}><sup class="fake-head" id="${url}"></sup><a class="header-link" href="#${url}">${text}</a></h${depth}>`;
       },
       image({ href, text }) {
@@ -56,7 +53,7 @@ export async function parseMarkdown(text: string) {
       },
       code({ text, lang, escaped }) {
         if (hljs) {
-          // 在这里parse
+          // prerender
           initHljs(hljs);
           text = (
             lang
@@ -66,7 +63,7 @@ export async function parseMarkdown(text: string) {
               : hljs.highlightAuto(text)
           ).value;
         } else {
-          // 先escape，留在afterInsertHtml里parse
+          // hydration，先escape，留在afterInsertHtml里parse
           text = escaped ? text : escapeHtml(text);
         }
         return `<pre><div><small></small></div><code class="language-${lang} ${isPrerender ? "hljs" : ""}">${text}</code></pre>`;
@@ -443,16 +440,7 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
       el.classList.add("processed-pre");
       const actions = document.createElement("span");
       el.children[0].appendChild(actions);
-      const themeBtn = createSvgIcon("code-theme", (span) => {
-        span.classList.add("code-theme");
-        actions.appendChild(span);
-      });
-      themeBtn.title = "theme";
-      themeBtn.onclick = () => toggleCodeBlockTheme();
-      const copyBtn = createSvgIcon("copy", (span) => {
-        span.classList.add("copy");
-        actions.appendChild(span);
-      });
+      const copyBtn = createSvgIcon(Clipboard);
       copyBtn.title = "copy";
       const ClipboardJS = (await import("clipboard")).default;
       const clipboard = new ClipboardJS(copyBtn, {
@@ -468,15 +456,14 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
       destroyFns.push(() => {
         clipboard.destroy();
       });
+      el.children[0].appendChild(copyBtn);
     });
     // target=_blank link
     mdEl.querySelectorAll("a[target=_blank]:not(.processed-a)").forEach((el) => {
       el.classList.add("processed-a");
-      createSvgIcon("open-link", (span) => {
-        span.classList.add("open-link");
-        el.appendChild(span);
-      });
+      el.appendChild(createSvgIcon(SquareArrowOutUpRight));
     });
+
     const pangu = (await import("pangu")).default;
     pangu.spacingElementByClassName("--markdown");
   });
@@ -484,11 +471,11 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
 }
 
 function createSvgIcon(
-  name: string,
-  process: (_span: HTMLSpanElement) => void
+  el: FunctionalComponent,
+  classes?: string
 ) {
   const span = document.createElement("span");
-  process(span);
-  render(createVNode(svgIconVue, { name }), span);
+  if (classes) span.classList.add(classes);
+  render(createVNode(el), span);
   return span;
 }

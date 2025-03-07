@@ -1,0 +1,44 @@
+@import "./fira-code.css";
+@import "./markdown.css";
+
+html {
+  @apply scroll-smooth;
+}
+
+html,
+body {
+  @apply min-w-full;
+}
+
+body {
+  @apply bg-nb-light dark:bg-nb-dark text-dark-900 dark:text-dark-300;
+  transition: background 0s linear 0.5s;
+
+  &.resizing {
+    @apply select-none cursor-ew-resize;
+  }
+}
+
+input,
+textarea,
+button {
+  @apply outline-none;
+}
+
+input, textarea {
+  @apply rounded-lg border border-dark-300 py-2 px-3 shadow-sm placeholder:text-dark-400 dark:border-dark-600 dark:bg-dark-700 dark:text-white max-md:text-sm min-w-5 transition-[border];
+  @apply focus:border-primary-400 dark:focus:border-primary-600;
+  @apply hover:border-primary-500 dark:hover:border-primary-500;
+}
+
+img[data-viewer] {
+  @apply cursor-zoom-in;
+}
+
+::-webkit-scrollbar {
+  @apply size-1.5 bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded bg-dark-300 hover:bg-dark-400 dark:bg-dark-500 dark:hover:bg-dark-400;
+}

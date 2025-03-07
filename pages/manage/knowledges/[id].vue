@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { Blocks, BookMarked, Captions, Image, Link } from "lucide-vue-next";
 import ManageContentEdit from "~/pages/manage/comps/manage-content-edit.vue";
-import { KnowledgeTabs, KnowledgeTabsList, type KnowledgeItem } from "~/utils/common/types";
+import { KnowledgeColorMap, KnowledgeIconMap, KnowledgeTabs, KnowledgeTabsList, type KnowledgeItem } from "~/utils/common/types";
 
 const typeSelectShow = ref(false);
 
@@ -8,191 +9,114 @@ const processWithContent = (_md: string, _item: KnowledgeItem) => {};
 </script>
 
 <template>
-  <div class="manage-knowledge-detail">
-    <manage-content-edit :process-with-content="processWithContent">
-      <template #title="{ disabled, item }">
-        <span :class="{ invalid: !item.title }">
-          <b>{{ $T('title') }}</b>
-          <svg-icon name="title" />
+  <manage-content-edit :process-with-content="processWithContent">
+    <template #title="{ disabled, item }">
+      <div>
+        <span :class="!item.title && 'form-item-invalid'">
+          <Captions class="size-5" />
+          {{ $t('title') }}
         </span>
         <input
           v-model="item.title"
           :placeholder="$t('please-input')"
           :disabled="disabled"
         >
-      </template>
-      <template #type="{ disabled, item }">
+      </div>
+    </template>
+    <template #type="{ disabled, item }">
+      <div>
         <span>
-          <b>{{ $T('type') }}</b>
-          <svg-icon name="type" />
+          <Blocks class="size-5" />
+          {{ $t('type') }}
         </span>
         <div
-          class="select"
+          class="relative"
           @click="!disabled && (typeSelectShow = true)"
         >
-          <a
+          <button
             tabindex="1"
-            class="flex"
-            :class="{ active: typeSelectShow, disabled: disabled }"
+            class="flex items-center gap-2 rounded-lg border border-dark-300 px-4 py-1 text-sm shadow-sm transition hover:border-primary-400 dark:border-dark-600 dark:bg-dark-700 dark:hover:border-primary-500"
+            :disabled="disabled"
           >
-            <b>{{ $T(KnowledgeTabsList.find((i) => i.key === item.type)!.name) }}</b>
-            <svg-icon :name="item.type" />
-          </a>
-          <common-dropdown
-            v-model:show="typeSelectShow"
-            class="flexc"
-          >
-            <div
-              v-for="tp in KnowledgeTabs"
-              :key="tp"
-              class="flex"
-              :class="{ active: item.type===tp }"
-              @click="item.type=tp;typeSelectShow=false"
+            {{ $t(KnowledgeTabsList.find((i) => i.key === item.type)!.name) }}
+            <span
+              :class="twMerge(
+                'rounded-full p-2',
+                KnowledgeColorMap[item.type]
+              )"
             >
-              <span>{{ $T(KnowledgeTabsList.find((i) => i.key === tp)!.name) }}</span>
-              <svg-icon :name="tp" />
+              <component
+                :is="KnowledgeIconMap[item.type]"
+                class="size-4"
+              />
+
+            </span>
+          </button>
+          <common-dropdown v-model:show="typeSelectShow">
+            <div class="flex flex-col p-2">
+              <button
+                v-for="tp in KnowledgeTabs"
+                :key="tp"
+                class="flex items-center gap-2 px-4 py-1 transition hover:text-primary-500"
+                @click="item.type=tp;typeSelectShow=false"
+              >
+                {{ $t(KnowledgeTabsList.find((i) => i.key === tp)!.name) }}
+                <span
+                  :class="twMerge(
+                    'p-2 rounded-full',
+                    KnowledgeColorMap[tp]
+                  )"
+                >
+                  <component
+                    :is="KnowledgeIconMap[tp]"
+                    class="size-4"
+                  />
+                </span>
+              </button>
             </div>
           </common-dropdown>
         </div>
-      </template>
-      <template #link="{ disabled, item }">
-        <span :class="{ invalid: !item.link }">
-          <b>{{ $T('link') }}</b>
-          <svg-icon name="link" />
+      </div>
+    </template>
+    <template #link="{ disabled, item }">
+      <div>
+        <span :class="!item.link && 'form-item-invalid'">
+          <Link class="size-5" />
+          {{ $t('link') }}
         </span>
         <input
           v-model="item.link"
           :placeholder="$t('please-input')"
           :disabled="disabled"
         >
-      </template>
-      <template #cover="{ disabled, item }">
-        <span :class="{ invalid: !item.cover }">
-          <b>{{ $T('cover') }}</b>
-          <svg-icon name="images" />
+      </div>
+    </template>
+    <template #cover="{ disabled, item }">
+      <div>
+        <span :class="!item.cover && 'form-item-invalid'">
+          <Image class="size-5" />
+          {{ $t('cover') }}
         </span>
         <input
           v-model="item.cover"
           :placeholder="$t('please-input')"
           :disabled="disabled"
         >
-      </template>
-      <template #summary="{ disabled, item }">
-        <span :class="{ invalid: !item.summary }">
-          <b>{{ $T('summary') }}</b>
-          <svg-icon name="summary" />
+      </div>
+    </template>
+    <template #summary="{ disabled, item }">
+      <div>
+        <span :class="!item.summary && 'form-item-invalid'">
+          <BookMarked class="size-5" />
+          {{ $t('summary') }}
         </span>
         <textarea
           v-model="item.summary"
           :placeholder="$t('please-input')"
+          rows="4"
           :disabled="disabled"
         />
-      </template>
-    </manage-content-edit>
-  </div>
+      </div>
+    </template>
+  </manage-content-edit>
 </template>
-
-<style lang="scss">
-.manage-knowledge-detail {
-  .select {
-    flex-direction: row !important;
-    position: relative;
-    max-width: 100px;
-    min-width: unset;
-
-    > a {
-      padding: 0 8px;
-      border: 1px solid #a1a1a1;
-      transition: border $animation-duration $animation-function, box-shadow $animation-duration $animation-function;
-      border-radius: 2px;
-      background: #fff;
-      color: black;
-      cursor: pointer;
-
-      @include dark-mode {
-        background: rgb(54 54 54);
-        color: rgb(255 255 255);
-
-        &:hover {
-          border-color: white;
-        }
-      }
-
-      &:hover {
-        border-color: black;
-      }
-
-      &.active {
-        box-shadow: 0 0 4px rgba($theme-color-lighten, 20%);
-        border-color: $theme-color;
-        background: white;
-      }
-
-      &.disabled {
-        cursor: not-allowed;
-        border-color: #a5a5a5;
-        background: rgb(239 239 239);
-      }
-
-      > svg {
-        @include square(32px);
-
-        margin-left: 10px;
-      }
-    }
-
-    .common-dropdown {
-      width: 100%;
-      align-items: stretch;
-
-      > div {
-        justify-content: space-around;
-        padding: 4px;
-        transition: $common-transition;
-        cursor: pointer;
-
-        &:first-of-type {
-          border-top-left-radius: inherit;
-          border-top-right-radius: inherit;
-        }
-
-        &:last-of-type {
-          border-bottom-left-radius: inherit;
-          border-bottom-right-radius: inherit;
-        }
-
-        &:not(.active):hover {
-          background: rgb(230 230 230);
-        }
-
-        &.active {
-          background: $theme-color-lighten;
-        }
-
-        @include dark-mode {
-          &:not(.active):hover {
-            background: rgb(75 75 75);
-          }
-
-          &.active {
-            background: $theme-color-darken;
-          }
-        }
-
-        &:not(:last-of-type) {
-          border-bottom: 1px solid rgb(199 199 199);
-        }
-
-        span {
-          font-size: f-size(0.8);
-          word-break: keep-all;
-        }
-
-        svg {
-          @include square(26px);
-        }
-      }
-    }
-  }
-}
-</style>

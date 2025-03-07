@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Calendar, Clock, Image } from "lucide-vue-next";
 import { getNowDayjs } from "~/utils/common/dayjs";
 import type { RecordItem } from "~/utils/common/types";
 import { useListPage } from "~/utils/nuxt/public/list";
@@ -29,6 +30,8 @@ const years = computed(() => {
   return result.sort((a, b) => b.year - a.year);
 });
 
+const currentItems = computed(() => years.value.find(i => i.year === currentYear.value)?.items);
+
 onMounted(() => {
   if (years.value.length && !currentYear.value) {
     currentYear.value = years.value[0].year;
@@ -37,280 +40,88 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="record-list">
-    <ul v-if="years.length">
-      <li
-        v-for="year in years"
-        v-show="year.items.some(item => item._show)"
-        :key="year.year"
-      >
-        <h2
-          class="flex"
-          @click="currentYear = currentYear == year.year ? undefined : year.year"
-        >
-          <svg-icon
-            :style="{ transform: currentYear==year.year ? 'rotate(180deg)' : '' }"
-            name="up"
-          />
-          {{ year.year }}
-          <span class="size">( {{ year.items.length }} {{ $t('items') }} )</span>
+  <main class="container mx-auto grow px-4 py-8 max-md:px-4 lg:px-8">
+    <div
+      v-if="years.length"
+      class="mx-auto max-w-7xl"
+    >
+      <div class="mb-10">
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <button
+            v-for="year in years"
+            v-show="year.items.some(item => item._show)"
+            :key="year.year"
+            :class="twMerge($style.year, currentYear==year.year && $style.yearActive)"
+            @click="currentYear = currentYear == year.year ? undefined : year.year"
+          >
+            {{ year.year }}
+          </button>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h2 class="mb-4 flex items-center gap-2 text-lg font-medium text-dark-800 dark:text-dark-200">
+          <Calendar class="size-6" />
+          {{ currentYear }}
+          <span class="ml-1.5 rounded-full bg-dark-200 px-2 py-0.5 text-xs text-dark-700 dark:bg-dark-600 dark:text-dark-200">{{ currentItems?.length }}</span>
         </h2>
-        <div
-          v-show="currentYear==year.year"
-          class="contain flex"
-        >
+        <div class="flex flex-wrap items-center gap-8 max-md:grid max-md:grid-cols-1">
           <div
-            v-for="item in year.items"
+            v-for="item in currentItems"
             v-show="item._show"
             :key="item.id"
-            class="item flexc"
+            class="group"
+            :title="formatTime(item.time)"
           >
-            <b :title="formatTime(item.time)">{{
-              formatTime(item.time, 'month')
-            }}</b>
             <nuxt-link
-              :class="{ multiple: item.images.length > 1 }"
+              class="relative block overflow-hidden rounded-lg shadow-md transition duration-500 hover:shadow-xl max-md:aspect-square md:size-52"
               no-prefetch
               :to="'/records/' + item.id"
             >
               <the-lazy-img
-                v-if="currentYear==year.year"
                 alt="cover"
                 :src="item.images[0]?.src ?? 'no-poster'"
                 :retry="false"
+                :class="$style.lazyImg"
               />
+              <div class="absolute inset-x-0 bottom-0 flex items-center bg-gradient-to-t from-black/80 to-transparent px-3 pb-1.5 pt-4 text-xs">
+                <div class="flex items-center text-white">
+                  <Clock class="mr-1 size-4" />
+                  <span>{{ formatTime(item.time, "month") }}</span>
+                </div>
+                <div class="ml-auto flex items-center rounded-md bg-black/70 px-1.5 py-1 text-white">
+                  <Image class="mr-1 size-4" />
+                  <span>{{ item.images.length }}</span>
+                </div>
+              </div>
             </nuxt-link>
           </div>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
     <div
       v-else
-      class="empty"
+      class="flex items-center justify-center pt-10"
     >
-      {{ $T('nothing-here') }}
+      {{ $t('nothing-here') }}
     </div>
-  </div>
+  </main>
 </template>
 
-<style lang="scss">
-$space: 16px;
-
-.record-list {
-  margin: 20px 30px 0 40px;
-  padding-bottom: 60px;
-
-  .common-loading {
-    margin-top: calc(50vh - $header-height);
-    transform: translateY(-100%);
-  }
-
-  .empty {
-    color: rgb(53 53 53);
-    font-size: 1rem;
-    text-align: center;
-
-    @include dark-mode {
-      color: rgb(212 212 212);
-    }
-
-    margin-top: 50px;
-  }
-
-  ul {
-    margin: auto;
-    list-style: none;
-
-    li {
-      @include dark-mode {
-        &::marker {
-          color: white;
-        }
-      }
-
-      h2 {
-        margin: $space * 2 0;
-        color: $theme-color-darken;
-        text-shadow: 0 0 2px cyan;
-        cursor: pointer;
-
-        &:hover {
-          text-decoration: underline;
-        }
-
-        svg {
-          @include square(24px);
-
-          transition: $common-transition;
-          margin-right: 8px;
-        }
-
-        .size {
-          font-size: f-size(0.86);
-          color: #373737;
-          margin-left: 8px;
-          text-shadow: none;
-        }
-
-        @include dark-mode {
-          color: $theme-color-lighten;
-          text-shadow: 0 0 2px cyan;
-
-          .size {
-            color: #dedede;
-          }
-        }
-      }
-
-      &:hover {
-        .contain {
-          border-color: gray;
-        }
-      }
-
-      .contain {
-        flex-wrap: wrap;
-        gap: $space * 2 0;
-
-        .item {
-          position: relative;
-          margin: 0 $space * 1.8;
-
-          &::before {
-            position: absolute;
-            content: "";
-            width: calc(100% + #{$space * 3.6});
-            height: 1px;
-            background: #e9e9e9;
-            top: 0;
-          }
-
-          &:not(:last-of-type) {
-            &::after {
-              position: absolute;
-              content: "";
-              transform: translateY(-50%);
-              top: 0;
-              right: -$space * 1.8;
-              background: rgb(207 207 207);
-              height: $space * 0.8;
-              width: 1px;
-            }
-          }
-
-          &:hover {
-            b {
-              color: $theme-color-darken;
-              text-shadow: 0 0 2px cyan;
-
-              @include dark-mode {
-                color: $theme-color-lighten;
-                background: $background-dark;
-              }
-            }
-          }
-
-          b {
-            transform: translateY(-50%);
-            padding: 0 5px;
-            font-size: f-size(0.9);
-            background: $background;
-
-            @include dark-mode {
-              background: $background-dark;
-            }
-
-            transition: $common-transition;
-          }
-
-          a {
-            margin-top: 5px;
-            position: relative;
-            transition: $common-transition;
-
-            @include square($space * 10);
-
-            .--lazy-img {
-              z-index: 3;
-
-              span {
-                border: 1px solid #dedede;
-                box-sizing: border-box;
-              }
-
-              img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-              }
-            }
-
-            &:hover {
-              .--lazy-img {
-                transform: translate(-2px, -2px);
-              }
-            }
-
-            &::before,
-            &::after,
-            .--lazy-img {
-              position: absolute;
-              top: 0;
-              left: 0;
-
-              @include square;
-
-              transition: $common-transition;
-            }
-
-            &.multiple {
-              &::before,
-              &::after {
-                content: "";
-              }
-
-              &::before {
-                z-index: 2;
-                transform: translate(4px, 4px);
-                background: #b8b8b8;
-              }
-
-              &::after {
-                z-index: 1;
-                transform: translate(8px, 8px);
-                background: #d8d8d8;
-              }
-
-              &:hover {
-                &::after {
-                  transform: translate(10px, 10px);
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+<style module>
+.year {
+  @apply px-4 py-2 rounded-full bg-dark-200 text-dark-700 dark:bg-dark-700 dark:text-dark-300 font-medium hover:bg-dark-300 dark:hover:bg-dark-600 transition-all;
 }
 
-@include mobile {
-  .record-list {
-    margin: 20px 10px;
+.yearActive {
+  @apply !bg-primary-600 text-white font-medium hover:bg-primary-700;
+}
 
-    ul li .contain {
-      .item {
-        &:nth-child(even) {
-          &::after {
-            content: none;
-          }
-        }
+.lazyImg {
+  @apply size-full;
 
-        a {
-          @include square(calc(50vw - $space * 3.6 - 10px));
-        }
-      }
-    }
+  img {
+    @apply size-full hover:scale-110 transition duration-500 object-cover;
   }
 }
 </style>
