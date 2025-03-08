@@ -7,6 +7,7 @@ import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
 import { getNowDayjsString } from "./utils/common/dayjs";
 import { ThemeModeKey } from "./utils/common/constants";
+import { HeaderTabs, type CommonItem } from "./utils/common/types";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -112,6 +113,18 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: true,
       failOnError: false,
+      routes: (() => {
+        const routes: string[] = [];
+        HeaderTabs.forEach(({ url }) => {
+          const json = JSON.parse(fs.readFileSync(`./public/rebuild/json${url}.json`).toString()) as CommonItem[];
+          json.forEach((item) => {
+            if (!item.encrypt) {
+              routes.push(`${url}/${item.id}`);
+            }
+          });
+        });
+        return routes;
+      })(),
       ignore: ["/manage"]
     },
     cloudflare: {
@@ -120,6 +133,9 @@ export default defineNuxtConfig({
           include: ["/api/*"]
         }
       }
+    },
+    rollupConfig: {
+      external: ["monaco-editor"]
     }
   },
 

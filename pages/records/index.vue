@@ -14,19 +14,18 @@ const years = computed(() => {
     year: number;
     items: RecordItem[];
   }[] = [];
-  recordList
-    .forEach((item) => {
-      const year = getNowDayjs(item.time).year();
-      const exist = result.find(v => v.year === year);
-      if (!exist) {
-        result.push({
-          year,
-          items: [item]
-        });
-      } else {
-        exist.items.push(item);
-      }
-    });
+  recordList.forEach((item) => {
+    const year = getNowDayjs(item.time).year();
+    const exist = result.find(v => v.year === year);
+    if (!exist) {
+      result.push({
+        year,
+        items: [item]
+      });
+    } else {
+      exist.items.push(item);
+    }
+  });
   return result.sort((a, b) => b.year - a.year);
 });
 

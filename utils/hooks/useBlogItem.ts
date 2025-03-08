@@ -1,5 +1,4 @@
 import type { CommonItem, HeaderTabUrl } from "../common/types";
-import { isPrerender } from "../nuxt/constants";
 import { fetchMd } from "../nuxt/fetch";
 import { translate } from "../nuxt/i18n";
 import { useBlogList } from "./useBlogList";
@@ -19,9 +18,6 @@ export const useBlogItem = async <T extends CommonItem>(id: T["id"], url: Header
     const item = originItem;
     originMd = await fetchMd(url, String(id));
     if (item.encrypt) {
-      if (isPrerender) {
-        showError("Encrypted content is not allowed in prerender");
-      }
       decryptedMd.value = originMd;
       await encryptor.decryptOrWatchToDecrypt(
         async (decrypt) => {
