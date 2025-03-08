@@ -438,8 +438,6 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
     // copy button and theme button in <pre>
     mdEl.querySelectorAll("pre:not(.processed-pre)").forEach(async (el: Element) => {
       el.classList.add("processed-pre");
-      const actions = document.createElement("span");
-      el.children[0].appendChild(actions);
       const copyBtn = createSvgIcon(Clipboard);
       copyBtn.title = "copy";
       const ClipboardJS = (await import("clipboard")).default;

@@ -68,7 +68,7 @@ initViewer(root);
         class="order-2 shrink-0 max-xl:hidden lg:order-1 lg:w-52"
       >
         <div class="sticky top-16 max-h-[calc(100vh-120px)] overflow-y-auto rounded-lg bg-white p-4 shadow dark:bg-dark-800">
-          <h3 class="mb-4 text-lg font-medium text-dark-800 dark:text-dark-200">
+          <h3 class="mb-4 text-base font-medium text-dark-800 dark:text-dark-200">
             {{ $t('menu') }}
           </h3>
           <nav class="space-y-1 text-sm">

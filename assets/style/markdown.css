@@ -144,7 +144,7 @@
     @apply my-5 rounded-lg border border-dark-200 dark:border-dark-700 shadow bg-dark-100/40 dark:bg-dark-700/40;
 
     & > div {
-      @apply flex items-center justify-center py-1;
+      @apply flex items-center justify-center py-1 relative;
 
       & > span {
         @apply absolute right-2 cursor-pointer size-6 flex items-center justify-center p-1 transition rounded;
@@ -153,7 +153,7 @@
           @apply bg-dark-100 dark:bg-dark-700;
 
           & svg {
-            @apply text-dark-950 dark:text-dark-200;
+            @apply text-dark-800 dark:text-dark-200;
           }
         }
 
