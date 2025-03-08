@@ -2,6 +2,7 @@
 import axios from "axios";
 import FormData from "form-data";
 import { Info, Plus, Save, Upload } from "lucide-vue-next";
+import ClipboardJS from "clipboard";
 import { translate } from "~/utils/nuxt/i18n";
 import { getLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
 import { notify } from "~/utils/nuxt/notify";
@@ -134,7 +135,6 @@ const resultInput = ref<HTMLInputElement>();
 let clipboard: any;
 
 onMounted(async () => {
-  const ClipboardJS = clipboard || (await import("clipboard")).default;
   clipboard = new ClipboardJS(resultInput.value!, {
     target: function (trigger: HTMLElement) {
       return trigger;

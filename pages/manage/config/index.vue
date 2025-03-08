@@ -2,6 +2,7 @@
 import { createCommit } from "ls:~/utils/nuxt/manage/github";
 import type { editor as Editor } from "monaco-editor";
 import { Upload } from "lucide-vue-next";
+import * as MonacoEditor from "monaco-editor";
 import configString from "~/config.ts?raw";
 import config from "~/config";
 import { inBrowser } from "~/utils/nuxt/constants";
@@ -21,25 +22,23 @@ const { statusText, canCommit, processing, toggleProcessing } = useStatusText(mo
 const { themeMode } = useThemeMode();
 if (inBrowser) {
   onMounted(() => {
-    import("monaco-editor").then((module) => {
-      editor = module.editor.create(editorRef.value!, {
-        value: inputText.value,
-        language: "javascript",
-        theme: "vs",
-        automaticLayout: true,
-        minimap: {
-          enabled: false
-        }
+    editor = MonacoEditor.editor.create(editorRef.value!, {
+      value: inputText.value,
+      language: "javascript",
+      theme: "vs",
+      automaticLayout: true,
+      minimap: {
+        enabled: false
+      }
+    });
+    watch(themeMode, (mode) => {
+      editor.updateOptions({
+        theme: mode === "light" ? "vs" : "vs-dark"
       });
-      watch(themeMode, (mode) => {
-        editor.updateOptions({
-          theme: mode === "light" ? "vs" : "vs-dark"
-        });
-      }, { immediate: true });
-      editor.onDidChangeModelContent(() => {
-        const text = editor.getModel()!.getValue();
-        inputText.value = text;
-      });
+    }, { immediate: true });
+    editor.onDidChangeModelContent(() => {
+      const text = editor.getModel()!.getValue();
+      inputText.value = text;
     });
   });
 }

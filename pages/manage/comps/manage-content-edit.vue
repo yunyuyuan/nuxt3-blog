@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="T extends CommonItem">
 import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
+import hljs from "highlight.js";
 import { FolderOpen, Lock, MessageCircleMore, Save, Trash2, Upload } from "lucide-vue-next";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 import { getNowStamp } from "~/utils/common/dayjs";
@@ -132,7 +133,6 @@ const setPreviewInfo = async () => {
   previewContent.value = md;
   showPreviewModal.value = true;
   nextTick(async () => {
-    const hljs = (await import("highlight.js")).default;
     hljs.highlightElement(previewInfoEl.value);
     hljs.highlightElement(previewMdEl.value);
   });

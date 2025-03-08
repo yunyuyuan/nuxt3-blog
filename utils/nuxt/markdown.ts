@@ -1,5 +1,7 @@
 import { createApp, createVNode, render, type FunctionalComponent } from "vue";
 import { SquareArrowOutUpRight, Clipboard } from "lucide-vue-next";
+import { marked } from "marked";
+import pangu from "pangu";
 import { ViewerAttr } from "../common/constants";
 import { initHljs } from "../common/hljs";
 import { escapeHtml } from "../common/utils";
@@ -11,7 +13,6 @@ import { isPrerender } from "~/utils/nuxt/constants";
 export async function parseMarkdown(text: string) {
   const hljs = isPrerender ? (await import("highlight.js")).default : null;
   const katex = isPrerender ? (await import("katex")).default : null;
-  const marked = (await import("marked")).marked;
   const menuItems: { size: "big" | "small"; text: string; url: string }[] = [];
   marked.use({
     gfm: true,
@@ -462,7 +463,6 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
       el.appendChild(createSvgIcon(SquareArrowOutUpRight));
     });
 
-    const pangu = (await import("pangu")).default;
     pangu.spacingElementByClassName("--markdown");
   });
   return destroyFns;

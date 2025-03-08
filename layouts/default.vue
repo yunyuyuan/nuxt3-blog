@@ -1,6 +1,6 @@
 <script setup lang="tsx">
-import type Headroom from "headroom.js";
 import { Languages, Sun, MoonStar, Rocket, Menu, Rss, Key } from "lucide-vue-next";
+import Headroom from "headroom.js";
 import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
 import config from "~/config";
 import { i18nLocales, type I18nCode } from "~/utils/common/locales";
@@ -39,7 +39,6 @@ onMounted(async () => {
     themeAnimate.value = true;
   }, 500);
 
-  const Headroom = (await import("headroom.js")).default;
   headroom = new Headroom(headerRef.value, {
     offset: 48
   });

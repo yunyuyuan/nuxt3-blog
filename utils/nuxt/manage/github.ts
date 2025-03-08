@@ -1,4 +1,4 @@
-import type { Axios } from "axios";
+import axios from "axios";
 import { formatTime } from "../format-time";
 import { translate } from "../i18n";
 import { notify } from "../notify";
@@ -7,14 +7,11 @@ import { createCommitModal } from ".";
 import config from "~/config";
 import type { CommonItem } from "~/utils/common/types";
 
-let axios: Axios | null = null;
-
 async function post(data: string, token_?: string) {
   const token = token_ || useGithubToken().value;
   if (!token) {
     throw new Error(translate("need-token"));
   }
-  axios = axios || (await import("axios")).default;
   return await axios.post(
     "https://api.github.com/graphql",
     { query: data },
