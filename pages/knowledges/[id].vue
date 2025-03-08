@@ -28,7 +28,7 @@ initViewer(root);
         />
       </div>
 
-      <div class="px-6 py-8">
+      <div class="px-6 py-8 max-md:px-4">
         <div class="mb-6 flex justify-between max-md:flex-col max-md:gap-2">
           <a
             target="_blank"

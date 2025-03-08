@@ -31,6 +31,25 @@ export default {
         notify: "1000",
         modal: "999",
         dropdown: "999"
+      },
+      animation: {
+        shake: "shake 0.82s cubic-bezier(.36,.07,.19,.97) infinite"
+      },
+      keyframes: {
+        shake: {
+          "10%, 90%": {
+            transform: "rotate(3deg)"
+          },
+          "20%, 80%": {
+            transform: "rotate(0deg)"
+          },
+          "30%, 50%, 70%": {
+            transform: "rotate(3deg)"
+          },
+          "40%, 60%": {
+            transform: "rotate(0deg)"
+          }
+        }
       }
     }
   },

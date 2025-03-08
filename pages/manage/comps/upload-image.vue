@@ -6,6 +6,7 @@ import ClipboardJS from "clipboard";
 import { translate } from "~/utils/nuxt/i18n";
 import { getLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
 import { notify } from "~/utils/nuxt/notify";
+import { watchUntil } from "~/utils/nuxt/utils";
 
 const show = defineModel<boolean>({ required: true });
 
@@ -134,8 +135,8 @@ const doUpload = async () => {
 const resultInput = ref<HTMLInputElement>();
 let clipboard: any;
 
-onMounted(async () => {
-  clipboard = new ClipboardJS(resultInput.value!, {
+watchUntil(resultInput, (el) => {
+  clipboard = new ClipboardJS(el, {
     target: function (trigger: HTMLElement) {
       return trigger;
     }
@@ -145,7 +146,7 @@ onMounted(async () => {
     });
   });
   document.addEventListener("paste", onPaste);
-});
+}, {}, "boolean", "cancelAfterUntil");
 
 onUnmounted(() => {
   clipboard?.destroy();

@@ -117,24 +117,26 @@ const inputPwd = ref(encryptor.usePasswd.value);
               <Sun />
             </span>
           </button>
-          <nuxt-link
-            :to="rocketUrl"
-            title="🚀"
-            :class="twMerge('icon-button', $style.goManage)"
-          >
-            <Rocket />
-          </nuxt-link>
-          <div
-            :class="[$style.pwd, { [$style.pwdValid]: encryptor.passwdCorrect.value }]"
-            :title="$t('passwd')"
-            @click="showPwdModal = true"
-          >
-            <span>
-              <Key />
-            </span>
+          <div :class="$style.goManage">
+            <nuxt-link
+              :to="rocketUrl"
+              title="🚀"
+              class="icon-button anim-shake"
+            >
+              <Rocket />
+            </nuxt-link>
+            <div
+              :class="twMerge($style.pwd, encryptor.passwdCorrect.value && $style.pwdValid)"
+              :title="$t('passwd')"
+              @click="showPwdModal = true"
+            >
+              <span>
+                <Key />
+              </span>
+            </div>
           </div>
           <span
-            :class="$style.mobileMenuToggler"
+            class="icon-button !hidden max-md:!flex"
             @click="mobileMenuShow = !mobileMenuShow"
           >
             <Menu />
@@ -179,6 +181,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
         >nuxt3-blog</a></span>
       </div>
     </footer>
+
     <common-modal
       v-model="showPwdModal"
       @confirm="encryptor.usePasswd.value = inputPwd;showPwdModal = false"
@@ -191,7 +194,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
           v-model="inputPwd"
           data-focus
           :placeholder="$t('input-passwd')"
-          class="p-1.5"
+          class="w-full"
         >
       </template>
     </common-modal>
@@ -261,7 +264,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
   @apply flex max-md:hidden gap-10;
 
   a {
-    @apply -mb-[4px] font-medium flex flex-col items-center gap-[3px] text-lg text-dark-800 dark:text-dark-200 hover:text-primary-700 dark:hover:text-primary-400 after:block after:h-[1px] after:w-[120%] after:bg-transparent after:transition hover:after:bg-primary-700;
+    @apply -mb-[4px] font-medium flex flex-col items-center gap-[3px] text-lg text-dark-800 dark:text-dark-200 hover:text-primary-700 dark:hover:text-primary-400 after:block after:h-[1.5px] after:w-[120%] after:bg-transparent after:transition hover:after:bg-primary-700;
   }
 }
 
@@ -294,7 +297,11 @@ const inputPwd = ref(encryptor.usePasswd.value);
 }
 
 .goManage {
-  @apply relative flex justify-center overflow-visible;
+  @apply relative flex items-center justify-center;
+
+  > a {
+    @apply relative flex justify-center overflow-visible;
+  }
 
   &:hover .pwd {
     transform: translateY(100%) scaleY(100%);
@@ -303,7 +310,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
 
 .pwd {
   @apply absolute bottom-0 origin-top transition;
-  @apply before:content-[''] before:block before:w-full before:h-2;
+  @apply before:content-[''] before:block before:w-full before:h-3;
 
   transform: translateY(100%) scaleY(0);
 
@@ -320,10 +327,6 @@ const inputPwd = ref(encryptor.usePasswd.value);
   svg {
     @apply text-primary-700 dark:text-primary-500;
   }
-}
-
-.mobileMenuToggler {
-  @apply hidden max-md:flex;
 }
 
 .footer {

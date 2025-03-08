@@ -2,7 +2,7 @@
 import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
 import { Columns2, Loader2, Menu, SquareAsterisk, View } from "lucide-vue-next";
-import * as MonacoEditor from "monaco-editor";
+import type { editor as MonacoEditor } from "monaco-editor";
 import StickerPick from "./sticker-pick.vue";
 import { initViewer } from "~/utils/nuxt/viewer";
 import { useMarkdownParser } from "~/utils/hooks/useMarkdownParser";
@@ -18,7 +18,7 @@ const inputValue = defineModel<string>({ required: true });
 
 const emit = defineEmits(["preview"]);
 
-let editor: ReturnType<typeof MonacoEditor.editor.create>;
+let editor: MonacoEditor.IStandaloneCodeEditor;
 
 const currentView = ref<"edit" | "preview" | "both">("both");
 const currentText = ref("");
@@ -76,31 +76,37 @@ const initEditor = () => {
     return;
   }
   currentText.value = inputValue.value;
-  editor = MonacoEditor.editor.create(editorContainer.value, {
-    value: inputValue.value,
-    language: "markdown",
-    theme: "vs",
-    wordWrap: "on",
-    automaticLayout: true,
-    glyphMargin: false,
-    folding: false,
-    minimap: {
-      enabled: false
-    },
-    readOnly: props.disabled
-  });
-  watch(themeMode, (mode) => {
-    editor.updateOptions({
-      theme: mode === "light" ? "vs" : "vs-dark"
+  import("monaco-editor").then((module) => {
+    if (!editorContainer.value) {
+      return;
+    }
+    currentText.value = inputValue.value;
+    editor = module.editor.create(editorContainer.value, {
+      value: inputValue.value,
+      language: "markdown",
+      theme: "vs",
+      wordWrap: "on",
+      automaticLayout: true,
+      glyphMargin: false,
+      folding: false,
+      minimap: {
+        enabled: false
+      },
+      readOnly: props.disabled
     });
-  }, { immediate: true });
-  editor.onDidChangeModelContent(
-    debounce(() => {
-      const text = editor.getModel()!.getValue();
-      inputValue.value = text;
-      currentText.value = text;
-    }, 500)
-  );
+    watch(themeMode, (mode) => {
+      editor.updateOptions({
+        theme: mode === "light" ? "vs" : "vs-dark"
+      });
+    }, { immediate: true });
+    editor.onDidChangeModelContent(
+      debounce(() => {
+        const text = editor.getModel()!.getValue();
+        inputValue.value = text;
+        currentText.value = text;
+      }, 500)
+    );
+  });
 };
 
 watch(inputValue, (text) => {

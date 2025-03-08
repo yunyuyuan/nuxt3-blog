@@ -10,4 +10,21 @@
     @apply size-10 transition flex items-center justify-center overflow-hidden cursor-pointer;
     @apply rounded-full text-dark-500 dark:text-dark-400 hover:bg-dark-100 dark:hover:bg-dark-700;
   }
+  .anim-shake {
+    transform-origin: center center;
+    transform-box: border-box;
+    backface-visibility: hidden;
+    perspective: 1000px;
+
+    &:hover svg {
+      @apply animate-shake;
+
+      path {
+        @apply text-primary-600 dark:text-primary-400;
+        &:first-of-type{
+          @apply text-red-500 dark:text-red-400;
+        }
+      }
+    }
+  }
 }

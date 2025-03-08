@@ -171,7 +171,7 @@ onMounted(() => {
           <div class="flex justify-between gap-4 px-2 py-4">
             <nuxt-link
               :to="rocketUrl"
-              :class="$style.menuAction"
+              :class="twMerge('anim-shake', $style.menuAction)"
               title="🚀"
             >
               <Rocket />
@@ -289,7 +289,7 @@ onMounted(() => {
 }
 
 .menuAction {
-  @apply rounded-full p-2 text-dark-500 dark:text-dark-300 bg-dark-50 dark:bg-dark-700 hover:bg-dark-100 hover:dark:bg-dark-800 hover:text-primary-600 dark:hover:text-primary-500;
+  @apply rounded-full flex items-center justify-center size-10 text-dark-500 dark:text-dark-300 bg-dark-50 dark:bg-dark-700 hover:bg-dark-100 hover:dark:bg-dark-800 hover:text-primary-600 dark:hover:text-primary-500;
 
   svg {
     @apply size-5;
