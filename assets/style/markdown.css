@@ -1,7 +1,7 @@
 @import "./code-style.css";
 
 .--markdown {
-  @apply block break-words leading-[1.9] font-sans text-base font-normal text-dark-900 dark:text-dark-200;
+  @apply block break-words leading-[1.8] font-sans text-base font-normal text-dark-900 dark:text-dark-200;
 
   & h1, & h2, & h3, & h4, & h5, & h6 {
     @apply cursor-pointer block relative my-3;
@@ -50,7 +50,7 @@
   }
 
   & img[alt="sticker"] {
-    @apply inline-block size-6 mx-0.5 object-contain;
+    @apply inline-block size-6 mx-1 object-contain -mt-1;
   }
 
   & span.image-container {
@@ -142,6 +142,14 @@
 
   & pre {
     @apply my-5 rounded-lg border border-dark-200 dark:border-dark-700 shadow bg-dark-100/40 dark:bg-dark-700/40;
+    
+    &.mermaid {
+      @apply bg-white p-2 max-h-[60vh] overflow-auto;
+      
+      > svg {
+        @apply mx-auto;
+      }
+    }
 
     & > div {
       @apply flex items-center justify-center py-1 relative;
@@ -181,10 +189,10 @@
   }
 
   & fieldset {
-    @apply relative w-[98%] my-5 mx-[1%] pt-5 px-4 pb-2 rounded-sm border border-dark-300 dark:border-dark-700 transition;
+    @apply relative w-[98%] my-5 mx-[1%] pt-5 px-4 pb-2 rounded-lg border border-dark-300 dark:border-dark-700 transition;
 
     &:hover {
-      @apply border-dark-500;
+      @apply border-dark-400 dark:hover:border-dark-600;
     }
 
     & * {

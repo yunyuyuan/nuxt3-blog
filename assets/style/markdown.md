@@ -183,5 +183,14 @@ $$
 
 [!*and me*!]
 
+## 16. mermaid diagram
+#[please check reference](https://mermaid.js.org/)
+```mermaid
+sequenceDiagram
+    Alice->>John: Hello John, how are you?
+    John-->>Alice: Great!
+    Alice-)John: See you later!
+```
+
 # More
 coming...

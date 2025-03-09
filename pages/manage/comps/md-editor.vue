@@ -172,23 +172,22 @@ initViewer(markdownRef);
           v-model:show="showPreviewContents"
           :wrap-class="$style.menuDropdown"
         >
-          <div class="flex max-h-[50vh] w-32 max-w-full overflow-auto p-2">
-            <ol>
-              <li
-                v-for="(anchor, idx) in menuItems"
-                :key="idx"
+          <div class="flex max-h-[50vh] w-32 max-w-full flex-col overflow-auto p-2">
+            <div
+              v-for="(anchor, idx) in menuItems"
+              :key="idx"
+              class="text-start"
+            >
+              <span
+                :class="twMerge(
+                  'text-sm py-1',
+                  anchor.size === 'small' && 'text-xs pl-2'
+                )"
+                :title="anchor.text"
               >
-                <span
-                  :class="twMerge(
-                    'text-sm py-1',
-                    anchor.size === 'small' && 'text-xs'
-                  )"
-                  :title="anchor.text"
-                >
-                  <span v-html="anchor.text" />
-                </span>
-              </li>
-            </ol>
+                <span v-html="anchor.text" />
+              </span>
+            </div>
           </div>
         </common-dropdown>
       </button>
@@ -234,7 +233,7 @@ initViewer(markdownRef);
       <div
         ref="resizeRef"
         :class="twMerge(
-          'flex flex-col gap-1 items-center justify-center h-full w-2 shrink-0 cursor-ew-resize bg-dark-100 hover:bg-dark-200 dark:bg-dark-700 hover:dark:bg-dark-600',
+          $style.resize,
           currentView !== 'both' && 'hidden'
         )"
         @touchstart="startResize"
@@ -268,5 +267,13 @@ initViewer(markdownRef);
 <style module>
 .menuDropdown {
   @apply right-2;
+}
+
+.resize {
+  @apply flex flex-col gap-1 items-center justify-center h-full px-[2px] shrink-0 cursor-ew-resize bg-dark-100 dark:bg-dark-700;
+}
+
+:global(body.resizing) .resize, .resize:hover {
+  @apply bg-dark-200 dark:bg-dark-600;
 }
 </style>

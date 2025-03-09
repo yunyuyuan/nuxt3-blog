@@ -10,7 +10,7 @@ const reload = () => window.location.reload();
 </script>
 
 <template>
-  <div class="mx-auto flex min-h-screen max-w-2xl flex-col items-stretch">
+  <div class="mx-auto flex min-h-screen max-w-2xl flex-col items-stretch max-md:mx-1">
     <div class="mt-6 overflow-hidden rounded-lg bg-white shadow-lg dark:bg-dark-800">
       <div class="border-b border-red-100 bg-red-50 p-6 dark:border-red-900/30 dark:bg-red-900/20">
         <div class="flex items-center space-x-3">
@@ -29,7 +29,7 @@ const reload = () => window.location.reload();
       </div>
 
       <div class="space-y-6 p-6">
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div class="rounded-lg bg-dark-50 p-4 dark:bg-dark-700/50">
             <div class="text-sm font-medium text-dark-500 dark:text-dark-400">
               {{ $t('error-status-code') }}
@@ -77,7 +77,7 @@ const reload = () => window.location.reload();
       </div>
 
       <div
-        class="flex flex-col justify-end space-y-2 border-t border-dark-100 bg-dark-50 px-6 py-4 dark:border-dark-700 dark:bg-dark-800/50 sm:flex-row sm:space-x-2 sm:space-y-0"
+        class="flex items-center justify-end gap-2 border-t border-dark-100 bg-dark-50 px-6 py-4 dark:border-dark-700 dark:bg-dark-800/50"
       >
         <CommonButton
           :icon="RefreshCw"
@@ -97,7 +97,7 @@ const reload = () => window.location.reload();
       </div>
     </div>
 
-    <div class="mb-2 mt-auto text-center text-xs text-dark-500 dark:text-dark-400">
+    <div class="mt-auto py-2 text-center text-xs text-dark-500 dark:text-dark-400">
       <p>
         {{ $t('error-contact') }}
         |

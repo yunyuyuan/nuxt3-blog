@@ -1,3 +1,6 @@
+## 2025.03.09
+* Add [mermaid](https://mermaid.js.org/) markdown syntax.
+
 ## 2025.03.08
 * Migrate to tailwindcss, remove SASS.
 

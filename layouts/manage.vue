@@ -101,9 +101,9 @@ onMounted(() => {
 
 <template>
   <span
-    v-show="!!pageLoading.loadingState"
+    v-show="!!pageLoading.loadingState.value"
     class="fixed left-0 top-0 z-headerLoading h-0.5 bg-primary-500"
-    :style="{ width: `${pageLoading.loadingState}%` }"
+    :style="{ width: `${pageLoading.loadingState.value}%` }"
   />
 
   <div class="flex items-stretch">
@@ -111,7 +111,7 @@ onMounted(() => {
       :class="twMerge(
         'h-screen md:sticky inset-y-0 left-0 z-20 shadow-lg transition duration-300 ease-in-out',
         'max-md:fixed max-md:w-screen',
-        mobileMenuShow && 'max-md:bg-dark-500/30'
+        mobileMenuShow ? 'max-md:bg-dark-500/30' : 'max-md:pointer-events-none'
       )"
       @click.self="mobileMenuShow = false"
     >
@@ -137,7 +137,7 @@ onMounted(() => {
           </button>
           <button
             :class="twMerge(
-              'md:hidden px-2 py-1 rounded-lg',
+              'md:hidden px-2 py-1 rounded-lg pointer-events-auto',
               !mobileMenuShow ? 'max-md:translate-x-12 bg-white dark:bg-dark-800 shadow-md' : 'bg-dark-50 dark:bg-dark-700'
             )"
             @click="mobileMenuShow = !mobileMenuShow"
@@ -285,7 +285,7 @@ onMounted(() => {
 }
 
 .menuItem:hover, .menuItemActive{
-  @apply bg-primary-50 text-primary-600 dark:bg-dark-700 dark:text-primary-400;
+  @apply bg-primary-50 text-primary-700 dark:bg-dark-700 dark:text-primary-400;
 }
 
 .menuAction {

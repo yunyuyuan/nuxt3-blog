@@ -25,12 +25,13 @@ export default {
       zIndex: {
         modeBg: "10",
         body: "20",
+        footer: "30",
         header: "500",
         headerLoading: "501",
-        footer: "30",
-        notify: "1000",
         modal: "999",
-        dropdown: "999"
+        dropdown: "999",
+        mermaidFullscreen: "999",
+        notify: "1000"
       },
       animation: {
         shake: "shake 0.82s cubic-bezier(.36,.07,.19,.97) infinite"

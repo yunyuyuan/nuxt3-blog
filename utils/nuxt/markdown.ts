@@ -53,8 +53,10 @@ export async function parseMarkdown(text: string) {
         }" src="${href}"/><small class="desc">${marked.parseInline(alt_)}</small></span>`;
       },
       code({ text, lang, escaped }) {
+        if (lang === "mermaid") {
+          return `<pre class="mermaid">${escaped ? text : escapeHtml(text)}</pre>`;
+        }
         if (hljs) {
-          // prerender
           initHljs(hljs);
           text = (
             lang
@@ -186,7 +188,7 @@ export async function parseMarkdown(text: string) {
         renderer({ text, href }) {
           text = this.parser.parseInline(text);
           return `<div class="embed-media bili">
-                      <iframe src="${href}" title="${text}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      <iframe src="${href}&autoplay=0" title="${text}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                       <small class="desc">${text}</small>
                   </div>`;
         }
@@ -412,6 +414,11 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
         realEl.innerHTML = (await import("katex")).default.renderToString(realEl.innerText);
         el.classList.add("parsed");
       });
+    // mermaid
+    if (mdEl.querySelector<HTMLPreElement>("pre.mermaid:not([data-processed])")) {
+      const mermaid = (await import("mermaid")).default;
+      await mermaid.run();
+    }
     // lazy-img
     mdEl
       .querySelectorAll<HTMLImageElement>(".image-container > img")
@@ -437,8 +444,8 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
         });
       });
     // copy button and theme button in <pre>
-    mdEl.querySelectorAll("pre:not(.processed-pre)").forEach(async (el: Element) => {
-      el.classList.add("processed-pre");
+    mdEl.querySelectorAll<HTMLPreElement>("pre:not([data-processed])").forEach(async (el) => {
+      el.dataset.processed = "true";
       const copyBtn = createSvgIcon(Clipboard);
       copyBtn.title = "copy";
       const ClipboardJS = (await import("clipboard")).default;
@@ -458,8 +465,8 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
       el.children[0].appendChild(copyBtn);
     });
     // target=_blank link
-    mdEl.querySelectorAll("a[target=_blank]:not(.processed-a)").forEach((el) => {
-      el.classList.add("processed-a");
+    mdEl.querySelectorAll<HTMLLinkElement>("a[target=_blank]:not([data-processed])").forEach((el) => {
+      el.dataset.processed = "true";
       el.appendChild(createSvgIcon(SquareArrowOutUpRight));
     });
 
@@ -469,11 +476,10 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
 }
 
 function createSvgIcon(
-  el: FunctionalComponent,
-  classes?: string
+  component: FunctionalComponent,
+  tag: keyof HTMLElementTagNameMap = "span"
 ) {
-  const span = document.createElement("span");
-  if (classes) span.classList.add(classes);
-  render(createVNode(el), span);
-  return span;
+  const el = document.createElement(tag);
+  render(createVNode(component), el);
+  return el;
 }

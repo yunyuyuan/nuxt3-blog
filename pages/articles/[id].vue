@@ -68,7 +68,7 @@ initViewer(root);
         class="order-2 shrink-0 max-xl:hidden lg:order-1 lg:w-52"
       >
         <div class="sticky top-20 max-h-[calc(100vh-120px)] overflow-y-auto rounded-lg bg-white p-4 shadow dark:bg-dark-800">
-          <h3 class="mb-4 text-base font-medium text-dark-800 dark:text-dark-200">
+          <h3 class="mb-4 ml-2 text-base font-medium text-dark-800 dark:text-dark-200">
             {{ $t('menu') }}
           </h3>
           <nav class="space-y-1 text-sm">
@@ -89,12 +89,12 @@ initViewer(root);
         </div>
       </aside>
 
-      <main class="order-1 shrink overflow-hidden rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-2 lg:order-2">
+      <main class="order-1 flex-1 rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-2 lg:order-2">
         <h1 class="mb-4 text-2xl font-medium text-dark-900 dark:text-white">
           {{ item.title }}
         </h1>
 
-        <div class="mb-6 flex flex-wrap items-center gap-4 border-b pb-3 text-sm text-dark-600 dark:text-dark-400">
+        <div class="mb-6 flex flex-wrap items-center gap-4 border-b border-dark-300 pb-3 text-sm text-dark-500 dark:border-dark-600 dark:text-dark-400">
           <div class="flex items-center gap-1">
             <WroteDate :item="item" />
           </div>

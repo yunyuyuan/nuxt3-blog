@@ -29,13 +29,13 @@ const paragraphs = config.about;
   </div>
 
   <div class="fixed left-6 top-6 z-50">
-    <a
-      href="/"
+    <NuxtLink
+      to="/"
       class="flex items-center space-x-2 text-white transition hover:text-primary-300"
     >
       <ArrowLeft class="size-5" />
       <span>{{ $t('back-home') }}</span>
-    </a>
+    </NuxtLink>
   </div>
 
   <main class="relative z-20 flex min-h-screen flex-col items-center justify-center px-4 py-16 max-md:px-6 lg:px-8">

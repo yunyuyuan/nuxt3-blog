@@ -20,14 +20,14 @@ const toggleTag = (tag: string) => {
   if (inputTagsList.value.includes(tag)) {
     inputTags.value = inputTags.value.replace(new RegExp(`,?\\s*${tag}(\\s*|,|$)`), "");
   } else {
-    inputTags.value = inputTags.value.concat(`,${tag}`);
+    inputTags.value = inputTags.value.concat(`${inputTags.value.length ? "," : ""}${tag}`);
   }
 };
 
 const preProcessItem = (editingItem: Ref<ArticleItem>, originList: ArticleItem[]) => {
   originList.forEach(item => item.tags.forEach(t => allTags.add(t)));
 
-  watch(editingItem.value.tags, (tags) => {
+  watch(() => editingItem.value.tags, (tags) => {
     inputTags.value = tags.join(",");
   }, { immediate: true });
 
@@ -81,11 +81,11 @@ const processContent = (md: string, item: ArticleItem) => {
           <input
             v-model="inputTags"
             data-testid="item-tags-input"
-            class="peer w-full py-3 !text-transparent focus:!text-inherit"
+            class="peer w-full py-2 !text-transparent focus:!text-inherit"
             :disabled="disabled || item.encrypt"
             @focusin="showTagSelect = true"
           >
-          <div class="pointer-events-none absolute flex size-full items-center gap-1 overflow-auto break-keep px-4 peer-focus:opacity-0">
+          <div class="pointer-events-none absolute flex size-full items-center gap-1 overflow-auto break-keep px-3 peer-focus:opacity-0">
             <span
               v-if="!inputTagsList.length || item.encrypt"
               class="text-dark-400 dark:text-dark-700"
