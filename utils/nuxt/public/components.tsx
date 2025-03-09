@@ -43,38 +43,43 @@ export function WroteDate(props: { item: CommonItem }) {
   );
 }
 
-export function Comments() {
-  if (!__NB_COMMENTING_ENABLED__) return null;
+export const Comments = defineComponent({
+  name: 'Comments',
+  setup() {
+    if (!__NB_COMMENTING_ENABLED__) return () => null;
 
-  const { themeMode } = useThemeMode();
+    const { themeMode } = useThemeMode();
+    const giscusLoaded = ref(false);
+    const containerRef = ref<HTMLElement | null>(null);
 
-  const updateGiscusConfig = (config: object) => {
-    const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
-    if (!iframe) {
-      return;
-    }
-    iframe.contentWindow!.postMessage({
-      giscus: {
-        setConfig: config
+    const updateGiscusConfig = (config: object) => {
+      const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+      if (!iframe) {
+        return;
       }
-    }, "https://giscus.app");
-  };
-
-  const onGetHTMLElement = (el?: HTMLElement) => {
-    if (!el) return;
-    watchUntil(themeMode, () => {
-      const getTheme = () => {
-        return themeMode.value === "light" ? "light" : "dark_dimmed";
-      };
-      const getLang = (locale: string) => {
-        switch (locale) {
-          case "en":
-            return "en";
-          default:
-            return "zh-CN";
+      iframe.contentWindow!.postMessage({
+        giscus: {
+          setConfig: config
         }
-      };
+      }, "https://giscus.app");
+    };
 
+    const getTheme = () => {
+      return themeMode.value === "light" ? "light" : "dark_dimmed";
+    };
+
+    const getLang = (locale: string) => {
+      switch (locale) {
+        case "en":
+          return "en";
+        default:
+          return "zh-CN";
+      }
+    };
+
+    const loadGiscus = () => {
+      if (giscusLoaded.value || !containerRef.value) return;
+      
       const script = document.createElement("script");
       script.src = "https://giscus.app/client.js";
       script.setAttribute("data-repo", `${config.githubName}/${config.githubRepo}`);
@@ -90,31 +95,46 @@ export function Comments() {
       script.setAttribute("data-lang", getLang(useI18nCode().i18nCode.value));
       script.setAttribute("crossorigin", "anonymous");
       script.setAttribute("async", "");
-      el.appendChild(script);
-      watch(useI18nCode().i18nCode, (locale) => {
+      containerRef.value.appendChild(script);
+      giscusLoaded.value = true;
+    };
+
+    onMounted(() => {
+      watchUntil(themeMode, loadGiscus, 
+        { immediate: true }, 
+        themeMode => !!themeMode, 
+        "cancelAfterUntil"
+      );
+    });
+
+    watch(useI18nCode().i18nCode, (locale) => {
+      if (giscusLoaded.value) {
         updateGiscusConfig({
           lang: getLang(locale)
         });
-      });
-      watch(themeMode, () => {
+      }
+    });
+
+    watch(themeMode, () => {
+      if (giscusLoaded.value) {
         updateGiscusConfig({
           theme: getTheme()
         });
-      });
-    }, { immediate: true }, themeMode => !!themeMode, "cancelAfterUntil");
-  };
+      }
+    });
 
-  return (
-    <section>
-      <h3 class="mb-4 text-xl font-medium text-dark-900 dark:text-white">
-        { translate("comments") }
-      </h3>
-      <div class="flex min-h-44 items-center justify-center rounded-lg border border-dark-200 p-4 dark:border-dark-700 dark:bg-dark-800">
-        <div
-          ref={el => onGetHTMLElement(el as HTMLElement)}
-          class="w-full"
-        />
-      </div>
-    </section>
-  );
-}
+    return () => (
+      <section>
+        <h3 class="mb-4 text-xl font-medium text-dark-800 dark:text-dark-200">
+          { translate("comments") }
+        </h3>
+        <div class="flex min-h-44 items-center justify-center rounded-lg py-4">
+          <div
+            ref={containerRef}
+            class="w-full"
+          />
+        </div>
+      </section>
+    );
+  }
+});

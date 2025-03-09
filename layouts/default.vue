@@ -71,7 +71,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
       ref="headerRef"
       :class="$style.nav"
     >
-      <div class="container mx-auto flex h-header items-center justify-between px-4 max-md:px-6 lg:px-8">
+      <div class="container mx-auto flex h-header items-center justify-between px-4 max-md:px-2 lg:px-8">
         <nuxt-link
           class="shrink-0 text-lg font-medium text-primary-700 drop-shadow hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-500"
           to="/about"

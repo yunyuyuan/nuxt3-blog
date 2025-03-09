@@ -137,7 +137,7 @@ initViewer(markdownRef);
     >
       <Loader2 class="size-6 animate-spin" />
     </div>
-    <div class="relative flex items-center justify-between gap-6 border-b border-dark-200 px-4 pb-2 dark:border-dark-700">
+    <div class="relative flex items-center justify-between gap-6 border-b border-dark-200 px-2 pb-2 dark:border-dark-700 max-md:gap-2">
       <button
         :title="$t('add-sticker')"
         class="icon-button"

@@ -64,48 +64,42 @@ const tabLengthMap = computed(() => {
         v-if="filteredList.length"
         class="space-y-4"
       >
-        <div
+        <nuxt-link
           v-for="item in filteredList"
           :key="item.id"
-          class="group overflow-hidden rounded-lg bg-white shadow-sm transition-shadow duration-300 hover:shadow-md dark:bg-dark-800"
+          no-prefetch
+          class="group flex items-center justify-between overflow-hidden rounded-lg bg-white p-5 shadow-sm transition hover:shadow-md dark:bg-dark-800"
+          :to="'/knowledges/' + item.id"
         >
-          <nuxt-link
-            class="block p-5"
-            no-prefetch
-            :to="'/knowledges/' + item.id"
-          >
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3 overflow-hidden">
-                <div
+          <div class="flex items-center space-x-3 overflow-hidden">
+            <div
+              :class="twMerge(
+                'flex size-10 shrink-0 items-center justify-center rounded-full',
+                KnowledgeColorMap[item.type]
+              )"
+            >
+              <component
+                :is="KnowledgeIconMap[item.type]"
+                class="size-5"
+              />
+            </div>
+            <div class="space-y-1">
+              <h3 class="line-clamp-1 overflow-hidden text-ellipsis break-all text-lg font-medium text-dark-900 transition group-hover:text-primary-700 dark:text-white dark:group-hover:text-primary-500">{{ item.title }}</h3>
+              <div class="mt-1 flex items-center">
+                <span
                   :class="twMerge(
-                    'flex size-10 shrink-0 items-center justify-center rounded-full',
+                    'inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium',
                     KnowledgeColorMap[item.type]
                   )"
                 >
-                  <component
-                    :is="KnowledgeIconMap[item.type]"
-                    class="size-5"
-                  />
-                </div>
-                <div>
-                  <h3 class="line-clamp-1 overflow-hidden text-ellipsis break-all text-lg font-medium text-dark-900 transition group-hover:text-primary-700 dark:text-white dark:group-hover:text-primary-500">{{ item.title }}</h3>
-                  <div class="mt-1 flex items-center">
-                    <span
-                      :class="twMerge(
-                        'inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium',
-                        KnowledgeColorMap[item.type]
-                      )"
-                    >
-                      {{ $t(item.type) }}
-                    </span>
-                    <span class="ml-2 text-sm text-dark-500 dark:text-dark-400">{{ formatTime(item.time, "date") }}</span>
-                  </div>
-                </div>
+                  {{ $t(item.type) }}
+                </span>
+                <span class="ml-2 text-sm text-dark-500 dark:text-dark-400">{{ formatTime(item.time, "date") }}</span>
               </div>
-              <ChevronRight class="size-5 text-dark-400" />
             </div>
-          </nuxt-link>
-        </div>
+          </div>
+          <ChevronRight class="size-5 text-dark-400 transition group-hover:translate-x-1 group-hover:text-primary-500" />
+        </nuxt-link>
       </div>
 
       <div

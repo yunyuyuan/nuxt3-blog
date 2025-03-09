@@ -64,7 +64,10 @@ onBeforeUnmount(() => {
 <template>
   <main class="flex h-full flex-col gap-2 px-2 py-4 shadow-md md:px-4">
     <div class="flex items-center justify-end">
-      <span class="mr-4 text-sm text-red-500">{{ statusText }}</span>
+      <span
+        v-show="!!statusText"
+        class="mr-4 text-xs text-red-500"
+      >{{ statusText }}</span>
       <CommonButton
         :icon="Upload"
         :disabled="!canCommit || !modified"

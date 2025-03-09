@@ -16,7 +16,7 @@ initViewer(root);
 <template>
   <main
     ref="root"
-    class="container mx-auto grow px-4 py-8 max-md:p-2 lg:px-8"
+    class="container mx-auto grow px-4 py-8 max-md:px-1 max-md:py-2 lg:px-8"
   >
     <article class="mx-auto max-w-4xl overflow-hidden rounded-xl bg-white shadow-sm dark:bg-dark-800">
       <div class="relative mt-4 flex h-64 w-full justify-center overflow-hidden">
@@ -28,7 +28,7 @@ initViewer(root);
         />
       </div>
 
-      <div class="px-6 py-8 max-md:px-4">
+      <div class="px-6 py-8 max-md:px-3">
         <div class="mb-6 flex justify-between max-md:flex-col max-md:gap-2">
           <a
             target="_blank"
@@ -48,7 +48,7 @@ initViewer(root);
           </div>
         </div>
 
-        <div class="mb-8 max-w-none text-dark-600 dark:text-dark-300">
+        <div class="mb-8 max-w-none text-sm text-dark-600 dark:text-dark-300">
           {{ item.summary }}
         </div>
 
@@ -63,7 +63,7 @@ initViewer(root);
     </article>
     <div
       v-if="item.showComments"
-      class="mx-auto mt-8 max-w-4xl overflow-hidden rounded-xl bg-white p-4 shadow-sm dark:bg-dark-800"
+      class="mx-auto mt-4 max-w-4xl overflow-hidden rounded-xl bg-white p-4 shadow-sm dark:bg-dark-800 max-md:px-2"
     >
       <Comments />
     </div>

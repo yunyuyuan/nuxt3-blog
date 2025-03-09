@@ -60,8 +60,8 @@ const deleteSelect = async () => {
 <template>
   <main class="p-4 max-md:px-2">
     <div class="overflow-hidden">
-      <div class="flex space-y-3 pb-2 max-md:flex-col max-md:items-start max-md:space-y-2 md:items-center">
-        <div class="relative max-w-sm grow">
+      <div class="flex flex-wrap items-center gap-2 pb-2">
+        <div class="relative grow md:max-w-sm">
           <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <Search class="size-5 text-dark-400" />
           </div>
@@ -73,28 +73,33 @@ const deleteSelect = async () => {
           >
         </div>
 
-        <span class="ml-auto mr-4 text-sm text-red-500">{{ statusText }}</span>
+        <div class="ml-auto flex items-center">
+          <span
+            v-show="!!statusText"
+            class="ml-auto mr-4 text-xs text-red-500"
+          >{{ statusText }}</span>
 
-        <div class="flex items-center gap-3">
-          <NuxtLink :to="`/manage${targetTab.url}/new`">
+          <div class="flex items-center gap-3">
+            <NuxtLink :to="`/manage${targetTab.url}/new`">
+              <CommonButton
+                :icon="Plus"
+                theme="primary"
+                :disabled="!canCommit"
+              >
+                {{ $t('new') }}
+              </CommonButton>
+            </NuxtLink>
             <CommonButton
-              :icon="Plus"
-              theme="primary"
-              :disabled="!canCommit"
+              :icon="Trash2"
+              theme="danger"
+              :disabled="!canCommit || !selectedList.length"
+              :loading="processing"
+              data-testid="list-delete-btn"
+              @click="showConfirmModal = true"
             >
-              {{ $t('new') }}
+              {{ $t('del') }}
             </CommonButton>
-          </NuxtLink>
-          <CommonButton
-            :icon="Trash2"
-            theme="danger"
-            :disabled="!canCommit || !selectedList.length"
-            :loading="processing"
-            data-testid="list-delete-btn"
-            @click="showConfirmModal = true"
-          >
-            {{ $t('del') }}
-          </CommonButton>
+          </div>
         </div>
       </div>
 

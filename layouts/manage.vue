@@ -204,7 +204,7 @@ onMounted(() => {
     </aside>
 
     <div class="min-h-screen flex-1 overflow-hidden">
-      <div class="mx-auto size-full max-w-[1440] rounded-lg p-4 *:rounded-lg *:bg-white *:shadow-md *:dark:bg-dark-800 max-md:p-2">
+      <div class="mx-auto size-full max-w-[1440] rounded-lg p-4 *:rounded-lg *:bg-white *:shadow-md *:dark:bg-dark-800 max-md:p-1">
         <client-only>
           <slot />
         </client-only>

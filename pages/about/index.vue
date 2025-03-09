@@ -28,7 +28,7 @@ const paragraphs = config.about;
     >
   </div>
 
-  <div class="fixed left-6 top-6 z-50">
+  <div class="fixed left-6 top-6 z-50 max-md:left-2">
     <NuxtLink
       to="/"
       class="flex items-center space-x-2 text-white transition hover:text-primary-300"
@@ -38,7 +38,7 @@ const paragraphs = config.about;
     </NuxtLink>
   </div>
 
-  <main class="relative z-20 flex min-h-screen flex-col items-center justify-center px-4 py-16 max-md:px-6 lg:px-8">
+  <main class="relative z-20 flex min-h-screen flex-col items-center justify-center px-4 py-16 max-md:px-2">
     <div class="w-full max-w-2xl rounded-2xl bg-white/90 p-8 shadow-xl backdrop-blur-md dark:bg-dark-800/90 max-md:p-12">
       <div class="space-y-4 text-center text-dark-700 dark:text-dark-300">
         <p

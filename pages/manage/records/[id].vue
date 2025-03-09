@@ -51,7 +51,7 @@ initViewer(imagesEl);
               :alt="img.alt"
               :src="img.src"
               :title="img.alt"
-              class="size-48"
+              :class="$style.previewImg"
             />
           </div>
           <div
@@ -111,3 +111,13 @@ initViewer(imagesEl);
     </template>
   </manage-content-edit>
 </template>
+
+<style module>
+.previewImg {
+  @apply size-48 rounded-lg max-md:w-full max-md:h-[unset];
+
+  img {
+    @apply size-full md:object-cover;
+  }
+}
+</style>

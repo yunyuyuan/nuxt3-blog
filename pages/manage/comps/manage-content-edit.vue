@@ -181,7 +181,7 @@ const doDelete = async () => {
 
 <template>
   <main class="!bg-transparent !shadow-none">
-    <div :class="twMerge($style.box, 'mb-6 flex flex-wrap items-center justify-between gap-3')">
+    <div :class="twMerge($style.box, 'mb-6 flex flex-wrap items-center gap-3')">
       <div class="flex flex-wrap items-center gap-2">
         <CommonButton
           size="small"
@@ -208,8 +208,11 @@ const doDelete = async () => {
         </CommonButton>
       </div>
 
-      <div class="flex items-center gap-4">
-        <span class="ml-2 text-sm text-red-500">{{ statusText }}</span>
+      <div class="ml-auto flex items-center gap-4">
+        <span
+          v-show="!!statusText"
+          class="ml-2 text-xs text-red-500"
+        >{{ statusText }}</span>
         <CommonButton
           :icon="Upload"
           :disabled="!canUpload || currentOperate === 'delete' || !decrypted"
@@ -280,7 +283,7 @@ const doDelete = async () => {
   </main>
 
   <div
-    :class="$style.box"
+    :class="twMerge($style.box, 'max-md:!px-0')"
   >
     <client-only>
       <md-editor
@@ -326,7 +329,7 @@ const doDelete = async () => {
 
 <style module>
 .box {
-  @apply p-4 bg-white dark:bg-dark-800 shadow-md rounded-lg;
+  @apply p-4 max-md:px-2 bg-white dark:bg-dark-800 shadow-md rounded-lg;
 }
 
 .form {

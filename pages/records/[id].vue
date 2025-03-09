@@ -17,10 +17,10 @@ initViewer(root);
 <template>
   <main
     ref="root"
-    class="container mx-auto grow px-4 py-8 max-md:px-2 max-md:py-4 lg:px-8"
+    class="container mx-auto grow px-4 py-8 max-md:px-1 max-md:py-4 lg:px-8"
   >
     <article class="mx-auto max-w-4xl overflow-hidden rounded-xl bg-white shadow-sm dark:bg-dark-800">
-      <div class="px-6 max-md:px-4">
+      <div class="px-6 max-md:px-3">
         <div class="my-8 grid grid-cols-1 items-start gap-6 max-md:my-4 md:grid-cols-2">
           <the-lazy-img
             v-for="img, idx in item.images"
@@ -54,7 +54,7 @@ initViewer(root);
 
     <div
       v-if="item.showComments"
-      class="mx-auto mt-8 max-w-4xl overflow-hidden rounded-xl bg-white p-4 shadow-sm dark:bg-dark-800"
+      class="mx-auto mt-6 max-w-4xl overflow-hidden rounded-xl bg-white p-4 shadow-sm dark:bg-dark-800 max-md:px-2"
     >
       <Comments />
     </div>
