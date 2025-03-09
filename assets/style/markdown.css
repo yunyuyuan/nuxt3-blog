@@ -141,7 +141,11 @@
   }
 
   & pre {
-    @apply my-5 rounded-lg border border-dark-200 dark:border-dark-700 shadow bg-dark-100/40 dark:bg-dark-700/40;
+    @apply my-5 relative rounded-lg border border-dark-200 dark:border-dark-700 shadow bg-dark-50/80 dark:bg-dark-900/40;
+    
+    &[data-lang]:hover:after {
+      @apply absolute content-[attr(data-lang)] top-2 right-10 text-xs opacity-80;
+    }
     
     &.mermaid {
       @apply bg-white p-2 max-h-[60vh] overflow-auto;
@@ -151,32 +155,24 @@
       }
     }
 
-    & > div {
-      @apply flex items-center justify-center py-1 relative;
-
-      & > span {
-        @apply absolute right-2 cursor-pointer size-6 flex items-center justify-center p-1 transition rounded;
-        
-        &:hover {
-          @apply bg-dark-100 dark:bg-dark-700;
-
-          & svg {
-            @apply text-dark-800 dark:text-dark-200;
-          }
-        }
+    & > span {
+      @apply absolute right-2 top-1 cursor-pointer size-6 flex items-center justify-center p-1 transition rounded;
+      
+      &:hover {
+        @apply bg-dark-100 dark:bg-dark-700;
 
         & svg {
-          @apply size-4 text-dark-600 dark:text-dark-400 transition;
+          @apply text-dark-800 dark:text-dark-200;
         }
       }
 
-      & > small {
-        @apply font-mono text-xs text-dark-500 dark:text-dark-400 leading-5;
+      & svg {
+        @apply size-4 text-dark-600 dark:text-dark-400 transition;
       }
     }
 
     & > code.hljs {
-      @apply block break-keep py-2 px-3 border-t border-dark-200 dark:border-dark-700 rounded-b-lg max-h-[90vh] bg-white dark:bg-dark-900 text-sm font-normal overflow-auto;
+      @apply block break-keep py-2 px-3 rounded-lg max-h-[90vh] text-sm font-normal overflow-auto;
 
       @media (max-width: 768px) {
         @apply py-2 px-3 text-xs;

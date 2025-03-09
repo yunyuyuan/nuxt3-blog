@@ -1,7 +1,4 @@
 html.light .hljs {
-  color: #24292e;
-  background: #fff !important;
-
   .hljs-doctag,
   .hljs-keyword,
   .hljs-meta .hljs-keyword,
@@ -71,9 +68,6 @@ html.light .hljs {
 }
 
 html.dark .hljs {
-  color: #abb2bf;
-  background: #282c34 !important;
-
   .hljs-comment,
   .hljs-quote {
     color: #5c6370;
