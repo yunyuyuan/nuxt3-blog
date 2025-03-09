@@ -41,6 +41,9 @@ importers:
       viewerjs:
         specifier: ^1.10.5
         version: 1.11.7
+      vue-router:
+        specifier: '4'
+        version: 4.5.0(vue@3.5.13(typescript@5.7.3))
     devDependencies:
       '@eslint/js':
         specifier: ^9.20.0

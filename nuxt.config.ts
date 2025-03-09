@@ -127,13 +127,6 @@ export default defineNuxtConfig({
       })(),
       ignore: ["/manage"]
     },
-    cloudflare: {
-      pages: {
-        routes: {
-          include: ["/api/*"]
-        }
-      }
-    },
     rollupConfig: {
       external: ["monaco-editor"]
     }

@@ -29,10 +29,6 @@ const tabLengthMap = computed(() => {
   });
   return map;
 });
-
-const goTo = (tab?: string) => {
-  navigateTo({ query: { type: tab } }, { replace: true });
-};
 </script>
 
 <template>
@@ -43,14 +39,14 @@ const goTo = (tab?: string) => {
           class="flex space-x-8 overflow-auto"
           aria-label="Tabs"
         >
-          <button
+          <NuxtLink
             v-for="tab in tabs"
             :key="tab.key"
             :class="twMerge(
               'flex break-keep items-center py-2 px-1 border-b-2 border-transparent font-medium text-sm text-dark-500 dark:text-dark-400',
               tab.active ? 'border-primary-500 text-primary-600 dark:border-primary-400 dark:text-primary-400' : 'hover:text-dark-700 dark:hover:text-dark-300 hover:border-dark-300 dark:hover:border-dark-600'
             )"
-            @click="goTo(tab.key)"
+            :to="`?type=${tab.key}`"
           >
             <component
               :is="KnowledgeIconMap[tab.key as KnowledgeTab]"
@@ -60,7 +56,7 @@ const goTo = (tab?: string) => {
             <client-only>
               <span class="ml-1">{{ tabLengthMap.get(tab.key) }}</span>
             </client-only>
-          </button>
+          </NuxtLink>
         </nav>
       </div>
 

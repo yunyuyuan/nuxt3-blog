@@ -4,10 +4,11 @@ import { getNowDayjs } from "~/utils/common/dayjs";
 import type { RecordItem } from "~/utils/common/types";
 import { useListPage } from "~/utils/nuxt/public/list";
 import { formatTime } from "~/utils/nuxt/format-time";
+import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
+
+const currentYear = useRouteQuery("year", s => s ? parseInt(s) : undefined);
 
 const recordList = await useListPage<RecordItem>();
-
-const currentYear = useState<number | undefined>("record-expand", () => undefined);
 
 const years = computed(() => {
   const result: {
@@ -46,15 +47,15 @@ onMounted(() => {
     >
       <div class="mb-10">
         <div class="flex flex-wrap items-center justify-center gap-3">
-          <button
+          <NuxtLink
             v-for="year in years"
             v-show="year.items.some(item => item._show)"
             :key="year.year"
             :class="twMerge($style.year, currentYear==year.year && $style.yearActive)"
-            @click="currentYear = currentYear == year.year ? undefined : year.year"
+            :to="`?year=${year.year}`"
           >
             {{ year.year }}
-          </button>
+          </NuxtLink>
         </div>
       </div>
 
