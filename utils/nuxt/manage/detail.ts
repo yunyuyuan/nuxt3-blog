@@ -1,5 +1,6 @@
 import { translate } from "../i18n";
 import { getCurrentTab, useCommonSEOTitle, deepClone } from "../utils";
+import { notify } from "../notify";
 import { useStatusText } from ".";
 import type { CommonItem } from "~/utils/common/types";
 import { createNewItem } from "~/utils/common/utils";
@@ -17,7 +18,7 @@ export async function useManageContent<T extends CommonItem>() {
 
   const isNew = itemId === "new";
 
-  const blogItemResult = await useBlogItem<T>(Number(itemId), targetTab.url);
+  const blogItemResult = await useBlogItem<T>(Number(itemId), targetTab.url, false);
   const { originList, decryptedList, originMd, decryptedMd, successDecrypt } = blogItemResult;
   let { originItem, decryptedItem } = blogItemResult;
 
@@ -68,9 +69,27 @@ export async function useManageContent<T extends CommonItem>() {
     canDelete: canCommit,
 
     hasDraft,
-    saveDraft,
-    deleteDraft,
-    applyDraft,
+    saveDraft: () => {
+      saveDraft();
+      notify({
+        type: "success",
+        title: translate("draft-saved")
+      });
+    },
+    deleteDraft: () => {
+      deleteDraft();
+      notify({
+        type: "success",
+        title: translate("draft-deleted")
+      });
+    },
+    applyDraft: () => {
+      applyDraft();
+      notify({
+        type: "success",
+        title: translate("draft-loaded")
+      });
+    },
 
     editingItem,
     editingMd,

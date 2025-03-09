@@ -118,9 +118,9 @@ export default defineNuxtConfig({
         HeaderTabs.forEach(({ url }) => {
           const json = JSON.parse(fs.readFileSync(`./public/rebuild/json${url}.json`).toString()) as CommonItem[];
           json.forEach((item) => {
-            if (!item.encrypt) {
-              routes.push(`${url}/${item.id}`);
-            }
+            // if (!item.encrypt) {
+            routes.push(`${url}/${item.id}`);
+            // }
           });
         });
         return routes;

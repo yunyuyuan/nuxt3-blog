@@ -4,7 +4,7 @@
 
 @layer utilities {
   .form-item-invalid {
-    @apply before:content-['*'] text-red-400 dark:text-red-500;
+    @apply before:content-['*'] !text-red-400 dark:!text-red-500;
   }
   .icon-button {
     @apply size-10 transition flex items-center justify-center overflow-hidden cursor-pointer;

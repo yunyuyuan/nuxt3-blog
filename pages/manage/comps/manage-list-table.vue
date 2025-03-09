@@ -25,10 +25,6 @@ const header = Object.keys(slots).filter(
   key => !key.startsWith("_")
 );
 
-const newItem = () => {
-  navigateTo((`/manage${targetTab.url}/new`));
-};
-
 const showConfirmModal = ref<boolean>(false);
 const selectedList = reactive<CommonItem[]>([]);
 
@@ -64,7 +60,7 @@ const deleteSelect = async () => {
 <template>
   <main class="p-4 max-md:px-2">
     <div class="overflow-hidden">
-      <div class="flex space-y-3 pb-2 max-md:flex-col max-md:items-start max-md:space-y-2">
+      <div class="flex space-y-3 pb-2 max-md:flex-col max-md:items-start max-md:space-y-2 md:items-center">
         <div class="relative max-w-sm grow">
           <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <Search class="size-5 text-dark-400" />
@@ -80,14 +76,15 @@ const deleteSelect = async () => {
         <span class="ml-auto mr-4 text-sm text-red-500">{{ statusText }}</span>
 
         <div class="flex items-center gap-3">
-          <CommonButton
-            :icon="Plus"
-            theme="primary"
-            :disabled="!canCommit"
-            @click="newItem"
-          >
-            {{ $t('new') }}
-          </CommonButton>
+          <NuxtLink :to="`/manage${targetTab.url}/new`">
+            <CommonButton
+              :icon="Plus"
+              theme="primary"
+              :disabled="!canCommit"
+            >
+              {{ $t('new') }}
+            </CommonButton>
+          </NuxtLink>
           <CommonButton
             :icon="Trash2"
             theme="danger"

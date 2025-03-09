@@ -49,7 +49,7 @@ English Readme | [中文说明](/README.zh.md)
 
 # To-Do List
 #### Features
-- [ ] 404 page
+- [x] 404 page
 - [x] Update data in local `npm run dev` environment
 - [x] Automated testing
 - [x] Static Site Generation (SSG)

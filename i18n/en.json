@@ -115,5 +115,15 @@
   "comments": "Comments",
   "relativeArticles": "Related Articles",
   "back-home": "Back to Home",
-  "save": "Save"
+  "save": "Save",
+  "error-title": "Error Occurred",
+  "error-subtitle": "An unexpected problem occurred during execution",
+  "error-status-code": "Status Code",
+  "error-type": "Error Type",
+  "error-data": "Error Data",
+  "error-reason": "Error Reason",
+  "error-refresh": "Refresh Page",
+  "error-home": "Back to Home",
+  "error-contact": "If the problem persists, please contact the administrator",
+  "error-feedback": "Provide Feedback"
 }

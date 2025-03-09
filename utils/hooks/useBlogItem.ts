@@ -3,7 +3,7 @@ import { fetchMd } from "../nuxt/fetch";
 import { translate } from "../nuxt/i18n";
 import { useBlogList } from "./useBlogList";
 
-export const useBlogItem = async <T extends CommonItem>(id: T["id"], url: HeaderTabUrl) => {
+export const useBlogItem = async <T extends CommonItem>(id: T["id"], url: HeaderTabUrl, showNotFound = true) => {
   const githubToken = useGithubToken();
   const encryptor = useEncryptor();
   const { originList, decryptedList } = await useBlogList<T>(url, id);
@@ -52,8 +52,12 @@ export const useBlogItem = async <T extends CommonItem>(id: T["id"], url: Header
       decryptedMd.value = originMd;
       successDecrypt.value = true;
     }
-  } else {
-    // throw "Item not found";
+  } else if (showNotFound) {
+    showError({
+      status: 404,
+      statusText: `${url}/${id} not found`,
+      message: "wtf bro"
+    });
   }
 
   return {

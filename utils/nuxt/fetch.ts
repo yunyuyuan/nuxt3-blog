@@ -1,7 +1,6 @@
-import fs from "fs";
 import { escapeNewLine } from "../common/utils";
 import type { CommonItem, HeaderTabUrl } from "~/utils/common/types";
-import { inBrowser } from "~/utils/nuxt/constants";
+import { inBrowser, isDev, isPrerender } from "~/utils/nuxt/constants";
 
 const magicFetch = async<T = any>(_path: string, transform: (_: string) => T): Promise<T | undefined> => {
   const path = __NB_VITESTING__ ? `e2e/${_path}` : _path;
@@ -16,8 +15,8 @@ const magicFetch = async<T = any>(_path: string, transform: (_: string) => T): P
       window.NBCache[path] = res;
       return res;
     }
-  } else {
-    return transform(fs.readFileSync("public/" + path, { encoding: "utf-8" }).toString());
+  } else if (isDev || isPrerender) {
+    return transform((await import("fs")).readFileSync("public/" + path, { encoding: "utf-8" }).toString());
   }
 };
 

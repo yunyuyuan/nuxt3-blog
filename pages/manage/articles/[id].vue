@@ -85,7 +85,7 @@ const processContent = (md: string, item: ArticleItem) => {
             :disabled="disabled || item.encrypt"
             @focusin="showTagSelect = true"
           >
-          <div class="pointer-events-none absolute flex size-full items-center gap-1 overflow-auto break-keep px-2 peer-focus:opacity-0">
+          <div class="pointer-events-none absolute flex size-full items-center gap-1 overflow-auto break-keep px-4 peer-focus:opacity-0">
             <span
               v-if="!inputTagsList.length || item.encrypt"
               class="text-dark-400 dark:text-dark-700"

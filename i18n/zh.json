@@ -115,5 +115,15 @@
   "comments": "评论",
   "relativeArticles": "相关文章",
   "back-home": "返回首页",
-  "save": "保存"
+  "save": "保存",
+  "error-title": "发生错误",
+  "error-subtitle": "执行过程中出现了意外问题",
+  "error-status-code": "状态码",
+  "error-type": "错误类型",
+  "error-data": "错误数据",
+  "error-reason": "错误原因",
+  "error-refresh": "刷新页面",
+  "error-home": "返回首页",
+  "error-contact": "如果问题持续存在，请联系管理员",
+  "error-feedback": "提供反馈"
 }
