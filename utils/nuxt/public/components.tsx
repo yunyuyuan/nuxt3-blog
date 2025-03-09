@@ -1,8 +1,8 @@
 import { Calendar, Eye, FileText } from "lucide-vue-next";
-import type { CommonItem } from "../common/types";
-import { formatTime } from "./format-time";
-import { watchUntil } from "./utils";
-import { cmtRepCateId, cmtRepId } from "./constants";
+import type { CommonItem } from "../../common/types";
+import { formatTime } from "../format-time";
+import { watchUntil } from "../utils";
+import { cmtRepCateId, cmtRepId } from "../constants";
 import config from "~/config";
 import { translate } from "~/utils/nuxt/i18n";
 

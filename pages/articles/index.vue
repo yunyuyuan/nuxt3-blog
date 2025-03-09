@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ArticleItem } from "~/utils/common/types";
 import { useListPage } from "~/utils/nuxt/public/list";
-import { Visitors, Words } from "~/utils/nuxt/components";
+import { Visitors, Words } from "~/utils/nuxt/public/components";
 import { formatTime } from "~/utils/nuxt/format-time";
 import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
 

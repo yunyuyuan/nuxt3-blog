@@ -2,7 +2,7 @@
 import { Link } from "lucide-vue-next";
 import type { KnowledgeItem } from "~/utils/common/types";
 import { useContentPage } from "~/utils/nuxt/public/detail";
-import { Visitors, Comments, WroteDate } from "~/utils/nuxt/components";
+import { Visitors, Comments, WroteDate } from "~/utils/nuxt/public/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 

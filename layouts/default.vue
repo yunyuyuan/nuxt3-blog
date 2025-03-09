@@ -94,12 +94,15 @@ const inputPwd = ref(encryptor.usePasswd.value);
           >
             <Languages />
             <common-dropdown v-model:show="showI18n">
-              <div :class="$style.i18nSelect">
+              <div>
                 <client-only>
                   <div
                     v-for="locale of i18nLocales"
                     :key="locale.code"
-                    :class="{ active: i18nCode === locale.code }"
+                    :class="twMerge(
+                      $style.i18nSelect,
+                      i18nCode === locale.code && $style.i18nSelectActive
+                    )"
                     @click="setLocale(locale.code)"
                   >
                     {{ locale.name }}
@@ -274,13 +277,10 @@ const inputPwd = ref(encryptor.usePasswd.value);
 }
 
 .i18nSelect{
-  div {
-    @apply rounded-lg cursor-pointer px-4 py-2 text-sm text-dark-600 dark:text-dark-300 hover:bg-primary-100 dark:hover:bg-primary-900 transition;
-
-    &:global(.active) {
-      @apply text-primary-700 dark:text-primary-500;
-    }
-  }
+  @apply rounded-lg cursor-pointer px-4 py-2 text-sm text-dark-600 dark:text-dark-300 hover:bg-primary-100 dark:hover:bg-primary-900 transition;
+}
+.i18nSelectActive {
+  @apply text-primary-700 dark:text-primary-500;
 }
 
 .themeMode {

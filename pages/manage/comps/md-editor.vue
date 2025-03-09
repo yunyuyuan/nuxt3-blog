@@ -234,7 +234,7 @@ initViewer(markdownRef);
         ref="resizeRef"
         :class="twMerge(
           $style.resize,
-          currentView !== 'both' && 'hidden'
+          currentView !== 'both' && '!hidden'
         )"
         @touchstart="startResize"
         @mousedown.left="startResize"

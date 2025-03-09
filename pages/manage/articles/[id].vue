@@ -75,8 +75,10 @@ const processContent = (md: string, item: ArticleItem) => {
         <div
           ref="tagParentRef"
           :title="item.encrypt ? $t('tags-not-allowed') : undefined"
-          class="relative flex"
-          :class="{ disabled: disabled || item.encrypt }"
+          :class="twMerge(
+            'relative flex',
+            (disabled || item.encrypt) && ''
+          )"
         >
           <input
             v-model="inputTags"
@@ -85,7 +87,7 @@ const processContent = (md: string, item: ArticleItem) => {
             :disabled="disabled || item.encrypt"
             @focusin="showTagSelect = true"
           >
-          <div class="pointer-events-none absolute flex size-full items-center gap-1 overflow-auto break-keep px-3 peer-focus:opacity-0">
+          <div class="pointer-events-none absolute flex size-full items-center gap-1 overflow-hidden break-keep px-3 peer-focus:opacity-0">
             <span
               v-if="!inputTagsList.length || item.encrypt"
               class="text-dark-400 dark:text-dark-700"

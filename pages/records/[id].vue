@@ -3,7 +3,7 @@ import type { RecordItem } from "~/utils/common/types";
 import { formatTime } from "~/utils/nuxt/format-time";
 import { translate } from "~/utils/nuxt/i18n";
 import { useContentPage } from "~/utils/nuxt/public/detail";
-import { Visitors, Comments, WroteDate } from "~/utils/nuxt/components";
+import { Visitors, Comments, WroteDate } from "~/utils/nuxt/public/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 

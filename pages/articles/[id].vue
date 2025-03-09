@@ -2,7 +2,7 @@
 import { addScrollListener, rmScrollListener } from "~/utils/common/scroll-event";
 import type { ArticleItem } from "~/utils/common/types";
 import { useContentPage } from "~/utils/nuxt/public/detail";
-import { Comments, Visitors, WroteDate } from "~/utils/nuxt/components";
+import { Comments, Visitors, WroteDate } from "~/utils/nuxt/public/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
@@ -123,7 +123,7 @@ initViewer(root);
           class="mt-8"
         >
           <div class="rounded-lg border border-dark-300 p-4 dark:border-dark-600">
-            <h3 class="mb-4 text-lg font-medium text-dark-800 dark:text-dark-200">
+            <h3 class="mb-4 text-lg font-medium text-dark-700 dark:text-dark-300">
               {{ $t('relativeArticles') }}
             </h3>
             <div class="max-h-40 space-y-4 overflow-auto">
@@ -133,7 +133,7 @@ initViewer(root);
                 :to="`/articles/${i.id}`"
                 class="block rounded-md bg-dark-50 p-3 transition hover:bg-dark-100 dark:bg-dark-700 dark:hover:bg-dark-600"
               >
-                <h4 class="text-sm font-medium text-dark-900 dark:text-white">{{ i.title }}</h4>
+                <h4 class="text-sm font-medium text-dark-700 dark:text-dark-300">{{ i.title }}</h4>
               </nuxt-link>
             </div>
           </div>
