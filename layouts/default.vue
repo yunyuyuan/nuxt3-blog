@@ -1,6 +1,7 @@
 <script setup lang="tsx">
 import { Languages, Sun, MoonStar, Rocket, Menu, Rss, Key } from "lucide-vue-next";
 import Headroom from "headroom.js";
+import tailwindConfig from "#tailwind-config";
 import NuxtLink from "~/node_modules/nuxt/dist/app/components/nuxt-link";
 import config from "~/config";
 import { i18nLocales, type I18nCode } from "~/utils/common/locales";
@@ -27,6 +28,13 @@ const setLocale = (locale: I18nCode) => {
   showI18n.value = false;
 };
 
+const toggleTheme = () => {
+  themeAnimate.value = true;
+  nextTick(() => {
+    toggleThemeMode();
+  });
+};
+
 const rocketUrl = computed(() => {
   return calcRocketUrl();
 });
@@ -35,12 +43,9 @@ let headroom: undefined | Headroom;
 const headerRef = ref();
 onMounted(async () => {
   footerDomain.value = window.location.hostname;
-  setTimeout(() => {
-    themeAnimate.value = true;
-  }, 500);
 
   headroom = new Headroom(headerRef.value, {
-    offset: 48
+    offset: parseInt(tailwindConfig.theme.spacing.header.replace("px", ""))
   });
   headroom.init();
 });
@@ -110,7 +115,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
               themeMode === 'dark' && $style.modeDark
             )"
             :title="$t('switch-mode', [$t(`mode-${themeMode === 'light' ? 'dark' : 'light'}`)])"
-            @click="toggleThemeMode"
+            @click="toggleTheme"
           >
             <span :class="themeAnimate && $style.themeAnimateToggle">
               <MoonStar />

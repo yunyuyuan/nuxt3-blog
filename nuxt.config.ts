@@ -206,6 +206,7 @@ export default defineNuxtConfig({
     }
   },
   tailwindcss: {
+    exposeConfig: true,
     cssPath: "~/assets/style/tailwind.css"
   }
 });

@@ -5,7 +5,7 @@ import { getLocalStorage } from "~/utils/nuxt/localStorage";
 export default defineNuxtPlugin((app) => {
   initScrollTrigger();
 
-  app.hook("page:finish", () => {
+  app.hook("app:suspense:resolve", () => {
     useThemeMode().themeMode.value = getLocalStorage(ThemeModeKey) || "light";
     useI18nCode().changeI18n(getLocalStorage(I18nStoreKey) || useI18nCode().i18nCode.value);
   });
