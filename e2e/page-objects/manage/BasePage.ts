@@ -63,6 +63,11 @@ export class ManageBasePage {
     return element.isDisabled();
   }
 
+  async getInputText(testId: string) {
+    const element = await this.getByTestId(testId);
+    return element.inputValue();
+  }
+
   async getElementText(testId: string) {
     const element = await this.getByTestId(testId);
     return element.innerText();

@@ -11,7 +11,8 @@ declare module "ls:*github" {
 }
 
 declare const __NB_MONGODB_ENABLED__: string;
-declare const __NB_COMMENTING_ENABLED__: string;
+declare const __NB_CMTREPOID__: string;
+declare const __NB_CMTREPOCATEID__: string;
 declare const __NB_BUILD_TIME__: string;
 declare const __NB_CURRENT_GIT_SHA__: string;
-declare const __NB_VITESTING__: boolean;
+declare const __NB_BUILDTIME_VITESTING__: boolean;

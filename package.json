@@ -3,7 +3,9 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "dev-for-test": "cross-env NUXT_PORT=13000 VITESTING=\"true\" nuxt dev",
+    "build-for-test": "cross-env VITESTING=\"true\" nuxt build",
+    "dev-for-test": "cross-env PORT=13000 VITESTING=\"true\" nuxt dev",
+    "prod-for-test": "cross-env PORT=13000 node .output/server/index.mjs",
     "generate": "nuxt generate",
     "local:change-pwd": "gulp change-passwd",
     "local:generate-img-map": "gulp generate-image-map",
@@ -11,6 +13,7 @@
     "local:substitute-img": "gulp substitute-image",
     "test:unit": "vitest run --exclude ./e2e",
     "test:e2e": "vitest run --dir ./e2e",
+    "test:prod-and-e2e": "start-server-and-test prod-for-test http://localhost:13000 test:e2e",
     "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e",
     "eslint": "eslint --fix .",
     "preview": "nuxt preview",

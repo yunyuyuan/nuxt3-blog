@@ -6,8 +6,8 @@ import { isAuthor } from "~/utils/nuxt/manage/github";
 import { notify } from "~/utils/nuxt/notify";
 
 export default defineNuxtPlugin((app) => {
-  if (isDev) {
-    app.hook("page:finish", () => {
+  if (isDev || __NB_BUILDTIME_VITESTING__) {
+    app.hook("app:suspense:resolve", () => {
       useGithubToken().value = "LocalServer";
       useRemoteLatestSha().value = __NB_CURRENT_GIT_SHA__;
       useIsAuthor().value = true;

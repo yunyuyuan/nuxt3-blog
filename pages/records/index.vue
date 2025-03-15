@@ -65,12 +65,12 @@ onMounted(() => {
           {{ currentYear }}
           <span class="ml-1.5 rounded-full bg-dark-200 px-2 py-0.5 text-xs text-dark-700 dark:bg-dark-600 dark:text-dark-200">{{ currentItems?.length }}</span>
         </h2>
-        <div class="flex flex-wrap items-center gap-8 max-md:grid max-md:grid-cols-1">
+        <div class="grid items-center justify-around gap-8 max-md:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           <div
             v-for="item in currentItems"
             v-show="item._show"
             :key="item.id"
-            class="group"
+            class="group flex justify-center"
             :title="formatTime(item.time)"
           >
             <nuxt-link

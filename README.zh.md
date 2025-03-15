@@ -107,6 +107,8 @@
   "build": "nuxt build", // 编译为ssr
   "dev": "nuxt dev", //开发
   "dev-for-test": "cross-env NUXT_PORT=13000 VITESTING=\"true\" nuxt dev", //用于e2e测试
+  "build-for-test": "cross-env VITESTING=\"true\" nuxt build", //用于e2e测试
+  "prod-for-test": "cross-env PORT=13000 node .output/server/index.mjs", //用于e2e测试
   "generate": "nuxt generate", // 弃用了
   "local:change-pwd": "gulp change-passwd", // 全局修改密码
   "local:generate-img-map": "gulp generate-image-map", // 收集全站图片，输出到img.json
@@ -114,7 +116,8 @@
   "local:substitute-img": "gulp substitute-image", // 读取img.json，替换为新的图片（运行此脚本前，请先修改img.json里的newUrl为需要替换的url）
   "test:unit": "vitest run --exclude ./e2e", // unit测试
   "test:e2e": "vitest run --dir ./e2e", // e2e测试
-  "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e", // 运行测试服务并开始e2e测试
+  "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e", // 运行测试dev并开始e2e测试
+  "test:prod-and-e2e": "start-server-and-test prod-for-test http://localhost:13000 test:e2e", // 运行测试prod并开始e2e测试
   "eslint": "eslint --fix .", //执行eslint
   "preview": "nuxt preview", // 预览编译后的网站
   "prepare": "husky" // 安装husky

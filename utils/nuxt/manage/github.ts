@@ -78,7 +78,7 @@ export async function createCommit(
   deletions: { path: string }[] = []
 ): Promise<boolean> {
   const correctSha = useRemoteLatestSha().value;
-  if (__NB_VITESTING__) {
+  if (__NB_BUILDTIME_VITESTING__) {
     await post(JSON.stringify({ additions, deletions }));
     return true;
   }

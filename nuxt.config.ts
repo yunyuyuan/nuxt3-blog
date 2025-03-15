@@ -10,6 +10,7 @@ import { ThemeModeKey } from "./utils/common/constants";
 import { HeaderTabs, type CommonItem } from "./utils/common/types";
 
 const isDev = process.env.NODE_ENV === "development";
+const isTest = process.env.VITESTING === "true";
 
 // stickers
 const stickers: Record<string, any> = {};
@@ -19,20 +20,23 @@ fs.readdirSync("./public/sticker").forEach((dir) => {
 
 const scripts = [];
 scripts.push(`(function(){const e=localStorage.getItem("${ThemeModeKey}")||"light";document.documentElement.classList.add(e)})();`);
-const cfAnalyzeId = config.CloudflareAnalyze || process.env.CloudflareAnalyze;
-const msAnalyzeId = config.MSClarityId || process.env.MSClarityId;
-if (cfAnalyzeId && !isDev) {
-  scripts.push({
-    "src": "https://static.cloudflareinsights.com/beacon.min.js",
-    "async": false,
-    "defer": true,
-    "data-cf-beacon": `{"token": "${cfAnalyzeId}"}`
-  });
-}
-if (msAnalyzeId && !isDev) {
-  scripts.push({
-    children: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${msAnalyzeId}");`
-  });
+
+if (!isDev) {
+  const cfAnalyzeId = config.CloudflareAnalyze || process.env.CloudflareAnalyze;
+  const msAnalyzeId = config.MSClarityId || process.env.MSClarityId;
+  if (cfAnalyzeId) {
+    scripts.push({
+      "src": "https://static.cloudflareinsights.com/beacon.min.js",
+      "async": false,
+      "defer": true,
+      "data-cf-beacon": `{"token": "${cfAnalyzeId}"}`
+    });
+  }
+  if (msAnalyzeId) {
+    scripts.push({
+      children: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${msAnalyzeId}");`
+    });
+  }
 }
 
 let githubBranch = "main";
@@ -112,12 +116,15 @@ export default defineNuxtConfig({
       routes: (() => {
         const routes: string[] = [];
         HeaderTabs.forEach(({ url }) => {
-          const json = JSON.parse(fs.readFileSync(`./public/rebuild/json${url}.json`).toString()) as CommonItem[];
-          json.forEach((item) => {
-            // if (!item.encrypt) {
-            routes.push(`${url}/${item.id}`);
-            // }
-          });
+          const path = `./public${isTest ? "/e2e" : ""}/rebuild/json${url}.json`;
+          if (fs.existsSync(path)) {
+            const json = JSON.parse(fs.readFileSync(path).toString()) as CommonItem[];
+            json.forEach((item) => {
+              // if (!item.encrypt) {
+              routes.push(`${url}/${item.id}`);
+              // }
+            });
+          }
         });
         return routes;
       })(),
@@ -139,10 +146,11 @@ export default defineNuxtConfig({
     plugins: isDev ? allPlugins : buildPlugins,
     define: {
       __NB_MONGODB_ENABLED__: !!import.meta.env.MONGODB_URI || !!import.meta.env.MONGODB_USER,
-      __NB_COMMENTING_ENABLED__: !!(config.CommentRepoId || import.meta.env.CommentRepoId) && !!(config.CommentDiscussionCategoryId || import.meta.env.CommentDiscussionCategoryId),
+      __NB_CMTREPOID__: JSON.stringify(config.CommentRepoId || import.meta.env.CommentRepoId),
+      __NB_CMTREPOCATEID__: JSON.stringify(config.CommentDiscussionCategoryId || import.meta.env.CommentDiscussionCategoryId),
       __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString()),
       __NB_CURRENT_GIT_SHA__: JSON.stringify(execSync("git rev-parse HEAD").toString().trim()),
-      __NB_VITESTING__: process.env.VITESTING === "true"
+      __NB_BUILDTIME_VITESTING__: isTest
     },
     css: {
       modules: {
@@ -187,7 +195,9 @@ export default defineNuxtConfig({
     },
     "nitro:build:public-assets"(nitro) {
       generateSiteMap(nitro.options.output.publicDir);
-      fs.rmSync(path.join(nitro.options.output.publicDir, "e2e"), { recursive: true });
+      if (!isTest) {
+        fs.rmSync(path.join(nitro.options.output.publicDir, "e2e"), { recursive: true });
+      }
     }
   },
 

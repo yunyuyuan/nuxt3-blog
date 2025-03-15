@@ -2,7 +2,6 @@ import { Calendar, Eye, FileText } from "lucide-vue-next";
 import type { CommonItem } from "../../common/types";
 import { formatTime } from "../format-time";
 import { watchUntil } from "../utils";
-import { cmtRepCateId, cmtRepId } from "../constants";
 import config from "~/config";
 import { translate } from "~/utils/nuxt/i18n";
 
@@ -43,12 +42,14 @@ export function WroteDate(props: { item: CommonItem }) {
   );
 }
 
+
 export const Comments = defineComponent({
   name: 'Comments',
   setup() {
-    if (!__NB_COMMENTING_ENABLED__) return () => null;
+    if (!__NB_CMTREPOID__ || ! __NB_CMTREPOCATEID__) return () => null;
 
     const { themeMode } = useThemeMode();
+    const { i18nCode } = useI18nCode();
     const giscusLoaded = ref(false);
     const containerRef = ref<HTMLElement | null>(null);
 
@@ -83,16 +84,16 @@ export const Comments = defineComponent({
       const script = document.createElement("script");
       script.src = "https://giscus.app/client.js";
       script.setAttribute("data-repo", `${config.githubName}/${config.githubRepo}`);
-      script.setAttribute("data-repo-id", cmtRepId!);
+      script.setAttribute("data-repo-id", __NB_CMTREPOID__);
       script.setAttribute("data-category", "Announcements");
-      script.setAttribute("data-category-id", cmtRepCateId!);
+      script.setAttribute("data-category-id", __NB_CMTREPOCATEID__);
       script.setAttribute("data-mapping", "pathname");
       script.setAttribute("data-strict", "0");
       script.setAttribute("data-reactions-enabled", "1");
       script.setAttribute("data-emit-metadata", "0");
       script.setAttribute("data-input-position", "top");
       script.setAttribute("data-theme", getTheme());
-      script.setAttribute("data-lang", getLang(useI18nCode().i18nCode.value));
+      script.setAttribute("data-lang", getLang(i18nCode.value));
       script.setAttribute("crossorigin", "anonymous");
       script.setAttribute("async", "");
       containerRef.value.appendChild(script);
@@ -107,7 +108,7 @@ export const Comments = defineComponent({
       );
     });
 
-    watch(useI18nCode().i18nCode, (locale) => {
+    watch(i18nCode, (locale) => {
       if (giscusLoaded.value) {
         updateGiscusConfig({
           lang: getLang(locale)

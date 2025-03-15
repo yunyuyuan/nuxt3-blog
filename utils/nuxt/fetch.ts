@@ -3,7 +3,7 @@ import type { CommonItem, HeaderTabUrl } from "~/utils/common/types";
 import { inBrowser, isDev, isPrerender } from "~/utils/nuxt/constants";
 
 const magicFetch = async<T = any>(_path: string, transform: (_: string) => T): Promise<T | undefined> => {
-  const path = __NB_VITESTING__ ? `e2e/${_path}` : _path;
+  const path = __NB_BUILDTIME_VITESTING__ ? `e2e/${_path}` : _path;
   if (inBrowser) {
     if (!window.NBCache) {
       window.NBCache = {};

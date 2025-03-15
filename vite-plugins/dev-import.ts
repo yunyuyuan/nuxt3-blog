@@ -7,7 +7,7 @@ export default {
   resolveId(source, importer, options) {
     if (source.startsWith(LOCAL_SERVER)) {
       const realPath = source.slice(LOCAL_SERVER.length);
-      const id = (process.env.NODE_ENV === "development" && process.env.VITESTING !== "true") ? realPath.replace(/([^/]*)$/, "__$1") : realPath;
+      const id = process.env.NODE_ENV === "development" ? realPath.replace(/([^/]*)$/, "__$1") : realPath;
       return this.resolve(id, importer, options).then(resolved => resolved || { id });
     }
     return null;

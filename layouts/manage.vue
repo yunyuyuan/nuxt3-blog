@@ -12,6 +12,8 @@ import { notify } from "~/utils/nuxt/notify";
 import { calcRocketUrl, watchUntil } from "~/utils/nuxt/utils";
 import { isDev } from "~/utils/nuxt/constants";
 
+const inputTokenDisabled = isDev || __NB_BUILDTIME_VITESTING__;
+
 const pageLoading = useLoading();
 
 const githubToken = useGithubToken();
@@ -234,7 +236,7 @@ onMounted(() => {
           v-model="inputToken"
           :placeholder="$t('please-input')"
           data-focus
-          :disabled="isDev"
+          :disabled="inputTokenDisabled"
         >
       </label>
       <label class="mt-4 flex flex-col">

@@ -187,6 +187,7 @@ const doDelete = async () => {
           size="small"
           :disabled="!hasDraft"
           :icon="FolderOpen"
+          data-testid="apply-draft-btn"
           @click="applyDraft"
         >
           {{ $t('load-draft') }}
@@ -194,6 +195,7 @@ const doDelete = async () => {
         <CommonButton
           size="small"
           :icon="Save"
+          data-testid="save-draft-btn"
           @click="saveDraft"
         >
           {{ $t('save-draft') }}
@@ -202,6 +204,7 @@ const doDelete = async () => {
           size="small"
           :disabled="!hasDraft"
           :icon="Trash2"
+          data-testid="delete-draft-btn"
           @click="deleteDraft"
         >
           {{ $t('delete-draft') }}

@@ -106,6 +106,8 @@ English Readme | [中文说明](/README.zh.md)
   "build": "nuxt build", // Compile for SSR
   "dev": "nuxt dev", // Development
   "dev-for-test": "cross-env NUXT_PORT=13000 VITESTING=\"true\" nuxt dev", // For E2E testing
+  "build-for-test": "cross-env VITESTING=\"true\" nuxt build", // For E2E testing
+  "prod-for-test": "cross-env PORT=13000 node .output/server/index.mjs", // For E2E testing
   "generate": "nuxt generate", // Deprecated
   "local:change-pwd": "gulp change-passwd", // Global password modification
   "local:generate-img-map": "gulp generate-image-map", // Collect all site images, output to img.json
@@ -114,6 +116,7 @@ English Readme | [中文说明](/README.zh.md)
   "test:unit": "vitest run --exclude ./e2e", // Unit testing
   "test:e2e": "vitest run --dir ./e2e", // E2E testing
   "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e", // Run test service and start E2E testing
+  "test:prod-and-e2e": "start-server-and-test prod-for-test http://localhost:13000 test:e2e", // Run test prod and start E2E testing
   "eslint": "eslint --fix .", // Run eslint
   "preview": "nuxt preview", // Preview compiled website
   "prepare": "husky" // Install husky
