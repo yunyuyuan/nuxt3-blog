@@ -185,14 +185,6 @@ export default defineNuxtConfig({
         };
       }
     },
-    "nitro:build:before"(nitro) {
-      const apiPath = path.join(__dirname, "utils", "api");
-      if (["node-server"].includes(nitro.options.preset) && !!import.meta.env.MONGODB_URI) {
-        for (const file of fs.readdirSync(path.join(apiPath, "db-tcp"))) {
-          fs.renameSync(path.join(apiPath, "db-tcp", file), path.join(apiPath, "db", file));
-        }
-      }
-    },
     "nitro:build:public-assets"(nitro) {
       generateSiteMap(nitro.options.output.publicDir);
       if (!isTest) {
