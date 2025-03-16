@@ -254,6 +254,7 @@ onUnmounted(() => {
             :loading="uploading"
             :disabled="!img || !smmsToken"
             class="mt-2 self-center"
+            theme="primary"
             @click="doUpload"
           >
             {{ $t('upload') }}
