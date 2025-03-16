@@ -1,14 +1,21 @@
+import axios from "axios";
 import type { HeaderTabUrl } from "../../common/types";
-import { cloudflareClient } from "./db-client";
 import config from "~/config";
 
 const request = async (sql: string, params: string[]) => {
-  const databaseRawResponse = await cloudflareClient.d1.database.raw(process.env.CLOUDFLARE_D1_DATABASE_ID!, {
-    account_id: process.env.CLOUDFLARE_D1_ACCOUNT_ID!,
-    sql,
-    params
-  });
-  const result = databaseRawResponse.result[0];
+  const res = await axios.post(`https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_D1_ACCOUNT_ID!}/d1/database/${process.env.CLOUDFLARE_D1_DATABASE_ID}/raw`,
+    { sql, params },
+    {
+      headers: {
+        "Authorization": `Bearer ${process.env.CLOUDFLARE_D1_TOKEN!}`,
+        "Content-Type": "application/json"
+      }
+    }
+  );
+  if (res.status !== 200) {
+    throw res.statusText;
+  }
+  const result = res.data.result[0];
   if (!result.success) {
     throw "sql error";
   }
