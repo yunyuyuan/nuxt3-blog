@@ -190,11 +190,11 @@ onMounted(() => {
             <button
               :class="twMerge(
                 $style.menuAction,
-                (useRemoteLatestSha().value && !$sameSha) && '!text-orange-400',
+                !$sameSha?.value && '!text-orange-400',
                 !githubToken && '!text-red-400',
                 allPassed && '!text-green-400'
               )"
-              :title="(!useRemoteLatestSha().value || $sameSha) ? (allPassed ? $t('all-verified') : $t('token-and-passwd')) : $t('commit-id-not-correct')"
+              :title="$sameSha?.value ? (allPassed ? $t('all-verified') : $t('token-and-passwd')) : $t('commit-id-not-correct')"
               data-testid="show-token-password-btn"
               @click="showModal = true"
             >

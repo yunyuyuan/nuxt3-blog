@@ -147,6 +147,6 @@ const close = () => {
 }
 
 .inner {
-  @apply max-w-[98vw] relative mt-32 max-h-[calc(100vh_-_160px)] [@media(max-height:600px)]:mt-12 [@media(max-height:600px)]:max-h-[calc(100vh_-_80px)] z-[2] bg-white dark:bg-dark-800 rounded-2xl mx-auto px-8 py-6 max-md:p-4 shadow-md flex flex-col items-stretch transition;
+  @apply max-w-[98vw] relative mt-32 max-md:mt-8 max-h-[calc(100vh_-_160px)] [@media(max-height:600px)]:mt-8 [@media(max-height:600px)]:max-h-[calc(100vh_-_80px)] z-[2] bg-white dark:bg-dark-800 rounded-2xl mx-auto px-8 py-6 max-md:p-4 shadow-md flex flex-col items-stretch transition;
 }
 </style>
