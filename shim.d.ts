@@ -10,7 +10,7 @@ declare module "ls:*github" {
   export const isAuthor: typeof import("./utils/nuxt/manage/github")["isAuthor"];
 }
 
-declare const __NB_MONGODB_ENABLED__: string;
+declare const __NB_DATABASE_ENABLED__: string;
 declare const __NB_CMTREPOID__: string;
 declare const __NB_CMTREPOCATEID__: string;
 declare const __NB_BUILD_TIME__: string;

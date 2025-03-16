@@ -29,7 +29,7 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
         query: {
           id: decryptedItem.value!.id,
           type: targetTab.url,
-          inc: config.MongoDb.visitFromOwner || !githubToken.value
+          inc: config.database.visitFromOwner || !githubToken.value
         },
         callback: (data) => {
           decryptedItem.value!._visitors = data;

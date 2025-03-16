@@ -21,7 +21,7 @@ export async function useListPage<T extends CommonItem> () {
     query: { type: targetTab.url },
     callback: (data) => {
       decryptedList.value.forEach((item) => {
-        item._visitors = data.find(i => i.nid === item.id)?.nvisitors || 0;
+        item._visitors = data.find(i => i[0] === item.id)?.[2] || 0;
       });
     }
   });
