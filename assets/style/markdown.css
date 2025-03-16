@@ -1,7 +1,7 @@
 @import "./code-style.css";
 
 .--markdown {
-  @apply block break-words leading-[1.8] font-sans text-base font-normal text-dark-900 dark:text-dark-200;
+  @apply block break-words leading-[1.8] text-base font-normal text-dark-900 dark:text-dark-200;
 
   & h1, & h2, & h3, & h4, & h5, & h6 {
     @apply cursor-pointer block relative my-3;
@@ -136,7 +136,7 @@
     @apply font-mono font-medium tracking-normal;
 
     &:not(.hljs) {
-      @apply rounded border border-black/10 dark:border-dark-500/40 text-xs font-normal mx-1 py-1 px-2;
+      @apply rounded border border-black/10 dark:border-dark-500/40 text-sm font-normal mx-1 py-1 px-2;
     }
   }
 
@@ -172,11 +172,7 @@
     }
 
     & > code.hljs {
-      @apply block break-keep py-2 px-3 rounded-lg max-h-[90vh] text-sm font-normal overflow-auto;
-
-      @media (max-width: 768px) {
-        @apply py-2 px-3 text-xs;
-      }
+      @apply block break-keep p-3 rounded-lg max-h-[85vh] text-sm font-normal overflow-auto;
     }
 
     &.theme-dark {

@@ -1,8 +1,8 @@
-@import "./fira-code.css";
+/* @import "./fira-code.css"; */
 @import "./markdown.css";
 
 html {
-  @apply scroll-smooth;
+  @apply scroll-smooth font-[unset];
 }
 
 html,
