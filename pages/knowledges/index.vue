@@ -32,7 +32,7 @@ const tabLengthMap = computed(() => {
 </script>
 
 <template>
-  <main class="container mx-auto grow px-4 py-8 max-md:px-2 max-md:py-4 lg:px-8">
+  <main class="container mx-auto grow px-4 py-8 max-md:px-2 max-md:py-4">
     <div class="mx-auto max-w-5xl">
       <div class="mb-8 border-b border-dark-200 dark:border-dark-700">
         <nav

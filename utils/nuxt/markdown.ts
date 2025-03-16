@@ -446,7 +446,7 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
       const ClipboardJS = (await import("clipboard")).default;
       const clipboard = new ClipboardJS(copyBtn, {
         target: function (trigger: HTMLElement) {
-          return trigger.parentElement!.parentElement!.parentElement!.querySelector("code")!;
+          return trigger.parentElement!.querySelector("code")!;
         }
       }).on("success", (e) => {
         e.clearSelection();

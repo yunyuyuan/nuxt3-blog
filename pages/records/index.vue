@@ -40,7 +40,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="container mx-auto grow px-4 py-8 max-md:px-4 lg:px-8">
+  <main class="container mx-auto grow px-4 py-8 max-md:px-4">
     <div
       v-if="years.length"
       class="mx-auto max-w-7xl"

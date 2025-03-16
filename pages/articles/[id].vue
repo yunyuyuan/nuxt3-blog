@@ -60,7 +60,7 @@ initViewer(root);
 <template>
   <div
     ref="root"
-    class="container mx-auto px-4 py-8 max-md:px-1 max-md:py-2 lg:px-8"
+    class="container mx-auto px-4 py-8 max-md:px-1 max-md:py-2"
   >
     <div class="flex w-full flex-col justify-center gap-6 lg:flex-row">
       <aside
@@ -89,7 +89,7 @@ initViewer(root);
         </div>
       </aside>
 
-      <main class="order-1 flex-1 rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-2 lg:order-2">
+      <main class="order-1 flex-1 overflow-hidden rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-2 lg:order-2">
         <h1 class="mb-4 text-2xl font-medium text-dark-900 dark:text-white">
           {{ item.title }}
         </h1>

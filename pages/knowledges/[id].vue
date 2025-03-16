@@ -16,7 +16,7 @@ initViewer(root);
 <template>
   <main
     ref="root"
-    class="container mx-auto grow px-4 py-8 max-md:px-1 max-md:py-2 lg:px-8"
+    class="container mx-auto grow px-4 py-8 max-md:px-1 max-md:py-2"
   >
     <article class="mx-auto max-w-4xl overflow-hidden rounded-xl bg-white shadow-sm dark:bg-dark-800">
       <div class="relative mt-4 flex h-64 w-full justify-center overflow-hidden">
