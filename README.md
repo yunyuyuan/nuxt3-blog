@@ -44,8 +44,7 @@ English Readme | [中文说明](/README.zh.md)
 
 #### Additional Steps
 * To use the page view statistics feature, see https://github.com/yunyuyuan/nuxt3-blog/wiki/2.4-%E6%B5%8F%E8%A7%88%E9%87%8F%E7%BB%9F%E8%AE%A1
-* To use the comment feature, install [giscus](https://github.com/apps/giscus) for GitHub, enable [discussions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository), and fill in `CommentRepoId` and `CommentDiscussionCategoryId` in `config.ts`  
-  Refer to giscus.app, [enter](https://giscus.app/en) **your repository** address, then copy `data-repo-id` and `data-category-id`, which correspond to `CommentRepoId` and `CommentDiscussionCategoryId` respectively
+* To use the comment feature, see https://github.com/yunyuyuan/nuxt3-blog/wiki/2.3-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F
 
 # To-Do List
 #### Features

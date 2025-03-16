@@ -12,8 +12,8 @@ export default {
   SEO_keywords: "yunyuyuan,yunyuyuan's blog,云与原,云与原的博客", // keywords meta header
   MSClarityId: "", // Microsoft的Clarity统计，https://clarity.microsoft.com/
   CloudflareAnalyze: "", // cloudflare的统计，https://developers.cloudflare.com/analytics/web-analytics
-  CommentRepoId: "", // https://giscus.app/zh-CN
-  CommentDiscussionCategoryId: "", // https://giscus.app/zh-CN
+  CommentRepoId: "", // 评论系统，参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.3-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F
+  CommentDiscussionCategoryId: "", // 评论系统
 
   database: { // 参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.4-%E6%B5%8F%E8%A7%88%E9%87%8F%E7%BB%9F%E8%AE%A1
     initialVisitors: 1, // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
