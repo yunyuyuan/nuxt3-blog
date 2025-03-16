@@ -43,7 +43,7 @@ English Readme | [中文说明](/README.zh.md)
 6. Enjoy creating content.
 
 #### Additional Steps
-* To use the page view statistics feature, you need to [register for a MongoDB account](https://www.mongodb.com/cloud/atlas/register), create a database named `nuxt3-blog`, and set up MongoDB environment variables (refer to `env.sample`)
+* To use the page view statistics feature, see https://github.com/yunyuyuan/nuxt3-blog/wiki/2.4-%E6%B5%8F%E8%A7%88%E9%87%8F%E7%BB%9F%E8%AE%A1
 * To use the comment feature, install [giscus](https://github.com/apps/giscus) for GitHub, enable [discussions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository), and fill in `CommentRepoId` and `CommentDiscussionCategoryId` in `config.ts`  
   Refer to giscus.app, [enter](https://giscus.app/en) **your repository** address, then copy `data-repo-id` and `data-category-id`, which correspond to `CommentRepoId` and `CommentDiscussionCategoryId` respectively
 

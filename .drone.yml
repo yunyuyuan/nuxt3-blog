@@ -22,8 +22,12 @@ steps:
       - name: cache
         path: /drone/src/node_modules
     environment:
-      MONGODB_URI:
-        from_secret: MONGODB_URI
+      CLOUDFLARE_D1_TOKEN:
+        from_secret: CLOUDFLARE_D1_TOKEN
+      CLOUDFLARE_D1_ACCOUNT_ID:
+        from_secret: CLOUDFLARE_D1_ACCOUNT_ID
+      CLOUDFLARE_D1_DATABASE_ID:
+        from_secret: CLOUDFLARE_D1_DATABASE_ID
       CommentRepoId:
         from_secret: CommentRepoId
       CommentDiscussionCategoryId:
@@ -43,8 +47,12 @@ steps:
     environment:
       APP_NAME: nuxt3-blog-app
       IMAGE_NAME: nuxt3-blog:latest
-      MONGODB_URI:
-        from_secret: MONGODB_URI
+      CLOUDFLARE_D1_TOKEN:
+        from_secret: CLOUDFLARE_D1_TOKEN
+      CLOUDFLARE_D1_ACCOUNT_ID:
+        from_secret: CLOUDFLARE_D1_ACCOUNT_ID
+      CLOUDFLARE_D1_DATABASE_ID:
+        from_secret: CLOUDFLARE_D1_DATABASE_ID
     commands:
       - docker ps -q --filter "name=$APP_NAME" | xargs -r docker stop
       - docker ps -aq --filter "name=$APP_NAME" | xargs -r docker rm
@@ -54,7 +62,9 @@ steps:
         docker run -d
         --name=$APP_NAME
         --restart=always
-        -e MONGODB_URI=$MONGODB_URI
+        -e CLOUDFLARE_D1_TOKEN=$CLOUDFLARE_D1_TOKEN
+        -e CLOUDFLARE_D1_ACCOUNT_ID=$CLOUDFLARE_D1_ACCOUNT_ID
+        -e CLOUDFLARE_D1_DATABASE_ID=$CLOUDFLARE_D1_DATABASE_ID
         -p 127.0.0.1:8451:3000
         $IMAGE_NAME
 

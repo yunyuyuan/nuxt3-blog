@@ -7,7 +7,7 @@ import { translate } from "~/utils/nuxt/i18n";
 
 export function Visitors(props: { visitors?: number }) {
   return (
-    __NB_MONGODB_ENABLED__ && Number(props.visitors) >= 0
+    __NB_DATABASE_ENABLED__ && Number(props.visitors) >= 0
       ? (
           <span class="flex items-center gap-1" title={translate("visit-time", [props.visitors])}>
             <Eye class="size-4" />

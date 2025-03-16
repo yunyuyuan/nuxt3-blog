@@ -15,9 +15,7 @@ export default {
   CommentRepoId: "", // https://giscus.app/zh-CN
   CommentDiscussionCategoryId: "", // https://giscus.app/zh-CN
 
-  MongoDb: {
-    database: "nuxt3-blog",
-    collection: "visitors",
+  database: { // 参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.4-%E6%B5%8F%E8%A7%88%E9%87%8F%E7%BB%9F%E8%AE%A1
     initialVisitors: 1, // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
     visitFromOwner: false // 网站拥有者访问时，是否增加浏览量
   },

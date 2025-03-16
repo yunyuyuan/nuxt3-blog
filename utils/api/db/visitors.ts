@@ -1,45 +1,40 @@
-import config from "../../../config";
 import type { HeaderTabUrl } from "../../common/types";
-import { getCollection } from "./mongodb";
+import { cloudflareClient } from "./db-client";
+import config from "~/config";
 
-type VisitorsDb = {
-  nid: number;
-  ntype: HeaderTabUrl;
-  nvisitors?: number;
-};
-
-const sqlOptions = {
-  projection: { _id: 0, nid: 1, nvisitors: 1 }
+const request = async (sql: string, params: string[]) => {
+  const databaseRawResponse = await cloudflareClient.d1.database.raw(process.env.CLOUDFLARE_D1_DATABASE_ID!, {
+    account_id: process.env.CLOUDFLARE_D1_ACCOUNT_ID!,
+    sql,
+    params
+  });
+  const result = databaseRawResponse.result[0];
+  if (!result.success) {
+    throw "sql error";
+  }
+  return result.results;
 };
 
 export async function getVisitors(type: HeaderTabUrl) {
-  const collection = await getCollection<VisitorsDb>();
-  const query: Partial<VisitorsDb> = {
-    ntype: type
-  };
-  const results = await collection.find(query, sqlOptions);
-  return await results.toArray();
+  const res = await request("SELECT * FROM visitors WHERE ntype = ?;", [type]);
+  return res?.rows;
 }
 
 export async function increaseVisitors({ id, type, inc }: { id: number; type: HeaderTabUrl; inc?: boolean }) {
-  const collection = await getCollection<VisitorsDb>();
-  const preset: VisitorsDb = {
-    nid: id,
-    ntype: type
-  };
-  const incN = inc ? 1 : 0;
-  const result = await collection.findOneAndUpdate(preset, {
-    $inc: {
-      nvisitors: incN
-    }
-  }, sqlOptions);
-  if (result) {
-    return result.nvisitors! + incN;
+  const updateRes = await request(
+    `UPDATE visitors SET nvisitors = ${inc ? "nvisitors + 1" : "nvisitors"} WHERE nid = ? AND ntype = ? RETURNING nvisitors;`,
+    [id.toString(), type]
+  );
+  if (!updateRes) {
+    return null;
+  }
+  if (!updateRes.rows?.length) {
+    const insertRes = await request(
+      "INSERT INTO visitors (nid, ntype, nvisitors) VALUES (?, ?, ?) RETURNING nvisitors;",
+      [id.toString(), type, config.database.initialVisitors.toString()]
+    );
+    return insertRes?.rows?.[0]?.[0];
   } else {
-    await collection.insertOne({
-      ...preset,
-      nvisitors: config.MongoDb.initialVisitors
-    });
-    return config.MongoDb.initialVisitors;
+    return updateRes.rows[0]?.[0];
   }
 }
