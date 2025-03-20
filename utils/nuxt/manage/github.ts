@@ -1,4 +1,5 @@
 import axios from "axios";
+import { encode } from "js-base64";
 import { formatTime } from "../format-time";
 import { translate } from "../i18n";
 import { notify } from "../notify";
@@ -24,7 +25,7 @@ async function post(data: string, token_?: string) {
 }
 
 function encodeB64(str: string) {
-  return btoa(unescape(encodeURIComponent(str)));
+  return encode(str);
 }
 
 /** @description 是否管理员 */
