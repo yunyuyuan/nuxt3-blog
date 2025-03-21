@@ -1,10 +1,8 @@
 import type { NuxtPage } from "@nuxt/test-utils";
+import type { CommitParams } from "../../../utils/common/types";
 
 export class ManageBasePage {
-  protected requestDataRef = ref<{
-    additions: { path: string; content: string }[];
-    deletions: { path: string }[];
-  }>();
+  protected requestDataRef = ref<CommitParams>();
 
   constructor(protected page: NuxtPage) {
     page.route("https://api.github.com/graphql", async (route) => {

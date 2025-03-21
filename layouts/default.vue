@@ -11,7 +11,7 @@ import { calcRocketUrl } from "~/utils/nuxt/utils";
 
 const { i18nCode, changeI18n } = useI18nCode();
 const { themeMode, toggleThemeMode } = useThemeMode();
-const pageLoading = useLoading();
+const loadingState = useLoadingState();
 
 const route = useRoute();
 const mobileMenuShow = ref(false);
@@ -166,9 +166,9 @@ const inputPwd = ref(encryptor.usePasswd.value);
       </div>
     </nav>
     <span
-      v-show="!!pageLoading.loadingState.value"
+      v-show="!!loadingState"
       class="fixed left-0 top-0 z-headerLoading h-0.5 bg-primary-500"
-      :style="{ width: `${pageLoading.loadingState.value}%` }"
+      :style="{ width: `${loadingState}%` }"
     />
     <section class="z-body min-h-[calc(100vh_-_64px)] pt-header">
       <slot />

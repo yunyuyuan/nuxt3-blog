@@ -12,11 +12,11 @@ const init = async () => {
 
 export const useEncryptor = () => {
   /** 密码本体 */
-  const usePasswd = useState<string>("passwd", () => "");
+  const usePasswd = useState("passwd", () => "");
   /** 密码是否正确 */
-  const passwdCorrect = useState<boolean>("passwd-correct", () => false);
+  const passwdCorrect = useState("passwd-correct", () => false);
   /** 同一个错误密码只会提示一次错误信息 */
-  const incorrectPwd = useState<string>("incorrect-passwd", () => "");
+  const incorrectPwd = useState("incorrect-passwd", () => "");
 
   const destroyFns = useUnmount();
 

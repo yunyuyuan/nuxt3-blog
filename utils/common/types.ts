@@ -75,3 +75,11 @@ export const HeaderTabs = [
 export type HeaderTabUrl = typeof HeaderTabs[number]["url"];
 
 export type DecryptFunction = (_s: string) => Promise<string>;
+
+export type CommitParamsAddition = { path: string; content: string };
+export type CommitParamsDeletion = { path: string };
+
+export type CommitParams = {
+  additions?: CommitParamsAddition[];
+  deletions?: CommitParamsDeletion[];
+};

@@ -25,19 +25,20 @@ const emit = defineEmits(["click"]);
       theme === 'danger' && 'bg-red-600 text-white hover:bg-red-700',
       size === 'small' && 'px-2 py-1.5 gap-0.5 text-xs',
       theme === 'default' && 'border-dark-500/30',
-      disabled && 'bg-dark-300 text-dark-600 hover:bg-dark-300 hover:text-dark-600 cursor-not-allowed'
+      disabled && 'bg-dark-300 text-dark-600 hover:bg-dark-300 hover:text-dark-600',
+      (disabled || loading) && 'cursor-not-allowed'
     )"
     :disabled="disabled"
     @click="loading ? null : emit('click', $event)"
   >
     <Loader2
       v-if="loading"
-      :class="twMerge('animate-spin', size === 'small' ? 'size-4' : 'size-5')"
+      :class="twMerge('animate-spin', size === 'small' ? 'size-3.5' : 'size-4.5')"
     />
     <component
       :is="icon"
       v-else-if="Boolean(icon)"
-      :class="twMerge(size === 'small' ? 'size-4' : 'size-5')"
+      :class="twMerge(size === 'small' ? 'size-3.5' : 'size-4.5')"
     />
     <slot />
   </button>

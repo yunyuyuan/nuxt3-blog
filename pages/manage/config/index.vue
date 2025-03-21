@@ -47,10 +47,12 @@ if (inBrowser) {
 const doUpload = async () => {
   toggleProcessing();
   try {
-    await createCommit("Update config.ts", [{
-      path: "config.ts",
-      content: inputText.value
-    }]);
+    await createCommit("Update config.ts", {
+      additions: [{
+        path: "config.ts",
+        content: inputText.value
+      }]
+    });
   } finally {
     toggleProcessing();
   }

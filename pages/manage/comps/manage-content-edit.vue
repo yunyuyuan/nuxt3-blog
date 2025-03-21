@@ -147,16 +147,18 @@ const doUpload = async () => {
   currentOperate.value = "upload";
   toggleProcessing();
   try {
-    const success = await createCommit(`Update ${targetTab.name}-${newItem.id}`, [
-      {
-        path: `public/rebuild/json${targetTab.url}.json`,
-        content: JSON.stringify(editItem(originList, newItem))
-      },
-      {
-        path: `public/rebuild${targetTab.url}/${newItem.id}.md`,
-        content: md
-      }
-    ]);
+    const success = await createCommit(`Update ${targetTab.name}-${newItem.id}`, {
+      additions: [
+        {
+          path: `public/rebuild/json${targetTab.url}.json`,
+          content: JSON.stringify(editItem(originList, newItem))
+        },
+        {
+          path: `public/rebuild${targetTab.url}/${newItem.id}.md`,
+          content: md
+        }
+      ]
+    });
     if (success) {
       useUnsavedContent().value = false;
     }

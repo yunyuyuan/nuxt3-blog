@@ -14,7 +14,7 @@ import { isDev } from "~/utils/nuxt/constants";
 
 const inputTokenDisabled = isDev || __NB_BUILDTIME_VITESTING__;
 
-const pageLoading = useLoading();
+const loadingState = useLoadingState();
 
 const githubToken = useGithubToken();
 const encryptor = useEncryptor();
@@ -103,9 +103,9 @@ onMounted(() => {
 
 <template>
   <span
-    v-show="!!pageLoading.loadingState.value"
+    v-show="!!loadingState"
     class="fixed left-0 top-0 z-headerLoading h-0.5 bg-primary-500"
-    :style="{ width: `${pageLoading.loadingState.value}%` }"
+    :style="{ width: `${loadingState}%` }"
   />
 
   <div class="flex items-stretch">

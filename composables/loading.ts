@@ -1,8 +1,9 @@
 let handle: number;
 
-export const useLoading = () => {
-  const loadingState = useState<number>("loading", () => 0);
+export const useLoadingState = () => useState<number>("loading", () => 0);
 
+export const useLoading = () => {
+  const loadingState = useLoadingState();
   const finish = () => {
     if (handle) {
       clearInterval(handle);
@@ -21,7 +22,6 @@ export const useLoading = () => {
   };
 
   return {
-    loadingState,
     start,
     finish
   };

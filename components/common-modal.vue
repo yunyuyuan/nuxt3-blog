@@ -72,7 +72,7 @@ const close = () => {
           @keyup.escape="close"
         >
           <div
-            class="absolute inset-0 bg-dark-700/20 dark:bg-dark-700/50"
+            :class="$style.bg"
             @click.self="maskClosable ? close() : null"
           />
           <div
@@ -134,16 +134,21 @@ const close = () => {
 
 <style module>
 .modal {
-  @apply fixed inset-0 outline-none z-modal transition opacity-100;
+  @apply fixed inset-0 outline-none z-modal transition opacity-100 backdrop-blur-sm;
 
   &:global(.modal-enter-from),
   &:global(.modal-leave-to) {
+
     @apply opacity-0;
 
     .inner {
       transform: translateY(-30px);
     }
   }
+}
+
+.bg {
+  @apply absolute inset-0 bg-dark-700/20 dark:bg-dark-700/50;
 }
 
 .inner {
