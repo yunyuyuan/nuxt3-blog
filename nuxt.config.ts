@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
 import { hash as cryptoHash } from "crypto";
-import { generateSiteMap, uploadAlgoliaIndex } from "./scripts/generate";
+import { generateSiteMap } from "./scripts/generate";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
 import { getNowDayjsString } from "./utils/common/dayjs";
@@ -191,7 +191,7 @@ export default defineNuxtConfig({
     "nitro:build:public-assets"(nitro) {
       generateSiteMap(nitro.options.output.publicDir);
       if (!isTest) {
-        uploadAlgoliaIndex();
+        // uploadAlgoliaIndex();
         fs.rmSync(path.join(nitro.options.output.publicDir, "e2e"), { recursive: true });
       }
     }

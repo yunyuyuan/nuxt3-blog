@@ -3,7 +3,9 @@ import path from "path";
 import { algoliasearch } from "algoliasearch";
 import config from "../config";
 import type { AlgoliaBody, ArticleItem, KnowledgeItem, RecordItem } from "../utils/common/types";
+import { parseMarkdown } from "../utils/common/markdown";
 import { genRss, getRebuildPath, nbLog, walkAllBlogData } from "./utils";
+import extractTextFromHtml from "./utils/html";
 
 export function generateSiteMap(publicDir: string) {
   nbLog("sitemap");
@@ -23,17 +25,22 @@ export async function uploadAlgoliaIndex() {
   const client = algoliasearch(appId, apiKey);
 
   blogData.forEach(({ type, list }) => {
-    list.filter(item => !item.encrypt).forEach((item) => {
+    list.filter(item => !item.encrypt).forEach(async (item) => {
+      const html = (await parseMarkdown(item._md)).md;
+
+      const extractedText = extractTextFromHtml(html);
+      // return fs.writeFileSync(`.output${type}-${item.id}.txt`, extractedText);
       const body: AlgoliaBody = {
         title: "",
         metaData: "",
-        content: item._md
+        content: extractedText
       };
       if (type === "/articles") {
         body.title = (item as ArticleItem).title;
         body.metaData = (item as ArticleItem).tags.join(" | ");
       } else if (type === "/records") {
         body.title = (item as RecordItem).images.map(img => img.alt).join(" | ");
+        body.metaData = (item as RecordItem).images[0]?.src ?? "";
       } else {
         body.title = (item as KnowledgeItem).title;
         body.metaData = (item as KnowledgeItem).summary;
