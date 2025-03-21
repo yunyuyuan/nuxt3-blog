@@ -6,7 +6,7 @@ export type EncryptBlock = {
   end: number;
 };
 
-export type ItemBase = {
+export type ItemBase<T> = T & {
   id: number;
   time: number;
   modifyTime: number;
@@ -17,15 +17,15 @@ export type ItemBase = {
   _show?: boolean;
 };
 
-export type ArticleItem = ItemBase & {
+export type ArticleItem = ItemBase<{
   title: string;
   len: number;
   tags: string[];
-};
+}>;
 
-export type RecordItem = ItemBase & {
+export type RecordItem = ItemBase<{
   images: { src: string; alt: string; id?: number }[];
-};
+}>;
 
 export const KnowledgeTabsList = [
   { key: "book", name: "book" },
@@ -35,13 +35,13 @@ export const KnowledgeTabsList = [
 export const KnowledgeTabs = KnowledgeTabsList.map(item => item.key);
 export type KnowledgeTab = typeof KnowledgeTabs[number];
 
-export type KnowledgeItem = ItemBase & {
+export type KnowledgeItem = ItemBase<{
   title: string;
   type: KnowledgeTab;
   link: string;
   cover: string;
   summary: string;
-};
+}>;
 
 export const KnowledgeIconMap = {
   game: Gamepad2,
@@ -82,4 +82,10 @@ export type CommitParamsDeletion = { path: string };
 export type CommitParams = {
   additions?: CommitParamsAddition[];
   deletions?: CommitParamsDeletion[];
+};
+
+export type AlgoliaBody = {
+  title: string;
+  content: string;
+  metaData: string;
 };

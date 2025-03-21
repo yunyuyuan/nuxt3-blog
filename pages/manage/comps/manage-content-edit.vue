@@ -71,6 +71,12 @@ const getUploadInfo = async () => {
   }
   // 需要clone一份item，clone的item仅用于上传
   const newItem = deepClone(editingItem.value) as T;
+  for (const key of Object.keys(newItem)) {
+    if (key.startsWith("_")) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete newItem[key as keyof T];
+    }
+  }
   let mdContent = escapeNewLine(editingMd.value);
   // 处理item
   if (props.processWithContent) {
@@ -113,9 +119,7 @@ const getUploadInfo = async () => {
   newItem.modifyTime = nowTime;
   return {
     item: {
-      ...newItem,
-      _show: undefined,
-      _visitors: undefined
+      ...newItem
     },
     md: mdContent
   };

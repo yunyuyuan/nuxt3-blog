@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
 import { hash as cryptoHash } from "crypto";
-import { generateSiteMap } from "./scripts/generate";
+import { generateSiteMap, uploadAlgoliaIndex } from "./scripts/generate";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
 import { getNowDayjsString } from "./utils/common/dayjs";
@@ -148,6 +148,9 @@ export default defineNuxtConfig({
       __NB_DATABASE_ENABLED__: !!import.meta.env.CLOUDFLARE_D1_TOKEN && !!import.meta.env.CLOUDFLARE_D1_ACCOUNT_ID && !!import.meta.env.CLOUDFLARE_D1_DATABASE_ID,
       __NB_CMTREPOID__: JSON.stringify(config.CommentRepoId || import.meta.env.CommentRepoId),
       __NB_CMTREPOCATEID__: JSON.stringify(config.CommentDiscussionCategoryId || import.meta.env.CommentDiscussionCategoryId),
+      __NB_ALGOLIA_APP_ID: JSON.stringify(process.env.ALGOLIA_APP_ID || config.algoliaSearch.appId),
+      __NB_ALGOLIA_SEARCH_KEY: JSON.stringify(process.env.ALGOLIA_SEARCH_KEY || config.algoliaSearch.searchKey),
+      __NB_ALGOLIA_INDEX_NAME: JSON.stringify(process.env.ALGOLIA_INDEX_NAME || config.algoliaSearch.indexName),
       __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString()),
       __NB_CURRENT_GIT_SHA__: JSON.stringify(execSync("git rev-parse HEAD").toString().trim()),
       __NB_BUILDTIME_VITESTING__: isTest
@@ -188,6 +191,7 @@ export default defineNuxtConfig({
     "nitro:build:public-assets"(nitro) {
       generateSiteMap(nitro.options.output.publicDir);
       if (!isTest) {
+        uploadAlgoliaIndex();
         fs.rmSync(path.join(nitro.options.output.publicDir, "e2e"), { recursive: true });
       }
     }

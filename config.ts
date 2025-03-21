@@ -19,6 +19,11 @@ export default {
     initialVisitors: 1, // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
     visitFromOwner: false // 网站拥有者访问时，是否增加浏览量
   },
+  algoliaSearch: {
+    appId: "",
+    searchKey: "",
+    indexName: ""
+  },
   themeColor: "cyan", // 主题色，参考 https://tailwindcss.com/docs/colors
   themeColorDark: "neutral", // 主题色(夜间模式)
   defaultLang: "zh", // default language, "zh" and "en" are supported currently
