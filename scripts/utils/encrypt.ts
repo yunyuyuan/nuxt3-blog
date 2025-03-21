@@ -2,9 +2,8 @@ import fs from "fs";
 import colors from "colors";
 import CryptoJS from "crypto-js";
 import type { CommonItem, DecryptFunction, HeaderTabUrl } from "../../utils/common/types";
-import { escapeNewLine } from "../../utils/common/utils";
 import { encryptDecryptItem, getEncryptedBlocks } from "../../utils/common/process-encrypt-decrypt";
-import { getRebuildPath } from ".";
+import { walkAllBlogData } from ".";
 
 export async function encrypt(s: string, pwd: string): Promise<string> {
   return CryptoJS.AES.encrypt(s, pwd).toString();
@@ -19,22 +18,20 @@ export async function decrypt(s: string, pwd: string): Promise<string> {
   return result;
 }
 
-export function processBlogItem(
+export async function processBlogItem(
   pwd: string,
   /** 单个item回调 */
-  itemCb: (_: { decryptedItem: CommonItem; decryptedMd: string; type: HeaderTabUrl; mdPath: string }) => any | Promise<any>,
+  processItem: (_: { decryptedItem: CommonItem; decryptedMd: string; type: HeaderTabUrl; mdPath: string }) => any | Promise<any>,
   /** 整个json回调 */
-  jsonCb: (_: { decryptedItemList: CommonItem[]; type: HeaderTabUrl; jsonPath: string }) => any | Promise<any> = () => null
+  processJson: (_: { decryptedItemList: CommonItem[]; type: HeaderTabUrl; jsonPath: string }) => any | Promise<any> = () => null
 ) {
   const _decrypt = (s: string) => decrypt(s, pwd);
 
-  const processJson = async (type: HeaderTabUrl) => {
-    const jsonPath = getRebuildPath("json", type + ".json");
-    const itemList: CommonItem[] = JSON.parse(fs.readFileSync(jsonPath).toString());
+  const blogData = walkAllBlogData();
+  for (const { type, jsonPath, list: itemList } of blogData) {
     let count = 0;
     for (const item of itemList) {
-      const mdPath = getRebuildPath(type, String(item.id) + ".md");
-      let decryptedMd = escapeNewLine(fs.readFileSync(mdPath).toString());
+      let decryptedMd = item._md;
       if (item.encrypt) {
         // 解密item
         await encryptDecryptItem(item, _decrypt, type);
@@ -47,14 +44,12 @@ export function processBlogItem(
           decryptedMd = decryptedMd.slice(0, start) + await _decrypt(decryptedMd.slice(start, end)) + decryptedMd.slice(end);
         }
       }
-      await itemCb({ decryptedItem: item, decryptedMd, type, mdPath });
+      await processItem({ decryptedItem: item, decryptedMd, type, mdPath: item._mdPath });
       count += 1;
     }
-    await jsonCb({ decryptedItemList: itemList, type, jsonPath });
+    await processJson({ decryptedItemList: itemList, type, jsonPath });
     console.log(colors.bold.bgCyan(type.substring(1) + ` (${count} in total) processing completed!`));
-  };
-
-  return Promise.all(["/articles", "/records", "/knowledges"].map(processJson));
+  }
 }
 
 /**

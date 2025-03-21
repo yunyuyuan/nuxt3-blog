@@ -3,6 +3,7 @@ import chpwd from "./change-pwd";
 import genImgMap from "./generate-img-map";
 import subImg from "./substitute-img";
 import downloadImg from "./download-img";
+import { uploadAlgoliaIndex } from "./generate";
 
 gulp.task("generate-image-map", async (cb) => {
   await genImgMap(process.env.NB_PASSWD, process.env.NB_IMG_REGEX);
@@ -21,5 +22,10 @@ gulp.task("substitute-image", async (cb) => {
 
 gulp.task("change-passwd", async (cb) => {
   await chpwd();
+  cb();
+});
+
+gulp.task("upload-algolia", async (cb) => {
+  await uploadAlgoliaIndex();
   cb();
 });
