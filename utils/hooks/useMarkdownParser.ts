@@ -1,4 +1,5 @@
-import { afterInsertHtml, parseMarkdown } from "../nuxt/markdown";
+import { parseMarkdown } from "../common/markdown";
+import { afterInsertHtml } from "../nuxt/markdown";
 
 type useMarkdownParserProps = {
   mdValueRef: Ref<string>;
