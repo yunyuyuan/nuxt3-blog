@@ -74,7 +74,7 @@ const toggleTags = (tag: string) => {
         :key="item.id"
         class="overflow-hidden rounded-xl bg-white shadow-sm transition-shadow duration-300 hover:shadow-md dark:bg-dark-800"
       >
-        <nuxt-link
+        <NuxtLink
           :to="'/articles/' + String(item.id)"
           no-prefetch
           class="group block p-6"
@@ -98,7 +98,7 @@ const toggleTags = (tag: string) => {
               <Visitors :visitors="item._visitors" />
             </div>
           </div>
-        </nuxt-link>
+        </NuxtLink>
       </article>
     </div>
     <div

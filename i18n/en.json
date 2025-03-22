@@ -3,7 +3,7 @@
   "add-sticker": "Add Sticker",
   "all": "All",
   "all-verified": "All Verified",
-  "articles": "Articles",
+  "/articles": "Articles",
   "articles-num": "articles",
   "avatar": "Avatar",
   "base-info": "Basic Information",
@@ -45,7 +45,7 @@
   "input-passwd": "Please enter password",
   "input-tags": "Enter tags, separated by commas (',')",
   "input-text-to-search": "Enter text to search",
-  "knowledges": "Knowledges",
+  "/knowledges": "Knowledges",
   "link": "Link",
   "list-manage": "{0} List Management",
   "load-draft": "Load Draft",
@@ -75,7 +75,7 @@
   "please-input-token-first": "Please verify token before proceeding",
   "preview": "Preview",
   "publish": "Publish",
-  "records": "Records",
+  "/records": "Records",
   "refresh-after-sec": "Page will refresh in {0} seconds",
   "save-draft": "Save Draft",
   "select": "Select",
@@ -125,5 +125,7 @@
   "error-refresh": "Refresh Page",
   "error-home": "Back to Home",
   "error-contact": "If the problem persists, please contact the administrator",
-  "error-feedback": "Provide Feedback"
+  "error-feedback": "Provide Feedback",
+  "search-all": "Search All",
+  "search-all-placeholder": "Enter text to search..."
 }

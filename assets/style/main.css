@@ -1,5 +1,6 @@
 /* @import "./fira-code.css"; */
 @import "./markdown.css";
+@import "./generated-theme-colors.css";
 
 html {
   @apply scroll-smooth font-[unset];

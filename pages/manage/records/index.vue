@@ -11,7 +11,7 @@ const searchFn = (item: RecordItem, s: string) => !item.images.length || item.im
   >
     <template #images="{ item: { images }, dataUrl }">
       <td>
-        <nuxt-link
+        <NuxtLink
           no-prefetch
           :to="dataUrl"
           :class="$style.a"
@@ -25,7 +25,7 @@ const searchFn = (item: RecordItem, s: string) => !item.images.length || item.im
             :retry="false"
             :class="$style.img"
           />
-        </nuxt-link>
+        </NuxtLink>
       </td>
     </template>
   </manage-list-table>

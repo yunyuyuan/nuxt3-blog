@@ -153,7 +153,7 @@ initViewer(markdownRef);
           @insert-sticker="insertSticker"
         />
       </button>
-      <nuxt-link
+      <NuxtLink
         v-if="!single"
         :title="$t('markdown-ref')"
         :to="'/manage/md-ref'"
@@ -161,7 +161,7 @@ initViewer(markdownRef);
         class="icon-button"
       >
         <SquareAsterisk class="size-6" />
-      </nuxt-link>
+      </NuxtLink>
       <button
         class="icon-button ml-auto"
         :title="$t('contents')"

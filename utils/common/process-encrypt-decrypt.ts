@@ -1,27 +1,27 @@
-import type * as types from "./types";
+import type { CommonItem, DecryptFunction, HeaderTabUrl, ArticleItem, RecordItem, KnowledgeItem, EncryptBlock } from "./types";
 
 /**
  * 三种类型的数据加解密
  */
 export async function encryptDecryptItem(
-  item: types.CommonItem,
-  fn: types.DecryptFunction,
-  url: types.HeaderTabUrl
+  item: CommonItem,
+  fn: DecryptFunction,
+  url: HeaderTabUrl
 ) {
   switch (url) {
     case "/articles":
-      item = item as types.ArticleItem;
+      item = item as ArticleItem;
       item.title = await fn(item.title);
       break;
     case "/records":
-      item = item as types.RecordItem;
+      item = item as RecordItem;
       for (const img of item.images) {
         img.src = await fn(img.src);
         img.alt = await fn(img.alt);
       }
       break;
     case "/knowledges":
-      item = item as types.KnowledgeItem;
+      item = item as KnowledgeItem;
       item.cover = await fn(item.cover);
       item.title = await fn(item.title);
       item.summary = await fn(item.summary);
@@ -33,13 +33,13 @@ export async function encryptDecryptItem(
 /**
  * 先加密block，然后获取这些block的start和end位置
  */
-export async function getEncryptedBlocks(md: string, encrypt: types.DecryptFunction): Promise<{
+export async function getEncryptedBlocks(md: string, encrypt: DecryptFunction): Promise<{
   md: string;
-  blocks: types.EncryptBlock[];
+  blocks: EncryptBlock[];
 }> {
   const reg = new RegExp(/(^|\n)\[encrypt]\n([\s\S]+?)\n\[\/encrypt]/, "gd");
   let matcher;
-  const encryptBlocks: types.EncryptBlock[] = [];
+  const encryptBlocks: EncryptBlock[] = [];
   while (true) {
     matcher = reg.exec(md);
     if (matcher && matcher.indices) {

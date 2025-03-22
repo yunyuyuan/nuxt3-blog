@@ -3,7 +3,7 @@ import chpwd from "./change-pwd";
 import genImgMap from "./generate-img-map";
 import subImg from "./substitute-img";
 import downloadImg from "./download-img";
-import { uploadAlgoliaIndex } from "./generate";
+import { uploadAlgoliaIndex } from "./nuxt-hooks";
 
 gulp.task("generate-image-map", async (cb) => {
   await genImgMap(process.env.NB_PASSWD, process.env.NB_IMG_REGEX);

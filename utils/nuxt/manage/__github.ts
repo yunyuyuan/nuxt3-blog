@@ -23,7 +23,7 @@ export function deleteList(
   newList: CommonItem[],
   dels: CommonItem[]
 ): Promise<boolean> {
-  const folder = getCurrentTab().url;
+  const folder = getCurrentTab();
   import.meta.hot!.send(rebuildEvent, {
     additions: [{
       path: `public/rebuild/json${folder}.json`,

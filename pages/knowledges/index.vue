@@ -64,7 +64,7 @@ const tabLengthMap = computed(() => {
         v-if="filteredList.length"
         class="space-y-4"
       >
-        <nuxt-link
+        <NuxtLink
           v-for="item in filteredList"
           :key="item.id"
           no-prefetch
@@ -99,7 +99,7 @@ const tabLengthMap = computed(() => {
             </div>
           </div>
           <ChevronRight class="size-5 text-dark-400 transition group-hover:translate-x-1 group-hover:text-primary-500" />
-        </nuxt-link>
+        </NuxtLink>
       </div>
 
       <div

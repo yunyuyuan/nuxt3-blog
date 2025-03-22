@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
 import { hash as cryptoHash } from "crypto";
-import { generateSiteMap } from "./scripts/generate";
+import { generateSiteMap, generateThemeColorsCSS, uploadAlgoliaIndex } from "./scripts/nuxt-hooks";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
 import { getNowDayjsString } from "./utils/common/dayjs";
@@ -19,7 +19,10 @@ fs.readdirSync("./public/sticker").forEach((dir) => {
 });
 
 const scripts = [];
+// dark mode
 scripts.push(`(function(){const e=localStorage.getItem("${ThemeModeKey}")||"light";document.documentElement.classList.add(e)})();`);
+// random theme
+scripts.push(`(function(){let e=${JSON.stringify(config.themeColor)};if(e.length<2)return;let t=Math.floor(Math.random()*e.length),l=e[t],n=document.documentElement;e.forEach(e=>{n.classList.remove(\`theme-\${e}\`)}),n.classList.add(\`theme-\${l}\`)})();`);
 
 if (!isDev) {
   const cfAnalyzeId = config.CloudflareAnalyze || process.env.CloudflareAnalyze;
@@ -115,7 +118,7 @@ export default defineNuxtConfig({
       failOnError: false,
       routes: (() => {
         const routes: string[] = [];
-        HeaderTabs.forEach(({ url }) => {
+        HeaderTabs.forEach((url) => {
           const path = `./public${isTest ? "/e2e" : ""}/rebuild/json${url}.json`;
           if (fs.existsSync(path)) {
             const json = JSON.parse(fs.readFileSync(path).toString()) as CommonItem[];
@@ -133,7 +136,7 @@ export default defineNuxtConfig({
     cloudflare: {
       pages: {
         routes: {
-          exclude: HeaderTabs.map(tab => `${tab.url}/*`)
+          exclude: HeaderTabs.map(tab => `${tab}/*`)
         }
       }
     },
@@ -181,6 +184,9 @@ export default defineNuxtConfig({
   telemetry: false,
 
   hooks: {
+    "nitro:build:before"() {
+      generateThemeColorsCSS();
+    },
     "vite:extendConfig"(config, { isClient }) {
       if (isClient) {
         (config.build?.rollupOptions?.output as any).manualChunks = {
@@ -191,7 +197,7 @@ export default defineNuxtConfig({
     "nitro:build:public-assets"(nitro) {
       generateSiteMap(nitro.options.output.publicDir);
       if (!isTest) {
-        // uploadAlgoliaIndex();
+        uploadAlgoliaIndex();
         fs.rmSync(path.join(nitro.options.output.publicDir, "e2e"), { recursive: true });
       }
     }

@@ -18,7 +18,7 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
   
   const destroyFns = useUnmount();
 
-  const { originList, decryptedItem, decryptedMd } = await useBlogItem<T>(Number(id), targetTab.url);
+  const { originList, decryptedItem, decryptedMd } = await useBlogItem<T>(Number(id), targetTab);
 
   const { htmlContent, markdownRef, menuItems } = await useMarkdownParser({ mdValueRef: decryptedMd, onAfterInsertHtml, destroyFns })
 
@@ -28,7 +28,7 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
         apiPath: "/db/inc-visitors",
         query: {
           id: decryptedItem.value!.id,
-          type: targetTab.url,
+          type: targetTab,
           inc: config.database.visitFromOwner || !githubToken.value
         },
         callback: (data) => {

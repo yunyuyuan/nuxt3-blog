@@ -1,4 +1,4 @@
-import type { ArticleItem, HeaderTabUrl, ItemBase, KnowledgeItem, RecordItem } from "./types";
+import type { CommonItem, HeaderTabUrl } from "./types";
 
 /**
  * 生成唯一id
@@ -11,38 +11,38 @@ export function getUniqueId(): typeof uniqueId {
 /**
  * 创建一个新item
  */
-export function createNewItem(url: HeaderTabUrl) {
-  const baseInfo: ItemBase = {
+export function createNewItem(url: HeaderTabUrl): CommonItem {
+  const baseInfo = {
     id: 0,
     time: 0,
     modifyTime: 0,
-    _show: true,
-    _visitors: 0,
     showComments: false,
-    encrypt: false
+    encrypt: false,
+    _show: true,
+    _visitors: 0
   };
-  switch (url) {
-    case "/articles":
-      return {
-        title: "",
-        len: 0,
-        tags: [],
-        ...baseInfo
-      } as ArticleItem;
-    case "/records":
-      return {
-        images: [],
-        ...baseInfo
-      } as RecordItem;
-    case "/knowledges":
-      return {
-        title: "",
-        summary: "",
-        link: "",
-        cover: "",
-        type: "book",
-        ...baseInfo
-      } as KnowledgeItem;
+
+  if (url === "/articles") {
+    return {
+      title: "",
+      len: 0,
+      tags: [],
+      ...baseInfo
+    };
+  } else if (url === "/records") {
+    return {
+      images: [],
+      ...baseInfo
+    };
+  } else {
+    return {
+      title: "",
+      summary: "",
+      link: "",
+      cover: "",
+      type: "book",
+      ...baseInfo
+    };
   }
 }
 

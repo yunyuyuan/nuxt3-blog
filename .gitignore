@@ -4,6 +4,8 @@ nuxt.d.ts
 img.json
 imgs/
 
+/assets/style/generated-theme-colors.css
+
 # Logs
 logs
 *.log

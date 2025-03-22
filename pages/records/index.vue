@@ -73,7 +73,7 @@ onMounted(() => {
             class="group flex justify-center"
             :title="formatTime(item.time)"
           >
-            <nuxt-link
+            <NuxtLink
               class="relative block overflow-hidden rounded-lg shadow-md transition duration-500 hover:shadow-xl max-md:aspect-square md:size-52"
               no-prefetch
               :to="'/records/' + item.id"
@@ -94,7 +94,7 @@ onMounted(() => {
                   <span>{{ item.images.length }}</span>
                 </div>
               </div>
-            </nuxt-link>
+            </NuxtLink>
           </div>
         </div>
       </div>

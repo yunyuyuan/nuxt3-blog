@@ -1,7 +1,7 @@
 @import "./code-style.css";
 
 .--markdown {
-  @apply block break-words leading-[1.8] text-base font-normal text-dark-900 dark:text-dark-200;
+  @apply block break-words leading-normal text-base font-normal text-dark-900 dark:text-dark-200;
 
   & h1, & h2, & h3, & h4, & h5, & h6 {
     @apply cursor-pointer block relative my-3;
@@ -34,7 +34,7 @@
   }
 
   & a[href]:not(.header-link) {
-    @apply mx-1 hover:underline transition text-primary-700 dark:text-primary-400 inline-flex items-center leading-4 break-all;
+    @apply mx-1 hover:underline transition text-primary-700 dark:text-primary-400 inline-flex items-center break-all;
 
     &:active {
       @apply text-primary-600 dark:text-primary-500;

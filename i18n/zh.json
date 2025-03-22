@@ -3,7 +3,7 @@
   "add-sticker": "添加表情",
   "all": "全部",
   "all-verified": "全部验证通过",
-  "articles": "文章",
+  "/articles": "文章",
   "articles-num": "篇",
   "avatar": "头像",
   "base-info": "基础信息",
@@ -45,7 +45,7 @@
   "input-passwd": "请输入密码",
   "input-tags": "输入标签，用英文逗号分隔(',')",
   "input-text-to-search": "输入文字进行搜索",
-  "knowledges": "文化",
+  "/knowledges": "文化",
   "link": "链接",
   "list-manage": "{0} 列表管理",
   "load-draft": "加载草稿",
@@ -75,7 +75,7 @@
   "please-input-token-first": "请先验证token，再进行操作",
   "preview": "预览",
   "publish": "发布",
-  "records": "记录",
+  "/records": "记录",
   "refresh-after-sec": "{0}秒后将刷新页面",
   "save-draft": "保存草稿",
   "select": "选择",
@@ -125,5 +125,7 @@
   "error-refresh": "刷新页面",
   "error-home": "返回首页",
   "error-contact": "如果问题持续存在，请联系管理员",
-  "error-feedback": "提供反馈"
+  "error-feedback": "提供反馈",
+  "search-all": "全站搜索",
+  "search-all-placeholder": "搜索所有内容..."
 }

@@ -5,7 +5,7 @@ import { isDev, inBrowser } from "./constants";
 import config from "~/config";
 
 export function getCurrentTab() {
-  return HeaderTabs.find(tab => useRoute().path.includes(tab.url)) || HeaderTabs[0];
+  return HeaderTabs.find(tab => useRoute().path.includes(tab)) || HeaderTabs[0];
 }
 
 export function useCommonSEOTitle(head: ComputedRef<string>, keys?: ComputedRef<string[]>) {
@@ -38,7 +38,7 @@ export function calcRocketUrl() {
   if (paths[0] === "about") {
     return githubRepoUrl;
   }
-  const item = HeaderTabs.find(tab => tab.url.substring(1) === paths[0]);
+  const item = HeaderTabs.find(tab => tab.substring(1) === paths[0]);
   if (item) {
     if (!paths[1] || paths[1] === "new") {
       return fromManage ? `/${paths[0]}` : `/manage/${paths[0]}`;

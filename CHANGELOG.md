@@ -1,3 +1,7 @@
+## 2025.03.22
+* Add Algolia search.
+* Support random theme color.
+
 ## 2025.03.16
 * Migrate mongodb atlas to cloudflare D1.
 

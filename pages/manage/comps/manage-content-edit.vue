@@ -90,7 +90,7 @@ const getUploadInfo = async () => {
         title: translate("need-passwd")
       });
     }
-    await encryptDecryptItem(newItem, encryptor.encrypt, targetTab.url);
+    await encryptDecryptItem(newItem, encryptor.encrypt, targetTab);
     mdContent = await encryptor.encrypt(mdContent);
     // 整篇加密的markdown，不会再有加密块
     delete newItem.encryptBlocks;
@@ -151,14 +151,14 @@ const doUpload = async () => {
   currentOperate.value = "upload";
   toggleProcessing();
   try {
-    const success = await createCommit(`Update ${targetTab.name}-${newItem.id}`, {
+    const success = await createCommit(`Update ${targetTab.replace("/", "")}-${newItem.id}`, {
       additions: [
         {
-          path: `public/rebuild/json${targetTab.url}.json`,
+          path: `public/rebuild/json${targetTab}.json`,
           content: JSON.stringify(editItem(originList, newItem))
         },
         {
-          path: `public/rebuild${targetTab.url}/${newItem.id}.md`,
+          path: `public/rebuild${targetTab}/${newItem.id}.md`,
           content: md
         }
       ]

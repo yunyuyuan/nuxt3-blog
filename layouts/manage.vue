@@ -151,33 +151,33 @@ onMounted(() => {
           </button>
         </div>
         <div class="my-1 space-y-1 border-y border-dark-200 py-3 dark:border-dark-700">
-          <nuxt-link
+          <NuxtLink
             v-for="item in HeaderTabs"
-            :key="item.url"
-            :to="`/manage${item.url}`"
-            :class="twMerge($style.menuItem, activeRoute.startsWith(item.url) && $style.menuItemActive)"
+            :key="item"
+            :to="`/manage${item}`"
+            :class="twMerge($style.menuItem, activeRoute.startsWith(item) && $style.menuItemActive)"
           >
-            <component :is="IconMap[item.url]" />
-            {{ $t(item.name) }}
-          </nuxt-link>
-          <nuxt-link
+            <component :is="IconMap[item]" />
+            {{ $t(item) }}
+          </NuxtLink>
+          <NuxtLink
             to="/manage/config"
             :class="twMerge($style.menuItem, activeRoute.startsWith('/config') && $style.menuItemActive)"
           >
             <Settings />
             {{ $t('config') }}
-          </nuxt-link>
+          </NuxtLink>
         </div>
 
         <div class="pt-2">
           <div class="flex justify-between gap-4 px-2 py-4">
-            <nuxt-link
+            <NuxtLink
               :to="rocketUrl"
               :class="twMerge('anim-shake', $style.menuAction)"
               title="🚀"
             >
               <Rocket />
-            </nuxt-link>
+            </NuxtLink>
 
             <button
               :class="$style.menuAction"

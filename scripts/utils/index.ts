@@ -4,7 +4,7 @@ import path from "path";
 import colors from "colors";
 import type { PromptObject } from "prompts";
 import prompts from "prompts";
-import type { CommonItem, HeaderTabUrl } from "../../utils/common/types";
+import type { CommonItemByHeaderType, HeaderTabUrl } from "../../utils/common/types";
 import { escapeNewLine } from "../../utils/common/utils";
 
 export async function promptTask<const T extends PromptObject & { name: string }>(params: T[], cb: (_: Record<T["name"], any>) => any | Promise<any>) {
@@ -30,9 +30,9 @@ export function getRebuildPath(...s: string[]) {
 }
 
 export function walkAllBlogData() {
-  const walk = (type: HeaderTabUrl) => {
+  const walk = <T extends HeaderTabUrl>(type: T) => {
     const jsonPath = getRebuildPath("json", type + ".json");
-    const itemList: (CommonItem & { _md: string; _mdPath: string })[] = JSON.parse(fs.readFileSync(jsonPath).toString());
+    const itemList: (CommonItemByHeaderType<T> & { _md: string; _mdPath: string })[] = JSON.parse(fs.readFileSync(jsonPath).toString());
     for (const item of itemList) {
       const mdPath = getRebuildPath(type, String(item.id) + ".md");
       item._mdPath = mdPath;
@@ -41,7 +41,11 @@ export function walkAllBlogData() {
     return { type, jsonPath, list: itemList };
   };
 
-  return ["/articles", "/records", "/knowledges"].map(walk);
+  return [
+    walk("/articles"),
+    walk("/records"),
+    walk("/knowledges")
+  ];
 }
 
 export async function runCmd(command: string) {
@@ -58,7 +62,7 @@ export async function runCmd(command: string) {
   });
 }
 
-export function nbLog(s: string, head = "generate") {
+export function nbLog(s: string, head = "nuxt hook") {
   console.log(`[${colors.blue.bold(head)}] ${colors.green(s)}`);
 }
 

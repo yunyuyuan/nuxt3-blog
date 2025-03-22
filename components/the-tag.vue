@@ -23,7 +23,7 @@ const emit = defineEmits(["click"]);
       :class="$style.num"
     >{{ num }}</span>
   </span>
-  <nuxt-link
+  <NuxtLink
     v-else
     :class="twMerge($style.tag, active && $style.active)"
     :to="href"
@@ -33,7 +33,7 @@ const emit = defineEmits(["click"]);
       v-if="num >= 0"
       :class="$style.num"
     >{{ num }}</span>
-  </nuxt-link>
+  </NuxtLink>
 </template>
 
 <style module>

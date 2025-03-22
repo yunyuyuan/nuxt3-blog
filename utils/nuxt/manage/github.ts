@@ -162,7 +162,7 @@ export function deleteList(
 ): Promise<boolean> {
   const commitInfo
     = dels.length === 1 ? `'${dels[0].id}'` : `${dels.length} items`;
-  const folder = getCurrentTab().url;
+  const folder = getCurrentTab();
   return createCommit(
     `Delete ${commitInfo} from ${folder}`,
     {

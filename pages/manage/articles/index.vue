@@ -11,13 +11,13 @@ const searchFn = (item: ArticleItem, s: string) => {
   <manage-list-table :filter-fn="searchFn">
     <template #title="{ item: { title }, dataUrl }">
       <td>
-        <nuxt-link
+        <NuxtLink
           no-prefetch
           :to="dataUrl"
           class="block break-all p-2 text-base text-dark-950 hover:text-primary-700 dark:text-dark-200 dark:hover:text-primary-400"
         >
           {{ title }}
-        </nuxt-link>
+        </NuxtLink>
       </td>
     </template>
     <template #tags="{ item: { tags } }">
@@ -26,7 +26,7 @@ const searchFn = (item: ArticleItem, s: string) => {
           <span
             v-for="tag in tags"
             :key="tag"
-            class="rounded-lg bg-dark-100 px-1.5 py-0.5 text-dark-700 dark:bg-dark-700 dark:text-dark-300"
+            class="rounded-full bg-dark-100 px-2.5 py-0.5 text-xs text-dark-800 dark:bg-dark-700 dark:text-dark-300"
           >
             {{ tag }}
           </span>

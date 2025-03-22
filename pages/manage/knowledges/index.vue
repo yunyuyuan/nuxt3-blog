@@ -11,13 +11,13 @@ const searchFn = (item: KnowledgeItem, s: string) => {
   <manage-list-table :filter-fn="searchFn">
     <template #title="{ item: { title }, dataUrl }">
       <td>
-        <nuxt-link
+        <NuxtLink
           no-prefetch
           :to="dataUrl"
           class="block break-all p-2 text-base text-dark-950 hover:text-primary-700 dark:text-dark-200 dark:hover:text-primary-400"
         >
           {{ title }}
-        </nuxt-link>
+        </NuxtLink>
       </td>
     </template>
     <template #type="{ item: { type } }">

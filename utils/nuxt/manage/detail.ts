@@ -14,18 +14,18 @@ export async function useManageContent<T extends CommonItem>() {
   const itemId = useRoute().params.id as string;
   const targetTab = getCurrentTab();
 
-  useCommonSEOTitle(computed(() => translate("detail-manage", [translate(targetTab.name)])));
+  useCommonSEOTitle(computed(() => translate("detail-manage", [translate(targetTab)])));
 
   const isNew = itemId === "new";
 
-  const blogItemResult = await useBlogItem<T>(Number(itemId), targetTab.url, false);
+  const blogItemResult = await useBlogItem<T>(Number(itemId), targetTab, false);
   const { originList, decryptedList, originMd, decryptedMd, successDecrypt } = blogItemResult;
   let { originItem, decryptedItem } = blogItemResult;
 
   if (!originItem) {
     // isNew
     successDecrypt.value = true;
-    originItem = createNewItem(targetTab.url) as T;
+    originItem = createNewItem(targetTab) as T;
     decryptedItem = readonly(ref(deepClone(originItem))) as Readonly<Ref<T>>;
   }
 
@@ -45,7 +45,7 @@ export async function useManageContent<T extends CommonItem>() {
     originMd: readonly(decryptedMd),
     editingItem,
     editingMd,
-    url: targetTab.url
+    url: targetTab
   });
 
   const { statusText, canCommit, processing, toggleProcessing } = useStatusText(

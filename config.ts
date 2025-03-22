@@ -19,12 +19,12 @@ export default {
     initialVisitors: 1, // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
     visitFromOwner: false // 网站拥有者访问时，是否增加浏览量
   },
-  algoliaSearch: {
+  algoliaSearch: { // 参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.5-%E5%85%A8%E7%AB%99%E6%90%9C%E7%B4%A2
     appId: "",
     searchKey: "",
     indexName: ""
   },
-  themeColor: "cyan", // 主题色，参考 https://tailwindcss.com/docs/colors
+  themeColor: ["cyan", "purple", "teal", "indigo", "orange"], // 主题色，如果有多个颜色，则随机使用，参考 https://tailwindcss.com/docs/colors
   themeColorDark: "neutral", // 主题色(夜间模式)
   defaultLang: "zh", // default language, "zh" and "en" are supported currently
   about: [

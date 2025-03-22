@@ -58,21 +58,16 @@ export const KnowledgeColorMap = {
 export type CommonItem = ArticleItem | RecordItem | KnowledgeItem;
 
 export const HeaderTabs = [
-  {
-    name: "articles",
-    url: "/articles"
-  },
-  {
-    name: "records",
-    url: "/records"
-  },
-  {
-    name: "knowledges",
-    url: "/knowledges"
-  }
+  "/articles",
+  "/records",
+  "/knowledges"
 ] as const;
 
-export type HeaderTabUrl = typeof HeaderTabs[number]["url"];
+export type HeaderTabUrl = typeof HeaderTabs[number];
+export type CommonItemByHeaderType<T extends HeaderTabUrl> = T extends "/articles"
+  ? ArticleItem
+  : T extends "/records"
+    ? RecordItem : KnowledgeItem;
 
 export type DecryptFunction = (_s: string) => Promise<string>;
 
@@ -87,5 +82,6 @@ export type CommitParams = {
 export type AlgoliaBody = {
   title: string;
   content: string;
-  metaData: string;
+  cover: string;
+  metaData: any;
 };

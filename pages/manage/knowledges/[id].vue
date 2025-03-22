@@ -49,7 +49,6 @@ const processWithContent = (_md: string, _item: KnowledgeItem) => {};
                 :is="KnowledgeIconMap[item.type]"
                 class="size-4"
               />
-
             </span>
           </button>
           <common-dropdown v-model:show="typeSelectShow">

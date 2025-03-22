@@ -22,9 +22,9 @@ English Readme | [中文说明](/README.md)
 # Blog Features
 * 💻 **5-minute setup**. Quick deployment without writing a single line of code.
 * 🤝 **Easy to use**. Powerful admin interface that requires just one token to **update configurations, add/modify/delete blog content via web interface**, no need for `notepad` or `git push`.
-* 📷 **Integrated image hosting**. Integrated with smms image hosting and tinypng image compression, one-click upload for blog images.
 * 🌐 **Pure static**. Packaged as a pure static website, no backend required.
 * 🔍 **SEO friendly**. Every HTML page is pre-rendered, making it indexable by search engines.
+🔌 **Extensibility**. Provides multiple optional extension features, such as integration with smms image hosting service, display of real-time page views, giscus comment system, and site-wide search.
 * 🔒 **Encryption support**. Ability to encrypt any individual **article/record/culture** entry, or encrypt specific content sections that can only be viewed with a password.
   * 🚪Full page encryption:  
       <img height="300px" src="https://s2.loli.net/2023/03/09/6loknpQFATqSOMB.png"/>
@@ -49,7 +49,7 @@ Blog principle example:
 - [ ] Plugin system
 - [x] Support for serverless function image uploads
 - [x] Database integration (page view statistics)
-- [ ] Algolia site-wide search
+- [x] Algolia site-wide search
 - [x] Blog image backup and migration
 - [x] Password modification (currently only supports modification via npm scripts locally)
 
@@ -106,6 +106,7 @@ Blog principle example:
   "local:generate-img-map": "gulp generate-image-map", // Collect all site images, output to img.json
   "local:download-img": "gulp download-image", // Read img.json, download all images to imgs/
   "local:substitute-img": "gulp substitute-image", // Read img.json, replace with new images (before running this script, modify newUrl in img.json to the URL to be replaced)
+  "local:upload-algolia": "gulp upload-algolia", // Upload index data to Algolia
   "test:unit": "vitest run --exclude ./e2e", // Unit testing
   "test:e2e": "vitest run --dir ./e2e", // E2E testing
   "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e", // Run test service and start E2E testing

@@ -80,7 +80,7 @@ const deleteSelect = async () => {
           >{{ statusText }}</span>
 
           <div class="flex items-center gap-3">
-            <NuxtLink :to="`/manage${targetTab.url}/new`">
+            <NuxtLink :to="`/manage${targetTab}/new`">
               <CommonButton
                 :icon="Plus"
                 theme="primary"
@@ -145,7 +145,7 @@ const deleteSelect = async () => {
                 :key="idx1"
                 :name="key"
                 :item="item"
-                :data-url="`/manage${targetTab.url}/${item.id}`"
+                :data-url="`/manage${targetTab}/${item.id}`"
               />
               <td :class="twMerge($style.td, 'break-all')">
                 {{ formatTime(item.time, 'date') }}
