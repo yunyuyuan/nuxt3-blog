@@ -18,6 +18,9 @@ fs.readdirSync("./public/sticker").forEach((dir) => {
   stickers[dir] = fs.readdirSync(`./public/sticker/${dir}`).length;
 });
 
+// random theme
+generateThemeColorsCSS();
+
 const scripts = [];
 // dark mode
 scripts.push(`(function(){const e=localStorage.getItem("${ThemeModeKey}")||"light";document.documentElement.classList.add(e)})();`);
@@ -184,9 +187,6 @@ export default defineNuxtConfig({
   telemetry: false,
 
   hooks: {
-    "nitro:build:before"() {
-      generateThemeColorsCSS();
-    },
     "vite:extendConfig"(config, { isClient }) {
       if (isClient) {
         (config.build?.rollupOptions?.output as any).manualChunks = {
