@@ -38,7 +38,7 @@ const emit = defineEmits(["click"]);
 
 <style module>
 .tag {
-  @apply px-3 py-1.5 rounded-full text-sm font-medium flex items-center transition cursor-pointer;
+  @apply px-2 py-1 rounded-full text-sm font-medium flex items-center transition cursor-pointer;
   @apply bg-dark-100 text-dark-800 dark:bg-dark-700 dark:text-dark-200 hover:bg-dark-200 dark:hover:bg-dark-600;
 }
 
@@ -51,6 +51,6 @@ const emit = defineEmits(["click"]);
 }
 
 .num {
-  @apply ml-1.5 bg-dark-200 dark:bg-dark-600 text-dark-700 dark:text-dark-300 rounded-full px-2 py-0.5 text-xs;
+  @apply ml-1.5 bg-dark-200/50 dark:bg-dark-600 text-dark-700 dark:text-dark-300 rounded-full px-2 py-0.5 text-xs;
 }
 </style>

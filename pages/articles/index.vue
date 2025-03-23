@@ -91,12 +91,8 @@ const toggleTags = (tag: string) => {
             </span>
           </div>
           <div class="mt-4 flex items-center space-x-4 text-sm text-dark-500 dark:text-dark-400">
-            <div class="flex items-center gap-1">
-              <Words :len="item.len" />
-            </div>
-            <div class="flex items-center">
-              <Visitors :visitors="item._visitors" />
-            </div>
+            <Words :len="item.len" />
+            <Visitors :visitors="item._visitors" />
           </div>
         </NuxtLink>
       </article>

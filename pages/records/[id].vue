@@ -41,12 +41,8 @@ initViewer(root);
 
         <div class="border-t border-dark-100 py-6 dark:border-dark-700">
           <div class="flex items-center space-x-4 text-sm text-dark-500 dark:text-dark-400">
-            <div class="flex items-center">
-              <WroteDate :item="item" />
-            </div>
-            <div class="flex items-center">
-              <Visitors :visitors="item._visitors" />
-            </div>
+            <WroteDate :item="item" />
+            <Visitors :visitors="item._visitors" />
           </div>
         </div>
       </div>

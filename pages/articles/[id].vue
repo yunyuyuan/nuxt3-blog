@@ -89,18 +89,14 @@ initViewer(root);
         </div>
       </aside>
 
-      <main class="order-1 flex-1 overflow-hidden rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-2 lg:order-2">
+      <main class="order-1 max-w-5xl flex-1 overflow-hidden rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-2 lg:order-2">
         <h1 class="mb-4 text-2xl font-medium text-dark-900 dark:text-white">
           {{ item.title }}
         </h1>
 
         <div class="mb-6 flex flex-wrap items-center gap-4 border-b border-dark-300 pb-3 text-sm text-dark-500 dark:border-dark-600 dark:text-dark-400">
-          <div class="flex items-center gap-1">
-            <WroteDate :item="item" />
-          </div>
-          <div class="flex items-center">
-            <Visitors :visitors="item._visitors" />
-          </div>
+          <WroteDate :item="item" />
+          <Visitors :visitors="item._visitors" />
           <div class="flex flex-wrap gap-2">
             <the-tag
               v-for="tag in item.tags"
