@@ -9,6 +9,9 @@
   .icon-button {
     @apply size-10 transition flex items-center justify-center overflow-hidden cursor-pointer;
     @apply rounded-full text-dark-500 dark:text-dark-400 hover:bg-dark-100 dark:hover:bg-dark-700;
+    > svg {
+      @apply size-5;
+    }
   }
   .anim-shake {
     transform-origin: center center;

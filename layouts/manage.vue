@@ -126,16 +126,12 @@ onMounted(() => {
         <div class="flex items-center justify-between py-1 text-dark-500 dark:text-dark-300 md:justify-center">
           <button
             :class="twMerge(
-              'icon-button',
-              $style.themeMode,
-              themeMode === 'dark' && $style.modeDark
+              'icon-button'
             )"
             @click="toggleThemeMode"
           >
-            <span>
-              <MoonStar />
-              <Sun />
-            </span>
+            <MoonStar v-if="themeMode === 'light'" />
+            <Sun v-else />
           </button>
           <button
             :class="twMerge(
@@ -260,24 +256,6 @@ onMounted(() => {
 </template>
 
 <style module>
-.themeMode {
-  @apply overflow-hidden block p-1;
-
-  > span {
-    @apply flex flex-col size-5 items-center justify-around w-full h-[200%];
-  }
-}
-
-.themeAnimateToggle {
-  transition: all 0.2s cubic-bezier(0, -0.01, 0.23, 1.56);
-}
-
-.modeDark {
-  span {
-    transform: translateY(-50%);
-  }
-}
-
 .menuItem {
   @apply flex items-center rounded-md px-3 py-2.5 text-base font-medium text-dark-700 dark:text-dark-300;
 
@@ -291,7 +269,7 @@ onMounted(() => {
 }
 
 .menuAction {
-  @apply rounded-full flex items-center justify-center size-10 text-dark-500 dark:text-dark-300 bg-dark-50 dark:bg-dark-700 hover:bg-dark-100 hover:dark:bg-dark-800 hover:text-primary-600 dark:hover:text-primary-500;
+  @apply rounded-full flex items-center justify-center size-10 text-dark-500 dark:text-dark-300 bg-dark-50 dark:bg-dark-700 hover:bg-dark-100 hover:dark:bg-dark-900 hover:text-primary-600 dark:hover:text-primary-500;
 
   svg {
     @apply size-5;

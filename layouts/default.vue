@@ -96,7 +96,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
             <Search />
           </NuxtLink>
           <button
-            class="icon-button relative overflow-visible"
+            class="icon-button relative !overflow-visible"
             @click="showI18n = true"
           >
             <Languages />
