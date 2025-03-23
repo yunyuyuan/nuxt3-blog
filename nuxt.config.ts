@@ -154,9 +154,13 @@ export default defineNuxtConfig({
       __NB_DATABASE_ENABLED__: !!import.meta.env.CLOUDFLARE_D1_TOKEN && !!import.meta.env.CLOUDFLARE_D1_ACCOUNT_ID && !!import.meta.env.CLOUDFLARE_D1_DATABASE_ID,
       __NB_CMTREPOID__: JSON.stringify(config.CommentRepoId || import.meta.env.CommentRepoId),
       __NB_CMTREPOCATEID__: JSON.stringify(config.CommentDiscussionCategoryId || import.meta.env.CommentDiscussionCategoryId),
-      __NB_ALGOLIA_APP_ID: JSON.stringify(process.env.ALGOLIA_APP_ID || config.algoliaSearch.appId),
-      __NB_ALGOLIA_SEARCH_KEY: JSON.stringify(process.env.ALGOLIA_SEARCH_KEY || config.algoliaSearch.searchKey),
-      __NB_ALGOLIA_INDEX_NAME: JSON.stringify(process.env.ALGOLIA_INDEX_NAME || config.algoliaSearch.indexName),
+      __NB_ALGOLIA_APP_ID__: JSON.stringify(process.env.ALGOLIA_APP_ID || config.algoliaSearch.appId),
+      __NB_ALGOLIA_SEARCH_KEY__: JSON.stringify(process.env.ALGOLIA_SEARCH_KEY || config.algoliaSearch.searchKey),
+      __NB_ALGOLIA_INDEX_NAME__: JSON.stringify(process.env.ALGOLIA_INDEX_NAME || config.algoliaSearch.indexName),
+      __NB_ALGOLIA_ENABLED__: JSON.stringify(
+        !!(process.env.ALGOLIA_APP_ID || config.algoliaSearch.appId)
+        && !!(process.env.ALGOLIA_SEARCH_KEY || config.algoliaSearch.searchKey)
+        && !!(process.env.ALGOLIA_INDEX_NAME || config.algoliaSearch.indexName)),
       __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString()),
       __NB_CURRENT_GIT_SHA__: JSON.stringify(execSync("git rev-parse HEAD").toString().trim()),
       __NB_BUILDTIME_VITESTING__: isTest

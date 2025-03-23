@@ -8,6 +8,8 @@ import { i18nLocales, type I18nCode } from "~/utils/common/locales";
 import { HeaderTabs } from "~/utils/common/types";
 import { calcRocketUrl } from "~/utils/nuxt/utils";
 
+const algoliaEnabled = __NB_ALGOLIA_ENABLED__;
+
 const { i18nCode, changeI18n } = useI18nCode();
 const { themeMode, toggleThemeMode } = useThemeMode();
 const loadingState = useLoadingState();
@@ -89,6 +91,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
         </div>
         <div class="flex items-center gap-4">
           <NuxtLink
+            v-if="algoliaEnabled"
             class="icon-button max-md:hidden"
             :title="$t('search-all')"
             to="/search"
@@ -174,6 +177,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
           {{ $t(item) }}
         </NuxtLink>
         <NuxtLink
+          v-if="algoliaEnabled"
           class="icon-button !w-full"
           :title="$t('search-all')"
           to="/search"

@@ -25,14 +25,14 @@ watch(input, (input) => {
 });
 
 onMounted(() => {
-  if (!__NB_ALGOLIA_APP_ID || !__NB_ALGOLIA_SEARCH_KEY || !__NB_ALGOLIA_INDEX_NAME) {
+  if (!__NB_ALGOLIA_ENABLED__) {
     return showError({
       statusCode: 500,
       statusText: "Algolia is not configured!",
       message: "Algolia is not configured!"
     });
   }
-  const client = algoliasearch(__NB_ALGOLIA_APP_ID, __NB_ALGOLIA_SEARCH_KEY);
+  const client = algoliasearch(__NB_ALGOLIA_APP_ID__, __NB_ALGOLIA_SEARCH_KEY__);
 
   watch(input, debounce(async (input) => {
     if (!input) {
@@ -42,7 +42,7 @@ onMounted(() => {
     timestamp.value = now;
     try {
       const response = await client.searchSingleIndex<AlgoliaBody>({
-        indexName: __NB_ALGOLIA_INDEX_NAME,
+        indexName: __NB_ALGOLIA_INDEX_NAME__,
         searchParams: { query: input }
       });
       if (now === timestamp.value) {
