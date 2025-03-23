@@ -84,7 +84,7 @@ onBeforeUnmount(() => {
     <div class="grow border border-dark-300 dark:border-dark-600">
       <div
         ref="editorRef"
-        class="h-[calc(100vh_-_100px)]"
+        class="h-[calc(100vh_-_120px)]"
       />
     </div>
   </main>

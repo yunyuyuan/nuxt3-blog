@@ -24,7 +24,7 @@ export default {
     searchKey: "",
     indexName: ""
   },
-  themeColor: ["cyan", "purple", "teal", "indigo", "orange"], // 主题色，如果有多个颜色，则随机使用，参考 https://tailwindcss.com/docs/colors
+  themeColor: ["cyan", "sky", "teal", "emerald", "purple", "indigo", "fuchsia", "orange", "amber"], // 主题色，如果有多个颜色，则随机使用，参考 https://tailwindcss.com/docs/colors
   themeColorDark: "neutral", // 主题色(夜间模式)
   defaultLang: "zh", // default language, "zh" and "en" are supported currently
   about: [
