@@ -67,7 +67,7 @@
 - [ ] IV for AES encryption
 - [x] 块级加密
 - [x] SSR, 用于自建([参考](https://blog.yunyuyuan.net/articles/8346))
-- [ ] 支持 cloudflare page,netlify 以及其他服务
+- [x] 支持 cloudflare page,netlify 以及其他服务
 
 # 项目结构
 * `/assets`

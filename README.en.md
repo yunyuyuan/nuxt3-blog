@@ -65,7 +65,7 @@ Blog principle example:
 - [ ] IV for AES encryption
 - [x] Block-level encryption
 - [x] SSR for self-hosting ([reference](https://blog.yunyuyuan.net/articles/8346))
-- [ ] Support for Cloudflare Pages, Netlify, and other services
+- [x] Support for Cloudflare Pages, Netlify, and other services
 
 # Project Structure
 * `/assets`
