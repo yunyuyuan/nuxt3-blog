@@ -134,8 +134,8 @@ const inputPwd = ref(encryptor.usePasswd.value);
             @click="toggleTheme"
           >
             <span :class="themeAnimate && $style.themeAnimateToggle">
-              <MoonStar />
-              <Sun />
+              <MoonStar class="size-5" />
+              <Sun class="size-5" />
             </span>
           </button>
           <div :class="$style.goManage">
