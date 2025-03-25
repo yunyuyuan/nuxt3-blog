@@ -89,7 +89,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
             {{ $t(item) }}
           </NuxtLink>
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 max-md:gap-2">
           <NuxtLink
             v-if="algoliaEnabled"
             class="icon-button max-md:hidden"

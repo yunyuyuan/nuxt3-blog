@@ -64,7 +64,7 @@ onMounted(() => {
       <h1 class="mb-6 text-center text-2xl font-bold text-dark-900 dark:text-white">
         {{ $t('search-all') }}
       </h1>
-      <div class="relative">
+      <div class="relative max-md:mx-4">
         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
           <Search class="size-5 text-dark-400" />
         </div>
@@ -135,7 +135,7 @@ onMounted(() => {
             v-else-if="item.type === '/records'"
           >
             <div
-              class="flex flex-col md:flex-row"
+              class="flex flex-col gap-4 max-md:items-center md:flex-row"
             >
               <div class="relative size-48 shrink-0 overflow-hidden rounded-lg">
                 <the-lazy-img
@@ -150,8 +150,8 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
-              <div class="px-4">
-                <h2 :class="$style.title">
+              <div>
+                <h2 :class="twMerge($style.title, 'max-md:text-center')">
                   {{ item.title }}
                 </h2>
                 <p :class="$style.content">
@@ -165,7 +165,7 @@ onMounted(() => {
             v-else
           >
             <div
-              class="flex flex-col md:flex-row"
+              class="flex flex-col gap-4 max-md:items-center md:flex-row"
             >
               <div class="size-48 shrink-0 overflow-hidden rounded-lg">
                 <the-lazy-img
@@ -174,11 +174,11 @@ onMounted(() => {
                   alt="cover"
                 />
               </div>
-              <div class="px-4">
-                <div class="flex items-center gap-1">
+              <div>
+                <div class="flex items-center gap-1 max-md:justify-center">
                   <div
                     :class="twMerge(
-                      'rounded-full px-2.5 py-1 flex items-center text-xs gap-1',
+                      'rounded-full px-2.5 py-1 flex items-center text-xs gap-1 break-keep',
                       KnowledgeColorMap[item.metaData as KnowledgeTab]
                     )"
                   >
