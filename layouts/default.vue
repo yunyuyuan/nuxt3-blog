@@ -293,7 +293,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
   @apply flex max-md:hidden gap-10;
 
   a {
-    @apply -mb-[4px] font-medium flex flex-col items-center gap-[3px] text-lg text-dark-800 dark:text-dark-200 hover:text-primary-700 dark:hover:text-primary-400 after:block after:h-[1.5px] after:w-[120%] after:bg-transparent after:transition hover:after:bg-primary-700;
+    @apply -mb-[4px] font-medium flex flex-col items-center gap-[3px] text-lg text-dark-800 dark:text-dark-200 hover:text-primary-700 dark:hover:text-primary-400 after:block after:h-[2px] after:w-[120%] after:bg-transparent after:transition hover:after:bg-primary-700;
   }
 }
 
