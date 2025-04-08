@@ -1,7 +1,7 @@
 import type { WatchHandle, WatchOptions } from "vue";
 import { githubRepoUrl } from "../common/constants";
 import { HeaderTabs } from "../common/types";
-import { isDev, inBrowser } from "./constants";
+import { isDev } from "./constants";
 import config from "~/config";
 
 export function getCurrentTab() {
@@ -90,7 +90,7 @@ export function deepClone<T extends object>(item: T): T {
  * dev热更新
  */
 export function devHotListen<T>(event: string, callback: (_: T) => unknown) {
-  if (isDev && inBrowser) {
+  if (isDev && import.meta.client) {
     const listener = (e: Event) => {
       callback((e as CustomEvent<T>).detail);
       window.removeEventListener(event, listener);

@@ -1,6 +1,5 @@
 import Viewer from "viewerjs";
 import type { Ref } from "vue";
-import { inBrowser } from "~/utils/nuxt/constants";
 import { ViewerAttr } from "~/utils/common/constants";
 
 function useMutationObserver(
@@ -27,7 +26,7 @@ function useMutationObserver(
  * viewerjs
  */
 export function initViewer(el: Ref<HTMLElement | undefined>): Ref<HTMLElement> | undefined {
-  if (!inBrowser) {
+  if (!import.meta.client) {
     return;
   }
   let viewerContainer;

@@ -4,7 +4,6 @@ import type { editor as Editor } from "monaco-editor";
 import { Upload } from "lucide-vue-next";
 import configString from "~/config.ts?raw";
 import config from "~/config";
-import { inBrowser } from "~/utils/nuxt/constants";
 import { translate } from "~/utils/nuxt/i18n";
 import { useStatusText } from "~/utils/nuxt/manage";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
@@ -19,7 +18,7 @@ const modified = computed(() => inputText.value !== configString);
 const { statusText, canCommit, processing, toggleProcessing } = useStatusText(modified);
 
 const { themeMode } = useThemeMode();
-if (inBrowser) {
+if (import.meta.client) {
   onMounted(() => {
     import("monaco-editor").then((module) => {
       editor = module.editor.create(editorRef.value!, {
