@@ -56,17 +56,17 @@
   & span.image-container {
     @apply inline-flex flex-col items-center my-4 mx-[5%] w-[90%];
 
-    & .--lazy-img {
-      @apply max-w-full shadow;
+    > span {
+      @apply max-w-full shadow min-w-10 min-h-10;
 
       &.loading,
       &.err {
         @apply size-[150px];
       }
-    }
-
-    & svg {
-      @apply size-14;
+      
+      & svg {
+        @apply size-6;
+      }  
     }
 
     &.just-height img {

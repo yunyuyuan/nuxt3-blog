@@ -19,7 +19,7 @@ initViewer(root);
     class="container mx-auto grow px-4 py-8 max-md:px-1 max-md:py-2"
   >
     <article class="mx-auto max-w-4xl overflow-hidden rounded-xl bg-white shadow-sm dark:bg-dark-800">
-      <div class="relative mt-4 flex h-64 w-full justify-center overflow-hidden">
+      <div class="relative mt-4 flex w-full justify-center overflow-hidden p-1">
         <the-lazy-img
           :class="$style.img"
           :src="item.cover"
@@ -68,7 +68,7 @@ initViewer(root);
 
 <style module>
 .img {
-  @apply rounded-lg shadow h-full justify-center;
+  @apply rounded-lg shadow h-64 min-w-36 justify-center;
 
   img {
     @apply h-full rounded-lg object-contain transition-transform duration-500 hover:scale-105;

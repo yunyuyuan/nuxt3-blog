@@ -59,7 +59,7 @@ initViewer(root);
 
 <style module>
 .img {
-  @apply rounded-lg shadow;
+  @apply rounded-lg shadow min-h-12;
 
   img {
     @apply object-contain transition-transform duration-500 hover:scale-105;

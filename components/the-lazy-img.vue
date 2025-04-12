@@ -149,7 +149,6 @@ const attr = ViewerAttr;
 <template>
   <span
     ref="root"
-    class="--lazy-img"
     :style="containerStyle"
     :class="twMerge(
       'relative inline-flex overflow-hidden',
