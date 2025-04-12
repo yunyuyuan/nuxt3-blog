@@ -3,7 +3,10 @@
 @import "./generated-theme-colors.css";
 
 html {
-  @apply scroll-smooth font-sans;
+  @apply font-sans;
+  &.smooth-scroll {
+    @apply scroll-smooth;
+  }
 }
 
 html,
