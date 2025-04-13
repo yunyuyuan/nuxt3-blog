@@ -5,10 +5,6 @@ const emits = defineEmits({
   insertSticker: (_: string) => true
 });
 
-const stickersTranslate = {
-  "aru": "阿鲁",
-  "yellow-face": "小黄脸"
-} as const;
 const stickersList = toRaw(useRuntimeConfig().public.stickers);
 const stickersTab = Object.keys(stickersList) as (keyof typeof stickersList)[];
 const currentStickerTab = ref(stickersTab[0]);
@@ -25,20 +21,24 @@ const stickerTranslateY = computed(() => {
     :wrap-class="$style.dropdown"
   >
     <div class=" flex h-48 max-w-[500px]">
-      <div class="flex h-full flex-col">
+      <div class="flex h-full flex-col border-r">
         <button
           v-for="k in stickersTab"
           :key="k"
           :class="twMerge(
-            'break-all text-center px-1 text-sm',
+            'px-1 text-sm',
             currentStickerTab === k && 'bg-dark-100 dark:bg-dark-600'
           )"
           :style="{
             height: `${100/stickersTab.length}%`
           }"
+          :title="k"
           @click="currentStickerTab = k"
         >
-          {{ stickersTranslate[k] }}
+          <img
+            class="min-w-6"
+            :src="`/sticker/${k}/1.png`"
+          >
         </button>
       </div>
       <div class="h-full overflow-hidden">

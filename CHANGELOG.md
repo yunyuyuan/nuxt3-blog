@@ -1,3 +1,6 @@
+## 2025.04.13
+* Add 小黑盒 cube stickers.
+
 ## 2025.03.22
 * Add Algolia search.
 * Support random theme color.
