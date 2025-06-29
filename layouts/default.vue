@@ -258,7 +258,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
 }
 
 .themeAnimateBg {
-  animation-duration: 0.5s;
+  animation-duration: 1s;
   animation-timing-function: cubic-bezier(0, 0, 0, 1);
   animation-fill-mode: forwards;
   transform: translate(50%, -50%);
@@ -274,7 +274,8 @@ const inputPwd = ref(encryptor.usePasswd.value);
 
 .nav {
   @apply fixed w-full z-header max-md:!transform-none;
-  @apply shadow max-md:!shadow transition bg-white dark:bg-dark-800;
+  @apply shadow-md transition-all duration-300;
+  @apply backdrop-blur-md bg-white/60 dark:bg-gray-900/60 border-b border-gray-200/50 dark:border-gray-700/50;
 
   &:global(:not(.headroom--pinned).headroom--not-top) {
     @apply shadow-none -translate-y-full;
