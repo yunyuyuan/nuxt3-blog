@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
+import type { ArticleItem } from "../../app/utils/common/types";
 import { createListPage, setupTestEnvironment } from "./test-helpers";
-import type { ArticleItem } from "~/utils/common/types";
 
 describe("List Editing", async () => {
   await setupTestEnvironment();

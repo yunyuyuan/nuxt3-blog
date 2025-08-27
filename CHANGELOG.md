@@ -1,3 +1,12 @@
+## [v1] 2025.10.03
+* Official `v1` release.
+* Add support for "stage" and remove drafting.
+* Show a final diff preview before committing.
+* Clear `/public/rebuild`; new forks include only sample data.
+* Upgrade to `nuxt4`.
+
+---
+
 ## 2025.04.13
 * Add 小黑盒 cube stickers.
 

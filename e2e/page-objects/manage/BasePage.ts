@@ -1,5 +1,6 @@
 import type { NuxtPage } from "@nuxt/test-utils";
-import type { CommitParams } from "../../../utils/common/types";
+import { ref, unref } from "vue";
+import type { CommitParams } from "../../../app/utils/common/types";
 
 export class ManageBasePage {
   protected requestDataRef = ref<CommitParams>();
@@ -47,13 +48,22 @@ export class ManageBasePage {
     return element;
   }
 
+  async getMonacoEditor() {
+    return this.page.locator(".monaco-editor").nth(0);
+  }
+
   async clearAndTypeInMonacoEditor(content: string) {
-    const monacoEditor = this.page.locator(".monaco-editor").nth(0);
+    const monacoEditor = await this.getMonacoEditor();
     await monacoEditor.click();
     await this.page.keyboard.press("ControlOrMeta+KeyA");
     await this.page.keyboard.type(content);
     await this.waitForTimeout();
     return monacoEditor;
+  }
+
+  async getMonacoEditorText() {
+    const monacoEditor = await this.getMonacoEditor();
+    return (await monacoEditor.textContent())?.replace(/\s+/g, "");
   }
 
   async isElementDisabled(testId: string) {

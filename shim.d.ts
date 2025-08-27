@@ -8,6 +8,7 @@ declare module "ls:*github" {
   export const deleteList: typeof import("./utils/nuxt/manage/github")["deleteList"];
   export const createCommit: typeof import("./utils/nuxt/manage/github")["createCommit"];
   export const isAuthor: typeof import("./utils/nuxt/manage/github")["isAuthor"];
+  export const commitStagedItems: typeof import("./utils/nuxt/manage/github")["commitStagedItems"];
 }
 
 declare const __NB_DATABASE_ENABLED__: string;

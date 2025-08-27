@@ -1,8 +1,8 @@
 import fs from "fs";
 import colors from "colors";
 import CryptoJS from "crypto-js";
-import type { CommonItem, DecryptFunction, HeaderTabUrl } from "../../utils/common/types";
-import { encryptDecryptItem, getEncryptedBlocks } from "../../utils/common/process-encrypt-decrypt";
+import type { CommonItem, DecryptFunction, HeaderTabUrl } from "../../app/utils/common/types";
+import { encryptDecryptItem, getEncryptedBlocks } from "../../app/utils/common/process-encrypt-decrypt";
 import { walkAllBlogData } from ".";
 
 export async function encrypt(s: string, pwd: string): Promise<string> {

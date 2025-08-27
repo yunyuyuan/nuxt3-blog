@@ -2,12 +2,13 @@ import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
 import { hash as cryptoHash } from "crypto";
+import type { NitroRouteConfig } from "nitropack";
 import { generateSiteMap, generateThemeColorsCSS, uploadAlgoliaIndex } from "./scripts/nuxt-hooks";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
-import { getNowDayjsString } from "./utils/common/dayjs";
-import { ThemeModeKey } from "./utils/common/constants";
-import { HeaderTabs, type CommonItem } from "./utils/common/types";
+import { getNowDayjsString } from "./app/utils/common/dayjs";
+import { ThemeModeKey } from "./app/utils/common/constants";
+import { HeaderTabs, type CommonItem } from "./app/utils/common/types";
 
 const isDev = process.env.NODE_ENV === "development";
 const isTest = process.env.VITESTING === "true";
@@ -20,6 +21,16 @@ fs.readdirSync("./public/sticker").forEach((dir) => {
 
 // random theme
 generateThemeColorsCSS();
+
+const routes = fs.readdirSync("./public/rebuild/json").reduce((acc, target) => {
+  const jsonPath = `./public/rebuild/json/${target}`;
+  const targetUrlPath = target.replace(".json", "");
+  const json = JSON.parse(fs.readFileSync(jsonPath).toString()) as CommonItem[];
+  json.filter(item => Boolean(item.customSlug)).forEach((item) => {
+    acc[`/${targetUrlPath}/${item.id}`] = { redirect: { to: `/${targetUrlPath}/${item.customSlug}` } };
+  });
+  return acc;
+}, {} as Record<string, NitroRouteConfig>);
 
 const scripts = [];
 // dark mode
@@ -68,6 +79,7 @@ for (const b of [
 export default defineNuxtConfig({
   modules: [
     "@nuxt/eslint",
+    "@nuxt/devtools",
     "@nuxt/test-utils/module",
     "@nuxtjs/tailwindcss"
   ],
@@ -79,7 +91,7 @@ export default defineNuxtConfig({
       }
     ]
   },
-  devtools: { enabled: false },
+  devtools: { enabled: true },
 
   app: {
     head: {
@@ -91,11 +103,11 @@ export default defineNuxtConfig({
       link: [
         { rel: "shortcut icon", href: "/icon.png" }
       ],
-      script: scripts,
+      script: scripts as any,
       title: config.title
     }
   },
-  css: ["~/assets/style/main.css", "~/node_modules/katex/dist/katex.min.css", "~/node_modules/viewerjs/dist/viewer.css"],
+  css: ["~/assets/style/main.css", "./node_modules/katex/dist/katex.min.css", "./node_modules/viewerjs/dist/viewer.css"],
 
   runtimeConfig: {
     public: {
@@ -105,6 +117,8 @@ export default defineNuxtConfig({
       githubBranch
     }
   },
+
+  routeRules: routes,
 
   features: {
     inlineStyles: false

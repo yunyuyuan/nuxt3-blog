@@ -5,7 +5,7 @@ describe("Item Creation", async () => {
   await setupTestEnvironment();
 
   it("Creating works", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/new");
+    const { itemPage } = await createItemPage("/manage/articles/0");
 
     const uploadBtn = await itemPage.getByTestId("item-upload-btn");
     expect(await uploadBtn.isDisabled()).toBe(true);
@@ -25,7 +25,7 @@ describe("Item Creation", async () => {
   });
 
   it("Creating item with encryptedBlock works", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/new");
+    const { itemPage } = await createItemPage("/manage/articles/0");
 
     const uploadBtn = await itemPage.getByTestId("item-upload-btn");
     expect(await uploadBtn.isDisabled()).toBe(true);
@@ -47,7 +47,7 @@ describe("Item Creation", async () => {
   });
 
   it("Creating encrypted item works", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/new");
+    const { itemPage } = await createItemPage("/manage/articles/0");
 
     const uploadBtn = await itemPage.getByTestId("item-upload-btn");
     expect(await uploadBtn.isDisabled()).toBe(true);

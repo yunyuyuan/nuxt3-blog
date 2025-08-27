@@ -4,8 +4,8 @@ import path from "path";
 import colors from "colors";
 import type { PromptObject } from "prompts";
 import prompts from "prompts";
-import type { CommonItemByHeaderType, HeaderTabUrl } from "../../utils/common/types";
-import { escapeNewLine } from "../../utils/common/utils";
+import type { CommonItemByHeaderType, HeaderTabUrl } from "../../app/utils/common/types";
+import { escapeNewLine } from "../../app/utils/common/utils";
 
 export async function promptTask<const T extends PromptObject & { name: string }>(params: T[], cb: (_: Record<T["name"], any>) => any | Promise<any>) {
   let canceled = false;
