@@ -1,5 +1,5 @@
 import { readBody, createError } from "h3";
-import { getVisitors } from "../../../utils/api/db";
+import { getVisitors } from "../../../app/utils/api/db";
 
 export default defineEventHandler(async (event) => {
   if (event.node.req.method?.toUpperCase() !== "POST") {

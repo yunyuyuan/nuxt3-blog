@@ -2,17 +2,15 @@ import fs from "fs";
 import path from "path";
 import { algoliasearch } from "algoliasearch";
 import config from "../config";
-import type { AlgoliaBody, ArticleItem, KnowledgeItem, RecordItem } from "../utils/common/types";
-import { parseMarkdown } from "../utils/common/markdown";
+import type { AlgoliaBody, ArticleItem, KnowledgeItem, RecordItem } from "../app/utils/common/types";
+import { parseMarkdown } from "../app/utils/common/markdown";
 import { genRss, getAbsolutePath, getRebuildPath, nbLog, walkAllBlogData } from "./utils";
 import extractTextFromHtml from "./utils/html";
 
 export function generateThemeColorsCSS() {
   const themeColors = config.themeColor;
 
-  let cssContent = `/* AUTO GENERATED: ${new Date().toISOString()} */
-/* set a default */
-:root {
+  let cssContent = `:root {
   --color-primary-50: theme('colors.${config.themeColor[0]}.50');
   --color-primary-100: theme('colors.${config.themeColor[0]}.100');
   --color-primary-200: theme('colors.${config.themeColor[0]}.200');
@@ -45,7 +43,7 @@ export function generateThemeColorsCSS() {
 `;
   });
 
-  const cssFilePath = getAbsolutePath("assets/style/generated-theme-colors.css");
+  const cssFilePath = getAbsolutePath("app/assets/style/generated-theme-colors.css");
   fs.writeFileSync(cssFilePath, cssContent);
 
   nbLog(`random themes generated: ${cssFilePath}`);

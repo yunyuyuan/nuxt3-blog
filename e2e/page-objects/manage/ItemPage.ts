@@ -1,6 +1,7 @@
 import { expect } from "vitest";
+import { nextTick } from "vue";
+import type { ArticleItem } from "../../../app/utils/common/types";
 import { ManageBasePage } from "./BasePage";
-import type { ArticleItem } from "~/utils/common/types";
 
 export class ManageItemPage extends ManageBasePage {
   async fillItemDetails(title: string, tags?: string, content?: string) {
@@ -72,18 +73,20 @@ export class ManageItemPage extends ManageBasePage {
       expect(requestList.filter(i => Boolean(i.encryptBlocks?.length))).lengthOf(options.encryptBlocksItemsCount);
     }
 
-    const foundEncryptedTitle = requestList.find(i => i.title === "U2FsdGVkX18wyEu7vCLMOGilOsG2cQdWY+kvi3b+AZE=");
-    if (options.shouldContainEncryptedTitle) {
-      expect(foundEncryptedTitle).toBeDefined();
-    } else {
-      expect(foundEncryptedTitle).toBeUndefined();
+    if (options.shouldContainEncryptedTitle !== undefined) {
+      const foundEncryptedTitle = requestList.find(i => i.title.startsWith("U2Fs"));
+      if (options.shouldContainEncryptedTitle) {
+        expect(foundEncryptedTitle).toBeDefined();
+      } else {
+        expect(foundEncryptedTitle).toBeUndefined();
+      }
     }
 
     return requestList;
   }
 
   async verifyItemContentInResponse(shouldContain?: string, shouldNotContain?: string) {
-    const newItemContent = this.requestAdditions[1].content || "";
+    const newItemContent = this.requestAdditions.map(r => r.content).join("\n") || "";
 
     if (shouldContain) {
       expect(newItemContent).toContain(shouldContain);

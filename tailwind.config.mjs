@@ -4,11 +4,11 @@ import config from "./config";
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./utils/**/*.{tsx,vue}",
-    "./pages/**/*.vue",
-    "./components/**/*.vue",
-    "./layouts/**/*.vue",
-    "./app.vue"
+    "./app/utils/**/*.{tsx,vue}",
+    "./app/pages/**/*.vue",
+    "./app/components/**/*.vue",
+    "./app/layouts/**/*.vue",
+    "./app/app.vue"
   ],
   darkMode: "class",
   theme: {
@@ -46,8 +46,7 @@ export default {
         headerLoading: "501",
         modal: "999",
         dropdown: "999",
-        mermaidFullscreen: "999",
-        notify: "1000"
+        mermaidFullscreen: "999"
       },
       animation: {
         shake: "shake 0.82s cubic-bezier(.36,.07,.19,.97) infinite"
