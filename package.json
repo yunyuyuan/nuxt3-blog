@@ -31,7 +31,7 @@
     "marked": "^15.0.1",
     "mermaid": "^11.4.1",
     "monaco-editor": "^0.52.0",
-    "pangu": "^4.0.7",
+    "pangu": "^7.2.0",
     "viewerjs": "^1.10.5",
     "vue-router": "4"
   },

@@ -1,6 +1,6 @@
 import { createApp, createVNode, render, type FunctionalComponent } from "vue";
 import { SquareArrowOutUpRight, Clipboard } from "lucide-vue-next";
-import pangu from "pangu";
+import { pangu } from "pangu/browser";
 import { initHljs } from "../common/hljs";
 import { translate } from "./i18n";
 import { notify } from "./notify";
@@ -80,7 +80,7 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
       el.appendChild(createSvgIcon(SquareArrowOutUpRight));
     });
 
-    pangu.spacingElementByClassName("--markdown");
+    pangu.spacingNode(mdEl);
   });
   return destroyFns;
 }

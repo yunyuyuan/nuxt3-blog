@@ -3,7 +3,21 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.biome": "never"
+  },
+  "editor.formatOnSave": true,
   "editor.quickSuggestions": {
-      "strings": true
+    "strings": true
   }
 }
