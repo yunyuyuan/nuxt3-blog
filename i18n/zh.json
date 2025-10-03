@@ -159,5 +159,11 @@
   "confirm": "确认",
   "no-staged-items-to-commit": "暂无暂存项目可提交",
   "custom-slug": "自定义slug",
-  "same-id-or-slug-found": "发现相同的id或slug"
+  "same-id-or-slug-found": "发现相同的id或slug",
+  "new-version-available": "发现新版本",
+  "new-version-detected": "检测到新版本 v{0}",
+  "view-changelog": "查看更新日志",
+  "how-to-upgrade": "如何升级",
+  "upgrade-step-1": "进入你的仓库网站",
+  "upgrade-step-2": "点击 \"Sync fork\" → 点击 \"update branch\""
 }

@@ -1,3 +1,6 @@
+## [v2] 2025.10.03
+* Add upgrade notifications and tutorials for forks.
+
 ## [v1] 2025.10.03
 * Official `v1` release.
 * Add support for "stage" and remove drafting.

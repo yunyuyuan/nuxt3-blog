@@ -12,7 +12,7 @@ definePageMeta({
 useCommonSEOTitle(computed(() => translate("about")));
 
 const commitSha = __NB_CURRENT_GIT_SHA__;
-const commitUrl = computed(() => `https://github.com/${config.githubName}/${config.githubRepo}/commit/${commitSha}`);
+const commitUrl = computed(() => `https://github.com/${config.githubName}/${__NB_GITHUB_REPO__}/commit/${commitSha}`);
 const buildTime = __NB_BUILD_TIME__;
 
 const paragraphs = config.about;

@@ -159,5 +159,11 @@
   "confirm": "Confirm",
   "no-staged-items-to-commit": "No staged items to commit",
   "custom-slug": "Custom Slug",
-  "same-id-or-slug-found": "Same id or slug found"
+  "same-id-or-slug-found": "Same id or slug found",
+  "new-version-available": "New Version Available",
+  "new-version-detected": "New version v{0} detected",
+  "view-changelog": "View Changelog",
+  "how-to-upgrade": "How to Upgrade",
+  "upgrade-step-1": "Go to your repository website",
+  "upgrade-step-2": "Click \"Sync fork\" → Click \"Update branch\""
 }
