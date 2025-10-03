@@ -83,6 +83,23 @@ for (const b of [
   }
 }
 
+let gitCurrentSha = "";
+for (const b of [
+  // vercel
+  process.env.VERCEL_GIT_COMMIT_SHA,
+  // cloudflare page
+  process.env.CF_PAGES_COMMIT_SHA,
+  // netlify
+  process.env.COMMIT_REF,
+  // git cli for fallback
+  execSync("git rev-parse HEAD").toString().trim()
+]) {
+  if (b) {
+    gitCurrentSha = b;
+    break;
+  }
+}
+
 // current version from CHANGELOG.md
 const changelogContent = fs.readFileSync("./CHANGELOG.md").toString();
 const versionMatch = changelogContent.match(/##\s*\[v(\d+)\]/);
@@ -176,8 +193,8 @@ export default defineNuxtConfig({
         && !!(process.env.ALGOLIA_SEARCH_KEY || config.algoliaSearch.searchKey)
         && !!(process.env.ALGOLIA_INDEX_NAME || config.algoliaSearch.indexName)),
       __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString()),
-      __NB_GITHUB_REPO__: JSON.stringify(__dirname.split("/").pop() || "nuxt3-blog"),
-      __NB_CURRENT_GIT_SHA__: JSON.stringify(execSync("git rev-parse HEAD").toString().trim()),
+      __NB_GITHUB_REPO__: JSON.stringify(config.githubRepo),
+      __NB_CURRENT_GIT_SHA__: JSON.stringify(gitCurrentSha),
       __NB_BUILDTIME_VITESTING__: isTest,
       __NB_CURRENT_VERSION__: JSON.stringify(currentVersion)
     },
