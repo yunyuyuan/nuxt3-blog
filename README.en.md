@@ -61,7 +61,7 @@ Blog principle example:
 ##### Low Priority Features
 - [ ] Different passwords for different encrypted pages
 - [ ] Monaco editor support for additional markdown syntax highlighting
-- [ ] One-click pull updates from upstream GitHub repository
+- [x] One-click pull updates from upstream GitHub repository
 - [ ] IV for AES encryption
 - [x] Block-level encryption
 - [x] SSR for self-hosting ([reference](https://blog.yunyuyuan.net/articles/8346))

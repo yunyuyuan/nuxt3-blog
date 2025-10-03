@@ -63,7 +63,7 @@
 ##### 低优先级特性
 - [ ] 不同加密页面可使用不同的密码
 - [ ] 让monaco editor支持额外的markdown语法高亮
-- [ ] 一键拉取上游github仓库更新 
+- [x] 一键拉取上游github仓库更新 
 - [ ] IV for AES encryption
 - [x] 块级加密
 - [x] SSR, 用于自建([参考](https://blog.yunyuyuan.net/articles/8346))
