@@ -149,19 +149,15 @@ export function createDiffModal({
  * 显示新版本提示弹窗
  */
 export function createVersionUpdateModal(newVersion: string) {
-  return new Promise<boolean>((resolve) => {
+  return new Promise<void>((resolve) => {
     const container = document.createElement("div");
     const vm = createVNode(VersionUpdateModal, {
       modelValue: true,
       newVersion
     });
-    vm.props!.onOk = () => {
-      render(null, container);
-      resolve(true);
-    };
     vm.props!.onClose = () => {
       render(null, container);
-      resolve(false);
+      resolve();
     };
     vm.appContext = useNuxtApp().vueApp._context;
     render(vm, container);
