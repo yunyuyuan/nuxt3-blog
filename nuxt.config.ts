@@ -22,15 +22,24 @@ fs.readdirSync("./public/sticker").forEach((dir) => {
 // random theme
 generateThemeColorsCSS();
 
-const routes = fs.readdirSync("./public/rebuild/json").reduce((acc, target) => {
-  const jsonPath = `./public/rebuild/json/${target}`;
-  const targetUrlPath = target.replace(".json", "");
-  const json = JSON.parse(fs.readFileSync(jsonPath).toString()) as CommonItem[];
-  json.filter(item => Boolean(item.customSlug)).forEach((item) => {
-    acc[`/${targetUrlPath}/${item.id}`] = { redirect: { to: `/${targetUrlPath}/${item.customSlug}` } };
-  });
-  return acc;
-}, {} as Record<string, NitroRouteConfig>);
+// routes
+const routes: string[] = [];
+const ignoreRoutes: string[] = [];
+const routesConfig: Record<string, NitroRouteConfig> = {};
+
+HeaderTabs.forEach((url) => {
+  const path = `./public${isTest ? "/e2e" : ""}/rebuild/json${url}.json`;
+  if (fs.existsSync(path)) {
+    const json = JSON.parse(fs.readFileSync(path).toString()) as CommonItem[];
+    json.forEach((item) => {
+      if (item.customSlug) {
+        ignoreRoutes.push(`${url}/${item.id}`);
+        routesConfig[`${url}/${item.id}`] = { redirect: { to: `/${url}/${item.customSlug}` } };
+      }
+      routes.push(`${url}/${item.customSlug || item.id}`);
+    });
+  }
+});
 
 const scripts = [];
 // dark mode
@@ -118,7 +127,7 @@ export default defineNuxtConfig({
     }
   },
 
-  routeRules: routes,
+  routeRules: routesConfig,
 
   features: {
     inlineStyles: false
@@ -133,22 +142,8 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: true,
       failOnError: false,
-      routes: (() => {
-        const routes: string[] = [];
-        HeaderTabs.forEach((url) => {
-          const path = `./public${isTest ? "/e2e" : ""}/rebuild/json${url}.json`;
-          if (fs.existsSync(path)) {
-            const json = JSON.parse(fs.readFileSync(path).toString()) as CommonItem[];
-            json.forEach((item) => {
-              // if (!item.encrypt) {
-              routes.push(`${url}/${item.id}`);
-              // }
-            });
-          }
-        });
-        return routes;
-      })(),
-      ignore: ["/manage"]
+      routes: routes,
+      ignore: ["/manage", ...ignoreRoutes]
     },
     cloudflare: {
       pages: {

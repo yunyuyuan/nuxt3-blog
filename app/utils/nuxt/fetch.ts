@@ -18,7 +18,7 @@ const magicFetch = async<T = any>(_path: string, transform: (_: string) => T): P
   } else if (isDev || isPrerender) {
     return transform((await import("fs")).readFileSync("public/" + path, { encoding: "utf-8" }).toString());
   }
-  throw new Error(`Fetch ${path} failed`);
+  return transform("[]");
 };
 
 export const fetchList = async<T extends CommonItem>(tab: HeaderTabUrl) => {
