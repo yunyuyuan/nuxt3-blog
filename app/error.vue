@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { AlertCircle, Home, RefreshCw } from "lucide-vue-next";
 import type { NuxtError } from "#app";
+import { OfficialRepo } from "~/utils/common/constants";
 
 defineProps<{
   error: NuxtError;
@@ -103,7 +104,7 @@ const reload = () => window.location.reload();
         |
         <a
           target="_blank"
-          href="https://github.com/yunyuyuan/nuxt3-blog/issues/new"
+          :href="`https://github.com/${OfficialRepo}/issues/new`"
           class="text-primary-600 hover:underline dark:text-primary-400"
         >
           {{ $t('error-feedback') }}

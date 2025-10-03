@@ -1,4 +1,4 @@
-import { GithubTokenKey, IgnoredVersionKey } from "~/utils/common/constants";
+import { GithubTokenKey, IgnoredVersionKey, OfficialRepo } from "~/utils/common/constants";
 import { isDev } from "~/utils/nuxt/constants";
 import { translate } from "~/utils/nuxt/i18n";
 import { getLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
@@ -8,7 +8,7 @@ import { notify } from "~/utils/nuxt/notify";
 
 async function checkVersion() {
   try {
-    const response = await fetch("https://raw.githubusercontent.com/yunyuyuan/nuxt3-blog/refs/heads/master/CHANGELOG.md");
+    const response = await fetch(`https://raw.githubusercontent.com/${OfficialRepo}/refs/heads/master/CHANGELOG.md`);
     const content = await response.text();
     const versionMatch = content.match(/##\s*\[v(\d+)\]/);
     const latestVersion = versionMatch ? versionMatch[1] : null;

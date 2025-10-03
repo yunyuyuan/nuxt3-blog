@@ -3,7 +3,6 @@
 * Add support for "stage" and remove drafting.
 * Show a final diff preview before committing.
 * Clear `/public/rebuild`; new forks include only sample data.
-* Add upgrade notifications and tutorials for forks.
 * Upgrade to `nuxt4`.
 
 ---

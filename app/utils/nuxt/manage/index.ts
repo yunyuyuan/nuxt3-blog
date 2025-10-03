@@ -3,6 +3,7 @@ import type { CommonItem, RecordItem, CommitParamsAddition } from "~/utils/commo
 import { translate } from "~/utils/nuxt/i18n";
 import CommonModal from "~/components/common-modal.vue";
 import DiffModal from "~/pages/manage/comps/diff-modal.vue";
+import VersionUpdateModal from "~/pages/manage/comps/version-update-modal.vue";
 import { escapeNewLine } from "~/utils/common/utils";
 import { ModalContainerId } from "~/utils/common/constants";
 
@@ -150,11 +151,9 @@ export function createDiffModal({
 export function createVersionUpdateModal(newVersion: string) {
   return new Promise<boolean>((resolve) => {
     const container = document.createElement("div");
-    const vm = createVNode(CommonModal, {
+    const vm = createVNode(VersionUpdateModal, {
       modelValue: true,
-      modalTitle: translate("new-version-available"),
-      modalContent: translate("new-version-detected", [newVersion]),
-      showCancel: true
+      newVersion
     });
     vm.props!.onOk = () => {
       render(null, container);

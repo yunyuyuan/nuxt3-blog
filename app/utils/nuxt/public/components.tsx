@@ -9,11 +9,11 @@ export function Visitors(props: { visitors?: number }) {
   return (
     __NB_DATABASE_ENABLED__ && Number(props.visitors) >= 0
       ? (
-          <span class="flex items-center gap-1" title={translate("visit-time", [props.visitors])}>
-            <Eye class="size-4" />
-            { props.visitors }
-          </span>
-        )
+        <span class="flex items-center gap-1" title={translate("visit-time", [props.visitors])}>
+          <Eye class="size-4" />
+          {props.visitors}
+        </span>
+      )
       : null
   );
 }
@@ -22,13 +22,13 @@ export function Words(props: { len: number }) {
   return (
     Number(props.len) >= 0
       ? (
-          <span class="flex items-center gap-1">
-            <FileText class="size-4" />
-            { props.len }
-            {" "}
-            { translate("words-num") }
-          </span>
-        )
+        <span class="flex items-center gap-1">
+          <FileText class="size-4" />
+          {props.len}
+          {" "}
+          {translate("words-num")}
+        </span>
+      )
       : null
   );
 }
@@ -37,7 +37,7 @@ export function WroteDate(props: { item: CommonItem }) {
   return (
     <span class="flex items-center gap-1" title={`${translate("created-at")}: ${formatTime(props.item.time)}\n${translate("updated-at")}: ${formatTime(props.item.modifyTime)}`}>
       <Calendar class="size-4" />
-      { formatTime(props.item.time, "date") }
+      {formatTime(props.item.time, "date")}
     </span>
   );
 }
@@ -46,7 +46,7 @@ export function WroteDate(props: { item: CommonItem }) {
 export const Comments = defineComponent({
   name: 'Comments',
   setup() {
-    if (!__NB_CMTREPOID__ || ! __NB_CMTREPOCATEID__) return () => null;
+    if (!__NB_CMTREPOID__ || !__NB_CMTREPOCATEID__) return () => null;
 
     const { themeMode } = useThemeMode();
     const { i18nCode } = useI18nCode();
@@ -80,10 +80,10 @@ export const Comments = defineComponent({
 
     const loadGiscus = () => {
       if (giscusLoaded.value || !containerRef.value) return;
-      
+
       const script = document.createElement("script");
       script.src = "https://giscus.app/client.js";
-      script.setAttribute("data-repo", `${config.githubName}/${config.githubRepo}`);
+      script.setAttribute("data-repo", `${config.githubName}/${__NB_GITHUB_REPO__}`);
       script.setAttribute("data-repo-id", __NB_CMTREPOID__);
       script.setAttribute("data-category", "Announcements");
       script.setAttribute("data-category-id", __NB_CMTREPOCATEID__);
@@ -101,9 +101,9 @@ export const Comments = defineComponent({
     };
 
     onMounted(() => {
-      watchUntil(themeMode, loadGiscus, 
-        { immediate: true }, 
-        themeMode => !!themeMode, 
+      watchUntil(themeMode, loadGiscus,
+        { immediate: true },
+        themeMode => !!themeMode,
         "cancelAfterUntil"
       );
     });
@@ -127,7 +127,7 @@ export const Comments = defineComponent({
     return () => (
       <section>
         <h3 class="mb-4 text-xl font-medium text-dark-800 dark:text-dark-200">
-          { translate("comments") }
+          {translate("comments")}
         </h3>
         <div class="flex min-h-44 items-center justify-center rounded-lg py-4">
           <div

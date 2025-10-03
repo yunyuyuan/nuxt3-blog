@@ -1,5 +1,4 @@
 import type { WatchHandle, WatchOptions } from "vue";
-import { githubRepoUrl } from "../common/constants";
 import { HeaderTabs } from "../common/types";
 import { isDev } from "./constants";
 import config from "~~/config";
@@ -36,7 +35,7 @@ export function calcRocketUrl() {
   const fromManage = path.startsWith("manage");
   const paths = (fromManage ? path.replace(/^manage\//, "") : path).split("/");
   if (paths[0] === "about") {
-    return githubRepoUrl;
+    return `https://github.com/${config.githubName}/${__NB_GITHUB_REPO__}`;
   }
   const item = HeaderTabs.find(tab => tab.substring(1) === paths[0]);
   if (item) {

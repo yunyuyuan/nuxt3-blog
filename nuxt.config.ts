@@ -176,6 +176,7 @@ export default defineNuxtConfig({
         && !!(process.env.ALGOLIA_SEARCH_KEY || config.algoliaSearch.searchKey)
         && !!(process.env.ALGOLIA_INDEX_NAME || config.algoliaSearch.indexName)),
       __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString()),
+      __NB_GITHUB_REPO__: JSON.stringify(__dirname.split("/").pop() || "nuxt3-blog"),
       __NB_CURRENT_GIT_SHA__: JSON.stringify(execSync("git rev-parse HEAD").toString().trim()),
       __NB_BUILDTIME_VITESTING__: isTest,
       __NB_CURRENT_VERSION__: JSON.stringify(currentVersion)
