@@ -16,11 +16,9 @@ async function checkVersion() {
     if (latestVersion && latestVersion !== __NB_CURRENT_VERSION__) {
       const ignoredVersion = getLocalStorage(IgnoredVersionKey);
       if (ignoredVersion !== latestVersion) {
-        const shouldUpdate = await createVersionUpdateModal(latestVersion);
-        if (!shouldUpdate) {
-          // 用户选择忽略此版本
-          setLocalStorage(IgnoredVersionKey, latestVersion);
-        }
+        await createVersionUpdateModal(latestVersion);
+        // 不会弹出第二次
+        setLocalStorage(IgnoredVersionKey, latestVersion);
       }
     }
   } catch (e) {

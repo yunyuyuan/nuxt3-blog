@@ -8,7 +8,6 @@ const show = defineModel<boolean>({ required: true });
 defineProps<{
   newVersion: string;
   onClose: () => void;
-  onOk: () => void;
 }>();
 
 const changelogUrl = `https://github.com/${OfficialRepo}/blob/master/CHANGELOG.md`;
@@ -19,9 +18,8 @@ const repoUrl = `https://github.com/${config.githubName}/nuxt3-blog`;
   <common-modal
     v-model="show"
     modal-width="800px"
-    :show-ok="true"
-    :show-cancel="true"
-    @confirm="onOk"
+    :show-ok="false"
+    :show-cancel="false"
     @cancel="onClose"
   >
     <template #title>

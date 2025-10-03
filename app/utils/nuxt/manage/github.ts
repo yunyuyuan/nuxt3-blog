@@ -30,13 +30,12 @@ function encodeB64(str: string) {
 
 /** @description 是否管理员 */
 export async function isAuthor(token: string): Promise<boolean> {
-  const result = await post(
-    `query {
+  const result = await post(`query {
     viewer {
       login
     }
     repository(name: "${__NB_GITHUB_REPO__}", owner: "${config.githubName}") {
-      defaultBranchRef {
+      ref(qualifiedName: "${useRuntimeConfig().app.githubBranch}") {
         target {
           ... on Commit {
             history(first: 1) {
@@ -49,7 +48,7 @@ export async function isAuthor(token: string): Promise<boolean> {
       }
     }
   }`,
-    token
+  token
   );
   const err = result.data.errors;
   if (err) {
@@ -60,7 +59,7 @@ export async function isAuthor(token: string): Promise<boolean> {
       // token 验证成功
       useGithubToken().value = token;
       // 更新 commit id
-      useRemoteLatestSha().value = result.data.data.repository.defaultBranchRef.target.history.nodes[0].oid;
+      useRemoteLatestSha().value = result.data.data.repository.ref.target.history.nodes[0].oid;
     }
     return verified;
   }
