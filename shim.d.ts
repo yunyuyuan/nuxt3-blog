@@ -21,3 +21,4 @@ declare const __NB_ALGOLIA_ENABLED__: boolean;
 declare const __NB_BUILD_TIME__: string;
 declare const __NB_CURRENT_GIT_SHA__: string;
 declare const __NB_BUILDTIME_VITESTING__: boolean;
+declare const __NB_CURRENT_VERSION__: string;

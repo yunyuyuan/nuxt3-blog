@@ -143,3 +143,31 @@ export function createDiffModal({
       .appendChild(container.firstElementChild!);
   });
 }
+
+/**
+ * 显示新版本提示弹窗
+ */
+export function createVersionUpdateModal(newVersion: string) {
+  return new Promise<boolean>((resolve) => {
+    const container = document.createElement("div");
+    const vm = createVNode(CommonModal, {
+      modelValue: true,
+      modalTitle: translate("new-version-available"),
+      modalContent: translate("new-version-detected", [newVersion]),
+      showCancel: true
+    });
+    vm.props!.onOk = () => {
+      render(null, container);
+      resolve(true);
+    };
+    vm.props!.onClose = () => {
+      render(null, container);
+      resolve(false);
+    };
+    vm.appContext = useNuxtApp().vueApp._context;
+    render(vm, container);
+    document
+      .getElementById(ModalContainerId)!
+      .appendChild(container.firstElementChild!);
+  });
+}

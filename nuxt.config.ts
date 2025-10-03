@@ -83,6 +83,11 @@ for (const b of [
   }
 }
 
+// current version from CHANGELOG.md
+const changelogContent = fs.readFileSync("./CHANGELOG.md").toString();
+const versionMatch = changelogContent.match(/##\s*\[v(\d+)\]/);
+const currentVersion = versionMatch ? versionMatch[1] : "1";
+
 // const prefix = "monaco-editor/esm/vs";
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
@@ -172,7 +177,8 @@ export default defineNuxtConfig({
         && !!(process.env.ALGOLIA_INDEX_NAME || config.algoliaSearch.indexName)),
       __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString()),
       __NB_CURRENT_GIT_SHA__: JSON.stringify(execSync("git rev-parse HEAD").toString().trim()),
-      __NB_BUILDTIME_VITESTING__: isTest
+      __NB_BUILDTIME_VITESTING__: isTest,
+      __NB_CURRENT_VERSION__: JSON.stringify(currentVersion)
     },
     css: {
       modules: {
