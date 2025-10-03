@@ -8,8 +8,8 @@ export default defineVitestConfig({
       {
         find: /^monaco-editor$/,
         replacement:
-          __dirname + "/node_modules/monaco-editor/esm/vs/editor/editor.api",
-      },
-    ],
-  },
+          __dirname + "/node_modules/monaco-editor/esm/vs/editor/editor.api"
+      }
+    ]
+  }
 });
