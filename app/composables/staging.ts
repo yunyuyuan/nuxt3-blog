@@ -117,7 +117,7 @@ export const useStaging = () => {
   };
 
   // 移除指定的暂存项目（批量）
-  const removeStagedItems = (itemsToRemove: StagedItem<CommonItem>[]) => {
+  const removeStagedItems = (itemsToRemove: Pick<StagedItem<CommonItem>, "id" | "targetTab">[]) => {
     for (const item of itemsToRemove) {
       unstageItem(item.id, item.targetTab);
     }

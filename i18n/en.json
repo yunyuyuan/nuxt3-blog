@@ -151,7 +151,7 @@
   "confirm-changes": "Confirm Changes",
   "loading-changes": "Loading changes...",
   "confirm": "Confirm",
-  "no-staged-items-to-commit": "No staged items to commit",
+  "select-items-to-commit": "Select staged items to commit",
   "custom-slug": "Custom Slug",
   "same-id-or-slug-found": "Same id or slug found",
   "new-version-available": "New Version Available",
