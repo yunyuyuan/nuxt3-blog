@@ -311,7 +311,7 @@ onMounted(() => {
         </CommonButton>
       </div>
 
-      <div class="ml-auto flex items-center gap-4">
+      <div class="ml-auto flex flex-wrap items-center gap-4">
         <span
           v-show="!!statusText"
           class="ml-2 text-xs text-red-500"
