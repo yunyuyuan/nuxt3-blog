@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { algoliasearch } from "algoliasearch";
+import { algoliasearch, type Action } from "algoliasearch";
 import config from "../config";
 import type { AlgoliaBody, ArticleItem, KnowledgeItem, RecordItem } from "../app/utils/common/types";
 import { parseMarkdown } from "../app/utils/common/markdown";
@@ -66,6 +66,8 @@ export async function uploadAlgoliaIndex() {
 
   const client = algoliasearch(appId, apiKey);
 
+  const dataMap: Record<string, AlgoliaBody> = {};
+
   blogData.forEach(({ type, list }) => {
     list.filter(item => !item.encrypt).forEach(async (item) => {
       const html = (await parseMarkdown(item._md)).md;
@@ -92,13 +94,57 @@ export async function uploadAlgoliaIndex() {
       }
 
       const objectID = `${type}/${item.id}`;
-      client.addOrUpdateObject({
-        indexName: indexName,
-        objectID,
-        body
-      }).then(() => {
-        nbLog(`uploaded Algolia index: ${objectID}`);
-      });
+
+      dataMap[objectID] = body;
     });
   });
+
+  const allObjectIDs = Object.keys(dataMap);
+  const exists = (await client.getObjects<{ objectID: string }>({
+    requests: allObjectIDs.map(objectID => ({
+      indexName,
+      objectID,
+      attributesToRetrieve: ["objectID"]
+    }))
+  })).results.map(result => result.objectID);
+
+  const adds = allObjectIDs.filter(objectID => !exists.includes(objectID));
+  const updates = allObjectIDs.filter(objectID => exists.includes(objectID));
+  const deletes = exists.filter(objectID => !allObjectIDs.includes(objectID));
+
+  // 合并所有操作请求
+  const allRequests = [
+    ...adds.map(objectID => ({
+      action: "addObject" as Action,
+      body: dataMap[objectID]
+    })),
+    ...updates.map(objectID => ({
+      action: "updateObject" as Action,
+      body: dataMap[objectID]
+    })),
+    ...deletes.map(objectID => ({
+      action: "deleteObject" as Action,
+      body: { objectID }
+    }))
+  ];
+
+  // 每100条数据调用一个batch
+  const batchSize = 100;
+  const batches = [];
+  for (let i = 0; i < allRequests.length; i += batchSize) {
+    batches.push(allRequests.slice(i, i + batchSize));
+  }
+
+  // 执行所有批次
+  for (let i = 0; i < batches.length; i++) {
+    await client.batch({
+      indexName,
+      batchWriteParams: {
+        requests: batches[i]
+      }
+    });
+    nbLog(`Algolia batch ${i + 1}/${batches.length} uploaded (${batches[i].length} items)`);
+  }
+
+  nbLog(`Algolia index upload completed: ${allRequests.length} total items`);
 }
