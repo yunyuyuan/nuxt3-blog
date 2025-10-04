@@ -1,7 +1,5 @@
 <script setup lang="tsx">
 import { Languages, Sun, MoonStar, Rocket, Menu, Rss, Key, Search } from "lucide-vue-next";
-import Headroom from "headroom.js";
-import tailwindConfig from "#tailwind-config";
 import config from "~~/config";
 import { i18nLocales, type I18nCode } from "~/utils/common/locales";
 import { HeaderTabs } from "~/utils/common/types";
@@ -40,18 +38,8 @@ const rocketUrl = computed(() => {
   return calcRocketUrl();
 });
 
-let headroom: undefined | Headroom;
-const headerRef = ref();
 onMounted(async () => {
   footerDomain.value = window.location.hostname;
-
-  headroom = new Headroom(headerRef.value, {
-    offset: parseInt(tailwindConfig.theme.spacing.header.replace("px", ""))
-  });
-  headroom.init();
-});
-onBeforeUnmount(() => {
-  headroom?.destroy();
 });
 
 const encryptor = useEncryptor();
@@ -68,19 +56,18 @@ const inputPwd = ref(encryptor.usePasswd.value);
         themeAnimate && $style.themeAnimateBg
       )"
     />
-    <nav
-      ref="headerRef"
-      :class="$style.nav"
-    >
-      <div class="container mx-auto flex h-header items-center justify-between px-4 max-md:px-2 lg:px-8">
+    <nav :class="$style.nav">
+      <div class="container mx-auto flex h-header items-center px-4 max-md:justify-between max-md:px-2 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center lg:px-8">
         <NuxtLink
-          class="group shrink-0"
+          class="group shrink-0 md:justify-self-start"
           to="/about"
         >
-          <span class="hidden pr-1 text-sm group-hover:inline">{{ $t('about') }}</span>
           <span class="text-xl font-medium text-primary-700 drop-shadow hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-500">{{ config.nickName }}</span>
         </NuxtLink>
-        <div :class="$style.pcMenu">
+        <div
+          :class="$style.pcMenu"
+          class="md:justify-self-center"
+        >
           <NuxtLink
             v-for="item in HeaderTabs"
             :key="item"
@@ -89,7 +76,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
             {{ $t(item) }}
           </NuxtLink>
         </div>
-        <div class="flex items-center gap-4 max-md:gap-2">
+        <div class="flex items-center gap-4 max-md:gap-2 md:justify-end md:justify-self-end">
           <NuxtLink
             v-if="algoliaEnabled"
             class="icon-button max-md:hidden"
@@ -191,7 +178,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
       class="fixed left-0 top-0 z-headerLoading h-0.5 bg-primary-500"
       :style="{ width: `${loadingState}%` }"
     />
-    <section class="z-body min-h-[calc(100vh_-_64px)] pt-header">
+    <section class="z-body min-h-[calc(100vh_-_64px)] pt-4">
       <slot />
     </section>
     <footer :class="$style.footer">
@@ -273,13 +260,9 @@ const inputPwd = ref(encryptor.usePasswd.value);
 }
 
 .nav {
-  @apply fixed w-full z-header max-md:!transform-none;
+  @apply w-full z-header max-md:!transform-none;
   @apply shadow-md transition-all duration-300;
   @apply backdrop-blur-md bg-white/60 dark:bg-gray-900/60 border-b border-gray-200/50 dark:border-gray-700/50;
-
-  &:global(:not(.headroom--pinned).headroom--not-top) {
-    @apply shadow-none -translate-y-full;
-  }
 }
 
 .mobileMenu {
@@ -291,7 +274,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
 }
 
 .pcMenu {
-  @apply flex max-md:hidden gap-10;
+  @apply flex max-md:hidden gap-10 justify-center;
 
   a {
     @apply -mb-[4px] font-medium flex flex-col items-center gap-[3px] text-lg text-dark-800 dark:text-dark-200 hover:text-primary-700 dark:hover:text-primary-400 after:block after:h-[2px] after:w-[120%] after:bg-transparent after:transition hover:after:bg-primary-700;
@@ -357,10 +340,10 @@ const inputPwd = ref(encryptor.usePasswd.value);
 }
 
 .footer {
-  @apply pb-4 relative z-footer text-sm text-dark-600 dark:text-dark-400;
+  @apply pb-4 relative z-footer text-sm leading-6 text-dark-600 dark:text-dark-400;
 
   a {
-    @apply mx-1 text-primary-700 hover:text-primary-500 dark:text-primary-500 hover:dark:text-primary-600 inline-flex items-center gap-1;
+    @apply mx-2 text-primary-700 hover:text-primary-500 dark:text-primary-500 hover:dark:text-primary-600 inline-flex items-center gap-1;
   }
 }
 </style>

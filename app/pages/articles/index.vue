@@ -47,9 +47,18 @@ const toggleTags = (tag: string) => {
 </script>
 
 <template>
-  <main class="container mx-auto max-w-5xl grow px-4 py-8 max-md:px-2">
-    <div class="mx-auto max-w-5xl">
-      <div class="mb-8">
+  <main class="relative mx-auto max-w-6xl grow px-4 py-12 max-md:px-3">
+    <div class="relative mx-auto max-w-4xl space-y-10">
+      <section
+        v-if="articleTagList.size"
+        class="rounded-3xl border border-transparent bg-white/70 p-6 shadow-[0_15px_35px_-25px_rgba(15,23,42,0.4)] ring-1 ring-dark-100/70 backdrop-blur-md transition dark:bg-dark-900/50 dark:ring-dark-700"
+      >
+        <header class="mb-4 flex flex-wrap items-baseline justify-between gap-3">
+          <h2 class="text-sm font-medium text-dark-700 dark:text-dark-200 max-md:text-xs">
+            {{ $t('tags') }}
+          </h2>
+          <span class="text-[13px] text-dark-400 dark:text-dark-400">{{ filteredList.length }} {{ $t('articles-num') }}</span>
+        </header>
         <div class="flex flex-wrap gap-2">
           <the-tag
             v-for="[tag, count] in articleTagList"
@@ -61,47 +70,60 @@ const toggleTags = (tag: string) => {
             {{ tag }}
           </the-tag>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <div
-      v-if="filteredList.length"
-      class="space-y-5"
-    >
-      <article
-        v-for="item in filteredList"
-        v-show="item._show"
-        :key="item.id"
-        class="group overflow-hidden rounded-xl bg-white shadow-sm transition duration-300 hover:translate-y-[-2px] hover:shadow-md dark:bg-dark-800"
+      <section
+        v-if="filteredList.length"
+        class="space-y-6"
       >
-        <NuxtLink
-          :to="`/articles/${item.customSlug || item.id}`"
-          no-prefetch
-          class="relative block p-6"
+        <article
+          v-for="item in filteredList"
+          v-show="item._show"
+          :key="item.id"
+          class="group relative overflow-hidden rounded-3xl border border-dark-100/70 bg-white/80 p-6 shadow-[0_25px_45px_-35px_rgba(15,23,42,0.45)] transition-all duration-300 hover:-translate-y-1 hover:border-primary-400 hover:bg-white dark:border-dark-700 dark:bg-dark-900/60 dark:hover:border-primary-500"
         >
-          <div class="flex items-start justify-between">
-            <h3 class="text-lg font-medium text-dark-900 transition group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400">
-              {{ item.title }}
-            </h3>
-            <span
-              class="ml-4 whitespace-nowrap text-sm text-dark-500 dark:text-dark-400 max-md:absolute max-md:bottom-6 max-md:right-6"
-              :title="formatTime(item.time)"
+          <NuxtLink
+            :to="`/articles/${item.customSlug || item.id}`"
+            no-prefetch
+            class="flex flex-col gap-4"
+          >
+            <div class="flex flex-wrap items-start justify-between gap-4">
+              <h3 class="max-w-xl text-lg font-semibold text-dark-900 transition group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400">
+                {{ item.title }}
+              </h3>
+              <span
+                class="text-sm text-dark-400 transition group-hover:text-primary-500 dark:text-dark-400 dark:group-hover:text-primary-300"
+                :title="formatTime(item.time)"
+              >
+                {{ formatTime(item.time, "date") }}
+              </span>
+            </div>
+            <div
+              v-if="item.tags.length"
+              class="flex flex-wrap gap-2"
             >
-              {{ formatTime(item.time, "date") }}
-            </span>
-          </div>
-          <div class="mt-4 flex items-center space-x-4 text-sm text-dark-500 dark:text-dark-400">
-            <Words :len="item.len" />
-            <Visitors :visitors="item._visitors" />
-          </div>
-        </NuxtLink>
-      </article>
-    </div>
-    <div
-      v-else
-      class="flex items-center justify-center pt-10 text-dark-600 dark:text-dark-400"
-    >
-      {{ $t('nothing-here') }}
+              <span
+                v-for="innerTag in item.tags"
+                :key="innerTag"
+                class="rounded-full border border-dark-100/80 px-3 py-1 text-[12px] text-dark-500 transition group-hover:border-primary-200 group-hover:text-primary-600 dark:border-dark-700 dark:text-dark-300 dark:group-hover:border-primary-400"
+              >
+                {{ innerTag }}
+              </span>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-[13px] text-dark-500 dark:text-dark-300">
+              <Words :len="item.len" />
+              <Visitors :visitors="item._visitors" />
+            </div>
+          </NuxtLink>
+        </article>
+      </section>
+
+      <section
+        v-else
+        class="flex items-center justify-center rounded-3xl border border-dashed border-dark-100/80 py-20 text-sm text-dark-500 dark:border-dark-700 dark:text-dark-300"
+      >
+        {{ $t('nothing-here') }}
+      </section>
     </div>
   </main>
 </template>
