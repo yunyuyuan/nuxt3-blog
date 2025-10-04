@@ -98,40 +98,4 @@ export class ManageItemPage extends ManageBasePage {
 
     return newItemContent;
   }
-
-  async verifyDeletionPathInResponse(shouldContain: string) {
-    const deletionItem = this.requestDeletions[0].path || "";
-    expect(deletionItem).toContain(shouldContain);
-    return deletionItem;
-  }
-
-  async saveDraft() {
-    await this.clickElement("save-draft-btn");
-    await this.waitForTimeout();
-  }
-
-  async applyDraft() {
-    await this.clickElement("apply-draft-btn");
-    await this.waitForTimeout();
-  }
-
-  async deleteDraft() {
-    await this.clickElement("delete-draft-btn");
-    await this.waitForTimeout();
-  }
-
-  async verifyDraftExists() {
-    expect(await this.isElementDisabled("apply-draft-btn")).toBe(false);
-    expect(await this.isElementDisabled("delete-draft-btn")).toBe(false);
-  }
-
-  async verifyDraftDeleted() {
-    expect(await this.isElementDisabled("apply-draft-btn")).toBe(true);
-    expect(await this.isElementDisabled("delete-draft-btn")).toBe(true);
-  }
-
-  async verifyEditorContent(expectedContent: string) {
-    const renderedMarkdown = await this.getByTestId("rendered-markdown");
-    expect(await renderedMarkdown.innerText()).toContain(expectedContent);
-  }
 }
