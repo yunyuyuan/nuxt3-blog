@@ -68,17 +68,20 @@ export async function uploadAlgoliaIndex() {
 
   const dataMap: Record<string, AlgoliaBody> = {};
 
-  blogData.forEach(({ type, list }) => {
-    list.filter(item => !item.encrypt).forEach(async (item) => {
+  for (const { type, list } of blogData) {
+    for (const item of list.filter(item => !item.encrypt)) {
       const html = (await parseMarkdown(item._md)).md;
 
       const extractedText = extractTextFromHtml(html);
       // return fs.writeFileSync(`.output${type}-${item.id}.txt`, extractedText);
-      const body: AlgoliaBody = {
+
+      const objectID = `${type}/${item.id}`;
+      const body: AlgoliaBody & { objectID: string } = {
         title: "",
         metaData: {},
         cover: "",
-        content: extractedText
+        content: extractedText,
+        objectID
       };
       if (type === "/articles") {
         body.title = (item as ArticleItem).title;
@@ -93,11 +96,9 @@ export async function uploadAlgoliaIndex() {
         body.metaData = (item as KnowledgeItem).type;
       }
 
-      const objectID = `${type}/${item.id}`;
-
       dataMap[objectID] = body;
-    });
-  });
+    }
+  }
 
   const allObjectIDs = Object.keys(dataMap);
   const exists: string[] = [];
@@ -152,5 +153,5 @@ export async function uploadAlgoliaIndex() {
     nbLog(`Algolia batch ${i + 1}/${batches.length} uploaded (${batches[i].length} items)`);
   }
 
-  nbLog(`Algolia index upload completed: ${allRequests.length} total items`);
+  nbLog(`Algolia index upload completed: ${adds.length} adds, ${updates.length} updates, ${deletes.length} deletes`);
 }
