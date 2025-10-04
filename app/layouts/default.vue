@@ -261,15 +261,14 @@ const inputPwd = ref(encryptor.usePasswd.value);
 
 .nav {
   @apply w-full z-header max-md:!transform-none;
-  @apply shadow-md transition-all duration-300;
-  @apply backdrop-blur-md bg-white/60 dark:bg-gray-900/60 border-b border-gray-200/50 dark:border-gray-700/50;
+  @apply transition-all duration-300;
 }
 
 .mobileMenu {
   @apply flex flex-col mt-2 mb-4 px-4 md:hidden;
 
   a {
-    @apply flex items-center font-medium pl-2 py-2 rounded text-base text-dark-800 dark:text-dark-200 hover:bg-dark-200 dark:hover:bg-dark-700 hover:text-primary-700;
+    @apply flex items-center font-semibold pl-2 py-2 rounded text-base text-dark-600 dark:text-dark-200 hover:bg-dark-200 dark:hover:bg-dark-700 hover:text-primary-700;
   }
 }
 
@@ -277,7 +276,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
   @apply flex max-md:hidden gap-10 justify-center;
 
   a {
-    @apply -mb-[4px] font-medium flex flex-col items-center gap-[3px] text-lg text-dark-800 dark:text-dark-200 hover:text-primary-700 dark:hover:text-primary-400 after:block after:h-[2px] after:w-[120%] after:bg-transparent after:transition hover:after:bg-primary-700;
+    @apply -mb-[4px] font-semibold flex flex-col items-center gap-[3px] text-lg text-dark-600 dark:text-dark-200 hover:text-primary-700 dark:hover:text-primary-400 after:block after:h-[2px] after:w-[120%] after:bg-transparent after:transition hover:after:bg-primary-700;
   }
 }
 

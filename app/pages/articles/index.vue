@@ -51,7 +51,7 @@ const toggleTags = (tag: string) => {
     <div class="relative mx-auto max-w-4xl space-y-10">
       <section
         v-if="articleTagList.size"
-        class="rounded-3xl border border-transparent bg-white/70 p-6 shadow-[0_15px_35px_-25px_rgba(15,23,42,0.4)] ring-1 ring-dark-100/70 backdrop-blur-md transition dark:bg-dark-900/50 dark:ring-dark-700"
+        class="rounded-3xl border border-transparent bg-white/70 p-6 shadow-card ring-1 ring-dark-100/70 backdrop-blur-md transition dark:bg-dark-900/50 dark:ring-dark-700"
       >
         <header class="mb-4 flex flex-wrap items-baseline justify-between gap-3">
           <h2 class="text-sm font-medium text-dark-700 dark:text-dark-200 max-md:text-xs">
@@ -80,7 +80,7 @@ const toggleTags = (tag: string) => {
           v-for="item in filteredList"
           v-show="item._show"
           :key="item.id"
-          class="group relative overflow-hidden rounded-3xl border border-dark-100/70 bg-white/80 p-6 shadow-[0_25px_45px_-35px_rgba(15,23,42,0.45)] transition-all duration-300 hover:-translate-y-1 hover:border-primary-400 hover:bg-white dark:border-dark-700 dark:bg-dark-900/60 dark:hover:border-primary-500"
+          class="group relative overflow-hidden rounded-3xl border border-dark-100/70 bg-white/80 p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary-400 hover:bg-white dark:border-dark-700 dark:bg-dark-900/60 dark:hover:border-primary-500"
         >
           <NuxtLink
             :to="`/articles/${item.customSlug || item.id}`"
@@ -88,7 +88,7 @@ const toggleTags = (tag: string) => {
             class="flex flex-col gap-4"
           >
             <div class="flex flex-wrap items-start justify-between gap-4">
-              <h3 class="max-w-xl text-lg font-semibold text-dark-900 transition group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400">
+              <h3 class="title-text max-w-xl transition group-hover:text-primary-600 dark:group-hover:text-primary-400">
                 {{ item.title }}
               </h3>
               <span

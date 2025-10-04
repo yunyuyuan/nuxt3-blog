@@ -43,7 +43,7 @@ const tabLengthMap = computed(() => {
             v-for="tab in tabs"
             :key="tab.key"
             :class="twMerge(
-              'flex break-keep items-center py-2 px-1 border-b-2 border-transparent font-medium text-sm text-dark-500 dark:text-dark-400',
+              'flex break-keep items-center py-2 px-1 border-b-2 border-transparent font-semibold text-base text-dark-500 dark:text-dark-400',
               tab.active ? 'border-primary-500 text-primary-600 dark:border-primary-400 dark:text-primary-400' : 'hover:text-dark-700 dark:hover:text-dark-300 hover:border-dark-300 dark:hover:border-dark-600'
             )"
             :to="`?type=${tab.key}`"
@@ -62,13 +62,13 @@ const tabLengthMap = computed(() => {
 
       <div
         v-if="filteredList.length"
-        class="space-y-4"
+        class="space-y-8"
       >
         <NuxtLink
           v-for="item in filteredList"
           :key="item.id"
           no-prefetch
-          class="group flex items-center justify-between overflow-hidden rounded-lg bg-white p-5 shadow-sm transition hover:shadow-md dark:bg-dark-800"
+          class="group flex items-center justify-between overflow-hidden rounded-2xl bg-white p-5 shadow-card transition dark:bg-dark-800"
           :to="`/knowledges/${item.customSlug || item.id}`"
         >
           <div class="flex items-center space-x-3 overflow-hidden">
@@ -80,11 +80,11 @@ const tabLengthMap = computed(() => {
             >
               <component
                 :is="KnowledgeIconMap[item.type]"
-                class="size-5"
+                class="size-6"
               />
             </div>
-            <div class="space-y-1">
-              <h3 class="line-clamp-1 overflow-hidden text-ellipsis break-all text-lg font-medium text-dark-900 transition group-hover:text-primary-700 dark:text-white dark:group-hover:text-primary-500">{{ item.title }}</h3>
+            <div class="space-y-2">
+              <h3 class="title-text line-clamp-1 overflow-hidden text-ellipsis break-all transition group-hover:text-primary-700 dark:group-hover:text-primary-500">{{ item.title }}</h3>
               <div class="mt-1 flex items-center">
                 <span
                   :class="twMerge(
@@ -98,7 +98,7 @@ const tabLengthMap = computed(() => {
               </div>
             </div>
           </div>
-          <ChevronRight class="size-5 text-dark-400 transition group-hover:translate-x-1 group-hover:text-primary-500" />
+          <ChevronRight class="size-7 text-dark-400 transition group-hover:translate-x-1 group-hover:text-primary-500" />
         </NuxtLink>
       </div>
 

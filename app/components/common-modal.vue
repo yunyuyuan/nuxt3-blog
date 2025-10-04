@@ -22,31 +22,28 @@ const props = withDefaults(defineProps<{
   modalWidth?: string;
   modalTitle?: string;
   modalContent?: string;
-  onClose?: CallableFunction;
-  onOk?: CallableFunction;
   testId?: string;
   okTestId?: string;
   cancelTestId?: string;
+
+  onClose?: CallableFunction;
+  onOk?: CallableFunction;
+  onAfterOpen?: CallableFunction;
+  onAfterClose?: CallableFunction;
 }>(), {
   confirmTheme: "primary",
   wrapClass: "",
   showOk: true,
   showCancel: true,
   maskClosable: true,
-  modalWidth: "500px",
-  modalTitle: undefined,
-  modalContent: undefined,
-  onClose: undefined,
-  onOk: undefined,
-  testId: undefined,
-  okTestId: undefined,
-  cancelTestId: undefined
+  modalWidth: "500px"
 });
 
 const root = ref<HTMLElement>();
-const emit = defineEmits(["confirm", "cancel"]);
+const emit = defineEmits(["confirm", "cancel", "afterOpen", "afterClose"]);
 
 const setFocus = () => {
+  emit("afterOpen");
   if (root.value) {
     const focusEl = root.value.querySelector<HTMLElement>("[data-focus]") || root.value;
     focusEl?.focus();
@@ -73,6 +70,7 @@ const close = () => {
       <transition
         name="modal"
         @after-enter="setFocus"
+        @after-leave="emit('afterClose')"
       >
         <div
           v-show="show"

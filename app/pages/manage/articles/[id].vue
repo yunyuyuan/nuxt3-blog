@@ -76,7 +76,7 @@ const preProcessItem = (editingItem: Ref<ArticleItem>, originList: ArticleItem[]
             data-testid="item-tags-input"
             class="peer w-full py-2 !text-transparent focus:!text-inherit"
             :disabled="disabled || item.encrypt"
-            @focusin="showTagSelect = true"
+            @focusin="allTags.size ? (showTagSelect = true) : undefined"
           >
           <div class="pointer-events-none absolute flex size-full items-center gap-1 overflow-hidden break-keep px-3 peer-focus:opacity-0">
             <span

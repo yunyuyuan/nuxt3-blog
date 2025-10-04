@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import throttle from "lodash/throttle.js";
 import debounce from "lodash/debounce.js";
-import { Columns2, Loader2, Menu, SquareAsterisk, View } from "lucide-vue-next";
+import { Columns2, Loader2, Menu, SquareAsterisk } from "lucide-vue-next";
 import type { editor as MonacoEditor } from "monaco-editor";
 import StickerPick from "./sticker-pick.vue";
 import { initViewer } from "~/utils/nuxt/viewer";
@@ -15,8 +15,6 @@ const props = defineProps<{
 }>();
 
 const inputValue = defineModel<string>({ required: true });
-
-const emit = defineEmits(["preview"]);
 
 let editor: MonacoEditor.IStandaloneCodeEditor;
 
@@ -189,14 +187,6 @@ initViewer(markdownRef);
             </div>
           </div>
         </common-dropdown>
-      </button>
-      <button
-        v-if="!single"
-        class="icon-button"
-        :title="$t('preview')"
-        @click="emit('preview')"
-      >
-        <View class="size-6" />
       </button>
       <button
         class="icon-button"

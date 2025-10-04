@@ -13,6 +13,9 @@
       @apply size-5;
     }
   }
+  .title-text {
+    @apply text-lg font-semibold text-dark-600 dark:text-dark-200;
+  }
   .anim-shake {
     transform-origin: center center;
     transform-box: border-box;
