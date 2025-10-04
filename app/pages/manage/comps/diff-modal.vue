@@ -9,6 +9,7 @@ const show = defineModel<boolean>({ required: true });
 const props = defineProps<{
   additions?: CommitParamsAddition[];
   deletions?: CommitParamsDeletion[];
+  rawDiff?: { path: string; original: string; modified: string }[];
   showOk?: boolean;
   onClose: () => void;
   onOk: () => void;
@@ -40,6 +41,18 @@ const getLanguageFromPath = (path: string) => {
 const loadFileChanges = async () => {
   loadingChanges.value = true;
   const changes: FileChange[] = [];
+
+  // 处理 rawDiff
+  if (props.rawDiff && props.rawDiff.length > 0) {
+    for (const diff of props.rawDiff) {
+      changes.push({
+        path: diff.path,
+        type: "addition",
+        originalContent: diff.original,
+        modifiedContent: diff.modified
+      });
+    }
+  }
 
   // 处理 additions
   if (props.additions && props.additions.length > 0) {
@@ -108,7 +121,8 @@ const loadFileChanges = async () => {
       renderSideBySide: true,
       minimap: { enabled: false },
       wordWrap: "on",
-      scrollBeyondLastLine: false
+      scrollBeyondLastLine: false,
+      useInlineViewWhenSpaceIsLimited: false
     });
 
     let modifiedContent = change.modifiedContent;

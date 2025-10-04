@@ -92,7 +92,7 @@ onMounted(() => {
         </button>
       </div>
     </div>
-    <div class="space-y-4">
+    <div class="space-y-8">
       <div
         v-if="loading"
         class="mt-12 flex justify-center"
@@ -113,7 +113,7 @@ onMounted(() => {
               class="flex items-start justify-between"
             >
               <div>
-                <h2 :class="$style.title">
+                <h2 class="title-text">
                   {{ item.title }}
                 </h2>
                 <div class="mt-1 flex flex-wrap gap-2">
@@ -151,7 +151,7 @@ onMounted(() => {
                 </div>
               </div>
               <div>
-                <h2 :class="twMerge($style.title, 'max-md:text-center')">
+                <h2 class="title-text max-md:text-center">
                   {{ item.title }}
                 </h2>
                 <p :class="$style.content">
@@ -188,7 +188,7 @@ onMounted(() => {
                       class="size-4"
                     />
                   </div>
-                  <h2 :class="$style.title">
+                  <h2 class="title-text">
                     {{ item.title }}
                   </h2>
                 </div>
@@ -198,7 +198,7 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <span class="absolute right-4 top-4 text-xs text-dark-500 dark:text-dark-400">
+          <span class="absolute right-4 top-4 text-sm text-dark-500 dark:text-dark-400">
             {{ $t(item.type) }}
           </span>
         </NuxtLink>
@@ -215,26 +215,22 @@ onMounted(() => {
 
 <style module>
 .filter {
-  @apply rounded-full bg-dark-100 px-3 py-1 text-sm text-dark-700 transition hover:bg-dark-200 dark:bg-dark-800 dark:text-dark-300 dark:hover:bg-dark-700;
+  @apply rounded-full bg-dark-100 px-4 py-1 text-base font-semibold text-dark-700 transition hover:bg-dark-200 dark:bg-dark-800 dark:text-dark-300 dark:hover:bg-dark-700;
 }
 .filterActive {
   @apply bg-primary-100 text-primary-800 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-300 dark:hover:bg-primary-800;
 }
 
 .link {
-  @apply relative block rounded-lg border border-dark-100 bg-white p-6 shadow-sm transition duration-200 hover:shadow-md dark:border-dark-700 dark:bg-dark-800;
+  @apply relative block rounded-2xl border border-dark-100 bg-white p-6 shadow-card transition duration-200 hover:-translate-y-1 dark:border-dark-700 dark:bg-dark-800;
   &:hover{
-    .title {
+    h2 {
       @apply text-primary-600 dark:text-primary-400;
     }
     img {
       @apply scale-105;
     }
   }
-}
-
-.title {
-  @apply text-xl font-semibold text-dark-900 dark:text-white;
 }
 
 .img {

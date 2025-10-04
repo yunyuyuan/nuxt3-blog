@@ -51,6 +51,9 @@ export default {
       animation: {
         shake: "shake 0.82s cubic-bezier(.36,.07,.19,.97) infinite"
       },
+      boxShadow: {
+        card: "0 12px 30px -27px rgba(15,23,42,0.45)"
+      },
       keyframes: {
         shake: {
           "10%, 90%": {

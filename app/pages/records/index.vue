@@ -62,7 +62,7 @@ onMounted(() => {
       <div class="mb-6">
         <h2 class="mb-4 flex items-center gap-2 text-lg font-medium text-dark-800 dark:text-dark-200">
           <Calendar class="size-6" />
-          {{ currentYear }}
+          <span class="font-semibold">{{ currentYear }}</span>
           <span class="ml-1.5 rounded-full bg-dark-200 px-2 py-0.5 text-xs text-dark-700 dark:bg-dark-600 dark:text-dark-200">{{ currentItems?.length }}</span>
         </h2>
         <div class="grid items-center justify-around gap-8 max-md:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -74,7 +74,7 @@ onMounted(() => {
             :title="formatTime(item.time)"
           >
             <NuxtLink
-              class="relative block overflow-hidden rounded-lg shadow-md transition duration-500 hover:shadow-xl max-md:aspect-square md:size-52"
+              class="relative block overflow-hidden rounded-2xl shadow-card transition duration-500 max-md:aspect-square md:size-52"
               no-prefetch
               :to="`/records/${item.customSlug || item.id}`"
             >
@@ -110,7 +110,7 @@ onMounted(() => {
 
 <style module>
 .year {
-  @apply px-4 py-2 rounded-full bg-dark-200 text-dark-700 dark:bg-dark-700 dark:text-dark-300 font-medium hover:bg-dark-300 dark:hover:bg-dark-600 transition-all;
+  @apply px-4 py-2 rounded-full font-semibold bg-dark-200 text-dark-700 dark:bg-dark-700 dark:text-dark-300 hover:bg-dark-300 dark:hover:bg-dark-600 transition-all;
 }
 
 .yearActive {

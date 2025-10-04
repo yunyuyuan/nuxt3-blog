@@ -1,7 +1,6 @@
 <script setup lang="ts" generic="T extends CommonItem">
 import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
-import hljs from "highlight.js";
-import { Captions, FolderOpen, Lock, MessageCircleMore, Save, Trash2, Upload } from "lucide-vue-next";
+import { FolderOpen, Hash, Lock, MessageCircleMore, Save, Trash2, Upload } from "lucide-vue-next";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 import type { CommonItem } from "~/utils/common/types";
 import { translate } from "~/utils/nuxt/i18n";
@@ -54,11 +53,8 @@ props.preProcessItem?.(editingItem, originList);
 
 const currentOperate = ref<"upload" | "delete" | "">("");
 const showDeleteModal = ref(false);
-const showPreviewModal = ref(false);
 
 const baseInfo = ref<HTMLElement>();
-const previewInfo = ref("");
-const previewContent = ref("");
 
 const isValidUrlSegment = computed(() => !editingItem.value.customSlug || /^[a-zA-Z0-9\-_]+$/.test(editingItem.value.customSlug));
 
@@ -94,23 +90,6 @@ const getUploadInfo = async () => {
   }
 
   return result;
-};
-
-const previewInfoEl = ref();
-const previewMdEl = ref();
-const setPreviewInfo = async () => {
-  const info = await getUploadInfo();
-  if (!info) {
-    return;
-  }
-  const { item, md } = info;
-  previewInfo.value = JSON.stringify(item, null, 4);
-  previewContent.value = md;
-  showPreviewModal.value = true;
-  nextTick(async () => {
-    hljs.highlightElement(previewInfoEl.value);
-    hljs.highlightElement(previewMdEl.value);
-  });
 };
 
 const doUpload = async () => {
@@ -311,7 +290,7 @@ onMounted(() => {
         </CommonButton>
       </div>
 
-      <div class="ml-auto flex items-center gap-4">
+      <div class="ml-auto flex flex-wrap items-center gap-4">
         <span
           v-show="!!statusText"
           class="ml-2 text-xs text-red-500"
@@ -385,7 +364,7 @@ onMounted(() => {
       <div class="mt-4 space-y-4">
         <div>
           <span :class="!isValidUrlSegment && 'form-item-invalid'">
-            <Captions class="size-5" />
+            <Hash class="size-5" />
             {{ $t('custom-slug') }}
           </span>
           <input
@@ -412,7 +391,6 @@ onMounted(() => {
       <md-editor
         v-model="editingMd"
         :disabled="!decrypted"
-        @preview="setPreviewInfo"
       />
     </client-only>
   </div>
@@ -429,34 +407,13 @@ onMounted(() => {
   </common-modal>
 
   <common-modal
-    v-model="showPreviewModal"
-    :show-ok="false"
-    :show-cancel="false"
-    modal-width="720px"
-    wrap-class="preview-modal"
-    @confirm="showPreviewModal = false"
-  >
-    <template #title>
-      {{ $t('preview') }}
-    </template>
-    <template #body>
-      <div :class="$style.preview">
-        <p>{{ $t('base-info') }}</p>
-        <span ref="previewInfoEl">{{ previewInfo }}</span>
-        <p>{{ $t('content') }}</p>
-        <span ref="previewMdEl">{{ previewContent }}</span>
-      </div>
-    </template>
-  </common-modal>
-
-  <common-modal
     v-model="showLoadStagedModal"
     modal-width="600px"
     test-id="load-staged-modal"
     ok-test-id="load-staged-ok-btn"
     cancel-test-id="load-staged-cancel-btn"
     @ok="loadStagedContent"
-    @cancel="cancelLoadStaged"
+    @after-close="cancelLoadStaged"
   >
     <template #title>
       {{ $t('load-staged-changes') }}
@@ -511,18 +468,6 @@ onMounted(() => {
         @apply opacity-70;
       }
     }
-  }
-}
-
-.preview {
-  @apply flex flex-col gap-2;
-
-  > p {
-    @apply py-1 bg-primary-200 dark:bg-primary-700 text-center text-sm sticky -top-4 rounded;
-  }
-
-  > span {
-    @apply whitespace-pre-wrap break-all mt-1 p-2;
   }
 }
 </style>

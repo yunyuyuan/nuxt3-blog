@@ -1,5 +1,5 @@
 import { createVNode, render } from "vue";
-import type { CommonItem, RecordItem, CommitParamsAddition } from "~/utils/common/types";
+import type { CommonItem, RecordItem } from "~/utils/common/types";
 import { translate } from "~/utils/nuxt/i18n";
 import CommonModal from "~/components/common-modal.vue";
 import DiffModal from "~/pages/manage/comps/diff-modal.vue";
@@ -97,7 +97,7 @@ export function createCommitModal() {
       render(null, container);
       resolve(true);
     };
-    vm.props!.onClose = () => {
+    vm.props!.onAfterClose = () => {
       render(null, container);
       resolve(false);
     };
@@ -113,18 +113,16 @@ export function createCommitModal() {
  * 显示 diff 弹窗确认更改
  */
 export function createDiffModal({
+  rawDiff,
   additions,
   deletions,
   showOk = true
-}: {
-  additions?: CommitParamsAddition[];
-  deletions?: Array<{ path: string }>;
-  showOk?: boolean;
-}) {
+}: Pick<InstanceType<typeof DiffModal>["$props"], "additions" | "deletions" | "showOk" | "rawDiff">) {
   return new Promise<boolean>((resolve) => {
     const container = document.createElement("div");
     const vm = createVNode(DiffModal, {
       modelValue: true,
+      rawDiff,
       additions,
       deletions,
       showOk
@@ -133,7 +131,7 @@ export function createDiffModal({
       render(null, container);
       resolve(true);
     };
-    vm.props!.onClose = () => {
+    vm.props!.onAfterClose = () => {
       render(null, container);
       resolve(false);
     };
@@ -155,7 +153,7 @@ export function createVersionUpdateModal(newVersion: string) {
       modelValue: true,
       newVersion
     });
-    vm.props!.onClose = () => {
+    vm.props!.onAfterClose = () => {
       render(null, container);
       resolve();
     };

@@ -2,7 +2,7 @@
 import { Eye, X } from "lucide-vue-next";
 import { commitStagedItems } from "ls:~/utils/nuxt/manage/github";
 import type { CommitParamsAddition, CommonItem, HeaderTabUrl } from "~/utils/common/types";
-import { fetchList } from "~/utils/nuxt/fetch";
+import { fetchAny, fetchList } from "~/utils/nuxt/fetch";
 import { translate } from "~/utils/nuxt/i18n";
 import { createDiffModal, randomId } from "~/utils/nuxt/manage";
 import { notify } from "~/utils/nuxt/notify";
@@ -129,11 +129,21 @@ const isStagedItemSelected = (item: typeof stagedItems.value[number]) => {
   return selectedStagedItems.some(s => s.id === item.id && s.targetTab === item.targetTab);
 };
 
-const peekItemDiff = (id: number, targetTab: HeaderTabUrl) => {
-  createDiffModal({ additions: [{
-    path: `public/rebuild${targetTab}/${id}.md`,
-    content: stagedItems.value.find(s => s.id === id && s.targetTab === targetTab)?.md || ""
-  }], showOk: false });
+const peekItemDiff = async (id: number, targetTab: HeaderTabUrl) => {
+  const item = stagedItems.value.find(s => s.id === id && s.targetTab === targetTab);
+  const jsonPath = `public/rebuild/json${targetTab}.json`;
+  createDiffModal({
+    rawDiff: [{
+      path: jsonPath,
+      original: JSON.stringify((await fetchAny<CommonItem[]>(jsonPath)).find(i => i.id === id), null, 2),
+      modified: JSON.stringify(item?.item, null, 2)
+    }],
+    additions: [{
+      path: `public/rebuild${targetTab}/${id}.md`,
+      content: item?.md || ""
+    }],
+    showOk: false
+  });
 };
 </script>
 
