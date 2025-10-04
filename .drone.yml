@@ -16,6 +16,28 @@ clone:
   retries: 3
 
 steps:
+  # 仅用于个人使用，因为我的博客实际上在blog分支
+  - name: check_branch
+    image: node:20
+    environment:
+      REAL_TARGET_BRANCH:
+        from_secret: REAL_TARGET_BRANCH
+    commands:
+      - |
+        if [ -n "$REAL_TARGET_BRANCH" ]; then
+          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          echo "Current branch: $CURRENT_BRANCH"
+          echo "Expected branch: $REAL_TARGET_BRANCH"
+          if [ "$CURRENT_BRANCH" = "$REAL_TARGET_BRANCH" ]; then
+            echo "✓ Branch check passed"
+          else
+            echo "✗ Branch mismatch!"
+            exit 1
+          fi
+        else
+          echo "REAL_TARGET_BRANCH not set, skipping branch check"
+        fi
+
   - name: build_project
     image: node:20
     volumes:
@@ -102,6 +124,27 @@ clone:
   retries: 3
 
 steps:
+  - name: check_branch
+    image: node:20
+    environment:
+      REAL_TARGET_BRANCH:
+        from_secret: REAL_TARGET_BRANCH
+    commands:
+      - |
+        if [ -n "$REAL_TARGET_BRANCH" ]; then
+          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          echo "Current branch: $CURRENT_BRANCH"
+          echo "Expected branch: $REAL_TARGET_BRANCH"
+          if [ "$CURRENT_BRANCH" = "$REAL_TARGET_BRANCH" ]; then
+            echo "✓ Branch check passed"
+          else
+            echo "✗ Branch mismatch!"
+            exit 1
+          fi
+        else
+          echo "REAL_TARGET_BRANCH not set, skipping branch check"
+        fi
+
   - name: backup_img
     image: node:20
     volumes:
