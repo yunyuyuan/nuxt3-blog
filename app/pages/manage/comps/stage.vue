@@ -11,13 +11,16 @@ import { hasSameIdOrSlug } from "~/utils/nuxt/manage/detail";
 
 const show = defineModel<boolean>({ required: true });
 
-const selectedStagedItems = reactive<typeof stagedItems.value>([]);
+const loading = ref(false);
+const selectedStagedItems = reactive<{ targetTab: HeaderTabUrl; id: number }[]>([]);
 
 const { stagedItems, clearStaging, unstageItem, removeStagedItems } = useStaging();
 
-watch(stagedItems, () => {
-  selectedStagedItems.splice(0, selectedStagedItems.length);
-  selectedStagedItems.push(...stagedItems.value);
+watch(show, () => {
+  if (show.value) {
+    selectedStagedItems.splice(0, selectedStagedItems.length);
+    selectedStagedItems.push(...stagedItems.value.map(item => ({ targetTab: item.targetTab, id: item.id })));
+  }
 }, { immediate: true });
 
 const handleCommitStaged = async () => {
@@ -26,11 +29,11 @@ const handleCommitStaged = async () => {
       notify({
         type: "warn",
         title: translate("warning"),
-        description: translate("no-staged-items-to-commit")
+        description: translate("select-items-to-commit")
       });
       return;
     }
-    const itemsToCommit = deepClone(selectedStagedItems);
+    const itemsToCommit = deepClone(toRaw(stagedItems.value).filter(item => selectedStagedItems.some(s => s.id === item.id && s.targetTab === item.targetTab)));
 
     // 按targetTab分组
     const groupedItems = new Map<string, Array<{ item: CommonItem; md: string }>>();
@@ -86,6 +89,7 @@ const handleCommitStaged = async () => {
       }
     }
 
+    loading.value = true;
     const success = await commitStagedItems(additions);
     if (success) {
       notify({
@@ -107,19 +111,21 @@ const handleCommitStaged = async () => {
       title: translate("error"),
       description: String(error)
     });
+  } finally {
+    loading.value = false;
   }
 };
 
-const toggleStagedItemSelection = (item: typeof stagedItems.value[0]) => {
+const toggleStagedItemSelection = (item: typeof stagedItems.value[number]) => {
   const index = selectedStagedItems.findIndex(s => s.id === item.id && s.targetTab === item.targetTab);
   if (index >= 0) {
     selectedStagedItems.splice(index, 1);
   } else {
-    selectedStagedItems.push(item);
+    selectedStagedItems.push({ targetTab: item.targetTab, id: item.id });
   }
 };
 
-const isStagedItemSelected = (item: typeof stagedItems.value[0]) => {
+const isStagedItemSelected = (item: typeof stagedItems.value[number]) => {
   return selectedStagedItems.some(s => s.id === item.id && s.targetTab === item.targetTab);
 };
 
@@ -138,6 +144,7 @@ const peekItemDiff = (id: number, targetTab: HeaderTabUrl) => {
     modal-width="700px"
     test-id="staged-items-modal"
     ok-test-id="staged-items-modal-ok"
+    :loading="loading"
     @confirm="handleCommitStaged"
   >
     <template #title>
@@ -150,42 +157,42 @@ const peekItemDiff = (id: number, targetTab: HeaderTabUrl) => {
         </div>
         <div class="max-h-60 space-y-2 overflow-y-auto">
           <div
-            v-for="staged in stagedItems"
-            :key="`${staged.targetTab}-${staged.id}`"
+            v-for="item in stagedItems"
+            :key="`${item.targetTab}-${item.id}`"
             :class="twMerge(
               'rounded-lg border border-dark-200 p-3 dark:border-dark-700 transition-colors',
-              isStagedItemSelected(staged) && 'bg-blue-50 border-blue-300 dark:bg-blue-900/20 dark:border-blue-600'
+              isStagedItemSelected(item) && 'bg-blue-50 border-blue-300 dark:bg-blue-900/20 dark:border-blue-600'
             )"
           >
             <div class="flex items-center justify-between gap-2">
               <div class="flex grow items-center gap-3">
                 <CommonCheckbox
-                  :checked="isStagedItemSelected(staged)"
-                  @change="toggleStagedItemSelection(staged)"
+                  :checked="isStagedItemSelected(item)"
+                  @change="toggleStagedItemSelection(item)"
                 />
                 <div>
                   <NuxtLink
-                    :to="`/manage${staged.targetTab}/${staged.id}`"
+                    :to="`/manage${item.targetTab}/${item.id}`"
                     class="font-medium hover:underline"
                     @click="show = false"
                   >
-                    {{ 'title' in staged.item ? staged.item.title : `ID: ${staged.id}` }}
+                    {{ 'title' in item.item ? item.item.title : `ID: ${item.id}` }}
                   </NuxtLink>
                   <div class="text-sm text-dark-500 dark:text-dark-400">
-                    {{ $t(staged.targetTab) }} - {{ staged.id }}
+                    {{ $t(item.targetTab) }} - {{ item.id }}
                   </div>
                 </div>
               </div>
               <button
                 class="text-dark-500 hover:text-dark-700"
                 :title="$t('preview')"
-                @click="peekItemDiff(staged.id, staged.targetTab)"
+                @click="peekItemDiff(item.id, item.targetTab)"
               >
                 <Eye class="size-5" />
               </button>
               <button
                 class="text-red-500 hover:text-red-700"
-                @click="unstageItem(staged.id, staged.targetTab)"
+                @click="unstageItem(item.id, item.targetTab)"
               >
                 <X class="size-5" />
               </button>
