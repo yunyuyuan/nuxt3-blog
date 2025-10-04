@@ -107,10 +107,10 @@ export async function uploadAlgoliaIndex() {
       page,
       attributesToRetrieve: ["objectID"]
     } });
+    exists.push(...hits.map(hit => hit.objectID));
     if (page >= nbPages) {
       break;
     }
-    exists.push(...hits.map(hit => hit.objectID));
     page++;
   }
 
