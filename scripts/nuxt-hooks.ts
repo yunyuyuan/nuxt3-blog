@@ -100,13 +100,19 @@ export async function uploadAlgoliaIndex() {
   });
 
   const allObjectIDs = Object.keys(dataMap);
-  const exists = (await client.getObjects<{ objectID: string }>({
-    requests: allObjectIDs.map(objectID => ({
-      indexName,
-      objectID,
+  const exists: string[] = [];
+  let page = 0;
+  while (true) {
+    const { hits, nbPages } = await client.browse({ indexName, browseParams: {
+      page,
       attributesToRetrieve: ["objectID"]
-    }))
-  })).results.map(result => result.objectID);
+    } });
+    exists.push(...hits.map(hit => hit.objectID));
+    if (page >= nbPages) {
+      break;
+    }
+    page++;
+  }
 
   const adds = allObjectIDs.filter(objectID => !exists.includes(objectID));
   const updates = allObjectIDs.filter(objectID => exists.includes(objectID));
