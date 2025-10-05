@@ -275,7 +275,7 @@ onMounted(() => {
 
 <style module>
 .menuItem {
-  @apply flex items-center rounded-md px-3 py-2.5 text-base font-medium text-dark-700 dark:text-dark-300;
+  @apply flex items-center rounded-md px-3 py-2.5 text-base font-semibold text-dark-700 dark:text-dark-300;
 
   svg {
     @apply mr-3 size-5;

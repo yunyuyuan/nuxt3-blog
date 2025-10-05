@@ -72,10 +72,10 @@ initViewer(root);
             {{ $t('menu') }}
           </h3>
           <nav class="space-y-1 text-sm">
-            <NuxtLink
+            <a
               v-for="(anchor, idx) in menuItems"
               :key="idx"
-              :to="`#${anchor.url}`"
+              :href="`#${anchor.url}`"
               :class="twMerge(
                 $style.menuItem,
                 anchor.size === 'small' && $style.menuItemSmall,
@@ -84,7 +84,7 @@ initViewer(root);
               :title="anchor.text"
             >
               <span v-html="anchor.text" />
-            </NuxtLink>
+            </a>
           </nav>
         </div>
       </aside>

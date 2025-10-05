@@ -62,7 +62,7 @@ onMounted(() => {
         <div class="ml-3 flex-1">
           <p
             v-if="title"
-            class="text-sm font-medium text-dark-900 dark:text-white"
+            class="text-sm font-semibold text-dark-900 dark:text-white"
           >
             {{ title }}
           </p>

@@ -1,3 +1,6 @@
+## [v3] 2025.10.05
+* Bug fixes and improvements.
+
 ## [v2] 2025.10.03
 * Add upgrade notifications and tutorials for forks.
 

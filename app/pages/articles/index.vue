@@ -47,7 +47,7 @@ const toggleTags = (tag: string) => {
 </script>
 
 <template>
-  <main class="relative mx-auto max-w-6xl grow px-4 py-12 max-md:px-3">
+  <main class="relative mx-auto max-w-6xl grow px-4 py-8 max-md:px-3">
     <div class="relative mx-auto max-w-4xl space-y-10">
       <section
         v-if="articleTagList.size"

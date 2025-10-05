@@ -178,7 +178,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
       class="fixed left-0 top-0 z-headerLoading h-0.5 bg-primary-500"
       :style="{ width: `${loadingState}%` }"
     />
-    <section class="z-body min-h-[calc(100vh_-_64px)] pt-4">
+    <section class="z-body grow">
       <slot />
     </section>
     <footer :class="$style.footer">
