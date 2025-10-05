@@ -38,7 +38,7 @@ const emit = defineEmits(["click"]);
 
 <style module>
 .tag {
-  @apply rounded-full border border-dark-100/80 bg-white/90 px-3 py-1 text-[13px] font-medium text-dark-700 hover:border-primary-400 hover:text-primary-600 dark:border-dark-700 dark:bg-dark-900/80 dark:text-dark-100;
+  @apply rounded-full border border-dark-200/80 bg-white/90 px-3 py-1 text-[13px] font-medium text-dark-700 hover:border-primary-400 hover:text-primary-600 dark:border-dark-700 dark:bg-dark-900/80 dark:text-dark-100;
   @apply flex items-center transition cursor-pointer;
 }
 

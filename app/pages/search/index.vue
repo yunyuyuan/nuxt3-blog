@@ -222,7 +222,7 @@ onMounted(() => {
 }
 
 .link {
-  @apply relative block rounded-2xl border border-dark-100 bg-white p-6 shadow-card transition duration-200 hover:-translate-y-1 dark:border-dark-700 dark:bg-dark-800;
+  @apply relative block rounded-2xl border border-transparent hover:border-primary-400 dark:hover:border-primary-600 hover:-translate-y-0.5 bg-white p-6 shadow-card transition duration-200 dark:border-dark-700 dark:bg-dark-800;
   &:hover{
     h2 {
       @apply text-primary-600 dark:text-primary-400;

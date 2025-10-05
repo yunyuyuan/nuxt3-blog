@@ -68,7 +68,7 @@ const tabLengthMap = computed(() => {
           v-for="item in filteredList"
           :key="item.id"
           no-prefetch
-          class="group flex items-center justify-between overflow-hidden rounded-2xl bg-white p-5 shadow-card transition dark:bg-dark-800"
+          class="group flex items-center justify-between overflow-hidden rounded-2xl border border-transparent bg-white p-5 shadow-card transition hover:-translate-y-0.5 hover:border-primary-400 dark:bg-dark-800 dark:hover:border-primary-600"
           :to="`/knowledges/${item.customSlug || item.id}`"
         >
           <div class="flex items-center space-x-3 overflow-hidden">
