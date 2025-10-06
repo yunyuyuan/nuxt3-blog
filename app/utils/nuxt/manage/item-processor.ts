@@ -1,3 +1,5 @@
+import { notify } from "../notify";
+import { translate } from "../i18n";
 import type { ArticleItem, RecordItem, KnowledgeItem, CommonItem, HeaderTabUrl } from "~/utils/common/types";
 import { escapeNewLine } from "~/utils/common/utils";
 import { encryptDecryptItem, getEncryptedBlocks } from "~/utils/common/process-encrypt-decrypt";
@@ -84,6 +86,13 @@ export async function getProcessedUploadInfo<T extends CommonItem>(params: {
   if (baseInfoElement) {
     const invalidInfo = baseInfoElement.querySelectorAll<HTMLElement>(".form-item-invalid");
     if (invalidInfo.length) {
+      notify({
+        type: "error",
+        title: translate("missing-info"),
+        description: translate("missing") + `: ${Array.from(invalidInfo)
+          .map(el => el.innerText)
+          .join(", ")}`
+      });
       return null;
     }
   }
@@ -104,25 +113,35 @@ export async function getProcessedUploadInfo<T extends CommonItem>(params: {
   // 根据类型处理内容
   processItemContent(mdContent, newItem, targetTab);
 
+  const needPasswd = () => {
+    notify({
+      type: "error",
+      title: translate("need-passwd")
+    });
+    useShowPwdModal().value = true;
+  };
+
   // 处理加密
   if (newItem.encrypt) {
     if (!encryptor.usePasswd.value) {
+      needPasswd();
       return null; // 需要密码但未设置
     }
     await encryptDecryptItem(newItem, encryptor.encrypt, targetTab);
     mdContent = await encryptor.encrypt(mdContent);
     // 整篇加密的markdown，不会再有加密块
-    delete (newItem as any).encryptBlocks;
+    delete newItem.encryptBlocks;
   } else {
     // 处理加密块
     const { md, blocks } = await getEncryptedBlocks(mdContent, encryptor.encrypt);
     mdContent = md;
     if (blocks.length) {
-      (newItem as any).encryptBlocks = blocks.reverse();
+      newItem.encryptBlocks = blocks.reverse();
     } else {
-      delete (newItem as any).encryptBlocks;
+      delete newItem.encryptBlocks;
     }
-    if ((newItem as any).encryptBlocks?.length && !encryptor.usePasswd.value) {
+    if (newItem.encryptBlocks?.length && !encryptor.usePasswd.value) {
+      needPasswd();
       return null; // 需要密码但未设置
     }
   }

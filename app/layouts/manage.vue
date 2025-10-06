@@ -11,6 +11,7 @@ import { rmLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
 import { notify } from "~/utils/nuxt/notify";
 import { calcRocketUrl, watchUntil } from "~/utils/nuxt/utils";
 import { isDev } from "~/utils/nuxt/constants";
+import { useStaging } from "~/utils/hooks/useStaging";
 
 const inputTokenDisabled = isDev || __NB_BUILDTIME_VITESTING__;
 
