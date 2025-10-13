@@ -56,9 +56,9 @@ export function generateSiteMap(publicDir: string) {
 }
 
 export async function uploadAlgoliaIndex() {
-  const appId = process.env.ALGOLIA_APP_ID || config.algoliaSearch.appId;
+  const appId = config.algoliaSearch.appId;
   const apiKey = process.env.ALGOLIA_ADMIN_KEY;
-  const indexName = process.env.ALGOLIA_INDEX_NAME || config.algoliaSearch.indexName;
+  const indexName = config.algoliaSearch.indexName;
   if (!apiKey || !appId || !indexName) return;
 
   nbLog("start upload Algolia index");

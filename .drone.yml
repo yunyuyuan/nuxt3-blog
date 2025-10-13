@@ -44,24 +44,12 @@ steps:
       - name: cache
         path: /drone/src/node_modules
     environment:
-      ALGOLIA_APP_ID:
-          from_secret: ALGOLIA_APP_ID
-      ALGOLIA_SEARCH_KEY:
-          from_secret: ALGOLIA_SEARCH_KEY
-      ALGOLIA_INDEX_NAME:
-          from_secret: ALGOLIA_INDEX_NAME
       CLOUDFLARE_D1_TOKEN:
         from_secret: CLOUDFLARE_D1_TOKEN
       CLOUDFLARE_D1_ACCOUNT_ID:
         from_secret: CLOUDFLARE_D1_ACCOUNT_ID
       CLOUDFLARE_D1_DATABASE_ID:
         from_secret: CLOUDFLARE_D1_DATABASE_ID
-      CommentRepoId:
-        from_secret: CommentRepoId
-      CommentDiscussionCategoryId:
-        from_secret: CommentDiscussionCategoryId
-      CloudflareAnalyze:
-        from_secret: CloudflareAnalyze
     commands:
       - npm i -g pnpm
       - pnpm i

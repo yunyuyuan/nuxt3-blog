@@ -48,8 +48,8 @@ scripts.push(`(function(){const e=localStorage.getItem("${ThemeModeKey}")||"ligh
 scripts.push(`(function(){let e=${JSON.stringify(config.themeColor)};if(e.length<2)return;let t=Math.floor(Math.random()*e.length),l=e[t],n=document.documentElement;e.forEach(e=>{n.classList.remove(\`theme-\${e}\`)}),n.classList.add(\`theme-\${l}\`)})();`);
 
 if (!isDev) {
-  const cfAnalyzeId = config.CloudflareAnalyze || process.env.CloudflareAnalyze;
-  const msAnalyzeId = config.MSClarityId || process.env.MSClarityId;
+  const cfAnalyzeId = config.CloudflareAnalyze;
+  const msAnalyzeId = config.MSClarityId;
   if (cfAnalyzeId) {
     scripts.push({
       "src": "https://static.cloudflareinsights.com/beacon.min.js",
@@ -182,16 +182,16 @@ export default defineNuxtConfig({
   vite: {
     plugins: isDev ? allPlugins : buildPlugins,
     define: {
-      __NB_DATABASE_ENABLED__: !!import.meta.env.CLOUDFLARE_D1_TOKEN && !!import.meta.env.CLOUDFLARE_D1_ACCOUNT_ID && !!import.meta.env.CLOUDFLARE_D1_DATABASE_ID,
-      __NB_CMTREPOID__: JSON.stringify(config.CommentRepoId || import.meta.env.CommentRepoId),
-      __NB_CMTREPOCATEID__: JSON.stringify(config.CommentDiscussionCategoryId || import.meta.env.CommentDiscussionCategoryId),
-      __NB_ALGOLIA_APP_ID__: JSON.stringify(process.env.ALGOLIA_APP_ID || config.algoliaSearch.appId),
-      __NB_ALGOLIA_SEARCH_KEY__: JSON.stringify(process.env.ALGOLIA_SEARCH_KEY || config.algoliaSearch.searchKey),
-      __NB_ALGOLIA_INDEX_NAME__: JSON.stringify(process.env.ALGOLIA_INDEX_NAME || config.algoliaSearch.indexName),
+      __NB_DATABASE_ENABLED__: !!process.env.CLOUDFLARE_D1_TOKEN && !!process.env.CLOUDFLARE_D1_ACCOUNT_ID && !!process.env.CLOUDFLARE_D1_DATABASE_ID,
+      __NB_CMTREPOID__: JSON.stringify(config.CommentRepoId),
+      __NB_CMTREPOCATEID__: JSON.stringify(config.CommentDiscussionCategoryId),
+      __NB_ALGOLIA_APP_ID__: JSON.stringify(config.algoliaSearch.appId),
+      __NB_ALGOLIA_SEARCH_KEY__: JSON.stringify(config.algoliaSearch.searchKey),
+      __NB_ALGOLIA_INDEX_NAME__: JSON.stringify(config.algoliaSearch.indexName),
       __NB_ALGOLIA_ENABLED__: JSON.stringify(
-        !!(process.env.ALGOLIA_APP_ID || config.algoliaSearch.appId)
-        && !!(process.env.ALGOLIA_SEARCH_KEY || config.algoliaSearch.searchKey)
-        && !!(process.env.ALGOLIA_INDEX_NAME || config.algoliaSearch.indexName)),
+        !!(config.algoliaSearch.appId)
+        && !!(config.algoliaSearch.searchKey)
+        && !!(config.algoliaSearch.indexName)),
       __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString()),
       __NB_GITHUB_REPO__: JSON.stringify(config.githubRepo),
       __NB_CURRENT_GIT_SHA__: JSON.stringify(gitCurrentSha),
