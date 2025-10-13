@@ -8,7 +8,7 @@ import { formatTime } from "~/utils/nuxt/format-time";
 
 import { useManageContent, deleteItem, editItem } from "~/utils/nuxt/manage/detail";
 import { notify } from "~/utils/nuxt/notify";
-import { useStaging, type StagedItem } from "~/composables/staging";
+import { useStaging, type StagedItem } from "~/utils/hooks/useStaging";
 import { getProcessedUploadInfo } from "~/utils/nuxt/manage/item-processor";
 import { encryptDecryptItem } from "~/utils/common/process-encrypt-decrypt";
 import { deepClone } from "~/utils/nuxt/utils";
@@ -58,8 +58,8 @@ const baseInfo = ref<HTMLElement>();
 
 const isValidUrlSegment = computed(() => !editingItem.value.customSlug || /^[a-zA-Z0-9\-_]+$/.test(editingItem.value.customSlug));
 
-const getUploadInfo = async () => {
-  const result = await getProcessedUploadInfo({
+const doUpload = async () => {
+  const info = await getProcessedUploadInfo({
     editingItem: editingItem.value,
     editingMd: editingMd.value,
     targetTab,
@@ -68,32 +68,6 @@ const getUploadInfo = async () => {
     encryptor,
     baseInfoElement: baseInfo.value
   });
-
-  if (!result) {
-    const invalidInfo = baseInfo.value?.querySelectorAll<HTMLElement>(".form-item-invalid");
-    if (invalidInfo?.length) {
-      return notify({
-        type: "error",
-        title: translate("missing-info"),
-        description: translate("missing") + `: ${Array.from(invalidInfo)
-          .map(el => el.innerText)
-          .join(", ")}`
-      });
-    } else {
-      notify({
-        type: "error",
-        title: translate("need-passwd")
-      });
-      showPwdModal.value = true;
-      return;
-    }
-  }
-
-  return result;
-};
-
-const doUpload = async () => {
-  const info = await getUploadInfo();
   if (!info) {
     return;
   }
@@ -149,23 +123,7 @@ const doStage = async () => {
   });
 
   if (!processedInfo) {
-    const invalidInfo = baseInfo.value?.querySelectorAll<HTMLElement>(".form-item-invalid");
-    if (invalidInfo?.length) {
-      return notify({
-        type: "error",
-        title: translate("missing-info"),
-        description: translate("missing") + `: ${Array.from(invalidInfo)
-          .map(el => el.innerText)
-          .join(", ")}`
-      });
-    } else {
-      notify({
-        type: "error",
-        title: translate("need-passwd")
-      });
-      showPwdModal.value = true;
-      return;
-    }
+    return;
   }
 
   stageItem(processedInfo.item, processedInfo.md, targetTab);
@@ -216,7 +174,7 @@ const loadStagedForCurrentItem = async () => {
   const stagedItem = getStagedItem<T>(currentId, targetTab);
 
   if (stagedItem) {
-    await overrideEditingItem(stagedItem.item, stagedItem.md);
+    await overrideEditingItem(deepClone(toRaw(stagedItem.item)), stagedItem.md);
   }
 };
 

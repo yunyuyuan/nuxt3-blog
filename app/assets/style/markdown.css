@@ -1,7 +1,7 @@
 @import "./code-style.css";
 
 .--markdown {
-  @apply block break-words leading-relaxed text-base font-normal text-dark-900 dark:text-dark-200;
+  @apply block break-words leading-[1.825] text-base font-normal text-dark-900 dark:text-dark-200;
 
   & h1, & h2, & h3, & h4, & h5, & h6 {
     @apply cursor-pointer block relative my-3;

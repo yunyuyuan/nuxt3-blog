@@ -8,7 +8,7 @@ export interface StagedItem<T extends CommonItem> {
   id: number;
 }
 
-const STAGING_KEY = "staged-items";
+export const STAGING_KEY = "nb-staged-items";
 
 export const useStaging = () => {
   // 暂存的项目列表，使用标志位确保只初始化一次

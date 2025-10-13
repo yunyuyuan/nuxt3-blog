@@ -8,6 +8,7 @@ import { createDiffModal, randomId } from "~/utils/nuxt/manage";
 import { notify } from "~/utils/nuxt/notify";
 import { deepClone } from "~/utils/nuxt/utils";
 import { hasSameIdOrSlug } from "~/utils/nuxt/manage/detail";
+import { useStaging } from "~/utils/hooks/useStaging";
 
 const show = defineModel<boolean>({ required: true });
 
@@ -92,11 +93,6 @@ const handleCommitStaged = async () => {
     loading.value = true;
     const success = await commitStagedItems(additions);
     if (success) {
-      notify({
-        type: "success",
-        title: translate("update-success"),
-        description: translate("staged-items-count", [itemsToCommit.length])
-      });
       if (selectedStagedItems.length > 0) {
         removeStagedItems(selectedStagedItems);
         selectedStagedItems.splice(0);
