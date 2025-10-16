@@ -136,7 +136,7 @@
     @apply font-mono font-medium tracking-normal;
 
     &:not(.hljs) {
-      @apply rounded border border-black/10 dark:border-dark-500/40 text-sm font-normal mx-1 py-1 px-2;
+      @apply rounded bg-dark-100 dark:bg-dark-700 text-sm font-normal mx-1 py-1 px-2;
     }
   }
 
