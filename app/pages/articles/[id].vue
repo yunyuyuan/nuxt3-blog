@@ -62,15 +62,12 @@ initViewer(root);
     ref="root"
     class="container mx-auto px-4 py-8 max-md:px-1 max-md:py-2"
   >
-    <div class="flex w-full flex-col justify-center gap-6 lg:flex-row">
-      <aside
+    <div class="flex w-full justify-center gap-6">
+      <!-- <aside
         v-if="menuItems.length > 2"
-        class="order-2 shrink-0 max-xl:hidden lg:order-1 lg:w-52"
+        class="shrink-0 max-xl:hidden lg:w-52"
       >
-        <div class="sticky top-20 max-h-[calc(100vh-120px)] overflow-y-auto rounded-lg bg-white p-4 shadow dark:bg-dark-800">
-          <h3 class="mb-4 ml-2 text-base font-medium text-dark-800 dark:text-dark-200">
-            {{ $t('menu') }}
-          </h3>
+        <div class="sticky top-20 max-h-[calc(100vh-120px)] overflow-y-auto p-4">
           <nav class="space-y-1 text-sm">
             <a
               v-for="(anchor, idx) in menuItems"
@@ -87,9 +84,9 @@ initViewer(root);
             </a>
           </nav>
         </div>
-      </aside>
+      </aside> -->
 
-      <main class="order-1 max-w-5xl flex-1 overflow-hidden rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-2 lg:order-2">
+      <main class="max-w-5xl flex-1 overflow-hidden rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-2">
         <h1 class="mb-4 text-2xl font-medium text-dark-900 dark:text-white">
           {{ item.title }}
         </h1>
