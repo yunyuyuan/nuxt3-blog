@@ -48,7 +48,7 @@ export async function parseMarkdown(text: string) {
       },
       code({ text, lang, escaped }) {
         if (lang === "mermaid") {
-          return `<pre class="mermaid">${escaped ? text : escapeHtml(text)}</pre>`;
+          return `<pre class="mermaid-block">${escaped ? text : escapeHtml(text)}</pre>`;
         }
         if (hljs) {
           initHljs(hljs);

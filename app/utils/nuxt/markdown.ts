@@ -25,21 +25,30 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
         el.classList.add("parsed");
       });
     // mermaid
-    const mermaidBlocks = mdEl.querySelectorAll<HTMLPreElement>("pre.mermaid");
+    const mermaidBlocks = mdEl.querySelectorAll<HTMLPreElement>("pre.mermaid-block");
     if (mermaidBlocks.length) {
-      if (Array.from(mermaidBlocks).some(pre => !pre.dataset.processed)) {
-        const mermaid = (await import("mermaid")).default;
-        await mermaid.run();
-      }
-      mermaidBlocks.forEach((pre) => {
-        if (!pre.dataset.processed) {
-          pre.dataset.processed = "true";
-        }
-        const cleanup = setupMermaidPanZoom(pre);
-        if (cleanup) {
-          destroyFns.push(cleanup);
-        }
-      });
+      const originalContent = Array.from(mermaidBlocks).map(pre => pre.textContent.trim());
+      const mermaid = (await import("mermaid")).default;
+      watch(useThemeMode().themeMode, async (themeMode) => {
+        mermaidBlocks.forEach((pre, index) => {
+          pre.removeAttribute("data-processed");
+          if (originalContent[index]) {
+            pre.innerHTML = originalContent[index];
+          }
+        });
+        mermaid.initialize({
+          theme: themeMode === "light" ? "default" : "dark"
+        });
+        await mermaid.run({
+          nodes: mermaidBlocks
+        });
+        mermaidBlocks.forEach((pre) => {
+          const cleanup = setupMermaidPanZoom(pre);
+          if (cleanup) {
+            destroyFns.push(cleanup);
+          }
+        });
+      }, { immediate: true });
     }
     // lazy-img
     mdEl
