@@ -147,8 +147,8 @@
       @apply absolute content-[attr(data-lang)] top-2 right-10 text-xs opacity-80;
     }
     
-    &.mermaid {
-      @apply bg-white p-2 max-h-[60vh] overflow-hidden;
+    &.mermaid-block {
+      @apply p-2 max-h-[60vh] overflow-hidden;
 
       > svg {
         @apply mx-auto transition-transform duration-200 ease-out;
