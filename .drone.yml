@@ -18,7 +18,7 @@ clone:
 steps:
   # 仅用于个人使用，因为我的博客实际上在blog分支
   - name: check_branch
-    image: node:20
+    image: node:22
     environment:
       REAL_TARGET_BRANCH:
         from_secret: REAL_TARGET_BRANCH
@@ -39,7 +39,7 @@ steps:
         fi
 
   - name: build_project
-    image: node:20
+    image: node:22
     volumes:
       - name: cache
         path: /drone/src/node_modules
@@ -56,7 +56,7 @@ steps:
       - pnpm build
 
   - name: build_docker
-    image: docker:26.0.1
+    image: docker:29.1.4
     volumes:
       - name: docker
         path: /var/run/docker.sock
@@ -113,7 +113,7 @@ clone:
 
 steps:
   - name: check_branch
-    image: node:20
+    image: node:22
     environment:
       REAL_TARGET_BRANCH:
         from_secret: REAL_TARGET_BRANCH
@@ -134,7 +134,7 @@ steps:
         fi
 
   - name: backup_img
-    image: node:20
+    image: node:22
     volumes:
       - name: cache
         path: /drone/src/node_modules
