@@ -9,6 +9,21 @@ jobs:
   build:
     runs-on: node22
     steps:
+      - name: Verify Docker availability
+        run: |
+          if ! command -v docker >/dev/null 2>&1; then
+            echo "✗ docker CLI not found"
+            exit 1
+          fi
+          if ! docker info >/dev/null 2>&1; then
+            echo "✗ docker daemon not reachable. Check /var/run/docker.sock and privileges."
+            docker version || true
+            ls -l /var/run/docker.sock || true
+            id || true
+            exit 1
+          fi
+          echo "✓ Docker is ready"
+
       # 仅用于个人使用，因为我的博客实际上在blog分支
       - name: check_branch
         run: |
