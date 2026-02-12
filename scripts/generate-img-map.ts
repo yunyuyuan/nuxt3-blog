@@ -2,6 +2,8 @@ import fs from "fs";
 import type { ImgMap } from "./utils";
 import { getAbsolutePath, processBlogItem, promptTask } from "./utils";
 
+const DEFAULT_REG = "(https?:\\/\\/)?([\\w.-]+)\\.([a-zA-Z]{2,6})(\\/[\\w.-]*)*?\\.(jpg|jpeg|webp|gif|png)";
+
 export default async function (pwd?: string, reg?: string) {
   const fn = async function (result) {
     const regexp = RegExp(result.reg, "gi");
@@ -37,10 +39,10 @@ export default async function (pwd?: string, reg?: string) {
     });
     fs.writeFileSync(getAbsolutePath("img.json"), JSON.stringify(imgMap, null, 2));
   };
-  if (pwd && reg) {
+  if (pwd) {
     fn({
       pwd,
-      reg
+      reg: reg || DEFAULT_REG
     });
   } else {
     await promptTask([{
@@ -52,7 +54,7 @@ export default async function (pwd?: string, reg?: string) {
       name: "reg",
       type: "text",
       message: "RegExp",
-      initial: "(https?:\\/\\/)?([\\w.-]+)\\.([a-zA-Z]{2,6})(\\/[\\w.-]*)*?\\.(jpg|jpeg|webp|gif|png)",
+      initial: DEFAULT_REG,
       validate: v => !!v
     }], fn);
   }
