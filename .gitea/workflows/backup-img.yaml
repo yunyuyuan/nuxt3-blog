@@ -8,6 +8,26 @@ jobs:
   backup:
     runs-on: node22
     steps:
+      # 仅用于个人使用，因为我的博客实际上在blog分支
+      - name: check_branch
+        run: |
+          if [ -n "$REAL_TARGET_BRANCH" ]; then
+            CURRENT_BRANCH="${{ gitea.ref }}"
+            CURRENT_BRANCH="${CURRENT_BRANCH#refs/heads/}"
+            echo "Current branch: $CURRENT_BRANCH"
+            echo "Expected branch: $REAL_TARGET_BRANCH"
+            if [ "$CURRENT_BRANCH" = "$REAL_TARGET_BRANCH" ]; then
+              echo "✓ Branch check passed"
+            else
+              echo "✗ Branch mismatch!"
+              exit 1
+            fi
+          else
+            echo "REAL_TARGET_BRANCH not set, skipping branch check"
+          fi
+        env:
+          REAL_TARGET_BRANCH: ${{ secrets.REAL_TARGET_BRANCH }}
+
       - name: Checkout code
         uses: actions/checkout@v4
 
