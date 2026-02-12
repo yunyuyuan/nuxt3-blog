@@ -32,21 +32,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: '22'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: "pnpm"
 
       - name: Install pnpm
         run: npm i -g pnpm
-
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
         run: pnpm i
@@ -58,20 +51,24 @@ jobs:
           CLOUDFLARE_D1_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_D1_ACCOUNT_ID }}
           CLOUDFLARE_D1_DATABASE_ID: ${{ secrets.CLOUDFLARE_D1_DATABASE_ID }}
 
-      - name: Build and run Docker
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Docker build
-        run: docker build -t nuxt3-blog:latest .
+      - name: Build and load Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: nuxt3-blog:latest
 
-      - name: Stop and remove existing container
+      - name: Deploy Docker container
         run: |
-          docker ps -q --filter "name=nuxt3-blog-app" | xargs -r docker stop
-          docker ps -aq --filter "name=nuxt3-blog-app" | xargs -r docker rm
-          docker images --filter "reference=nuxt3-blog:latest" -q | xargs -r docker rmi || true
+          # Stop and remove existing container
+          docker ps -q --filter "name=nuxt3-blog-app" | xargs -r docker stop || true
+          docker ps -aq --filter "name=nuxt3-blog-app" | xargs -r docker rm || true
 
-      - name: Run Docker container
-        run: |
+          # Run new container
           docker run -d \
             --name=nuxt3-blog-app \
             --restart=always \
