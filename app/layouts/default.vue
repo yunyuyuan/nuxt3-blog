@@ -183,7 +183,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
     </section>
     <footer :class="$style.footer">
       <div class="mx-auto flex flex-col items-center gap-1">
-        <span>Copyright (c) 2019-2025 <b><a
+        <span>Copyright (c) 2019-2026 <b><a
           target="_blank"
           :href="'https://github.com/'+config.githubName"
         >{{ config.nickName }}</a> | {{ footerDomain }}</b></span>
