@@ -66,7 +66,7 @@ export function nbLog(s: string, head = "nuxt hook") {
   console.log(`[${colors.blue.bold(head)}] ${colors.green(s)}`);
 }
 
-export type ImgMap = Record<string, {
+export type FileMap = Record<string, {
   newUrl: string;
   appearIn: string[];
 }>;

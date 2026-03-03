@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import axios from "axios";
-import FormData from "form-data";
 import { Info, Plus, Save, Upload } from "lucide-vue-next";
 import ClipboardJS from "clipboard";
 import { translate } from "~/utils/nuxt/i18n";
@@ -10,78 +9,59 @@ import { watchUntil } from "~/utils/nuxt/utils";
 
 const show = defineModel<boolean>({ required: true });
 
+const r2Enabled = __NB_R2_ENABLED__;
+
 const dragIn = ref(false);
-const img = ref<File>();
-const imgUrl = ref();
-const smmsToken = ref(getLocalStorage("smms-token") || "");
+const file = ref<File>();
+const fileUrl = ref();
+const isImage = computed(() => file.value?.type.startsWith("image"));
+const isVideo = computed(() => file.value?.type.startsWith("video"));
+const r2SecretAccessKey = ref(getLocalStorage("r2-secret-access-key") || "");
 const tinyPngToken = ref(getLocalStorage("tinypng-token") || "");
 const resultUrl = ref("");
 const uploading = ref(false);
 
-const setImage = (e: Event) => {
-  const file = (e.target as HTMLInputElement).files?.[0];
-  if (!file) {
-    return;
+const setFile = (e: Event) => {
+  const f = (e.target as HTMLInputElement).files?.[0];
+  if (f) {
+    file.value = f;
   }
-  if (!file.type.startsWith("image")) {
-    return notify({
-      type: "error",
-      title: translate("need-images-file")
-    });
-  }
-  img.value = file;
 };
-const dropImg = (ev: DragEvent) => {
+const dropFile = (ev: DragEvent) => {
   dragIn.value = false;
-  let file: File | null;
+  let f: File | null;
 
   if (ev.dataTransfer?.items) {
     const item = ev.dataTransfer.items[0];
     if (item?.kind === "file") {
-      file = item.getAsFile()!;
+      f = item.getAsFile()!;
     } else {
-      file = null;
+      f = null;
     }
   } else {
-    file = ev.dataTransfer?.files[0] ?? null;
+    f = ev.dataTransfer?.files[0] ?? null;
   }
-  if (!file) {
+  if (!f) {
     return notify({
       type: "warn",
-      title: translate("no-image-selected")
+      title: translate("no-file-selected")
     });
   }
-  if (!file.type.startsWith("image")) {
-    return notify({
-      type: "error",
-      title: translate("need-images-file")
-    });
-  }
-  img.value = file;
+  file.value = f;
 };
 const onPaste = (event: ClipboardEvent) => {
   const items = event.clipboardData && event.clipboardData.items;
-  let file: File | null = null;
   if (items && items.length) {
-    for (let i = 0; i < items.length; i += 1) {
-      if (items[i]?.type.includes("image")) {
-        file = items[i]?.getAsFile() ?? null;
-        break;
-      }
+    const f = items[0]?.getAsFile();
+    if (f) {
+      file.value = f;
     }
-  }
-  if (file) {
-    img.value = file;
   }
 };
 
-watch(img, (img) => {
-  if (img) {
-    const reader = new FileReader();
-    reader.readAsDataURL(img);
-    reader.onloadend = (e) => {
-      imgUrl.value = e.target?.result;
-    };
+watch(file, (f) => {
+  if (f) {
+    fileUrl.value = URL.createObjectURL(f);
   }
 });
 
@@ -98,7 +78,7 @@ const afterUpload = (res: any) => {
       throw new TypeError(res);
     }
     if (res.data.success) {
-      resultUrl.value = res.data.data.url;
+      resultUrl.value = res.data.url;
       notify({
         title: translate("upload-successful"),
         description: translate("manually-copy-link")
@@ -121,11 +101,11 @@ const doUpload = async () => {
   uploading.value = true;
   try {
     const formData = new FormData();
-    formData.append("token", smmsToken.value);
+    formData.append("secretAccessKey", r2SecretAccessKey.value);
     formData.append("tinyPngToken", tinyPngToken.value);
-    formData.append("file", img.value);
+    formData.append("file", file.value!);
     const res = await axios({
-      url: "/api/smms/upload",
+      url: "/api/r2/upload",
       method: "post",
       data: formData
     });
@@ -160,26 +140,34 @@ onUnmounted(() => {
 <template>
   <common-modal
     v-model="show"
-    wrap-class="upload-image"
+    wrap-class="upload-file"
     :show-ok="false"
     :show-cancel="false"
     @update:model-value="show = $event"
   >
     <template #title>
-      {{ $t('upload-image') }}&nbsp;
+      <span :class="!r2Enabled && 'text-red-500'">{{ $t('upload-file') }}</span>&nbsp;
       <a
-        class="underline"
+        v-if="!r2Enabled"
+        class="text-sm text-red-500 underline"
         target="_blank"
-        href="https://doc.sm.ms/"
-      >sm.ms
-        <Info class="inline-block size-4" /></a>
-      &
-      <a
-        class="underline"
-        target="_blank"
-        href="https://tinypng.com/developers"
-      >tinypng
-        <Info class="inline-block size-4" /></a>
+        href="https://github.com/yunyuyuan/nuxt3-blog/wiki/2.2-%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87"
+      ><Info class="inline-block size-4" /></a>
+      <template v-else>
+        <a
+          class="underline"
+          target="_blank"
+          href="https://developers.cloudflare.com/r2/"
+        >R2
+          <Info class="inline-block size-4" /></a>
+        &
+        <a
+          class="underline"
+          target="_blank"
+          href="https://tinypng.com/developers"
+        >tinypng
+          <Info class="inline-block size-4" /></a>
+      </template>
     </template>
     <template #body>
       <div class="flex flex-col px-2">
@@ -202,38 +190,46 @@ onUnmounted(() => {
           @dragleave="dragIn = false"
           @dragenter.prevent
           @dragover.prevent="!dragIn && (dragIn = true)"
-          @drop.prevent="dropImg"
+          @drop.prevent="dropFile"
         >
           <input
             type="file"
-            accept="image/*"
+            accept="*/*"
             class="hidden"
-            @change="setImage"
+            @change="setFile"
           >
           <div
-            v-if="!img"
+            v-if="!file"
             class="flex flex-col items-center gap-1"
           >
             <Plus class="size-8" />
-            <span>{{ $t('select-image') }}</span>
+            <span>{{ $t('select-file') }}</span>
           </div>
-          <img
-            v-else
+          <video
+            v-else-if="isVideo"
             class="size-full object-contain"
-            :src="imgUrl"
+            :src="fileUrl"
+            controls
+          />
+          <img
+            v-else-if="isImage"
+            class="size-full object-contain"
+            :src="fileUrl"
           >
+          <span v-else>{{ file.name }}</span>
         </label>
         <div class="flex flex-col gap-2">
           <div class="flex items-center">
             <input
-              v-model="smmsToken"
+              v-model="r2SecretAccessKey"
+              type="password"
               class="grow"
-              :placeholder="$t('please-input') + ' smms API token'"
+              :placeholder="$t('please-input') + ' R2 Secret Access Key'"
             >
             <button
               class="ml-2 text-primary-600"
               :title="$t('save')"
-              @click="saveToken('smms-token', smmsToken)"
+              @click="saveToken('r2-secret-access-key', r2SecretAccessKey)"
             >
               <Save />
             </button>
@@ -255,7 +251,7 @@ onUnmounted(() => {
           <CommonButton
             :icon="Upload"
             :loading="uploading"
-            :disabled="!img || !smmsToken"
+            :disabled="!file || !r2SecretAccessKey"
             class="mt-2 self-center"
             theme="primary"
             @click="doUpload"

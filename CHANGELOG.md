@@ -1,3 +1,8 @@
+## [v5] 2026.03.04
+* Migrate image upload from sm.ms to Cloudflare R2.
+* R2 credentials (`Account ID`, `Access Key ID`, `Bucket Name`, `Public URL`) configured via env vars; `Secret Access Key` entered in the UI.
+* Upload now supports any file type (images, videos, zip, etc.); TinyPNG compression is skipped for non-image files.
+
 ## [v4] 2025.10.18
 * Bug fixes and improvements.
 

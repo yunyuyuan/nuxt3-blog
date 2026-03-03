@@ -183,6 +183,7 @@ export default defineNuxtConfig({
     plugins: isDev ? allPlugins : buildPlugins,
     define: {
       __NB_DATABASE_ENABLED__: !!process.env.CLOUDFLARE_D1_TOKEN && !!process.env.CLOUDFLARE_D1_ACCOUNT_ID && !!process.env.CLOUDFLARE_D1_DATABASE_ID,
+      __NB_R2_ENABLED__: !!process.env.CLOUDFLARE_D1_ACCOUNT_ID && !!process.env.CLOUDFLARE_R2_ACCESS_KEY_ID && !!process.env.CLOUDFLARE_R2_BUCKET_NAME && !!process.env.CLOUDFLARE_R2_PUBLIC_URL,
       __NB_CMTREPOID__: JSON.stringify(config.CommentRepoId),
       __NB_CMTREPOCATEID__: JSON.stringify(config.CommentDiscussionCategoryId),
       __NB_ALGOLIA_APP_ID__: JSON.stringify(config.algoliaSearch.appId),

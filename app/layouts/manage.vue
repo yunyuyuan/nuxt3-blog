@@ -3,7 +3,7 @@ import { BookOpen, CheckCheck, FileEdit, Image, ImagePlus, Key, Menu, MoonStar, 
 import type { FunctionalComponent } from "vue";
 import { isAuthor as checkIsAuthor } from "ls:~/utils/nuxt/manage/github";
 import Stage from "~/pages/manage/comps/stage.vue";
-import UploadImage from "~/pages/manage/comps/upload-image.vue";
+import UploadFile from "~/pages/manage/comps/upload-file.vue";
 import { GithubTokenKey } from "~/utils/common/constants";
 import { HeaderTabs, type HeaderTabUrl } from "~/utils/common/types";
 import { translate } from "~/utils/nuxt/i18n";
@@ -31,7 +31,7 @@ const IconMap = {
 } as Record<HeaderTabUrl, FunctionalComponent>;
 
 const mobileMenuShow = ref(false);
-const showUploadImage = ref(false);
+const showUploadFile = ref(false);
 const showStagedModal = ref(false);
 const inputToken = ref(githubToken.value);
 const inputPwd = ref(encryptor.usePasswd.value);
@@ -184,8 +184,8 @@ onMounted(() => {
 
             <button
               :class="$style.menuAction"
-              :title="$t('images')"
-              @click="showUploadImage = true"
+              :title="$t('files')"
+              @click="showUploadFile = true"
             >
               <ImagePlus />
             </button>
@@ -269,7 +269,7 @@ onMounted(() => {
     </template>
   </common-modal>
 
-  <upload-image v-model="showUploadImage" />
+  <upload-file v-model="showUploadFile" />
 
   <stage v-model="showStagedModal" />
 </template>

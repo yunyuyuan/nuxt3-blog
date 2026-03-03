@@ -2,14 +2,14 @@ import fs from "fs";
 import path from "path";
 import https from "https";
 import colors from "colors";
-import type { ImgMap } from "./utils";
+import type { FileMap } from "./utils";
 import { getAbsolutePath } from "./utils";
 
 export default async function (user?: number, group?: number) {
-  await downloadImages(JSON.parse(fs.readFileSync(getAbsolutePath("img.json")).toString()), user, group);
+  await downloadFiles(JSON.parse(fs.readFileSync(getAbsolutePath("file-map.json")).toString()), user, group);
 }
 
-const imgsPath = getAbsolutePath("imgs");
+const filesPath = getAbsolutePath("files");
 
 function sleep() {
   return new Promise<void>((resolve) => {
@@ -17,11 +17,11 @@ function sleep() {
   });
 }
 
-async function downloadImages(json: ImgMap, user?: number, group?: number) {
+async function downloadFiles(json: FileMap, user?: number, group?: number) {
   const urls = Object.keys(json);
 
-  if (!fs.existsSync(imgsPath)) {
-    fs.mkdirSync(imgsPath);
+  if (!fs.existsSync(filesPath)) {
+    fs.mkdirSync(filesPath);
   }
 
   let succeedCount = 0;
@@ -29,7 +29,7 @@ async function downloadImages(json: ImgMap, user?: number, group?: number) {
     let count = 0;
     while (true) {
       try {
-        const res = await downloadImage(url, user, group);
+        const res = await downloadFile(url, user, group);
         if (res !== null) {
           await sleep();
         }
@@ -49,9 +49,9 @@ async function downloadImages(json: ImgMap, user?: number, group?: number) {
   console.log(colors.bold("Downloaded " + colors.green(succeedCount + "/" + urls.length + " items")));
 }
 
-function downloadImage(url: string, user?: number, group?: number) {
+function downloadFile(url: string, user?: number, group?: number) {
   return new Promise<boolean | null>((resolve, reject) => {
-    const fileName = path.join(imgsPath, url.replace(/^.*?([^/]*)$/, "$1"));
+    const fileName = path.join(filesPath, url.replace(/^.*?([^/]*)$/, "$1"));
     if (fs.existsSync(fileName)) {
       console.log(`${fileName} existed, ignore...`);
       resolve(null);
