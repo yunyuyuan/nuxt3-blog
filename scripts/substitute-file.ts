@@ -1,5 +1,5 @@
 import fs from "fs";
-import type { ImgMap } from "./utils";
+import type { FileMap } from "./utils";
 import { processBlogItem, encryptAndWriteMd, encrypt, promptTask, getAbsolutePath } from "./utils";
 
 export default async function () {
@@ -11,13 +11,11 @@ export default async function () {
   }], async function (result) {
     const _encrypt = (s: string) => encrypt(s, result.pwd);
 
-    const imgMap: ImgMap = JSON.parse(fs.readFileSync(getAbsolutePath("img.json")).toString());
-    // https://s2.loli.net/\d{4}/\d{2}/\d{2}/[a-zA-Z0-9.]*
-    // (https?:\/\/)?([\w.-]+)\.([a-zA-Z]{2,6})(\/[\w.-]*)*?\.(jpg|jpeg|webp|gif|png)
+    const fileMap: FileMap = JSON.parse(fs.readFileSync(getAbsolutePath("file-map.json")).toString());
 
-    const subImg = (s: string, path: string) => {
+    const subFile = (s: string, path: string) => {
       let result = s;
-      for (const [k, v] of Object.entries(imgMap)) {
+      for (const [k, v] of Object.entries(fileMap)) {
         if (v.appearIn.includes(path) && v.newUrl !== k) {
           result = result.replace(k, v.newUrl);
         }
@@ -26,11 +24,11 @@ export default async function () {
     };
 
     await processBlogItem(result.pwd, async ({ decryptedItem, decryptedMd, mdPath, type }) => {
-      // 替换item里的图片
-      const newItem = JSON.parse(subImg(JSON.stringify(decryptedItem), mdPath));
+      // 替换item里的文件链接
+      const newItem = JSON.parse(subFile(JSON.stringify(decryptedItem), mdPath));
       Object.assign(decryptedItem, newItem);
-      // 替换markdown里的图片
-      const newMd = subImg(decryptedMd, mdPath);
+      // 替换markdown里的文件链接
+      const newMd = subFile(decryptedMd, mdPath);
       await encryptAndWriteMd({
         item: decryptedItem,
         md: newMd,

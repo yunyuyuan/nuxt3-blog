@@ -1,8 +1,10 @@
+.claude
+
 .nuxt
 nuxt.d.ts
 .output
-img.json
-imgs/
+file-map.json
+files/
 
 /app/assets/style/generated-theme-colors.css
 

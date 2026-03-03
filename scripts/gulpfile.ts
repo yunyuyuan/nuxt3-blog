@@ -1,22 +1,22 @@
 import gulp from "gulp";
 import chpwd from "./change-pwd";
-import genImgMap from "./generate-img-map";
-import subImg from "./substitute-img";
-import downloadImg from "./download-img";
+import genFileMap from "./generate-file-map";
+import subFile from "./substitute-file";
+import downloadFile from "./download-file";
 import { uploadAlgoliaIndex } from "./nuxt-hooks";
 
-gulp.task("generate-image-map", async (cb) => {
-  await genImgMap(process.env.NB_PASSWD, process.env.NB_IMG_REGEX);
+gulp.task("generate-file-map", async (cb) => {
+  await genFileMap(process.env.NB_PASSWD, process.env.NB_FILE_REGEX);
   cb();
 });
 
-gulp.task("download-image", async (cb) => {
-  await downloadImg(parseInt(process.env.FILE_USER), parseInt(process.env.FILE_GROUP));
+gulp.task("download-file", async (cb) => {
+  await downloadFile(parseInt(process.env.FILE_USER), parseInt(process.env.FILE_GROUP));
   cb();
 });
 
-gulp.task("substitute-image", async (cb) => {
-  await subImg();
+gulp.task("substitute-file", async (cb) => {
+  await subFile();
   cb();
 });
 

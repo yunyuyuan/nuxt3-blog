@@ -12,6 +12,7 @@ declare module "ls:*github" {
 }
 
 declare const __NB_DATABASE_ENABLED__: string;
+declare const __NB_R2_ENABLED__: boolean;
 declare const __NB_CMTREPOID__: string;
 declare const __NB_CMTREPOCATEID__: string;
 declare const __NB_ALGOLIA_APP_ID__: string;

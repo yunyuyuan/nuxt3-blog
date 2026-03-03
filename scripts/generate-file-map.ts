@@ -1,5 +1,5 @@
 import fs from "fs";
-import type { ImgMap } from "./utils";
+import type { FileMap } from "./utils";
 import { getAbsolutePath, processBlogItem, promptTask } from "./utils";
 
 const DEFAULT_REG = "(https?:\\/\\/)?([\\w.-]+)\\.([a-zA-Z]{2,6})(\\/[\\w.-]*)*?\\.(jpg|jpeg|webp|gif|png)";
@@ -8,20 +8,21 @@ export default async function (pwd?: string, reg?: string) {
   const fn = async function (result) {
     const regexp = RegExp(result.reg, "gi");
 
-    const imgMap: ImgMap = {};
-    // https://s2.loli.net/\d{4}/\d{2}/\d{2}/[a-zA-Z0-9.]*
-    // (https?:\/\/)?([\w.-]+)\.([a-zA-Z]{2,6})(\/[\w.-]*)*?\.(jpg|jpeg|webp|gif|png|mp3|mp4)
+    const fileMap: FileMap = {};
 
-    const pushImg = (s: string, path: string) => {
+    const pushFile = (s: string, path: string) => {
       let matcher;
       while (true) {
         matcher = regexp.exec(s);
         if (matcher) {
-          if (imgMap[matcher[0]]) {
-            imgMap[matcher[0]].appearIn.push(path);
+          const url = matcher[0];
+          if (fileMap[url]) {
+            if (!fileMap[url].appearIn.includes(path)) {
+              fileMap[url].appearIn.push(path);
+            }
           } else {
-            imgMap[matcher[0]] = {
-              newUrl: matcher[0],
+            fileMap[url] = {
+              newUrl: url,
               appearIn: [path]
             };
           }
@@ -32,12 +33,12 @@ export default async function (pwd?: string, reg?: string) {
     };
 
     await processBlogItem(result.pwd, ({ decryptedMd, decryptedItem, mdPath }) => {
-      // 寻找markdown里的图片
-      pushImg(decryptedMd, mdPath);
-      // 寻找item里的图片
-      pushImg(JSON.stringify(decryptedItem), mdPath);
+      // 遍历markdown里的文件链接
+      pushFile(decryptedMd, mdPath);
+      // 遍历item里的文件链接
+      pushFile(JSON.stringify(decryptedItem), mdPath);
     });
-    fs.writeFileSync(getAbsolutePath("img.json"), JSON.stringify(imgMap, null, 2));
+    fs.writeFileSync(getAbsolutePath("file-map.json"), JSON.stringify(fileMap, null, 2));
   };
   if (pwd) {
     fn({
