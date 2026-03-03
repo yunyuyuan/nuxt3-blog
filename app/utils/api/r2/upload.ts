@@ -38,21 +38,30 @@ export async function r2Upload(
   const randomSuffix = crypto.randomBytes(4).toString("hex");
   const key = `${date}-${randomSuffix}${ext}`;
 
-  const client = new S3Client({
-    region: "auto",
-    endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
-    credentials: {
-      accessKeyId,
-      secretAccessKey
-    }
-  });
+  let client: S3Client;
+  try {
+    client = new S3Client({
+      region: "auto",
+      endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+      credentials: {
+        accessKeyId,
+        secretAccessKey
+      }
+    });
+  } catch (e: any) {
+    throw new Error(`Failed to create S3Client: ${e.message ?? e}`);
+  }
 
-  await client.send(new PutObjectCommand({
-    Bucket: bucket,
-    Key: key,
-    Body: buffer,
-    ContentType: file.type || "application/octet-stream"
-  }));
+  try {
+    await client.send(new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      Body: buffer,
+      ContentType: file.type || "application/octet-stream"
+    }));
+  } catch (e: any) {
+    throw new Error(`Failed to upload "${key}" to bucket "${bucket}": ${e.message ?? e}`);
+  }
 
   const url = `${publicUrl.replace(/\/$/, "")}/${key}`;
   return { success: true, url };
