@@ -11,6 +11,7 @@ gulp.task("generate-file-map", async (cb) => {
 });
 
 gulp.task("download-file", async (cb) => {
+  // NB_FILES_DIR: optional, overrides default download directory (defaults to <project>/files)
   await downloadFile(parseInt(process.env.FILE_USER), parseInt(process.env.FILE_GROUP));
   cb();
 });
