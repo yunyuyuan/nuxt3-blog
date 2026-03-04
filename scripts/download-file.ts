@@ -9,7 +9,7 @@ export default async function (user?: number, group?: number) {
   await downloadFiles(JSON.parse(fs.readFileSync(getAbsolutePath("file-map.json")).toString()), user, group);
 }
 
-const filesPath = getAbsolutePath("files");
+const filesPath = process.env.NB_FILES_DIR || getAbsolutePath("files");
 
 function sleep() {
   return new Promise<void>((resolve) => {
