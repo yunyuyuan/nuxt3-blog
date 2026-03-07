@@ -1,17 +1,28 @@
-import { marked } from "marked";
+import { Marked } from "marked";
+import markedFootnote from "marked-footnote";
+import markedTokenPosition from "marked-token-position";
 import { ViewerAttr } from "../common/constants";
 import { initHljs } from "../common/hljs";
 import { escapeHtml } from "../common/utils";
 import { isPrerender } from "../nuxt/constants";
 
+export const MarkedDataLineAttr = "data-marked-line";
+
+function dataLine(token: any): string {
+  const line = token?.position?.start?.line;
+  return line != null ? ` ${MarkedDataLineAttr}="${line + 1}"` : "";
+}
+
 export async function parseMarkdown(text: string) {
   const hljs = isPrerender ? (await import("highlight.js")).default : null;
   const katex = isPrerender ? (await import("katex")).default : null;
   const menuItems: { size: "big" | "small"; text: string; url: string }[] = [];
-  marked.use({
+  const instance = new Marked();
+  instance.use({
     gfm: true,
     renderer: {
-      heading({ depth, tokens }) {
+      heading(token) {
+        const { depth, tokens } = token;
         const text = this.parser.parseInline(tokens);
         const url = escapeHtml(encodeURI(text), true);
 
@@ -20,7 +31,7 @@ export async function parseMarkdown(text: string) {
           text,
           url
         });
-        return `<h${depth}><sup class="fake-head" id="${url}"></sup><a class="header-link" href="#${url}">${text}</a></h${depth}>`;
+        return `<h${depth}${dataLine(token)}><sup class="fake-head" id="${url}"></sup><a class="header-link" href="#${url}">${text}</a></h${depth}>`;
       },
       image({ href, text }) {
         // sticker
@@ -33,22 +44,24 @@ export async function parseMarkdown(text: string) {
         }
         const matcher = text?.match(/^(.*?)\[(.*?) x (.*?)]$/);
         if (!matcher) {
-          return `<span class="image-container"><img ${ViewerAttr} alt="${text}" title="${text}" src="${href}"/><small class="desc">${marked.parseInline(text)}</small></span>`;
+          return `<span class="image-container"><img ${ViewerAttr} alt="${text}" title="${text}" src="${href}"/><small class="desc">${instance.parseInline(text)}</small></span>`;
         }
         // with dimension
         const [, alt_, w, h] = matcher;
         const justHeight = !w;
         return `<span class="image-container${
           justHeight ? " just-height" : ""
-        }"><img ${ViewerAttr} alt="${alt_}" title="${marked.parseInline(alt_ || "")}" style="${
+        }"><img ${ViewerAttr} alt="${alt_}" title="${instance.parseInline(alt_ || "")}" style="${
           w ? `width: ${w} !important;` : ""
         }${
           h ? `height: ${h} !important;` : ""
-        }" src="${href}"/><small class="desc">${marked.parseInline(alt_ || "")}</small></span>`;
+        }" src="${href}"/><small class="desc">${instance.parseInline(alt_ || "")}</small></span>`;
       },
-      code({ text, lang, escaped }) {
+      code(token) {
+        let { text } = token;
+        const { lang, escaped } = token;
         if (lang === "mermaid") {
-          return `<pre class="mermaid-block">${escaped ? text : escapeHtml(text)}</pre>`;
+          return `<pre${dataLine(token)} class="mermaid-block">${escaped ? text : escapeHtml(text)}</pre>`;
         }
         if (hljs) {
           initHljs(hljs);
@@ -63,7 +76,25 @@ export async function parseMarkdown(text: string) {
           // hydration，先escape，留在afterInsertHtml里parse
           text = escaped ? text : escapeHtml(text);
         }
-        return `<pre data-lang="${lang}"><code class="language-${lang} ${isPrerender ? "hljs" : ""}">${text}</code></pre>`;
+        return `<pre${dataLine(token)} data-lang="${lang}"><code class="language-${lang} ${isPrerender ? "hljs" : ""}">${text}</code></pre>`;
+      },
+      paragraph(token) {
+        return `<p${dataLine(token)}>${this.parser.parseInline(token.tokens)}</p>\n`;
+      },
+      blockquote(token) {
+        return `<blockquote${dataLine(token)}>\n${this.parser.parse(token.tokens)}</blockquote>\n`;
+      },
+      list(token) {
+        const tag = token.ordered ? "ol" : "ul";
+        const startAttr = token.ordered && token.start !== 1 ? ` start="${token.start}"` : "";
+        let body = "";
+        for (const item of token.items) {
+          body += this.listitem(item);
+        }
+        return `<${tag}${startAttr}${dataLine(token)}>\n${body}</${tag}>\n`;
+      },
+      hr(token) {
+        return `<hr${dataLine(token)} />\n`;
       }
     },
     extensions: [
@@ -285,8 +316,8 @@ export async function parseMarkdown(text: string) {
             };
           }
         },
-        renderer({ content }) {
-          return `<div class="math-formula block ${isPrerender ? "parsed" : ""}"><div>${isPrerender ? katex!.renderToString(content, { strict: "ignore" }) : content}</div></div>`;
+        renderer(token) {
+          return `<div${dataLine(token)} class="math-formula block ${isPrerender ? "parsed" : ""}"><div>${isPrerender ? katex!.renderToString(token.content, { strict: "ignore" }) : token.content}</div></div>`;
         }
       },
       {
@@ -303,8 +334,8 @@ export async function parseMarkdown(text: string) {
             };
           }
         },
-        renderer({ text }) {
-          return `<span class="raw-html">${this.parser.parse(text)}</span>`;
+        renderer(token) {
+          return `<span${dataLine(token)} class="raw-html">${this.parser.parse(token.text)}</span>`;
         }
       },
       {
@@ -322,8 +353,8 @@ export async function parseMarkdown(text: string) {
             };
           }
         },
-        renderer({ legend, content }) {
-          return `<fieldset><legend>${this.parser.parseInline(legend)}</legend>${this.parser.parse(content)}</fieldset>`;
+        renderer(token) {
+          return `<fieldset${dataLine(token)}><legend>${this.parser.parseInline(token.legend)}</legend>${this.parser.parse(token.content)}</fieldset>`;
         }
       },
       {
@@ -340,8 +371,8 @@ export async function parseMarkdown(text: string) {
             };
           }
         },
-        renderer({ text }) {
-          return `<div class="encrypt-block">${this.parser.parse(text)}</div>`;
+        renderer(token) {
+          return `<div${dataLine(token)} class="encrypt-block">${this.parser.parse(token.text)}</div>`;
         }
       },
       {
@@ -360,25 +391,27 @@ export async function parseMarkdown(text: string) {
             };
           }
         },
-        renderer({ cType, title, content }) {
-          title = this.parser.parseInline(title);
-          title = title || cType.toUpperCase();
+        renderer(token) {
+          let title = this.parser.parseInline(token.title);
+          title = title || token.cType.toUpperCase();
 
-          if (cType === "details") {
-            return `<details class="container-block ${cType}">
+          if (token.cType === "details") {
+            return `<details${dataLine(token)} class="container-block ${token.cType}">
                       <summary class="container-title">${title}</summary>
-                      ${this.parser.parse(content)}
+                      ${this.parser.parse(token.content)}
                     </details>`;
           }
-          return `<div class="container-block ${cType}">
+          return `<div${dataLine(token)} class="container-block ${token.cType}">
                     <p class="container-title">${title}</p>
-                    ${this.parser.parse(content)}
+                    ${this.parser.parse(token.content)}
                   </div>`;
         }
       }
     ]
   });
-  const md = await marked(text);
+  instance.use(markedFootnote({ refMarkers: true }));
+  instance.use(markedTokenPosition());
+  const md = instance.parse(text);
   return {
     menu: menuItems,
     md

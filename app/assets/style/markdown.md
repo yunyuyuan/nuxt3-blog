@@ -192,5 +192,13 @@ sequenceDiagram
     Alice-)John: See you later!
 ```
 
+## 17. footnotes
+There will be a footnote that points to me.[^1]
+
+[^1]: something
+    ```js
+    const s = 1;
+    ```
+
 # More
 coming...
