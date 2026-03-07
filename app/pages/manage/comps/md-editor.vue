@@ -7,6 +7,7 @@ import StickerPick from "./sticker-pick.vue";
 import { initViewer } from "~/utils/nuxt/viewer";
 import { useMarkdownParser } from "~/utils/hooks/useMarkdownParser";
 import { useUnmount } from "~/utils/hooks/useUnmount";
+import { MarkedDataLineAttr } from "~/utils/common/markdown";
 
 const props = defineProps<{
   disabled?: boolean;
@@ -63,6 +64,110 @@ const stopResize = () => {
   document.body.classList.remove("resizing");
 };
 
+// scroll sync
+const previewContainer = ref<HTMLElement>();
+let scrollSyncSource: "editor" | "preview" | null = null;
+let scrollSyncTimer: ReturnType<typeof setTimeout>;
+
+const resetScrollSync = () => {
+  clearTimeout(scrollSyncTimer);
+  scrollSyncTimer = setTimeout(() => {
+    scrollSyncSource = null;
+  }, 200);
+};
+
+const getLineMap = (preview: HTMLElement) => {
+  const elements = preview.querySelectorAll<HTMLElement>(`[${MarkedDataLineAttr}]`);
+  if (!elements.length) return null;
+
+  const containerRect = preview.getBoundingClientRect();
+  return Array.from(elements).map(el => ({
+    line: parseInt(el.getAttribute(MarkedDataLineAttr)!, 10),
+    top: el.getBoundingClientRect().top - containerRect.top + preview.scrollTop
+  }));
+};
+
+const syncPreviewScroll = () => {
+  if (scrollSyncSource === "preview" || !editor || currentView.value !== "both") return;
+  scrollSyncSource = "editor";
+
+  const preview = previewContainer.value;
+  if (!preview) return;
+
+  const visibleRanges = editor.getVisibleRanges();
+  if (!visibleRanges.length) return;
+  const editorTopLine = visibleRanges[0]!.startLineNumber;
+
+  const lineMap = getLineMap(preview);
+  if (!lineMap?.length) return;
+
+  // Find surrounding anchor points
+  let before = lineMap[0]!;
+  let after = lineMap[lineMap.length - 1]!;
+
+  for (const entry of lineMap) {
+    if (entry.line <= editorTopLine) before = entry;
+    if (entry.line >= editorTopLine) {
+      after = entry;
+      break;
+    }
+  }
+
+  // Interpolate between anchor points
+  let targetScroll: number;
+  if (before.line === after.line) {
+    targetScroll = before.top;
+  } else {
+    const fraction = (editorTopLine - before.line) / (after.line - before.line);
+    targetScroll = before.top + fraction * (after.top - before.top);
+  }
+
+  preview.scrollTop = targetScroll;
+  resetScrollSync();
+};
+
+const syncEditorScroll = () => {
+  if (scrollSyncSource === "editor" || !editor || currentView.value !== "both") return;
+  scrollSyncSource = "preview";
+
+  const preview = previewContainer.value;
+  if (!preview) return;
+
+  const lineMap = getLineMap(preview);
+  if (!lineMap?.length) return;
+
+  // Find which source line corresponds to current preview scroll position
+  let before = lineMap[0]!;
+  let after = lineMap[lineMap.length - 1]!;
+
+  for (const entry of lineMap) {
+    if (entry.top <= preview.scrollTop) before = entry;
+    if (entry.top >= preview.scrollTop) {
+      after = entry;
+      break;
+    }
+  }
+
+  let targetLine: number;
+  if (before.top === after.top) {
+    targetLine = before.line;
+  } else {
+    const fraction = (preview.scrollTop - before.top) / (after.top - before.top);
+    targetLine = before.line + fraction * (after.line - before.line);
+  }
+
+  // Map line number to editor scroll position proportionally
+  const totalLines = editor.getModel()!.getLineCount();
+  const maxEditorScroll = editor.getScrollHeight() - editor.getLayoutInfo().height;
+  if (totalLines <= 1 || maxEditorScroll <= 0) return;
+
+  editor.setScrollTop((targetLine / totalLines) * maxEditorScroll);
+  resetScrollSync();
+};
+
+const throttledSyncPreview = throttle(syncPreviewScroll, 30);
+const throttledSyncEditor = throttle(syncEditorScroll, 30);
+
 // 初始化manoco。mounted 或者 loadingChange 后执行，但只执行一次
 const { themeMode } = useThemeMode();
 const editorContainer = ref<HTMLElement>();
@@ -104,6 +209,9 @@ const initEditor = async () => {
       currentText.value = text;
     }, 500)
   );
+  editor.onDidScrollChange((e) => {
+    if (e.scrollTopChanged) throttledSyncPreview();
+  });
 };
 
 watch(inputValue, (text) => {
@@ -119,6 +227,7 @@ watch(() => props.disabled, (readOnly) => {
 onMounted(initEditor);
 onBeforeUnmount(() => {
   editor?.dispose();
+  clearTimeout(scrollSyncTimer);
 });
 initViewer(markdownRef);
 </script>
@@ -235,6 +344,7 @@ initViewer(markdownRef);
         />
       </div>
       <div
+        ref="previewContainer"
         :class="twMerge(
           'w-1/2 min-w-24 h-full overflow-auto p-2',
           currentView === 'both' && 'grow',
@@ -242,6 +352,7 @@ initViewer(markdownRef);
           currentView === 'preview' && 'w-full'
         )"
         data-testid="rendered-markdown"
+        @scroll="throttledSyncEditor"
       >
         <article
           ref="markdownRef"
