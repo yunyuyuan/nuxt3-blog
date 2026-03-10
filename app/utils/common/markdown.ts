@@ -1,8 +1,9 @@
+import { getSingletonHighlighter } from "shiki";
 import { Marked } from "marked";
 import markedFootnote from "marked-footnote";
 import markedTokenPosition from "marked-token-position";
 import { ViewerAttr } from "../common/constants";
-import { initHljs } from "../common/hljs";
+import { SHIKI_LIGHT_THEME, SHIKI_DARK_THEME } from "../common/shiki";
 import { escapeHtml } from "../common/utils";
 import { isPrerender } from "../nuxt/constants";
 
@@ -14,8 +15,32 @@ function dataLine(token: any): string {
 }
 
 export async function parseMarkdown(text: string) {
-  const hljs = isPrerender ? (await import("highlight.js")).default : null;
   const katex = isPrerender ? (await import("katex")).default : null;
+
+  let shikiHighlighter: Awaited<ReturnType<typeof getSingletonHighlighter>> | null = null;
+  if (isPrerender) {
+    shikiHighlighter = await getSingletonHighlighter({
+      themes: [SHIKI_LIGHT_THEME, SHIKI_DARK_THEME],
+      langs: []
+    });
+    // Pre-load all languages found in fenced code blocks
+    const langMatches = text.matchAll(/^```(\w+)/gm);
+    const langs = new Set<string>();
+    for (const match of langMatches) {
+      const lang = match[1].toLowerCase();
+      if (lang !== "mermaid") langs.add(lang);
+    }
+    for (const lang of langs) {
+      const loaded = shikiHighlighter.getLoadedLanguages();
+      if (!loaded.includes(lang as never)) {
+        try {
+          await shikiHighlighter.loadLanguage(lang as never);
+        } catch {
+          // Language not bundled, will fall back to plain text
+        }
+      }
+    }
+  }
   const menuItems: { size: "big" | "small"; text: string; url: string }[] = [];
   const instance = new Marked();
   instance.use({
@@ -63,20 +88,19 @@ export async function parseMarkdown(text: string) {
         if (lang === "mermaid") {
           return `<pre${dataLine(token)} class="mermaid-block">${escaped ? text : escapeHtml(text)}</pre>`;
         }
-        if (hljs) {
-          initHljs(hljs);
-          text = (
-            lang
-              ? hljs.highlight(text, {
-                  language: lang
-                })
-              : hljs.highlightAuto(text)
-          ).value;
+        if (shikiHighlighter) {
+          const resolvedLang = lang && shikiHighlighter.getLoadedLanguages().includes(lang as never) ? lang : "text";
+          const html = shikiHighlighter.codeToHtml(text, {
+            lang: resolvedLang,
+            themes: { light: SHIKI_LIGHT_THEME, dark: SHIKI_DARK_THEME }
+          });
+          const match = html.match(/<code>([\s\S]*)<\/code>/);
+          text = match ? match[1] : escapeHtml(text);
         } else {
-          // hydration，先escape，留在afterInsertHtml里parse
+          // hydration: escape first, will be highlighted in afterInsertHtml
           text = escaped ? text : escapeHtml(text);
         }
-        return `<pre${dataLine(token)} data-lang="${lang}"><code class="language-${lang} ${isPrerender ? "hljs" : ""}">${text}</code></pre>`;
+        return `<pre${dataLine(token)} data-lang="${lang}"${shikiHighlighter ? " data-shiki" : ""}><code class="language-${lang}">${text}</code></pre>`;
       },
       paragraph(token) {
         return `<p${dataLine(token)}>${this.parser.parseInline(token.tokens)}</p>\n`;

@@ -1,7 +1,7 @@
 import { createApp, createVNode, render, type FunctionalComponent } from "vue";
 import { SquareArrowOutUpRight, Clipboard, ZoomIn, ZoomOut, Maximize2, Minimize2 } from "lucide-vue-next";
 import { pangu } from "pangu/browser";
-import { initHljs } from "../common/hljs";
+import { SHIKI_LIGHT_THEME, SHIKI_DARK_THEME } from "../common/shiki";
 import { translate } from "./i18n";
 import { notify } from "./notify";
 import lazyImgVue from "~/components/the-lazy-img.vue";
@@ -9,13 +9,40 @@ import lazyImgVue from "~/components/the-lazy-img.vue";
 export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
   const destroyFns: CallableFunction[] = [];
   await nextTick(async () => {
-    // hljs
-    mdEl.querySelectorAll<HTMLElement>("pre>code").forEach(async (el) => {
-      const hljs = initHljs((await import("highlight.js")).default);
-      if (!el.classList.contains("hljs")) {
-        hljs.highlightElement(el);
+    // shiki: highlight code blocks not already processed server-side
+    const codeBlocks = Array.from(mdEl.querySelectorAll<HTMLElement>("pre:not([data-shiki])>code"));
+    if (codeBlocks.length) {
+      const { getSingletonHighlighter } = await import("shiki");
+      const highlighter = await getSingletonHighlighter({
+        themes: [SHIKI_LIGHT_THEME, SHIKI_DARK_THEME],
+        langs: []
+      });
+      for (const el of codeBlocks) {
+        const pre = el.parentElement!;
+        const lang = (pre.dataset.lang || "").toLowerCase();
+        const code = el.textContent || "";
+        if (lang) {
+          const loaded = highlighter.getLoadedLanguages();
+          if (!loaded.includes(lang as never)) {
+            try {
+              await highlighter.loadLanguage(lang as never);
+            } catch {
+              // Language not bundled, skip highlighting
+            }
+          }
+        }
+        const resolvedLang = lang && highlighter.getLoadedLanguages().includes(lang as never) ? lang : "text";
+        const html = highlighter.codeToHtml(code, {
+          lang: resolvedLang,
+          themes: { light: SHIKI_LIGHT_THEME, dark: SHIKI_DARK_THEME }
+        });
+        const match = html.match(/<code>([\s\S]*)<\/code>/);
+        if (match) {
+          el.innerHTML = match[1];
+          pre.dataset.shiki = "true";
+        }
       }
-    });
+    }
     // katex
     mdEl
       .querySelectorAll<HTMLDivElement>(".math-formula:not(.parsed)")
