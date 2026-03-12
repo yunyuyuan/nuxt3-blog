@@ -2,7 +2,20 @@ import fs from "fs";
 import type { FileMap } from "./utils";
 import { getAbsolutePath, processBlogItem, promptTask } from "./utils";
 
-const DEFAULT_REG = "(https?:\\/\\/)?([\\w.-]+)\\.([a-zA-Z]{2,6})(\\/[\\w.-]*)*?\\.(jpg|jpeg|webp|gif|png)";
+const LEGACY_DEFAULT_REG = "(https?:\\/\\/)?([\\w.-]+)\\.([a-zA-Z]{2,6})(\\/[\\w.-]*)*?\\.(jpg|jpeg|webp|gif|png)";
+
+function escapeRegExp(s: string) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function getDefaultReg() {
+  const r2BaseUrl = process.env.CLOUDFLARE_R2_PUBLIC_URL?.trim().replace(/\/$/, "");
+  if (!r2BaseUrl) {
+    return LEGACY_DEFAULT_REG;
+  }
+  // Match any public R2 object URL, regardless of file type.
+  return `${escapeRegExp(r2BaseUrl)}\\/[^\\s"'<>]+`;
+}
 
 export default async function (pwd?: string, reg?: string) {
   const fn = async function (result) {
@@ -37,13 +50,15 @@ export default async function (pwd?: string, reg?: string) {
       pushFile(decryptedMd, mdPath);
       // 遍历item里的文件链接
       pushFile(JSON.stringify(decryptedItem), mdPath);
+    }, undefined, {
+      decryptErrorMode: "skip-item"
     });
     fs.writeFileSync(getAbsolutePath("file-map.json"), JSON.stringify(fileMap, null, 2));
   };
   if (pwd) {
-    fn({
+    await fn({
       pwd,
-      reg: reg || DEFAULT_REG
+      reg: reg || getDefaultReg()
     });
   } else {
     await promptTask([{
@@ -55,7 +70,7 @@ export default async function (pwd?: string, reg?: string) {
       name: "reg",
       type: "text",
       message: "RegExp",
-      initial: DEFAULT_REG,
+      initial: getDefaultReg(),
       validate: v => !!v
     }], fn);
   }

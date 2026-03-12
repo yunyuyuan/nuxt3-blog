@@ -70,7 +70,8 @@ export async function uploadAlgoliaIndex() {
 
   for (const { type, list } of blogData) {
     for (const item of list.filter(item => !item.encrypt)) {
-      const html = (await parseMarkdown(item._md)).md;
+      const { md } = await parseMarkdown(item._md);
+      const html = await md;
 
       const extractedText = extractTextFromHtml(html);
       // return fs.writeFileSync(`.output${type}-${item.id}.txt`, extractedText);
