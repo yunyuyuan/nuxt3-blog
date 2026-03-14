@@ -12,8 +12,7 @@ export async function encrypt(s: string, pwd: string): Promise<string> {
 export async function decrypt(s: string, pwd: string): Promise<string> {
   const result = CryptoJS.AES.decrypt(s, pwd).toString(CryptoJS.enc.Utf8);
   if (!result) {
-    console.error(colors.red("Password incorrect"));
-    process.exit();
+    throw new Error("Password incorrect or decrypt failed");
   }
   return result;
 }
@@ -23,29 +22,41 @@ export async function processBlogItem(
   /** 单个item回调 */
   processItem: (_: { decryptedItem: CommonItem; decryptedMd: string; type: HeaderTabUrl; mdPath: string }) => any | Promise<any>,
   /** 整个json回调 */
-  processJson: (_: { decryptedItemList: CommonItem[]; type: HeaderTabUrl; jsonPath: string }) => any | Promise<any> = () => null
+  processJson: (_: { decryptedItemList: CommonItem[]; type: HeaderTabUrl; jsonPath: string }) => any | Promise<any> = () => null,
+  options: {
+    decryptErrorMode?: "throw" | "skip-item";
+  } = {}
 ) {
   const _decrypt = (s: string) => decrypt(s, pwd);
+  const decryptErrorMode = options.decryptErrorMode || "throw";
 
   const blogData = walkAllBlogData();
   for (const { type, jsonPath, list: itemList } of blogData) {
     let count = 0;
     for (const item of itemList) {
-      let decryptedMd = item._md;
-      if (item.encrypt) {
-        // 解密item
-        await encryptDecryptItem(item, _decrypt, type);
-        // 解密markdown
-        decryptedMd = await _decrypt(decryptedMd);
-      } else if (item.encryptBlocks?.length) {
-        // 解密 encrypted blocks
-        for (const block of item.encryptBlocks) {
-          const { start, end } = block;
-          decryptedMd = decryptedMd.slice(0, start) + await _decrypt(decryptedMd.slice(start, end)) + decryptedMd.slice(end);
+      try {
+        let decryptedMd = item._md;
+        if (item.encrypt) {
+          // 解密item
+          await encryptDecryptItem(item, _decrypt, type);
+          // 解密markdown
+          decryptedMd = await _decrypt(decryptedMd);
+        } else if (item.encryptBlocks?.length) {
+          // 解密 encrypted blocks
+          for (const block of item.encryptBlocks) {
+            const { start, end } = block;
+            decryptedMd = decryptedMd.slice(0, start) + await _decrypt(decryptedMd.slice(start, end)) + decryptedMd.slice(end);
+          }
         }
+        await processItem({ decryptedItem: item, decryptedMd, type, mdPath: item._mdPath });
+        count += 1;
+      } catch (e) {
+        if (decryptErrorMode === "skip-item") {
+          console.warn(colors.yellow(`Skip item ${String(item.id)} in ${type}: ${(e as Error)?.message || e}`));
+          continue;
+        }
+        throw e;
       }
-      await processItem({ decryptedItem: item, decryptedMd, type, mdPath: item._mdPath });
-      count += 1;
     }
     await processJson({ decryptedItemList: itemList, type, jsonPath });
     console.log(colors.bold.bgCyan(type.substring(1) + ` (${count} in total) processing completed!`));

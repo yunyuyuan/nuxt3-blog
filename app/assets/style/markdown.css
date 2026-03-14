@@ -134,10 +134,10 @@
 
   & code {
     @apply font-mono font-medium tracking-normal;
+  }
 
-    &:not(.hljs) {
-      @apply rounded bg-dark-100 dark:bg-dark-700 text-sm font-normal mx-1 py-1 px-2;
-    }
+  & :not(pre) > code {
+    @apply rounded bg-dark-100 dark:bg-dark-700 text-sm font-normal mx-1 py-1 px-2;
   }
 
   & pre {
@@ -203,7 +203,7 @@
       }
     }
 
-    & > code.hljs {
+    & > code {
       @apply block leading-relaxed break-keep p-3 rounded-lg max-h-[85vh] text-sm font-normal overflow-auto;
     }
 

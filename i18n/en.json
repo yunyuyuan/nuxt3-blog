@@ -156,5 +156,7 @@
   "view-changelog": "View Changelog",
   "how-to-upgrade": "How to Upgrade",
   "upgrade-step-1": "Go to your repository website",
-  "upgrade-step-2": "Click \"Sync fork\" → Click \"Update branch\""
+  "upgrade-step-2": "Click \"Sync fork\" → Click \"Update branch\"",
+  "images": "Images",
+  "view-deploy-status": "View Deploy Status"
 }

@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "target": "ES2018",
+    "module": "CommonJS",
+    "downlevelIteration": true,
     "esModuleInterop": true
   }
 }

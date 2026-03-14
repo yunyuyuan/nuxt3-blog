@@ -1,3 +1,7 @@
+## [v6] 2026.03.08
+* Block commit when the commit ID doesn't match the latest deployed version, preventing accidental overwrites.
+* Show a link to the GitHub commits page to check deployment status.
+
 ## [v5] 2026.03.04
 * Migrate image upload from sm.ms to Cloudflare R2.
 * R2 credentials (`Account ID`, `Access Key ID`, `Bucket Name`, `Public URL`) configured via env vars; `Secret Access Key` entered in the UI.

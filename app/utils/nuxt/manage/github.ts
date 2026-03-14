@@ -4,7 +4,7 @@ import { formatTime } from "../format-time";
 import { translate } from "../i18n";
 import { notify } from "../notify";
 import { getCurrentTab } from "../utils";
-import { createCommitModal, createDiffModal } from ".";
+import { createNotCommittableModal, createDiffModal } from ".";
 import config from "~~/config";
 import type { CommitParams, CommonItem, CommitParamsAddition } from "~/utils/common/types";
 
@@ -81,7 +81,7 @@ export async function createCommit(
     await post(JSON.stringify({ additions, deletions }));
     return true;
   }
-  if (correctSha !== __NB_CURRENT_GIT_SHA__ && !(await createCommitModal())) {
+  if (correctSha !== __NB_CURRENT_GIT_SHA__ && !(await createNotCommittableModal())) {
     return false;
   }
   // 显示 diff 弹窗让用户确认更改
