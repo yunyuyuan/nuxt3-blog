@@ -1,0 +1,82 @@
+name: Deploy Nuxt site to Pages
+
+on:
+  push:
+    branches: ["main", "master", "blog"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: ${{ vars.TARGET_BRANCH }}
+      # Base URL for the deployed site.
+      # Use "/" for a user/organization site or a site served from the domain root.
+      # Change this to "/<repo-name>/" when deploying a project site under a subpath,
+      # e.g. https://<user>.github.io/<repo-name>/
+      NUXT_APP_BASE_URL: /
+    steps:
+      - name: Check target branch
+        run: |
+          if [ -n "$TARGET_BRANCH" ]; then
+            CURRENT_BRANCH="${GITHUB_REF#refs/heads/}"
+            echo "Current branch: $CURRENT_BRANCH"
+            echo "Expected branch: $TARGET_BRANCH"
+            if [ "$CURRENT_BRANCH" = "$TARGET_BRANCH" ]; then
+              echo "✓ Branch check passed"
+            else
+              echo "✗ Branch mismatch!"
+              exit 1
+            fi
+          else
+            echo "TARGET_BRANCH not set, skipping branch check"
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate static site
+        run: pnpm generate
+
+      - name: Disable Jekyll
+        run: touch .output/public/.nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .output/public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
