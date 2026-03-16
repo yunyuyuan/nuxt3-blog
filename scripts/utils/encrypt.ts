@@ -50,6 +50,8 @@ export async function processBlogItem(
         }
         await processItem({ decryptedItem: item, decryptedMd, type, mdPath: item._mdPath });
         count += 1;
+        delete item._md;
+        delete item._mdPath;
       } catch (e) {
         if (decryptErrorMode === "skip-item") {
           console.warn(colors.yellow(`Skip item ${String(item.id)} in ${type}: ${(e as Error)?.message || e}`));

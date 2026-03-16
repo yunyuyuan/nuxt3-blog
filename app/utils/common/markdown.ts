@@ -27,7 +27,7 @@ export async function parseMarkdown(text: string) {
     const langMatches = text.matchAll(/^```(\w+)/gm);
     const langs = new Set<string>();
     for (const match of langMatches) {
-      const lang = match[1].toLowerCase();
+      const lang = match[1]!.toLowerCase();
       if (lang !== "mermaid") langs.add(lang);
     }
     for (const lang of langs) {
@@ -95,7 +95,7 @@ export async function parseMarkdown(text: string) {
             themes: { light: SHIKI_LIGHT_THEME, dark: SHIKI_DARK_THEME }
           });
           const match = html.match(/<code>([\s\S]*)<\/code>/);
-          text = match ? match[1] : escapeHtml(text);
+          text = match ? match[1]! : escapeHtml(text);
         } else {
           // hydration: escape first, will be highlighted in afterInsertHtml
           text = escaped ? text : escapeHtml(text);
@@ -435,7 +435,7 @@ export async function parseMarkdown(text: string) {
   });
   instance.use(markedFootnote({ refMarkers: true }));
   instance.use(markedTokenPosition());
-  const md = instance.parse(text);
+  const md = await instance.parse(text);
   return {
     menu: menuItems,
     md
