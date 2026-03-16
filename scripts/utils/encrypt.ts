@@ -46,6 +46,8 @@ export async function processBlogItem(
       }
       await processItem({ decryptedItem: item, decryptedMd, type, mdPath: item._mdPath });
       count += 1;
+      delete item._md;
+      delete item._mdPath;
     }
     await processJson({ decryptedItemList: itemList, type, jsonPath });
     console.log(colors.bold.bgCyan(type.substring(1) + ` (${count} in total) processing completed!`));

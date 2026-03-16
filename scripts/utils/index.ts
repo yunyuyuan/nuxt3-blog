@@ -45,7 +45,7 @@ export function walkAllBlogData() {
     walk("/articles"),
     walk("/records"),
     walk("/knowledges")
-  ];
+  ] as const;
 }
 
 export async function runCmd(command: string) {
