@@ -15,6 +15,8 @@
 >
 > Netlify:[https://blog-netlify.yunyuyuan.net](https://blog-netlify.yunyuyuan.net)
 >
+> Github Pages:[https://blog-ghpage.yunyuyuan.net](https://blog-ghpage.yunyuyuan.net)
+>
 > **🚀self hosted部署（参考[我的文章](https://blog.yunyuyuan.net/articles/8346)）**
 > Drone:[https://blog-drone-cf.yunyuyuan.net](https://blog-drone-cf.yunyuyuan.net)，这里的`cf`意思是使用cloudflare做内网穿透
 

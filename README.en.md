@@ -15,6 +15,8 @@ English Readme | [中文说明](/README.md)
 >
 > Netlify: [https://blog-netlify.yunyuyuan.net](https://blog-netlify.yunyuyuan.net)
 >
+> Github Pages:[https://blog-ghpage.yunyuyuan.net](https://blog-ghpage.yunyuyuan.net)
+>
 > **🚀Self-hosted deployment (refer to [my article](https://blog.yunyuyuan.net/articles/8346))**
 > Drone: [https://blog-drone-cf.yunyuyuan.net](https://blog-drone-cf.yunyuyuan.net), where `cf` means using Cloudflare for intranet penetration
 

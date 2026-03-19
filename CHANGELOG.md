@@ -1,3 +1,6 @@
+## [v7] 2026.03.16
+* Support Github pages deployment.
+
 ## [v6] 2026.03.08
 * Block commit when the commit ID doesn't match the latest deployed version, preventing accidental overwrites.
 * Show a link to the GitHub commits page to check deployment status.
