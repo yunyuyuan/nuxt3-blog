@@ -34,7 +34,7 @@ const tabLengthMap = computed(() => {
 <template>
   <main class="container mx-auto grow px-4 py-8 max-md:px-2 max-md:py-4">
     <div class="mx-auto max-w-5xl">
-      <div class="mb-8 border-b border-dark-200 dark:border-dark-700">
+      <div class="mb-8 animate-fade-in-up border-b border-dark-200 dark:border-dark-700">
         <nav
           class="flex space-x-8 overflow-auto"
           aria-label="Tabs"
@@ -65,11 +65,12 @@ const tabLengthMap = computed(() => {
         class="space-y-8"
       >
         <NuxtLink
-          v-for="item in filteredList"
+          v-for="(item, index) in filteredList"
           :key="item.id"
           no-prefetch
-          class="group flex items-center justify-between overflow-hidden rounded-2xl border border-transparent bg-white p-5 shadow-card transition hover:-translate-y-0.5 hover:border-primary-400 dark:bg-dark-800 dark:hover:border-primary-600"
+          class="group flex animate-fade-in-up items-center justify-between overflow-hidden rounded-2xl border border-transparent bg-white p-5 shadow-card transition hover:-translate-y-0.5 hover:border-primary-400 dark:bg-dark-800 dark:hover:border-primary-600"
           :to="`/knowledges/${item.customSlug || item.id}`"
+          :style="{ animationDelay: `${index * 60}ms` }"
         >
           <div class="flex items-center space-x-3 overflow-hidden">
             <div

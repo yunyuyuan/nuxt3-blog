@@ -49,13 +49,24 @@ export default {
         mermaidFullscreen: "999"
       },
       animation: {
-        shake: "shake 0.82s cubic-bezier(.36,.07,.19,.97) infinite"
+        "shake": "shake 0.82s cubic-bezier(.36,.07,.19,.97) infinite",
+        "fade-in-up": "fade-in-up 0.5s ease-out both"
       },
       boxShadow: {
         card: "0 12px 30px -27px rgba(15,23,42,0.45)"
       },
       keyframes: {
-        shake: {
+        "fade-in-up": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(16px)"
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)"
+          }
+        },
+        "shake": {
           "10%, 90%": {
             transform: "rotate(3deg)"
           },
