@@ -51,7 +51,7 @@ const toggleTags = (tag: string) => {
     <div class="relative mx-auto max-w-4xl space-y-10">
       <section
         v-if="articleTagList.size"
-        class="rounded-3xl border border-transparent bg-white/70 p-6 shadow-card ring-1 ring-dark-100/70 backdrop-blur-md transition dark:bg-dark-900/50 dark:ring-dark-700"
+        class="animate-fade-in-up rounded-3xl border border-transparent bg-white/70 p-6 shadow-card ring-1 ring-dark-100/70 backdrop-blur-md transition dark:bg-dark-900/50 dark:ring-dark-700"
       >
         <header class="mb-4 flex flex-wrap items-baseline justify-between gap-3">
           <h2 class="text-sm font-medium text-dark-700 dark:text-dark-200 max-md:text-xs">
@@ -77,10 +77,11 @@ const toggleTags = (tag: string) => {
         class="space-y-6"
       >
         <article
-          v-for="item in filteredList"
+          v-for="(item, index) in filteredList"
           v-show="item._show"
           :key="item.id"
-          class="group relative overflow-hidden rounded-3xl border border-dark-100/70 bg-white/80 p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary-400 hover:bg-white dark:border-dark-700 dark:bg-dark-900/60 dark:hover:border-primary-500"
+          class="group relative animate-fade-in-up overflow-hidden rounded-3xl border border-dark-100/70 bg-white/80 p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary-400 hover:bg-white dark:border-dark-700 dark:bg-dark-900/60 dark:hover:border-primary-500"
+          :style="{ animationDelay: `${index * 60}ms` }"
         >
           <NuxtLink
             :to="`/articles/${item.customSlug || item.id}`"

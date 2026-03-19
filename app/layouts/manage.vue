@@ -86,6 +86,7 @@ const modalOk = async () => {
     if (res) {
       setLocalStorage(GithubTokenKey, inputToken.value);
       showPwdModal.value = false;
+      isAuthor.value = true;
     }
   } catch (e) {
     notify({

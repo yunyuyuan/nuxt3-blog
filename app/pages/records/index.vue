@@ -45,7 +45,7 @@ onMounted(() => {
       v-if="years.length"
       class="mx-auto max-w-7xl"
     >
-      <div class="mb-10">
+      <div class="mb-10 animate-fade-in-up">
         <div class="flex flex-wrap items-center justify-center gap-3">
           <NuxtLink
             v-for="year in years"
@@ -67,11 +67,12 @@ onMounted(() => {
         </h2>
         <div class="grid items-center justify-around gap-8 max-md:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           <div
-            v-for="item in currentItems"
+            v-for="(item, index) in currentItems"
             v-show="item._show"
             :key="item.id"
-            class="group flex justify-center"
+            class="group flex animate-fade-in-up justify-center"
             :title="formatTime(item.time)"
+            :style="{ animationDelay: `${index * 60}ms` }"
           >
             <NuxtLink
               class="relative block overflow-hidden rounded-2xl shadow-card transition duration-500 max-md:aspect-square md:size-52"
