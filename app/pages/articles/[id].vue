@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { addScrollListener, rmScrollListener } from "~/utils/common/scroll-event";
 import type { ArticleItem } from "~/utils/common/types";
 import { useContentPage } from "~/utils/nuxt/public/detail";
@@ -40,6 +40,39 @@ const onScroll = () => {
   } catch { /* empty */ }
 };
 
+const style = useCssModule();
+const FloatMenu = () => {
+  return (menuItems.value.length > 2
+    ? (
+        <aside
+          class="shrink-0 opacity-0 transition-opacity hover:opacity-100 max-2xl:hidden lg:w-52"
+        >
+          <div class="sticky top-2 max-h-[calc(100vh-10px)] overflow-y-auto p-4 [&::-webkit-scrollbar]:w-1">
+            <nav class="space-y-1 text-sm">
+              {
+                menuItems.value.map((anchor, idx) => (
+                  <a
+                    key={idx}
+                    href={`#${anchor.url}`}
+                    class={twMerge(
+                      style.menuItem,
+                      anchor.size === "small" && style.menuItemSmall,
+                      activeAnchor.value === anchor.url && style.menuItemActive
+                    )}
+                    title={anchor.text}
+                  >
+                    <span innerHTML={anchor.text} />
+                  </a>
+                ))
+              }
+            </nav>
+          </div>
+        </aside>
+      )
+    : null
+  );
+};
+
 onMounted(() => {
   nextTick(() => {
     if (!useRoute().hash) {
@@ -62,36 +95,16 @@ initViewer(root);
     ref="root"
     class="container mx-auto px-4 py-8 max-md:px-1 max-md:py-2"
   >
-    <div class="flex w-full justify-center gap-6">
-      <!-- <aside
-        v-if="menuItems.length > 2"
-        class="shrink-0 max-xl:hidden lg:w-52"
-      >
-        <div class="sticky top-20 max-h-[calc(100vh-120px)] overflow-y-auto p-4">
-          <nav class="space-y-1 text-sm">
-            <a
-              v-for="(anchor, idx) in menuItems"
-              :key="idx"
-              :href="`#${anchor.url}`"
-              :class="twMerge(
-                $style.menuItem,
-                anchor.size === 'small' && $style.menuItemSmall,
-                activeAnchor === anchor.url && $style.menuItemActive
-              )"
-              :title="anchor.text"
-            >
-              <span v-html="anchor.text" />
-            </a>
-          </nav>
-        </div>
-      </aside> -->
-
+    <div class="flex w-full justify-center">
+      <FloatMenu />
       <main class="max-w-5xl flex-1 overflow-hidden rounded-lg bg-white p-6 shadow dark:bg-dark-800 max-md:px-2">
         <h1 class="mb-4 text-2xl font-medium text-dark-900 dark:text-white">
           {{ item.title }}
         </h1>
 
-        <div class="mb-6 flex flex-wrap items-center gap-4 border-b border-dark-300 pb-3 text-sm text-dark-500 dark:border-dark-600 dark:text-dark-400">
+        <div
+          class="mb-6 flex flex-wrap items-center gap-4 border-b border-dark-300 pb-3 text-sm text-dark-500 dark:border-dark-600 dark:text-dark-400"
+        >
           <WroteDate :item="item" />
           <Visitors :visitors="item._visitors" />
           <div class="flex flex-wrap gap-2">
@@ -137,13 +150,14 @@ initViewer(root);
           class="mt-8"
         />
       </main>
+      <FloatMenu />
     </div>
   </div>
 </template>
 
 <style module>
 .menuItem {
-  @apply block py-2 px-3 text-sm text-dark-700 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-700 hover:text-primary-600 dark:hover:text-primary-400 rounded-md font-medium;
+  @apply block py-1 px-2 text-sm text-dark-700 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-700 hover:text-primary-600 dark:hover:text-primary-400 rounded-md font-medium;
 }
 
 .menuItemActive {
@@ -151,6 +165,6 @@ initViewer(root);
 }
 
 .menuItemSmall {
-  @apply py-1.5 px-3 pl-6 text-xs;
+  @apply py-1 px-2 pl-4 text-xs;
 }
 </style>
