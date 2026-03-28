@@ -1,4 +1,3 @@
-import { getSingletonHighlighter } from "shiki";
 import { Marked } from "marked";
 import markedFootnote from "marked-footnote";
 import markedTokenPosition from "marked-token-position";
@@ -17,8 +16,9 @@ function dataLine(token: any): string {
 export async function parseMarkdown(text: string) {
   const katex = isPrerender ? (await import("katex")).default : null;
 
-  let shikiHighlighter: Awaited<ReturnType<typeof getSingletonHighlighter>> | null = null;
+  let shikiHighlighter: Awaited<ReturnType<typeof import("shiki")["getSingletonHighlighter"]>> | null = null;
   if (isPrerender) {
+    const { getSingletonHighlighter } = await import("shiki");
     shikiHighlighter = await getSingletonHighlighter({
       themes: [SHIKI_LIGHT_THEME, SHIKI_DARK_THEME],
       langs: []

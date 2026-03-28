@@ -157,7 +157,7 @@ initViewer(root);
 
 <style module>
 .menuItem {
-  @apply block py-1 px-2 text-sm text-dark-700 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-700 hover:text-primary-600 dark:hover:text-primary-400 rounded-md font-medium;
+  @apply block py-1.5 px-2 text-sm text-dark-700 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-700 hover:text-primary-600 dark:hover:text-primary-400 rounded-md font-medium;
 }
 
 .menuItemActive {
@@ -165,6 +165,6 @@ initViewer(root);
 }
 
 .menuItemSmall {
-  @apply py-1 px-2 pl-4 text-xs;
+  @apply py-1 px-2 pl-4 text-sm;
 }
 </style>

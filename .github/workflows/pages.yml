@@ -59,8 +59,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Generate static site
-        run: pnpm generate
+      - name: Build project
+        run: pnpm build
 
       - name: Disable Jekyll
         run: touch .output/public/.nojekyll

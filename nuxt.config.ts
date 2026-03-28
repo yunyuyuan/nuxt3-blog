@@ -3,6 +3,7 @@ import fs from "fs";
 import { execSync } from "child_process";
 import { hash as cryptoHash } from "crypto";
 import type { NitroRouteConfig } from "nitropack";
+import type { AppHeadMetaObject } from "@nuxt/schema";
 import { generateSiteMap, generateThemeColorsCSS, uploadAlgoliaIndex } from "./scripts/nuxt-hooks";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
@@ -41,11 +42,15 @@ HeaderTabs.forEach((url) => {
   }
 });
 
-const scripts = [];
+const scripts: AppHeadMetaObject["script"] = [];
 // dark mode
-scripts.push(`(function(){const e=localStorage.getItem("${ThemeModeKey}")||"light";document.documentElement.classList.add(e)})();`);
+scripts.push({
+  innerHTML: `(function(){const e=localStorage.getItem("${ThemeModeKey}")||"light";document.documentElement.classList.add(e)})();`
+});
 // random theme
-scripts.push(`(function(){let e=${JSON.stringify(config.themeColor)};if(e.length<2)return;let t=Math.floor(Math.random()*e.length),l=e[t],n=document.documentElement;e.forEach(e=>{n.classList.remove(\`theme-\${e}\`)}),n.classList.add(\`theme-\${l}\`)})();`);
+scripts.push({
+  innerHTML: `(function(){let e=${JSON.stringify(config.themeColor)};if(e.length<2)return;let t=Math.floor(Math.random()*e.length),l=e[t],n=document.documentElement;e.forEach(e=>{n.classList.remove(\`theme-\${e}\`)}),n.classList.add(\`theme-\${l}\`)})();`
+});
 
 if (!isDev) {
   const cfAnalyzeId = config.CloudflareAnalyze;
@@ -60,7 +65,7 @@ if (!isDev) {
   }
   if (msAnalyzeId) {
     scripts.push({
-      children: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${msAnalyzeId}");`
+      innerHTML: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${msAnalyzeId}");`
     });
   }
 }
@@ -134,7 +139,7 @@ export default defineNuxtConfig({
       link: [
         { rel: "shortcut icon", href: "/icon.png" }
       ],
-      script: scripts as any,
+      script: scripts,
       title: config.title
     }
   },
@@ -175,7 +180,7 @@ export default defineNuxtConfig({
       }
     },
     rollupConfig: {
-      external: ["monaco-editor"]
+      external: ["monaco-editor", "shiki", "mermaid", "katex"]
     }
   },
 
@@ -225,13 +230,6 @@ export default defineNuxtConfig({
   telemetry: false,
 
   hooks: {
-    "vite:extendConfig"(config, { isClient }) {
-      if (isClient) {
-        (config.build?.rollupOptions?.output as any).manualChunks = {
-          // markdown: ["highlight.js", "katex", "marked"]
-        };
-      }
-    },
     "nitro:build:public-assets"(nitro) {
       generateSiteMap(nitro.options.output.publicDir);
       if (!isTest) {
