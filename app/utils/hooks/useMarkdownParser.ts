@@ -14,14 +14,18 @@ export const useMarkdownParser = async ({ mdValueRef, fromEdit, onAfterInsertHtm
   const htmlContent = ref("");
   const menuItems = ref<Awaited<ReturnType<typeof parseMarkdown>>["menu"]>([]);
 
+  let parseVersion = 0;
   const parse = async (md: string) => {
+    const version = ++parseVersion;
     const result = await parseMarkdown(md);
-    htmlContent.value = result.md;
-    menuItems.value = result.menu;
+    if (version === parseVersion) {
+      htmlContent.value = result.md;
+      menuItems.value = result.menu;
+    }
   };
 
   watch(mdValueRef, async (md) => {
-    parse(md);
+    await parse(md);
   });
 
   await parse(mdValueRef.value);

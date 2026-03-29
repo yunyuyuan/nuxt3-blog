@@ -26,6 +26,7 @@ export type ArticleItem = ItemBase<{
 
 export type RecordItem = ItemBase<{
   images: { src: string; alt: string; id?: number }[];
+  alternative?: string;
 }>;
 
 export const KnowledgeTabsList = [

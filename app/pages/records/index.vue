@@ -79,12 +79,20 @@ onMounted(() => {
               no-prefetch
               :to="`/records/${item.customSlug || item.id}`"
             >
-              <the-lazy-img
-                alt="cover"
-                :src="item.images[0]?.src ?? 'no-poster'"
-                :retry="false"
+              <template v-if="item.images.length > 0">
+                <the-lazy-img
+                  alt="cover"
+                  :src="item.images[0]!.src"
+                  :retry="false"
+                  :class="$style.lazyImg"
+                />
+              </template>
+              <TextImg
+                v-else
                 :class="$style.lazyImg"
-              />
+              >
+                {{ item.alternative }}
+              </TextImg>
               <div class="absolute inset-x-0 bottom-0 flex items-center bg-gradient-to-t from-black/80 to-transparent px-3 pb-1.5 pt-4 text-xs">
                 <div class="flex items-center text-white">
                   <Clock class="mr-1 size-4" />

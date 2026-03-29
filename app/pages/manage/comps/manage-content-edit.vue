@@ -27,7 +27,7 @@ const hasCurrentStaged = computed(() => {
   return getStagedItem(currentId, targetTab) !== undefined;
 });
 
-const slots = defineSlots<Record<string, (_: { item: T; disabled: boolean }) => void>>();
+const slots = defineSlots<Record<string, (_: { item: T; md: string; disabled: boolean }) => void>>();
 
 const slotsRow = computed(() => Object.keys(slots).filter(key => !key.startsWith("_")));
 
@@ -336,6 +336,7 @@ onMounted(() => {
           v-for="slot in slotsRow"
           :name="slot"
           :item="editingItem"
+          :md="editingMd"
           :disabled="!decrypted"
         />
       </div>

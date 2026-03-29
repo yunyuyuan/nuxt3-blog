@@ -43,11 +43,17 @@ function processArticleContent(md: string, item: ArticleItem): void {
 /**
  * 处理记录内容
  */
-function processRecordContent(_md: string, item: RecordItem): void {
+function processRecordContent(md: string, item: RecordItem): void {
   // 清理图片对象的临时id字段
   item.images.forEach((img) => {
     delete img.id;
   });
+  // 增加alternative字段
+  if (item.images.length === 0) {
+    item.alternative = md.slice(0, 50);
+  } else {
+    delete item.alternative;
+  }
 }
 
 /**
