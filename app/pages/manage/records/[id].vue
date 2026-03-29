@@ -25,7 +25,7 @@ initViewer(imagesEl);
 
 <template>
   <manage-content-edit :pre-process-item="preProcessItem">
-    <template #images="{ disabled, item }">
+    <template #images="{ disabled, item, md }">
       <div>
         <span :class="item.images.some(img => !img.src) && 'form-item-invalid'">
           <Image class="size-5" />
@@ -38,15 +38,23 @@ initViewer(imagesEl);
             v-if="!editing"
             class="flex flex-wrap gap-2"
           >
-            <the-lazy-img
-              v-for="(img, idx) in item.images"
-              :key="idx"
-              viewer
-              :alt="img.alt"
-              :src="img.src"
-              :title="img.alt"
+            <template v-if="item.images.length > 0">
+              <the-lazy-img
+                v-for="(img, idx) in item.images"
+                :key="idx"
+                viewer
+                :alt="img.alt"
+                :src="img.src"
+                :title="img.alt"
+                :class="$style.previewImg"
+              />
+            </template>
+            <TextImg
+              v-else
               :class="$style.previewImg"
-            />
+            >
+              {{ md.slice(0, 50) }}
+            </TextImg>
           </div>
           <div
             v-else

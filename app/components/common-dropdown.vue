@@ -19,10 +19,11 @@ watch(show, (v) => {
 });
 
 const innerRef = ref<HTMLElement>();
+let fn: (e: MouseEvent) => void;
 const afterOpen = () => {
   emit("open");
   const el = props.parent || innerRef.value;
-  const fn = (e: MouseEvent) => {
+  fn = (e: MouseEvent) => {
     let curr = e.target as (HTMLElement | null);
     while (curr) {
       if (curr === el) {
@@ -35,6 +36,12 @@ const afterOpen = () => {
   };
   document.addEventListener("mousedown", fn);
 };
+
+onBeforeUnmount(() => {
+  if (fn) {
+    document.removeEventListener("mousedown", fn);
+  }
+});
 </script>
 
 <template>

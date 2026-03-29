@@ -17,7 +17,9 @@ export function notify(options: NotifyOption) {
     render(null, container);
   };
   render(vm, container);
-  document
-    .getElementById(NotificationContainerId)!
-    .appendChild(container.firstElementChild!);
+  if (container.firstElementChild) {
+    document
+      .getElementById(NotificationContainerId)
+      ?.appendChild(container.firstElementChild);
+  }
 }

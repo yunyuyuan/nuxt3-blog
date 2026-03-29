@@ -13,9 +13,10 @@ export default defineEventHandler(async (event) => {
     const args = await readBody(event);
     return await getVisitors(args.type);
   } catch (e: any) {
-    return createError({
+    console.error("[get-visitors]", e);
+    throw createError({
       statusCode: 503,
-      data: e.toString()
+      data: "Internal server error"
     });
   }
 });

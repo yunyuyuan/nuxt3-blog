@@ -9,22 +9,30 @@ const searchFn = (item: RecordItem, s: string) => !item.images.length || item.im
   <manage-list-table
     :filter-fn="searchFn"
   >
-    <template #images="{ item: { images }, dataUrl }">
+    <template #images="{ item: { images, alternative }, dataUrl }">
       <td>
         <NuxtLink
           no-prefetch
           :to="dataUrl"
           :class="$style.a"
         >
-          <the-lazy-img
-            v-for="img, idx in (images.length ? images : [{ alt: '', src: 'no-poster' }]).slice(0, 6)"
-            :key="idx"
-            :alt="img.alt"
-            :src="img.src"
-            :title="img.alt"
-            :retry="false"
-            :class="$style.img"
-          />
+          <template v-if="images.length > 0">
+            <the-lazy-img
+              v-for="img, idx in images.slice(0, 6)"
+              :key="idx"
+              :alt="img.alt"
+              :src="img.src"
+              :title="img.alt"
+              :retry="false"
+              :class="$style.img"
+            />
+          </template>
+          <TextImg
+            v-else
+            :class="twMerge($style.img, 'text-xs')"
+          >
+            {{ alternative }}
+          </TextImg>
         </NuxtLink>
       </td>
     </template>

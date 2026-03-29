@@ -21,7 +21,10 @@ initViewer(root);
   >
     <article class="mx-auto max-w-4xl overflow-hidden rounded-xl bg-white shadow-sm dark:bg-dark-800">
       <div class="px-6 max-md:px-3">
-        <div class="my-8 grid grid-cols-1 items-start gap-6 max-md:my-4 md:grid-cols-2">
+        <div
+          v-if="item.images.length > 0"
+          class="my-8 grid grid-cols-1 items-start gap-6 max-md:my-4 md:grid-cols-2"
+        >
           <the-lazy-img
             v-for="img, idx in item.images"
             :key="idx"

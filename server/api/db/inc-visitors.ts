@@ -16,9 +16,10 @@ export default defineEventHandler(async (event) => {
       inc: args.inc
     });
   } catch (e: any) {
-    return createError({
+    console.error("[inc-visitors]", e);
+    throw createError({
       statusCode: 503,
-      data: e.toString()
+      data: "Internal server error"
     });
   }
 });

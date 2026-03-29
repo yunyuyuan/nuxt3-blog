@@ -28,9 +28,10 @@ export default defineEventHandler(async (event) => {
       }
     });
   } catch (e: any) {
-    return createError({
+    console.error("[r2-upload]", e);
+    throw createError({
       statusCode: 503,
-      data: e.toString()
+      data: "Internal server error"
     });
   }
 });
