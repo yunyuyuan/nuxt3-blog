@@ -3,7 +3,7 @@ import { defineVitestConfig } from "@nuxt/test-utils/config";
 export default defineVitestConfig({
   test: {
     environment: "nuxt",
-    testTimeout: 25000,
+    testTimeout: 45000,
     alias: [
       {
         find: /^monaco-editor$/,

@@ -82,10 +82,10 @@ export class ManageBasePage {
   }
 
   async enterPassword() {
-    this.clickElement("show-token-password-btn");
+    await this.clickElement("show-token-password-btn");
     await this.waitForTimeout();
-    this.fillInput("password-input", "123");
-    this.clickElement("token-password-confirm");
+    await this.fillInput("password-input", "123");
+    await this.clickElement("token-password-confirm");
     await this.waitForTimeout(1000);
   };
 }
