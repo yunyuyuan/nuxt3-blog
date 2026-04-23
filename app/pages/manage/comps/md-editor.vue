@@ -8,6 +8,7 @@ import { initViewer } from "~/utils/nuxt/viewer";
 import { useMarkdownParser } from "~/utils/hooks/useMarkdownParser";
 import { useUnmount } from "~/utils/hooks/useUnmount";
 import { MarkedDataLineAttr } from "~/utils/common/markdown";
+import { withBase } from "~/utils/nuxt/with-base";
 
 const props = defineProps<{
   disabled?: boolean;
@@ -251,7 +252,7 @@ initViewer(markdownRef);
       >
         <img
           class="size-6"
-          src="/sticker/yellow-face/18.png"
+          :src="withBase('/sticker/yellow-face/18.png')"
         >
         <StickerPick
           v-model="showStickers"

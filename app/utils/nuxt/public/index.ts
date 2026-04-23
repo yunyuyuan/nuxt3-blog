@@ -1,5 +1,6 @@
 import axios from "axios";
 import { isPrerender } from "~/utils/nuxt/constants";
+import { withBase } from "~/utils/nuxt/with-base";
 
 export function DBOperate<T = any> (
   { apiPath, query, callback }:
@@ -12,6 +13,6 @@ export function DBOperate<T = any> (
       } catch { }
     };
 
-    axios.post(`/api${apiPath}`, query).then(res => cb(res.data));
+    axios.post(withBase(`/api${apiPath}`), query).then(res => cb(res.data));
   }
 }

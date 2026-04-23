@@ -6,6 +6,7 @@ import { translate } from "~/utils/nuxt/i18n";
 import { getLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
 import { notify } from "~/utils/nuxt/notify";
 import { watchUntil } from "~/utils/nuxt/utils";
+import { withBase } from "~/utils/nuxt/with-base";
 
 const show = defineModel<boolean>({ required: true });
 
@@ -105,7 +106,7 @@ const doUpload = async () => {
     formData.append("tinyPngToken", tinyPngToken.value);
     formData.append("file", file.value!);
     const res = await axios({
-      url: "/api/r2/upload",
+      url: withBase("/api/r2/upload"),
       method: "post",
       data: formData
     });

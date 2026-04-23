@@ -1,6 +1,7 @@
 import { Marked } from "marked";
 import markedFootnote from "marked-footnote";
 import markedTokenPosition from "marked-token-position";
+import { withBase } from "ufo";
 import { ViewerAttr } from "../common/constants";
 import { SHIKI_LIGHT_THEME, SHIKI_DARK_THEME } from "../common/shiki";
 import { escapeHtml } from "../common/utils";
@@ -13,7 +14,7 @@ function dataLine(token: any): string {
   return line != null ? ` ${MarkedDataLineAttr}="${line + 1}"` : "";
 }
 
-export async function parseMarkdown(text: string) {
+export async function parseMarkdown(text: string, baseURL: string = "/") {
   const katex = isPrerender ? (await import("katex")).default : null;
 
   let shikiHighlighter: Awaited<ReturnType<typeof import("shiki")["getSingletonHighlighter"]>> | null = null;
@@ -64,7 +65,7 @@ export async function parseMarkdown(text: string) {
           const matcher = href?.match(/^(.*?)\/(\d*)$/);
           if (matcher) {
             const [, name, tone] = matcher;
-            return `<img src="/sticker/${name}/${tone}.png" alt="${text}"/>`;
+            return `<img src="${withBase(`/sticker/${name}/${tone}.png`, baseURL)}" alt="${text}"/>`;
           }
         }
         const matcher = text?.match(/^(.*?)\[(.*?) x (.*?)]$/);

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { withBase } from "~/utils/nuxt/with-base";
+
 const showStickers = defineModel<boolean>({ required: true });
 
 const emits = defineEmits({
@@ -37,7 +39,7 @@ const stickerTranslateY = computed(() => {
         >
           <img
             class="min-w-6"
-            :src="`/sticker/${k}/1.png`"
+            :src="withBase(`/sticker/${k}/1.png`)"
           >
         </button>
       </div>
@@ -65,7 +67,7 @@ const stickerTranslateY = computed(() => {
             >
               <img
                 class="size-8 object-contain transition group-hover:scale-105"
-                :src="`/sticker/${k}/${idx}.png`"
+                :src="withBase(`/sticker/${k}/${idx}.png`)"
               >
             </button>
           </div>

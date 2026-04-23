@@ -70,7 +70,7 @@ export async function uploadAlgoliaIndex() {
 
   for (const { type, list } of blogData) {
     for (const item of list.filter(item => !item.encrypt)) {
-      const { md } = await parseMarkdown(item._md);
+      const { md } = await parseMarkdown(item._md, process.env.NUXT_APP_BASE_URL || "/");
       const html = await md;
 
       const extractedText = extractTextFromHtml(html);

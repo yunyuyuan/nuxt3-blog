@@ -4,6 +4,7 @@ import { execSync } from "child_process";
 import { hash as cryptoHash } from "crypto";
 import type { NitroRouteConfig } from "nitropack";
 import type { AppHeadMetaObject } from "@nuxt/schema";
+import { withBase } from "ufo";
 import { generateSiteMap, generateThemeColorsCSS, uploadAlgoliaIndex } from "./scripts/nuxt-hooks";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
@@ -13,6 +14,7 @@ import { HeaderTabs, type CommonItem } from "./app/utils/common/types";
 
 const isDev = process.env.NODE_ENV === "development";
 const isTest = process.env.VITESTING === "true";
+const baseURL = process.env.NUXT_APP_BASE_URL || "/";
 
 // stickers
 const stickers: Record<string, any> = {};
@@ -137,7 +139,7 @@ export default defineNuxtConfig({
         { name: "author", content: config.nickName }
       ],
       link: [
-        { rel: "shortcut icon", href: "/icon.png" }
+        { rel: "shortcut icon", href: withBase("/icon.png", baseURL) }
       ],
       script: scripts,
       title: config.title
