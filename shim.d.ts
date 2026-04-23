@@ -24,3 +24,4 @@ declare const __NB_GITHUB_REPO__: string;
 declare const __NB_CURRENT_GIT_SHA__: string;
 declare const __NB_BUILDTIME_VITESTING__: boolean;
 declare const __NB_CURRENT_VERSION__: string;
+declare const __NB_BASE_URL__: string;
