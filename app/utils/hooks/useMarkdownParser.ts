@@ -10,6 +10,7 @@ type useMarkdownParserProps = {
 
 export const useMarkdownParser = async ({ mdValueRef, fromEdit, onAfterInsertHtml, destroyFns }: useMarkdownParserProps) => {
   const markdownRef = ref<HTMLElement>();
+  const baseURL = useRuntimeConfig().app.baseURL;
 
   const htmlContent = ref("");
   const menuItems = ref<Awaited<ReturnType<typeof parseMarkdown>>["menu"]>([]);
@@ -17,7 +18,7 @@ export const useMarkdownParser = async ({ mdValueRef, fromEdit, onAfterInsertHtm
   let parseVersion = 0;
   const parse = async (md: string) => {
     const version = ++parseVersion;
-    const result = await parseMarkdown(md);
+    const result = await parseMarkdown(md, baseURL);
     if (version === parseVersion) {
       htmlContent.value = result.md;
       menuItems.value = result.menu;

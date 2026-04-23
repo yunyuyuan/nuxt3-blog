@@ -2,6 +2,7 @@
 import { CircleFadingArrowUp, ExternalLink, ScrollText, Sparkles } from "lucide-vue-next";
 import config from "~~/config";
 import { OfficialRepo } from "~/utils/common/constants";
+import { withBase } from "~/utils/nuxt/with-base";
 
 const show = defineModel<boolean>({ required: true });
 
@@ -72,7 +73,7 @@ const repoUrl = `https://github.com/${config.githubName}/nuxt3-blog`;
           </ol>
           <div class="m-2 overflow-hidden rounded-lg border border-dark-200 dark:border-dark-700">
             <img
-              src="/how-to-upgrade.png"
+              :src="withBase('/how-to-upgrade.png')"
               alt="How to upgrade"
               class="w-full"
             >

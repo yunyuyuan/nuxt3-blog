@@ -4,6 +4,7 @@ import config from "~~/config";
 import { i18nLocales, type I18nCode } from "~/utils/common/locales";
 import { HeaderTabs } from "~/utils/common/types";
 import { calcRocketUrl } from "~/utils/nuxt/utils";
+import { withBase } from "~/utils/nuxt/with-base";
 import { OfficialRepo } from "~/utils/common/constants";
 
 const algoliaEnabled = __NB_ALGOLIA_ENABLED__;
@@ -189,7 +190,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
         >{{ config.nickName }}</a> | {{ footerDomain }}</b></span>
         <span class="flex"><a
           target="_blank"
-          href="/sitemap.xml"
+          :href="withBase('/sitemap.xml')"
           title="rss"
         >RSS <Rss class="size-4" /></a>| Powered By <a
           :href="`https://github.com/${OfficialRepo}`"

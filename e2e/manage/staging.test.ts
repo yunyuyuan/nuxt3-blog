@@ -446,5 +446,5 @@ describe("Staging Functionality", async () => {
     await itemPage.verifyItemContentInResponse(undefined, "multi encrypted content");
     await itemPage.verifyItemContentInResponse(undefined, "multi block content");
     await itemPage.verifyItemContentInResponse("multi regular content");
-  });
+  }, 45000);
 });

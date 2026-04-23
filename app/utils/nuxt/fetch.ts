@@ -1,6 +1,7 @@
 import { escapeNewLine } from "../common/utils";
 import type { CommonItem, HeaderTabUrl } from "~/utils/common/types";
 import { isDev, isPrerender } from "~/utils/nuxt/constants";
+import { withBase } from "~/utils/nuxt/with-base";
 
 const magicFetch = async<T = any>(_path: string, transform: (_: string) => T): Promise<T> => {
   const path = __NB_BUILDTIME_VITESTING__ ? `e2e/${_path}` : _path;
@@ -11,7 +12,7 @@ const magicFetch = async<T = any>(_path: string, transform: (_: string) => T): P
     if (typeof window.NBCache[path] !== "undefined") {
       return window.NBCache[path];
     } else {
-      const res = await $fetch<T>(`/${path}`, { query: { s: __NB_BUILD_TIME__ }, parseResponse: transform });
+      const res = await $fetch<T>(withBase(`/${path}`), { query: { s: __NB_BUILD_TIME__ }, parseResponse: transform });
       window.NBCache[path] = res;
       return res;
     }

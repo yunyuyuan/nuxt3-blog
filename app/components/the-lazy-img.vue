@@ -5,6 +5,7 @@ import { ViewerAttr } from "~/utils/common/constants";
 import { addScrollListener, rmScrollListener } from "~/utils/common/scroll-event";
 import { isPrerender } from "~/utils/nuxt/constants";
 import { watchUntil } from "~/utils/nuxt/utils";
+import { withBase } from "~/utils/nuxt/with-base";
 
 const props = defineProps({
   src: { type: String, required: true },
@@ -186,7 +187,7 @@ const attr = ViewerAttr;
       :style="imgStyle"
       :alt="alt"
       :[attr]="viewer || null"
-      :src="isEncryptedImg ? '/favicon.png' : props.src"
+      :src="isEncryptedImg ? withBase('/favicon.png') : props.src"
       @error="loadFinish(true)"
       @load="loadFinish(false)"
       @abort="loadFinish(true)"

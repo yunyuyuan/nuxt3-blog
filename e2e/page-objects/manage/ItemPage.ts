@@ -85,6 +85,12 @@ export class ManageItemPage extends ManageBasePage {
     return requestList;
   }
 
+  async verifyDeletionPathInResponse(expectedPath: string) {
+    const deletedPath = this.requestDeletions[0]?.path;
+    expect(deletedPath?.endsWith(expectedPath)).toBe(true);
+    return deletedPath;
+  }
+
   async verifyItemContentInResponse(shouldContain?: string, shouldNotContain?: string) {
     const newItemContent = this.requestAdditions.map(r => r.content).join("\n") || "";
 
