@@ -204,7 +204,8 @@ export default defineNuxtConfig({
       __NB_GITHUB_REPO__: JSON.stringify(config.githubRepo),
       __NB_CURRENT_GIT_SHA__: JSON.stringify(gitCurrentSha),
       __NB_BUILDTIME_VITESTING__: isTest,
-      __NB_CURRENT_VERSION__: JSON.stringify(currentVersion)
+      __NB_CURRENT_VERSION__: JSON.stringify(currentVersion),
+      __NB_BASE_URL__: JSON.stringify(baseURL)
     },
     css: {
       modules: {
