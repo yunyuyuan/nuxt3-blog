@@ -1,3 +1,7 @@
+## [v8] 2026.06.07
+* Upgrade Nuxt.
+* Added some e2e test cases.
+
 ## [v7] 2026.03.16
 * Support Github pages deployment.
 

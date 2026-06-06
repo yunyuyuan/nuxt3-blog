@@ -186,6 +186,9 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: isDev ? allPlugins : buildPlugins,
+    optimizeDeps: {
+      exclude: ["monaco-editor"]
+    },
     define: {
       __NB_DATABASE_ENABLED__: !!process.env.CLOUDFLARE_D1_TOKEN && !!process.env.CLOUDFLARE_D1_ACCOUNT_ID && !!process.env.CLOUDFLARE_D1_DATABASE_ID,
       __NB_R2_ENABLED__: !!process.env.CLOUDFLARE_D1_ACCOUNT_ID && !!process.env.CLOUDFLARE_R2_ACCESS_KEY_ID && !!process.env.CLOUDFLARE_R2_BUCKET_NAME && !!process.env.CLOUDFLARE_R2_PUBLIC_URL,

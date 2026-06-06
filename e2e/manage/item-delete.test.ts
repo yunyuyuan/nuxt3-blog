@@ -1,65 +1,59 @@
 import { describe, expect, it } from "vitest";
+import { ARTICLES, articlePath } from "./fixtures";
 import { createItemPage, setupTestEnvironment } from "./test-helpers";
 
 describe("Item Deletion", async () => {
   await setupTestEnvironment();
 
-  it("Deleting works", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/1111");
+  it("deletes a plain item", async () => {
+    const { itemPage } = await createItemPage(articlePath(ARTICLES.plain.id));
 
-    const deleteBtn = await itemPage.getByTestId("item-delete-btn");
-    expect(await deleteBtn.isDisabled()).toBe(false);
-
+    await itemPage.expectDisabled("item-delete-btn", false);
     await itemPage.deleteItem();
 
-    await itemPage.verifyItemListInResponse({
-      shouldNotFindItem: i => i.id === 1111,
-      encryptBlocksItemsCount: 1,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      notFind: i => i.id === ARTICLES.plain.id,
+      blockCount: 1,
+      hasEncryptedTitle: true
     });
-
-    await itemPage.verifyDeletionPathInResponse("1111.md");
+    itemPage.expectDeletedFile(`${ARTICLES.plain.id}.md`);
   });
 
-  it("Deleting works after entering password", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/1111");
+  it("deletes a plain item even after the password is entered", async () => {
+    const { itemPage } = await createItemPage(articlePath(ARTICLES.plain.id));
 
-    const deleteBtn = await itemPage.getByTestId("item-delete-btn");
-    expect(await deleteBtn.isDisabled()).toBe(false);
-
+    await itemPage.expectDisabled("item-delete-btn", false);
     await itemPage.enterPassword();
-
     await itemPage.deleteItem();
 
-    await itemPage.verifyItemListInResponse({
-      shouldNotFindItem: i => i.id === 1111,
-      encryptBlocksItemsCount: 1,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      notFind: i => i.id === ARTICLES.plain.id,
+      blockCount: 1,
+      hasEncryptedTitle: true
     });
-
-    await itemPage.verifyDeletionPathInResponse("1111.md");
+    itemPage.expectDeletedFile(`${ARTICLES.plain.id}.md`);
   });
 
-  it("Deleting item with encryptedBlock works after entering password", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/2222");
+  it("deletes a block-encrypted item, revealing blocks once decrypted", async () => {
+    const { itemPage } = await createItemPage(articlePath(ARTICLES.blockEncrypted.id));
 
-    const deleteBtn = await itemPage.getByTestId("item-delete-btn");
-    expect(await deleteBtn.isDisabled()).toBe(false);
+    await itemPage.expectDisabled("item-delete-btn", false);
 
+    // Before decrypting only the two plain "test" lines are visible.
     await itemPage.waitForTimeout(1500);
-    const renderedMarkdown = await itemPage.getByTestId("rendered-markdown");
+    const renderedMarkdown = itemPage.getByTestId("rendered-markdown");
     expect((await renderedMarkdown.innerText()).match(/test/g)).lengthOf(2);
 
+    // After decrypting, the two encrypted blocks resolve to "test" as well.
     await itemPage.enterPassword();
     expect((await renderedMarkdown.innerText()).match(/test/g)).lengthOf(4);
 
     await itemPage.deleteItem();
 
-    await itemPage.verifyItemListInResponse({
-      shouldNotFindItem: i => i.id === 2222,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      notFind: i => i.id === ARTICLES.blockEncrypted.id,
+      hasEncryptedTitle: true
     });
-
-    await itemPage.verifyDeletionPathInResponse("2222.md");
+    itemPage.expectDeletedFile(`${ARTICLES.blockEncrypted.id}.md`);
   });
 });

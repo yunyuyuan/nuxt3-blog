@@ -1,450 +1,285 @@
 import { describe, expect, it } from "vitest";
+import { ARTICLES, ARTICLE_COUNT, NEW_ID, articleListPath, articlePath } from "./fixtures";
 import { createItemPage, setupTestEnvironment } from "./test-helpers";
+
+const newArticlePath = articlePath(NEW_ID);
 
 describe("Staging Functionality", async () => {
   await setupTestEnvironment();
 
-  it("Can stage an item and load it back", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/0");
+  it("stages an item and loads it back", async () => {
+    const { itemPage } = await createItemPage(newArticlePath);
 
-    // Fill in item details
     await itemPage.fillItemDetails("staged title", "stagedtag", "staged content");
+    await itemPage.stageItem();
+    expect(await itemPage.getStagedItems()).lengthOf(1);
 
-    // Stage the item
-    const stageBtn = await itemPage.getByTestId("item-stage-btn");
-    await stageBtn.click();
-    await itemPage.waitForTimeout();
-
-    // Clear the form
     await itemPage.fillInput("item-title-input", "");
     await itemPage.fillInput("item-tags-input", "");
     await itemPage.clearAndTypeInMonacoEditor("");
 
-    // Load staged item back
-    const loadStagedBtn = await itemPage.getByTestId("load-staged-btn");
-    await loadStagedBtn.click();
-    await itemPage.waitForTimeout();
+    await itemPage.loadStaged();
 
-    // Verify content is loaded back
-    const titleValue = await itemPage.getInputText("item-title-input");
-    const tagsValue = await itemPage.getInputText("item-tags-input");
-
-    expect(titleValue).toBe("staged title");
-    expect(tagsValue).toBe("stagedtag");
+    expect(await itemPage.getInputText("item-title-input")).toBe("staged title");
+    expect(await itemPage.getInputText("item-tags-input")).toBe("stagedtag");
   });
 
-  it("Can delete staged item", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/0");
+  it("stages the same item only once", async () => {
+    const { itemPage } = await createItemPage(newArticlePath);
 
-    // Fill in item details and stage
+    await itemPage.fillItemDetails("dup title", "duptag", "dup content");
+    await itemPage.stageItem();
+    await itemPage.stageItem();
+
+    expect(await itemPage.getStagedItems()).lengthOf(1);
+  });
+
+  it("deletes a staged item", async () => {
+    const { itemPage } = await createItemPage(newArticlePath);
+
     await itemPage.fillItemDetails("to delete", "deletetag", "delete content");
-    await itemPage.clickElement("item-stage-btn");
+    await itemPage.stageItem();
 
-    // Delete staged item
-    const deleteStagedBtn = await itemPage.getByTestId("delete-staged-btn");
-    await deleteStagedBtn.click();
-    await itemPage.waitForTimeout();
+    await itemPage.deleteStaged();
 
-    // Verify load staged button is disabled or not visible
-    const loadStagedBtn = await itemPage.getByTestId("load-staged-btn");
-    const isDisabled = await loadStagedBtn.isDisabled();
-    expect(isDisabled).toBe(true);
+    expect(await itemPage.getStagedItems()).lengthOf(0);
+    await itemPage.expectDisabled("load-staged-btn");
   });
 
-  it("Shows staged items indicator in list page after staging", async () => {
-    // Create an item with staging first
-    const { itemPage, page } = await createItemPage("/manage/articles/1111");
+  it("shows the commit-staged indicator on the list page after staging", async () => {
+    const { itemPage, page } = await createItemPage(articlePath(ARTICLES.plain.id));
 
-    // Fill and stage the item
     await itemPage.fillItemDetails("list staged title", "listtag", "list staged content");
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await itemPage.stageItem();
 
-    // Navigate to list page using the same page instance
-    await page.goto("/manage/articles", { waitUntil: "hydration" });
+    await page.goto(articleListPath(), { waitUntil: "hydration" });
 
-    // Verify sidebar commit staged button is visible
-    const commitStagedBtn = await itemPage.getByTestId("commit-staged-btn");
-    const isVisible = await commitStagedBtn.isVisible();
-    expect(isVisible).toBe(true);
+    expect(await itemPage.getByTestId("commit-staged-btn").isVisible()).toBe(true);
   });
 
-  it("Shows auto load staged modal when returning to edit page", async () => {
-    // First stage an item
-    const { itemPage, page } = await createItemPage("/manage/articles/1111");
+  it("auto-prompts to load staged changes when returning to the edit page", async () => {
+    const { itemPage, page } = await createItemPage(articlePath(ARTICLES.plain.id));
+
     await itemPage.fillItemDetails("auto load title", "autoloadtag", "auto load content");
-    await itemPage.clickElement("item-stage-btn");
+    await itemPage.stageItem();
 
-    // Navigate away and return to the same edit page using same page instance
-    await page.goto("/manage/articles");
+    await page.goto(articleListPath());
     await itemPage.waitForTimeout(500);
-    await page.goto("/manage/articles/1111", { waitUntil: "hydration" });
+    await page.goto(articlePath(ARTICLES.plain.id), { waitUntil: "hydration" });
     await itemPage.waitForTimeout(500);
 
-    // Check if the load staged modal appears automatically
-    const loadStagedModal = await itemPage.getByTestId("load-staged-modal");
-    const isModalVisible = await loadStagedModal.isVisible();
-    expect(isModalVisible).toBe(true);
+    expect(await itemPage.getByTestId("load-staged-modal").isVisible()).toBe(true);
   });
 
-  it("Can commit staged items after modification", async () => {
-    const { itemPage, page } = await createItemPage("/manage/articles/1111");
+  it("commits a staged item", async () => {
+    const { itemPage, page } = await createItemPage(articlePath(ARTICLES.plain.id));
 
-    // Fill and stage the item
     await itemPage.fillItemDetails("commit test title", "committag", "commit test content");
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await itemPage.stageItem();
 
-    // Navigate to list page
-    await page.goto("/manage/articles", { waitUntil: "hydration" });
+    await page.goto(articleListPath(), { waitUntil: "hydration" });
 
-    // Click commit staged button to open modal
-    const commitStagedBtn = await itemPage.getByTestId("commit-staged-btn");
-    await commitStagedBtn.click();
-    await itemPage.waitForTimeout();
+    await itemPage.openCommitStagedModal();
+    expect(await itemPage.getByTestId("staged-items-modal").isVisible()).toBe(true);
 
-    // Verify staged items modal is open
-    const stagedItemsModal = await itemPage.getByTestId("staged-items-modal");
-    const isModalVisible = await stagedItemsModal.isVisible();
-    expect(isModalVisible).toBe(true);
+    await itemPage.confirmCommitStaged();
 
-    // Confirm commit (the modal should have confirm/ok functionality)
-    // Based on CommonModal pattern, there should be a confirm action
-    const commitStageOkBtn = await itemPage.getByTestId("staged-items-modal-ok");
-    await commitStageOkBtn.click();
-    await itemPage.waitForTimeout();
-
-    // Verify the upload was successful by checking github requests
-    await itemPage.verifyItemListInResponse({
-      expectedLength: 3,
-      shouldFindItem: { encrypt: false, title: "commit test title", tags: ["committag"] },
-      encryptBlocksItemsCount: 1,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      length: ARTICLE_COUNT,
+      find: { encrypt: false, title: "commit test title", tags: ["committag"] },
+      blockCount: 1,
+      hasEncryptedTitle: true
     });
-
-    await itemPage.verifyItemContentInResponse("commit test content");
+    itemPage.expectCommittedContent({ contains: "commit test content" });
+    expect(await itemPage.getStagedItems()).lengthOf(0);
   });
 
-  it("Can stage and load encrypted item", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/0");
+  it("stages and loads a fully encrypted item", async () => {
+    const { itemPage } = await createItemPage(newArticlePath);
 
-    // Toggle encrypted mode
-    await itemPage.toggleEncrypted();
-
-    // Fill in encrypted item details
+    await itemPage.setEncrypted(true);
     await itemPage.fillItemDetails("encrypted staged title", undefined, "encrypted staged content");
-
-    // Enter password for encrypted item
     await itemPage.enterPassword();
 
-    // Stage the encrypted item
-    const stageBtn = await itemPage.getByTestId("item-stage-btn");
-    await stageBtn.click();
-    await itemPage.waitForTimeout();
+    await itemPage.stageItem();
 
-    // Clear the form
-    await itemPage.fillInput("item-title-input", "");
-    await itemPage.clearAndTypeInMonacoEditor("");
+    await itemPage.clearTitleAndContent();
 
-    // Load staged encrypted item back
-    const loadStagedBtn = await itemPage.getByTestId("load-staged-btn");
-    await loadStagedBtn.click();
-    await itemPage.waitForTimeout();
+    await itemPage.loadStaged();
 
-    // Verify encrypted content is loaded back
-    const titleValue = await itemPage.getInputText("item-title-input");
-    expect(titleValue).toBe("encrypted staged title");
-
-    // Verify encrypted content is loaded back
-    const contentValue = await itemPage.getMonacoEditorText();
-    expect(contentValue).toContain("encryptedstagedcontent");
-
-    // Verify encrypted mode is still toggled
-    const encryptedToggle = await itemPage.getByTestId("item-encrypt-checkbox");
-    const isChecked = await encryptedToggle.isChecked();
-    expect(isChecked).toBe(true);
+    expect(await itemPage.getInputText("item-title-input")).toBe("encrypted staged title");
+    expect(await itemPage.getMonacoEditorText()).toContain("encryptedstagedcontent");
+    await itemPage.expectChecked("item-encrypt-checkbox");
   });
 
-  it("Can stage and load item with encrypted blocks", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/0");
+  it("stages and loads an item with encrypted blocks", async () => {
+    const { itemPage } = await createItemPage(newArticlePath);
 
-    // Fill in item details with encrypted blocks
     await itemPage.fillItemDetails("block staged title", "blocktag", "hello\n[encrypt]\nblock staged content\n[/encrypt]\nworld");
-
-    // Enter password for encrypted blocks
     await itemPage.enterPassword();
 
-    // Stage the item with encrypted blocks
-    const stageBtn = await itemPage.getByTestId("item-stage-btn");
-    await stageBtn.click();
-    await itemPage.waitForTimeout();
+    await itemPage.stageItem();
 
-    // Clear the form
     await itemPage.fillInput("item-title-input", "");
     await itemPage.fillInput("item-tags-input", "");
     await itemPage.clearAndTypeInMonacoEditor("");
 
-    // Load staged item back
-    const loadStagedBtn = await itemPage.getByTestId("load-staged-btn");
-    await loadStagedBtn.click();
-    await itemPage.waitForTimeout();
+    await itemPage.loadStaged();
 
-    // Verify content is loaded back
-    const titleValue = await itemPage.getInputText("item-title-input");
-    const tagsValue = await itemPage.getInputText("item-tags-input");
-    const contentValue = await itemPage.getMonacoEditorText();
-    expect(titleValue).toBe("block staged title");
-    expect(tagsValue).toBe("blocktag");
-    expect(contentValue).toContain("blockstagedcontent");
+    expect(await itemPage.getInputText("item-title-input")).toBe("block staged title");
+    expect(await itemPage.getInputText("item-tags-input")).toBe("blocktag");
+    expect(await itemPage.getMonacoEditorText()).toContain("blockstagedcontent");
   });
 
-  it("Can stage encrypted item and commit it", async () => {
-    const { itemPage, page } = await createItemPage("/manage/articles/0");
+  it("stages a fully encrypted item and commits it", async () => {
+    const { itemPage, page } = await createItemPage(newArticlePath);
 
-    // Toggle encrypted mode and fill details
-    await itemPage.toggleEncrypted();
+    await itemPage.setEncrypted(true);
     await itemPage.fillItemDetails("staged encrypted title", undefined, "staged encrypted content");
     await itemPage.enterPassword();
+    await itemPage.stageItem();
 
-    // Stage the encrypted item
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await page.goto(articleListPath(), { waitUntil: "hydration" });
+    await itemPage.commitStaged();
 
-    // Navigate to list page
-    await page.goto("/manage/articles", { waitUntil: "hydration" });
-
-    // Commit staged items
-    const commitStagedBtn = await itemPage.getByTestId("commit-staged-btn");
-    await commitStagedBtn.click();
-    await itemPage.waitForTimeout();
-
-    const commitStageOkBtn = await itemPage.getByTestId("staged-items-modal-ok");
-    await commitStageOkBtn.click();
-    await itemPage.waitForTimeout();
-
-    // Verify encrypted item was committed
-    await itemPage.verifyItemListInResponse({
-      expectedLength: 4,
-      shouldFindItem: { encrypt: true, tags: [] },
-      encryptBlocksItemsCount: 1,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      length: ARTICLE_COUNT + 1,
+      find: { encrypt: true, tags: [] },
+      blockCount: 1,
+      hasEncryptedTitle: true
     });
-
-    await itemPage.verifyItemContentInResponse(undefined, "staged encrypted content");
+    itemPage.expectCommittedContent({ excludes: "staged encrypted content" });
   });
 
-  it("Can stage item with encrypted blocks and commit it", async () => {
-    const { itemPage, page } = await createItemPage("/manage/articles/0");
+  it("stages an item with encrypted blocks and commits it", async () => {
+    const { itemPage, page } = await createItemPage(newArticlePath);
 
-    // Fill details with encrypted blocks
     await itemPage.fillItemDetails("staged block title", "blocktag", "[encrypt]\nstaged block content\n[/encrypt]");
     await itemPage.enterPassword();
+    await itemPage.stageItem();
 
-    // Stage the item
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await page.goto(articleListPath(), { waitUntil: "hydration" });
+    await itemPage.commitStaged();
 
-    // Navigate to list page
-    await page.goto("/manage/articles", { waitUntil: "hydration" });
-
-    // Commit staged items
-    const commitStagedBtn = await itemPage.getByTestId("commit-staged-btn");
-    await commitStagedBtn.click();
-    await itemPage.waitForTimeout();
-
-    const commitStageOkBtn = await itemPage.getByTestId("staged-items-modal-ok");
-    await commitStageOkBtn.click();
-    await itemPage.waitForTimeout();
-
-    // Verify item with encrypted blocks was committed
-    await itemPage.verifyItemListInResponse({
-      expectedLength: 4,
-      shouldFindItem: { encrypt: false, title: "staged block title", tags: ["blocktag"] },
-      encryptBlocksItemsCount: 2,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      length: ARTICLE_COUNT + 1,
+      find: { encrypt: false, title: "staged block title", tags: ["blocktag"] },
+      blockCount: 2,
+      hasEncryptedTitle: true
     });
-
-    await itemPage.verifyItemContentInResponse(undefined, "staged block content");
+    itemPage.expectCommittedContent({ excludes: "staged block content" });
   });
 
-  it("Can stage item and convert encryption type before commit", async () => {
-    const { itemPage, page } = await createItemPage("/manage/articles/1111");
+  it("converts a staged item's encryption type before committing", async () => {
+    const { itemPage, page } = await createItemPage(articlePath(ARTICLES.plain.id));
 
-    // Stage a regular item first
     await itemPage.fillItemDetails("convert staged title", "converttag", "convert staged content");
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await itemPage.stageItem();
 
-    // Load staged item back
-    const loadStagedBtn = await itemPage.getByTestId("load-staged-btn");
-    await loadStagedBtn.click();
-    await itemPage.waitForTimeout();
+    await itemPage.loadStaged();
 
-    // Convert to encrypted item
-    await itemPage.toggleEncrypted();
+    await itemPage.setEncrypted(true);
     await itemPage.fillItemDetails("converted encrypted title", undefined, "converted encrypted content");
     await itemPage.enterPassword();
+    await itemPage.stageItem();
 
-    // Stage the converted item
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await page.goto(articleListPath(), { waitUntil: "hydration" });
+    await itemPage.commitStaged();
 
-    // Navigate to list page and commit
-    await page.goto("/manage/articles", { waitUntil: "hydration" });
-
-    const commitStagedBtn = await itemPage.getByTestId("commit-staged-btn");
-    await commitStagedBtn.click();
-    await itemPage.waitForTimeout();
-
-    const commitStageOkBtn = await itemPage.getByTestId("staged-items-modal-ok");
-    await commitStageOkBtn.click();
-    await itemPage.waitForTimeout();
-
-    // Verify converted encrypted item was committed
-    await itemPage.verifyItemListInResponse({
-      expectedLength: 3,
-      shouldFindItem: { encrypt: true, tags: [] },
-      encryptBlocksItemsCount: 1,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      length: ARTICLE_COUNT,
+      find: { encrypt: true, tags: [] },
+      blockCount: 1,
+      hasEncryptedTitle: true
     });
-
-    await itemPage.verifyItemContentInResponse(undefined, "converted encrypted content");
+    itemPage.expectCommittedContent({ excludes: "converted encrypted content" });
   });
 
-  it("Can stage item and convert to encrypted blocks before commit", async () => {
-    const { itemPage, page } = await createItemPage("/manage/articles/1111");
+  it("converts a staged item to encrypted blocks before committing", async () => {
+    const { itemPage, page } = await createItemPage(articlePath(ARTICLES.plain.id));
 
-    // Stage a regular item first
     await itemPage.fillItemDetails("block convert title", "blockconverttag", "block convert content");
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await itemPage.stageItem();
 
-    // Load staged item back
-    const loadStagedBtn = await itemPage.getByTestId("load-staged-btn");
-    await loadStagedBtn.click();
-    await itemPage.waitForTimeout();
+    await itemPage.loadStaged();
 
-    // Convert to encrypted blocks
     await itemPage.fillItemDetails("converted block title", "convertedblocktag", "[encrypt]\nconverted block content\n[/encrypt]");
     await itemPage.enterPassword();
+    await itemPage.stageItem();
 
-    // Stage the converted item
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await page.goto(articleListPath(), { waitUntil: "hydration" });
+    await itemPage.commitStaged();
 
-    // Navigate to list page and commit
-    await page.goto("/manage/articles", { waitUntil: "hydration" });
-
-    const commitStagedBtn = await itemPage.getByTestId("commit-staged-btn");
-    await commitStagedBtn.click();
-    await itemPage.waitForTimeout();
-
-    const commitStageOkBtn = await itemPage.getByTestId("staged-items-modal-ok");
-    await commitStageOkBtn.click();
-    await itemPage.waitForTimeout();
-
-    // Verify converted item with encrypted blocks was committed
-    await itemPage.verifyItemListInResponse({
-      expectedLength: 3,
-      shouldFindItem: { encrypt: false, title: "converted block title", tags: ["convertedblocktag"] },
-      encryptBlocksItemsCount: 2,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      length: ARTICLE_COUNT,
+      find: { encrypt: false, title: "converted block title", tags: ["convertedblocktag"] },
+      blockCount: 2,
+      hasEncryptedTitle: true
     });
-
-    await itemPage.verifyItemContentInResponse(undefined, "converted block content");
+    itemPage.expectCommittedContent({ excludes: "converted block content" });
   });
 
-  it("Can stage encrypted item and convert to regular item before commit", async () => {
-    const { itemPage, page } = await createItemPage("/manage/articles/1111");
+  it("converts a staged encrypted item back to a plain item before committing", async () => {
+    const { itemPage, page } = await createItemPage(articlePath(ARTICLES.plain.id));
 
-    // Stage an encrypted item first
-    await itemPage.toggleEncrypted();
+    await itemPage.setEncrypted(true);
     await itemPage.fillItemDetails("encrypted convert title", undefined, "encrypted convert content");
     await itemPage.enterPassword();
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await itemPage.stageItem();
 
-    // Load staged item back
-    const loadStagedBtn = await itemPage.getByTestId("load-staged-btn");
-    await loadStagedBtn.click();
-    await itemPage.waitForTimeout();
+    await itemPage.loadStaged();
 
-    // Convert to regular item
-    await itemPage.toggleEncrypted(); // Turn off encryption
+    await itemPage.setEncrypted(false);
     await itemPage.fillItemDetails("converted regular title", "convertedregulartag", "converted regular content");
+    await itemPage.stageItem();
 
-    // Stage the converted item
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await page.goto(articleListPath(), { waitUntil: "hydration" });
+    await itemPage.commitStaged();
 
-    // Navigate to list page and commit
-    await page.goto("/manage/articles", { waitUntil: "hydration" });
-
-    const commitStagedBtn = await itemPage.getByTestId("commit-staged-btn");
-    await commitStagedBtn.click();
-    await itemPage.waitForTimeout();
-
-    const commitStageOkBtn = await itemPage.getByTestId("staged-items-modal-ok");
-    await commitStageOkBtn.click();
-    await itemPage.waitForTimeout();
-
-    // Verify converted regular item was committed
-    await itemPage.verifyItemListInResponse({
-      expectedLength: 3,
-      shouldFindItem: { encrypt: false, title: "converted regular title", tags: ["convertedregulartag"] },
-      encryptBlocksItemsCount: 1,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      length: ARTICLE_COUNT,
+      find: { encrypt: false, title: "converted regular title", tags: ["convertedregulartag"] },
+      blockCount: 1,
+      hasEncryptedTitle: true
     });
-
-    await itemPage.verifyItemContentInResponse("converted regular content");
+    itemPage.expectCommittedContent({ contains: "converted regular content" });
   });
 
-  it("Can stage multiple items with different encryption types and commit all", async () => {
-    const { itemPage, page } = await createItemPage("/manage/articles/1111");
+  it("stages several items with different encryption types and commits them all", async () => {
+    const { itemPage, page } = await createItemPage(articlePath(ARTICLES.plain.id));
 
-    // Stage first item (convert to encrypted)
-    await itemPage.toggleEncrypted();
+    // Plain article → fully encrypted.
+    await itemPage.setEncrypted(true);
     await itemPage.enterPassword();
     await itemPage.fillItemDetails("multi encrypted title", undefined, "multi encrypted content");
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await itemPage.stageItem();
 
-    await page.goto("/manage/articles/2222", { waitUntil: "hydration" });
-    // Stage second item (convert to regular)
+    // Block-encrypted article → plain.
+    await page.goto(articlePath(ARTICLES.blockEncrypted.id), { waitUntil: "hydration" });
     await itemPage.enterPassword();
     await itemPage.fillItemDetails("multi regular title", "multiregulartag", "multi regular content");
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await itemPage.stageItem();
 
-    await page.goto("/manage/articles/3333", { waitUntil: "hydration" });
+    // Fully encrypted article → block-encrypted.
+    await page.goto(articlePath(ARTICLES.fullEncrypted.id), { waitUntil: "hydration" });
     await itemPage.enterPassword();
-    // Stage third item (convert to encrypted blocks)
-    await itemPage.toggleEncrypted(); // Turn off full encryption
+    await itemPage.setEncrypted(false);
     await itemPage.fillItemDetails("multi block title", "multiblocktag", "[encrypt]\nmulti block content\n[/encrypt]");
-    await itemPage.clickElement("item-stage-btn");
-    await itemPage.waitForTimeout();
+    await itemPage.stageItem();
 
-    // Navigate to list page and commit all
-    await page.goto("/manage/articles", { waitUntil: "hydration" });
+    expect(await itemPage.getStagedItems()).lengthOf(3);
 
-    // Verify commit staged button shows count of 3
-    const commitStagedBtn = await itemPage.getByTestId("commit-staged-btn");
-    await commitStagedBtn.click();
-    await itemPage.waitForTimeout();
+    await page.goto(articleListPath(), { waitUntil: "hydration" });
+    await itemPage.commitStaged();
 
-    const commitStageOkBtn = await itemPage.getByTestId("staged-items-modal-ok");
-    await commitStageOkBtn.click();
-    await itemPage.waitForTimeout();
-
-    // Verify all items were committed
-    await itemPage.verifyItemListInResponse({
-      expectedLength: 3,
-      shouldFindItem: { encrypt: true, tags: [] },
-      encryptBlocksItemsCount: 1,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      length: ARTICLE_COUNT,
+      find: { encrypt: true, tags: [] },
+      blockCount: 1,
+      hasEncryptedTitle: true
     });
-    await itemPage.verifyItemContentInResponse(undefined, "multi encrypted content");
-    await itemPage.verifyItemContentInResponse(undefined, "multi block content");
-    await itemPage.verifyItemContentInResponse("multi regular content");
+    itemPage.expectCommittedContent({ contains: "multi regular content" });
+    itemPage.expectCommittedContent({ excludes: "multi encrypted content" });
+    itemPage.expectCommittedContent({ excludes: "multi block content" });
   }, 45000);
 });

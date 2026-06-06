@@ -1,73 +1,62 @@
-import { describe, expect, it } from "vitest";
+import { describe, it } from "vitest";
+import { ARTICLES, ARTICLE_COUNT, articlePath } from "./fixtures";
 import { createItemPage, setupTestEnvironment } from "./test-helpers";
 
 describe("Item Editing", async () => {
   await setupTestEnvironment();
 
-  it("Editing works", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/1111");
+  it("edits a plain item", async () => {
+    const { itemPage } = await createItemPage(articlePath(ARTICLES.plain.id));
 
-    const uploadBtn = await itemPage.getByTestId("item-upload-btn");
-    expect(await uploadBtn.isDisabled()).toBe(true);
+    await itemPage.expectDisabled("item-upload-btn");
 
     await itemPage.fillItemDetails("new title", "newtag", "new content");
-
     await itemPage.uploadItem();
 
-    await itemPage.verifyItemListInResponse({
-      expectedLength: 3,
-      shouldFindItem: { encrypt: false, title: "new title", tags: ["newtag"] },
-      encryptBlocksItemsCount: 1,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      length: ARTICLE_COUNT,
+      find: { encrypt: false, title: "new title", tags: ["newtag"] },
+      blockCount: 1,
+      hasEncryptedTitle: true
     });
-
-    await itemPage.verifyItemContentInResponse("new content");
+    itemPage.expectCommittedContent({ contains: "new content" });
   });
 
-  it("Editing item with encryptedBlock works", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/2222");
+  it("edits a block-encrypted item after entering the password", async () => {
+    const { itemPage } = await createItemPage(articlePath(ARTICLES.blockEncrypted.id));
 
-    const uploadBtn = await itemPage.getByTestId("item-upload-btn");
-    expect(await uploadBtn.isDisabled()).toBe(true);
-
-    expect(await itemPage.isElementDisabled("item-title-input")).toBe(true);
+    await itemPage.expectDisabled("item-upload-btn");
+    // Fields stay locked until the blocks are decrypted.
+    await itemPage.expectDisabled("item-title-input");
 
     await itemPage.enterPassword();
-
     await itemPage.fillItemDetails("new title", "newtag", "[encrypt]\nnew content\n[/encrypt]");
-
     await itemPage.uploadItem();
 
-    await itemPage.verifyItemListInResponse({
-      expectedLength: 3,
-      shouldFindItem: { encrypt: false, title: "new title", tags: ["newtag"] },
-      encryptBlocksItemsCount: 1,
-      shouldContainEncryptedTitle: true
+    itemPage.expectCommittedList({
+      length: ARTICLE_COUNT,
+      find: { encrypt: false, title: "new title", tags: ["newtag"] },
+      blockCount: 1,
+      hasEncryptedTitle: true
     });
-
-    await itemPage.verifyItemContentInResponse(undefined, "new content");
+    itemPage.expectCommittedContent({ excludes: "new content" });
   });
 
-  it("Editing encrypted item works", async () => {
-    const { itemPage } = await createItemPage("/manage/articles/3333");
+  it("edits a fully encrypted item after entering the password", async () => {
+    const { itemPage } = await createItemPage(articlePath(ARTICLES.fullEncrypted.id));
 
-    const uploadBtn = await itemPage.getByTestId("item-upload-btn");
-    expect(await uploadBtn.isDisabled()).toBe(true);
-
-    expect(await itemPage.isElementDisabled("item-title-input")).toBe(true);
+    await itemPage.expectDisabled("item-upload-btn");
+    await itemPage.expectDisabled("item-title-input");
 
     await itemPage.enterPassword();
-
     await itemPage.fillItemDetails("new title", undefined, "new content");
-
     await itemPage.uploadItem();
 
-    await itemPage.verifyItemListInResponse({
-      expectedLength: 3,
-      shouldFindItem: { encrypt: true, tags: [] },
-      encryptBlocksItemsCount: 1
+    itemPage.expectCommittedList({
+      length: ARTICLE_COUNT,
+      find: { encrypt: true, tags: [] },
+      blockCount: 1
     });
-
-    await itemPage.verifyItemContentInResponse(undefined, "new content");
+    itemPage.expectCommittedContent({ excludes: "new content" });
   });
 });
