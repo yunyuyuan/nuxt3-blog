@@ -35,7 +35,7 @@ export async function isAuthor(token: string): Promise<boolean> {
       login
     }
     repository(name: "${__NB_GITHUB_REPO__}", owner: "${config.githubName}") {
-      ref(qualifiedName: "${useRuntimeConfig().app.githubBranch}") {
+      ref(qualifiedName: "${__NB_GIT_BRANCH__}") {
         target {
           ... on Commit {
             history(first: 1) {
@@ -109,7 +109,7 @@ export async function createCommit(
     createCommitOnBranch(
       input: {
         branch: {
-          branchName: "${useRuntimeConfig().app.githubBranch}",
+          branchName: "${__NB_GIT_BRANCH__}",
           repositoryNameWithOwner: "${config.githubName}/${__NB_GITHUB_REPO__}"
         },
         message: {

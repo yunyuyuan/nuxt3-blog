@@ -151,9 +151,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       stickers
-    },
-    app: {
-      githubBranch
     }
   },
 
@@ -203,6 +200,7 @@ export default defineNuxtConfig({
         && !!(config.algoliaSearch.indexName)),
       __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString()),
       __NB_GITHUB_REPO__: JSON.stringify(config.githubRepo),
+      __NB_GIT_BRANCH__: JSON.stringify(githubBranch),
       __NB_CURRENT_GIT_SHA__: JSON.stringify(gitCurrentSha),
       __NB_BUILDTIME_VITESTING__: isTest,
       __NB_CURRENT_VERSION__: JSON.stringify(currentVersion),

@@ -66,7 +66,7 @@
     "lint-staged": "^15.5.2",
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.477.0",
-    "nuxt": "^4.0.2",
+    "nuxt": "^4.4.7",
     "postcss-html": "^1.8.0",
     "postcss-import": "^16.1.1",
     "postcss-nesting": "^13.0.2",
