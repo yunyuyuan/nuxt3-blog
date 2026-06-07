@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
         # 仅用于我个人使用，因为我的博客实际上在blog分支
         with:
-          ref: ${{ secrets.REAL_TARGET_BRANCH || gitea.ref }}
+          ref: ${{ vars.TARGET_BRANCH || gitea.ref }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

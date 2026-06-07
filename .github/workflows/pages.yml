@@ -17,30 +17,17 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Only run when TARGET_BRANCH is unset, or the current branch matches it.
+    # When this condition is false the job is *skipped* (not failed), so no
+    # failure notification is sent.
+    if: ${{ vars.TARGET_BRANCH == '' || github.ref == format('refs/heads/{0}', vars.TARGET_BRANCH) }}
     env:
-      TARGET_BRANCH: ${{ vars.TARGET_BRANCH }}
       # Base URL for the deployed site.
       # Use "/" for a user/organization site or a site served from the domain root.
       # Change this to "/<repo-name>/" when deploying a project site under a subpath,
       # e.g. https://<user>.github.io/<repo-name>/
       NUXT_APP_BASE_URL: /
     steps:
-      - name: Check target branch
-        run: |
-          if [ -n "$TARGET_BRANCH" ]; then
-            CURRENT_BRANCH="${GITHUB_REF#refs/heads/}"
-            echo "Current branch: $CURRENT_BRANCH"
-            echo "Expected branch: $TARGET_BRANCH"
-            if [ "$CURRENT_BRANCH" = "$TARGET_BRANCH" ]; then
-              echo "✓ Branch check passed"
-            else
-              echo "✗ Branch mismatch!"
-              exit 1
-            fi
-          else
-            echo "TARGET_BRANCH not set, skipping branch check"
-          fi
-
       - name: Checkout
         uses: actions/checkout@v4
 
