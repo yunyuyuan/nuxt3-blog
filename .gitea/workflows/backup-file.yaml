@@ -18,17 +18,18 @@ jobs:
         with:
           ref: ${{ vars.TARGET_BRANCH || gitea.ref }}
 
+      - name: Install pnpm
+        run: npm i -g pnpm
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "pnpm"
-
-      - name: Install pnpm
-        run: npm i -g pnpm
 
       - name: Install dependencies
-        run: pnpm i
+        # /pnpm-store is a persistent volume mounted by the runner; reusing it
+        # avoids re-downloading all packages on every run
+        run: pnpm i --store-dir=/pnpm-store
 
       - name: Generate file map
         run: pnpm local:generate-file-map
