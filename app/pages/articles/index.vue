@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ArticleItem } from "~/utils/common/types";
-import { useListPage } from "~/utils/nuxt/public/list";
+import { staggerDelay, useListPage } from "~/utils/nuxt/public/list";
 import { Visitors, Words } from "~/utils/nuxt/public/components";
 import { formatTime } from "~/utils/nuxt/format-time";
 import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
@@ -81,7 +81,7 @@ const toggleTags = (tag: string) => {
           v-show="item._show"
           :key="item.id"
           class="group relative animate-fade-in-up overflow-hidden rounded-3xl border border-dark-100/70 bg-white/80 p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary-400 hover:bg-white dark:border-dark-700 dark:bg-dark-900/60 dark:hover:border-primary-500"
-          :style="{ animationDelay: `${index * 60}ms` }"
+          :style="{ animationDelay: staggerDelay(index) }"
         >
           <NuxtLink
             :to="`/articles/${item.customSlug || item.id}`"

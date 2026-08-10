@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ChevronRight } from "lucide-vue-next";
 import { KnowledgeColorMap, KnowledgeIconMap, type KnowledgeItem, type KnowledgeTab, KnowledgeTabs, KnowledgeTabsList } from "~/utils/common/types";
-import { useListPage } from "~/utils/nuxt/public/list";
+import { staggerDelay, useListPage } from "~/utils/nuxt/public/list";
 import { formatTime } from "~/utils/nuxt/format-time";
 import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
 
@@ -70,7 +70,7 @@ const tabLengthMap = computed(() => {
           no-prefetch
           class="group flex animate-fade-in-up items-center justify-between overflow-hidden rounded-2xl border border-transparent bg-white p-5 shadow-card transition hover:-translate-y-0.5 hover:border-primary-400 dark:bg-dark-800 dark:hover:border-primary-600"
           :to="`/knowledges/${item.customSlug || item.id}`"
-          :style="{ animationDelay: `${index * 60}ms` }"
+          :style="{ animationDelay: staggerDelay(index) }"
         >
           <div class="flex items-center space-x-3 overflow-hidden">
             <div

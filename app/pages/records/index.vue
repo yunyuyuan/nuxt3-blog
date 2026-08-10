@@ -2,7 +2,7 @@
 import { Calendar, Clock, Image } from "lucide-vue-next";
 import { getNowDayjs } from "~/utils/common/dayjs";
 import type { RecordItem } from "~/utils/common/types";
-import { useListPage } from "~/utils/nuxt/public/list";
+import { staggerDelay, useListPage } from "~/utils/nuxt/public/list";
 import { formatTime } from "~/utils/nuxt/format-time";
 import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
 
@@ -72,7 +72,7 @@ onMounted(() => {
             :key="item.id"
             class="group flex animate-fade-in-up justify-center"
             :title="formatTime(item.time)"
-            :style="{ animationDelay: `${index * 60}ms` }"
+            :style="{ animationDelay: staggerDelay(index) }"
           >
             <NuxtLink
               class="relative block overflow-hidden rounded-2xl shadow-card transition duration-500 max-md:aspect-square md:size-52"
