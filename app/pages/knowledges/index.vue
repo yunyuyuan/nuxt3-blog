@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ChevronRight } from "lucide-vue-next";
 import { KnowledgeColorMap, KnowledgeIconMap, type KnowledgeItem, type KnowledgeTab, KnowledgeTabs, KnowledgeTabsList } from "~/utils/common/types";
-import { staggerDelay, useListPage } from "~/utils/nuxt/public/list";
+import { useListPage } from "~/utils/nuxt/public/list";
+import { staggerDelay } from "~/utils/nuxt/utils";
 import { formatTime } from "~/utils/nuxt/format-time";
 import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
 

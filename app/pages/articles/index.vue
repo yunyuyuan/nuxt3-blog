@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ArticleItem } from "~/utils/common/types";
-import { staggerDelay, useListPage } from "~/utils/nuxt/public/list";
+import { useListPage } from "~/utils/nuxt/public/list";
+import { staggerDelay } from "~/utils/nuxt/utils";
 import { Visitors, Words } from "~/utils/nuxt/public/components";
 import { formatTime } from "~/utils/nuxt/format-time";
 import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
@@ -30,7 +31,7 @@ watch(articlesList, () => {
 
 const filteredList = computed(() => {
   return articlesList.filter(item =>
-    !tags.value.length || tags.value.some(tag => item.tags.includes(tag))
+    !!item._show && (!tags.value.length || tags.value.some(tag => item.tags.includes(tag)))
   );
 });
 
@@ -78,7 +79,6 @@ const toggleTags = (tag: string) => {
       >
         <article
           v-for="(item, index) in filteredList"
-          v-show="item._show"
           :key="item.id"
           class="group relative animate-fade-in-up overflow-hidden rounded-3xl border border-dark-100/70 bg-white/80 p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary-400 hover:bg-white dark:border-dark-700 dark:bg-dark-900/60 dark:hover:border-primary-500"
           :style="{ animationDelay: staggerDelay(index) }"
