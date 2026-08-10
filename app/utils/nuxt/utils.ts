@@ -7,6 +7,16 @@ export function getCurrentTab() {
   return HeaderTabs.find(tab => useRoute().path.includes(tab)) || HeaderTabs[0];
 }
 
+/**
+ * 列表项渐入动画的交错延迟：延迟期间元素不可见（fade-in-up 的 fill 模式），
+ * 若延迟随 index 线性增长，用户把滚动条直接拖到底部会长时间看到空白，
+ * 因此把延迟统一封顶在 480ms，与动画时长 0.5s（见 tailwind.config.mjs）相当。
+ * index 必须是可见项的序号，v-show 隐藏的项不能占用序号
+ */
+export function staggerDelay(index: number) {
+  return `${Math.min(index * 60, 480)}ms`;
+}
+
 export function useCommonSEOTitle(head: ComputedRef<string>, keys?: ComputedRef<string[]>) {
   watch([head, keys].filter(i => !!i), ([head, keys]) => {
     const title = head + config.SEO_title;

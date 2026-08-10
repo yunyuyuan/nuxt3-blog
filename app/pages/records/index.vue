@@ -3,6 +3,7 @@ import { Calendar, Clock, Image } from "lucide-vue-next";
 import { getNowDayjs } from "~/utils/common/dayjs";
 import type { RecordItem } from "~/utils/common/types";
 import { useListPage } from "~/utils/nuxt/public/list";
+import { staggerDelay } from "~/utils/nuxt/utils";
 import { formatTime } from "~/utils/nuxt/format-time";
 import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
 
@@ -30,7 +31,7 @@ const years = computed(() => {
   return result.sort((a, b) => b.year - a.year);
 });
 
-const currentItems = computed(() => years.value.find(i => i.year === currentYear.value)?.items);
+const currentItems = computed(() => years.value.find(i => i.year === currentYear.value)?.items.filter(i => !!i._show));
 
 onMounted(() => {
   if (years.value.length && !currentYear.value) {
@@ -68,11 +69,10 @@ onMounted(() => {
         <div class="grid items-center justify-around gap-8 max-md:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           <div
             v-for="(item, index) in currentItems"
-            v-show="item._show"
             :key="item.id"
             class="group flex animate-fade-in-up justify-center"
             :title="formatTime(item.time)"
-            :style="{ animationDelay: `${index * 60}ms` }"
+            :style="{ animationDelay: staggerDelay(index) }"
           >
             <NuxtLink
               class="relative block overflow-hidden rounded-2xl shadow-card transition duration-500 max-md:aspect-square md:size-52"
