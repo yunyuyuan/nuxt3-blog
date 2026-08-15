@@ -177,7 +177,7 @@ const textSections: TextSection[] = [
 <template>
   <main class="h-full overflow-y-auto">
     <div class="mx-auto flex max-w-4xl flex-col gap-4 px-2 py-4 md:px-4">
-      <div class="sticky top-0 z-10 -mx-2 flex items-center justify-end gap-3 border-b border-dark-200 bg-nb-light p-2 dark:border-dark-700 dark:bg-nb-dark md:-mx-4 md:px-4">
+      <div class="sticky top-0 z-10 -mx-2 flex items-center justify-end gap-3 p-2 md:-mx-4 md:px-4">
         <span
           v-show="!!statusText || invalid"
           class="text-xs text-red-500"
