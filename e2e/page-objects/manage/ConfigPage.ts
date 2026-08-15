@@ -1,22 +1,22 @@
 import { ManageBasePage } from "./BasePage";
 
-/** Page object for the config editor (`/manage/config`). */
+/** Page object for the config form (`/manage/config`). */
 export class ManageConfigPage extends ManageBasePage {
   isUpdateDisabled() {
     return this.isElementDisabled("update-config-btn");
   }
 
-  async setContent(content: string) {
-    await this.clearAndTypeInMonacoEditor(content);
+  async setTitle(title: string) {
+    await this.fillInput("config-title-input", title);
   }
 
   async clickUpdate() {
     await this.clickElement("update-config-btn");
   }
 
-  /** Type new config content and commit it. */
-  async updateConfig(content: string) {
-    await this.setContent(content);
+  /** Fill in a new site title and commit it. */
+  async updateTitle(title: string) {
+    await this.setTitle(title);
     await this.clickUpdate();
   }
 

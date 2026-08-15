@@ -10,7 +10,7 @@ describe("Config Editing", async () => {
 
     expect(await configPage.isUpdateDisabled()).toBe(true);
     await configPage.screenShot();
-    await configPage.setContent("{test-config}");
+    await configPage.setTitle("test-config-title");
     await configPage.screenShot();
     expect(await configPage.isUpdateDisabled()).toBe(false);
   });
@@ -18,9 +18,9 @@ describe("Config Editing", async () => {
   it("commits the edited config to config.ts", async () => {
     const { configPage } = await createConfigPage(configPath());
 
-    await configPage.updateConfig("{test-config}");
+    await configPage.updateTitle("test-config-title");
 
     expect(configPage.requestAdditions[0]?.path).toBe("config.ts");
-    expect(configPage.getCommittedConfig()).toContain("{test-config}");
+    expect(configPage.getCommittedConfig()).toContain("title: \"test-config-title\"");
   });
 });
