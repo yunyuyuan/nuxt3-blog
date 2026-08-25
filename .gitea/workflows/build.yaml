@@ -52,10 +52,6 @@ jobs:
           load: true
           tags: nuxt3-blog:${{ github.sha }}
 
-  deploy:
-    runs-on: runner-host
-    needs: build
-    steps:
       - name: Deploy Docker container
         env:
           IMAGE: nuxt3-blog:${{ github.sha }}
