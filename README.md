@@ -18,7 +18,7 @@
 > Github Pages:[https://blog-ghpage.yunyuyuan.net](https://blog-ghpage.yunyuyuan.net)
 >
 > **🚀self hosted部署（参考[我的文章](https://blog.yunyuyuan.net/articles/8346)）**
-> Drone:[https://blog-drone-cf.yunyuyuan.net](https://blog-drone-cf.yunyuyuan.net)，这里的`cf`意思是使用cloudflare做内网穿透
+> forgejo-runner:[https://blog-local-cf.yunyuyuan.net](https://blog-local-cf.yunyuyuan.net)，这里的`cf`意思是使用cloudflare做内网穿透
 
 # 博客特性
 
