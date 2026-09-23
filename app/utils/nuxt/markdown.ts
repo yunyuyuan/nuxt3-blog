@@ -6,107 +6,179 @@ import { translate } from "./i18n";
 import { notify } from "./notify";
 import lazyImgVue from "~/components/the-lazy-img.vue";
 
-export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
+let mermaidRenderQueue = Promise.resolve();
+
+const enqueueMermaidRender = (renderMermaid: () => Promise<void>) => {
+  const render = mermaidRenderQueue.then(renderMermaid, renderMermaid);
+  mermaidRenderQueue = render.catch(() => {});
+  return render;
+};
+
+export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false, signal?: AbortSignal) {
   const destroyFns: CallableFunction[] = [];
-  await nextTick(async () => {
-    // shiki: highlight code blocks not already processed server-side
-    const codeBlocks = Array.from(mdEl.querySelectorAll<HTMLElement>("pre:not([data-shiki])>code"));
-    if (codeBlocks.length) {
-      const { getSingletonHighlighter } = await import("shiki");
-      const highlighter = await getSingletonHighlighter({
-        themes: [SHIKI_LIGHT_THEME, SHIKI_DARK_THEME],
-        langs: []
-      });
-      for (const el of codeBlocks) {
-        const pre = el.parentElement!;
-        const lang = (pre.dataset.lang || "").toLowerCase();
-        const code = el.textContent || "";
-        if (lang) {
-          const loaded = highlighter.getLoadedLanguages();
-          if (!loaded.includes(lang as never)) {
-            try {
-              await highlighter.loadLanguage(lang as never);
-            } catch {
-              // Language not bundled, skip highlighting
-            }
+  await nextTick();
+  if (signal?.aborted || !mdEl.isConnected) {
+    return destroyFns;
+  }
+
+  // shiki: highlight code blocks not already processed server-side
+  const codeBlocks = Array.from(mdEl.querySelectorAll<HTMLElement>("pre:not([data-shiki])>code"));
+  if (codeBlocks.length) {
+    const { getSingletonHighlighter } = await import("shiki");
+    if (signal?.aborted) return destroyFns;
+    const highlighter = await getSingletonHighlighter({
+      themes: [SHIKI_LIGHT_THEME, SHIKI_DARK_THEME],
+      langs: []
+    });
+    for (const el of codeBlocks) {
+      if (signal?.aborted) return destroyFns;
+      const pre = el.parentElement!;
+      const lang = (pre.dataset.lang || "").toLowerCase();
+      const code = el.textContent || "";
+      if (lang) {
+        const loaded = highlighter.getLoadedLanguages();
+        if (!loaded.includes(lang as never)) {
+          try {
+            await highlighter.loadLanguage(lang as never);
+          } catch {
+            // Language not bundled, skip highlighting
           }
         }
-        const resolvedLang = lang && highlighter.getLoadedLanguages().includes(lang as never) ? lang : "text";
-        const html = highlighter.codeToHtml(code, {
-          lang: resolvedLang,
-          themes: { light: SHIKI_LIGHT_THEME, dark: SHIKI_DARK_THEME }
-        });
-        const match = html.match(/<code>([\s\S]*)<\/code>/);
-        if (match) {
-          el.innerHTML = match[1];
-          pre.dataset.shiki = "true";
-        }
+      }
+      const resolvedLang = lang && highlighter.getLoadedLanguages().includes(lang as never) ? lang : "text";
+      const html = highlighter.codeToHtml(code, {
+        lang: resolvedLang,
+        themes: { light: SHIKI_LIGHT_THEME, dark: SHIKI_DARK_THEME }
+      });
+      const match = html.match(/<code>([\s\S]*)<\/code>/);
+      if (match) {
+        el.innerHTML = match[1];
+        pre.dataset.shiki = "true";
       }
     }
-    // katex
-    mdEl
-      .querySelectorAll<HTMLDivElement>(".math-formula:not(.parsed)")
-      .forEach(async (el) => {
-        const realEl = el.classList.contains("block") ? el.children[0] as HTMLElement : el;
-        realEl.innerHTML = (await import("katex")).default.renderToString(realEl.innerText);
-        el.classList.add("parsed");
-      });
-    // mermaid
-    const mermaidBlocks = mdEl.querySelectorAll<HTMLPreElement>("pre.mermaid-block");
-    if (mermaidBlocks.length) {
-      const originalContent = Array.from(mermaidBlocks).map(pre => pre.textContent.trim());
-      const mermaid = (await import("mermaid")).default;
-      watch(useThemeMode().themeMode, async (themeMode) => {
+  }
+  // katex
+  const mathFormulae = mdEl.querySelectorAll<HTMLDivElement>(".math-formula:not(.parsed)");
+  if (mathFormulae.length) {
+    const katex = (await import("katex")).default;
+    if (signal?.aborted) return destroyFns;
+    mathFormulae.forEach((el) => {
+      const realEl = el.classList.contains("block") ? el.children[0] as HTMLElement : el;
+      realEl.innerHTML = katex.renderToString(realEl.innerText);
+      el.classList.add("parsed");
+    });
+  }
+  // mermaid
+  const mermaidBlocks = mdEl.querySelectorAll<HTMLPreElement>("pre.mermaid-block");
+  if (mermaidBlocks.length) {
+    const originalContent = Array.from(mermaidBlocks).map(pre => pre.textContent.trim());
+    const mermaid = (await import("mermaid")).default;
+    if (signal?.aborted) return destroyFns;
+
+    const themeMode = useThemeMode().themeMode;
+    const mermaidCleanupFns: CallableFunction[] = [];
+    let stopped = false;
+    let renderVersion = 0;
+
+    const cleanupMermaid = () => {
+      mermaidCleanupFns.splice(0).forEach(fn => fn());
+    };
+
+    const renderMermaid = async (mode: typeof themeMode.value) => {
+      const version = ++renderVersion;
+      await enqueueMermaidRender(async () => {
+        if (stopped || signal?.aborted || !mdEl.isConnected) return;
+
+        cleanupMermaid();
         mermaidBlocks.forEach((pre, index) => {
           pre.removeAttribute("data-processed");
           if (originalContent[index]) {
-            pre.innerHTML = originalContent[index];
+            pre.textContent = originalContent[index];
           }
         });
         mermaid.initialize({
-          theme: themeMode === "light" ? "default" : "dark"
+          theme: mode === "light" ? "default" : "dark"
         });
-        await mermaid.run({
-          nodes: mermaidBlocks
-        });
+
+        try {
+          await mermaid.run({
+            nodes: mermaidBlocks
+          });
+        } catch (error) {
+          // Navigation can detach the page while Mermaid is yielding internally.
+          // In that case the render is obsolete; syntax/render errors on a live
+          // page should still be surfaced.
+          if (stopped || signal?.aborted || !mdEl.isConnected) return;
+          throw error;
+        }
+
+        if (stopped || signal?.aborted || version !== renderVersion || !mdEl.isConnected) return;
         mermaidBlocks.forEach((pre) => {
           const cleanup = setupMermaidPanZoom(pre);
           if (cleanup) {
-            destroyFns.push(cleanup);
+            mermaidCleanupFns.push(cleanup);
           }
         });
-      }, { immediate: true });
-    }
-    // lazy-img
-    mdEl
-      .querySelectorAll<HTMLImageElement>(".image-container > img")
-      .forEach((el) => {
-        const style = el.getAttribute("style");
-        const title = (el.nextElementSibling as HTMLElement).innerText;
-        const vm = createApp(lazyImgVue, {
-          src: el.getAttribute("src"),
-          alt: title,
-          viewer: true,
-          compStyle: style,
-          noLazy: forEdit,
-          imgStyle: el.parentElement!.classList.contains("just-height")
-            ? style
-            : "",
-          title
-        });
-        const alt = el.nextElementSibling!;
-        vm.mount(el.parentElement!);
-        vm._container!.appendChild(alt);
-        destroyFns.push(() => {
-          vm.unmount();
+      });
+    };
+
+    await renderMermaid(themeMode.value);
+    if (!signal?.aborted) {
+      const stopThemeWatch = watch(themeMode, (mode) => {
+        void renderMermaid(mode).catch((error) => {
+          if (!stopped && !signal?.aborted) {
+            console.error("Failed to rerender Mermaid", error);
+          }
         });
       });
-    // copy button in <pre>
-    mdEl.querySelectorAll<HTMLPreElement>("pre:not([data-processed])").forEach(async (el) => {
+      destroyFns.push(() => {
+        stopped = true;
+        renderVersion++;
+        stopThemeWatch();
+        cleanupMermaid();
+      });
+    }
+  }
+  if (signal?.aborted) {
+    destroyFns.forEach(fn => fn());
+    return [];
+  }
+  // lazy-img
+  mdEl
+    .querySelectorAll<HTMLImageElement>(".image-container > img")
+    .forEach((el) => {
+      const style = el.getAttribute("style");
+      const title = (el.nextElementSibling as HTMLElement).innerText;
+      const vm = createApp(lazyImgVue, {
+        src: el.getAttribute("src"),
+        alt: title,
+        viewer: true,
+        compStyle: style,
+        noLazy: forEdit,
+        imgStyle: el.parentElement!.classList.contains("just-height")
+          ? style
+          : "",
+        title
+      });
+      const alt = el.nextElementSibling!;
+      vm.mount(el.parentElement!);
+      vm._container!.appendChild(alt);
+      destroyFns.push(() => {
+        vm.unmount();
+      });
+    });
+  // copy button in <pre>
+  const copyBlocks = mdEl.querySelectorAll<HTMLPreElement>("pre:not([data-processed])");
+  if (copyBlocks.length) {
+    const ClipboardJS = (await import("clipboard")).default;
+    if (signal?.aborted) {
+      destroyFns.forEach(fn => fn());
+      return [];
+    }
+    copyBlocks.forEach((el) => {
       el.dataset.processed = "true";
       const copyBtn = createSvgIcon(Clipboard);
       copyBtn.title = "copy";
-      const ClipboardJS = (await import("clipboard")).default;
       const clipboard = new ClipboardJS(copyBtn, {
         target: function (trigger: HTMLElement) {
           return trigger.parentElement!.querySelector("code")!;
@@ -122,14 +194,14 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false) {
       });
       el.appendChild(copyBtn);
     });
-    // target=_blank link
-    mdEl.querySelectorAll<HTMLLinkElement>("a[target=_blank]:not([data-processed])").forEach((el) => {
-      el.dataset.processed = "true";
-      el.appendChild(createSvgIcon(SquareArrowOutUpRight));
-    });
-
-    pangu.spacingNode(mdEl);
+  }
+  // target=_blank link
+  mdEl.querySelectorAll<HTMLLinkElement>("a[target=_blank]:not([data-processed])").forEach((el) => {
+    el.dataset.processed = "true";
+    el.appendChild(createSvgIcon(SquareArrowOutUpRight));
   });
+
+  pangu.spacingNode(mdEl);
   return destroyFns;
 }
 
