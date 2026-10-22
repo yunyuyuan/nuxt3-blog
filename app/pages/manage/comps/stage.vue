@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Eye, X } from "lucide-vue-next";
-import { commitStagedItems } from "ls:~/utils/nuxt/manage/github";
+import { commitStagedItems } from "~/utils/nuxt/manage/repository";
 import type { CommitParamsAddition, CommonItem, HeaderTabUrl } from "~/utils/common/types";
 import { fetchAny, fetchList } from "~/utils/nuxt/fetch";
 import { translate } from "~/utils/nuxt/i18n";

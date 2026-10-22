@@ -1,24 +1,25 @@
 import fs from "fs";
 import path from "path";
 import type { Plugin } from "vite";
-import type { CommitParams, CommitParamsAddition, CommitParamsDeletion } from "../app/utils/common/types";
+import type { CommitParams } from "../app/utils/common/types";
+import { resolveWritablePath } from "./allowed-path";
 import { rebuildEvent } from "./types";
 
-function writeFile(file: CommitParamsAddition): void {
-  fs.writeFileSync(path.resolve(__dirname, "../", file.path), file.content!);
-}
+const rootDir = path.resolve(__dirname, "../");
 
-function removeFile(file: CommitParamsDeletion): void {
-  fs.unlinkSync(path.resolve(__dirname, "../", file.path));
-}
-
+/**
+ * 开发模式的“提交”：后台通过 Vite WebSocket 发来要写入和删除的文件，这里改写本地文件。
+ * 先校验全部路径，再执行写入；任何一个路径不合法时都不写。
+ */
 export default {
   name: "nb-rebuild-plugin",
   configureServer(server) {
     server.ws.on(rebuildEvent, (data: CommitParams, client) => {
       try {
-        data.additions?.forEach(writeFile);
-        data.deletions?.forEach(removeFile);
+        const additions = (data.additions ?? []).map(file => ({ target: resolveWritablePath(rootDir, file.path), content: file.content ?? "" }));
+        const deletions = (data.deletions ?? []).map(file => resolveWritablePath(rootDir, file.path));
+        additions.forEach(({ target, content }) => fs.writeFileSync(target, content));
+        deletions.forEach(target => fs.unlinkSync(target));
         client.send(rebuildEvent, true);
       } catch (e: any) {
         client.send(rebuildEvent, e.toString());

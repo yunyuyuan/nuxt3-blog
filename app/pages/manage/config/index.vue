@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { createCommit } from "ls:~/utils/nuxt/manage/github";
 import twColors from "tailwindcss/colors";
 import { BarChart3, Check, ExternalLink, Eye, FileDiff, Github, Info, Languages, MessageCircleMore, Moon, Palette, Search, Upload } from "lucide-vue-next";
 import type { FunctionalComponent } from "vue";
+import { createCommit } from "~/utils/nuxt/manage/repository";
 import configString from "~~/config.ts?raw";
 import config from "~~/config";
 import { translate } from "~/utils/nuxt/i18n";

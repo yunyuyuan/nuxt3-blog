@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T extends CommonItem">
-import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
 import { FolderOpen, Hash, Lock, MessageCircleMore, Save, Trash2, Upload } from "lucide-vue-next";
+import { createCommit, deleteList } from "~/utils/nuxt/manage/repository";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 import type { CommonItem } from "~/utils/common/types";
 import { translate } from "~/utils/nuxt/i18n";

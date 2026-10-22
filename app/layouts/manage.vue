@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import { BookOpen, CheckCheck, FileEdit, Image, ImagePlus, Key, Menu, MoonStar, Rocket, Settings, Sun, Upload, X } from "lucide-vue-next";
 import type { FunctionalComponent } from "vue";
-import { isAuthor as checkIsAuthor } from "ls:~/utils/nuxt/manage/github";
+import { isAuthor as checkIsAuthor } from "~/utils/nuxt/manage/repository";
 import Stage from "~/pages/manage/comps/stage.vue";
 import UploadFile from "~/pages/manage/comps/upload-file.vue";
 import { GithubTokenKey } from "~/utils/common/constants";
