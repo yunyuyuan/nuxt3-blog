@@ -44,11 +44,14 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
   const initialMd = originMd === null ? "" : visibleMarkdown(item, originMd);
   // 只有加密条目的 md 会在浏览器中变化
   const shownMd = ref(initialMd);
+  // 加密条目的字段（标题、链接等）在解密前是密文
+  const decrypted = ref(!item.encrypt);
 
   if (originMd !== null) {
     if (item.encrypt) {
       await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
         await encryptDecryptItem(item, decrypt, targetTab);
+        decrypted.value = true;
         shownMd.value = await decrypt(originMd);
       });
     } else if (item.encryptBlocks?.length) {
@@ -104,6 +107,7 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
 
   return {
     item,
+    decrypted,
     related: loaded.related,
     htmlContent,
     menuItems,

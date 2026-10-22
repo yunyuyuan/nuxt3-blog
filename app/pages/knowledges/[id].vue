@@ -6,7 +6,7 @@ import { Visitors, Comments, WroteDate } from "~/utils/nuxt/public/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
-const { item, markdownRef, htmlContent, description, visitors } = await useContentPage<KnowledgeItem>();
+const { item, decrypted, markdownRef, htmlContent, description, visitors } = await useContentPage<KnowledgeItem>();
 useCommonSEOTitle(() => item.title, undefined, description);
 
 const root = ref<HTMLElement>();
@@ -32,7 +32,7 @@ initViewer(root);
         <div class="mb-6 flex justify-between max-md:flex-col max-md:gap-2">
           <a
             target="_blank"
-            :href="item.link"
+            :href="decrypted ? item.link : undefined"
             class="mb-2 flex items-center text-2xl font-medium text-dark-900 dark:text-white max-md:mb-0"
           >
             <Link class="mr-2 size-5 text-primary-500" />
