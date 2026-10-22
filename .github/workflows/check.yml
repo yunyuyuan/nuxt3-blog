@@ -14,7 +14,8 @@ jobs:
     # Forks deploy from their own branches and commit content from /manage;
     # only run the full check in the upstream repository.
     if: ${{ github.repository == 'yunyuyuan/nuxt3-blog' }}
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest is migrating to 26.04, which Playwright 1.54 does not support.
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,6 +28,9 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Prepare Nuxt
+        # eslint.config.mjs imports .nuxt/eslint.config.mjs, which nuxi prepare generates.
+        run: pnpm exec nuxi prepare
       - name: Lint
         run: pnpm exec eslint . --max-warnings 0
       - name: Typecheck
@@ -41,7 +45,7 @@ jobs:
         run: test -f .output/public/404.html
   e2e:
     if: ${{ github.repository == 'yunyuyuan/nuxt3-blog' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
