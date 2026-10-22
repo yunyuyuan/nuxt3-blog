@@ -5,7 +5,7 @@ import { hash as cryptoHash } from "crypto";
 import type { NitroRouteConfig } from "nitropack";
 import type { AppHeadMetaObject } from "@nuxt/schema";
 import { withBase } from "ufo";
-import { generateSiteMap, generateThemeColorsCSS, uploadAlgoliaIndex } from "./scripts/nuxt-hooks";
+import { generateFeeds, generateThemeColorsCSS, uploadAlgoliaIndex } from "./scripts/nuxt-hooks";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
 import { getNowDayjsString } from "./app/utils/common/dayjs";
@@ -140,7 +140,8 @@ export default defineNuxtConfig({
         { name: "author", content: config.nickName }
       ],
       link: [
-        { rel: "shortcut icon", href: withBase("/icon.png", baseURL) }
+        { rel: "shortcut icon", href: withBase("/icon.png", baseURL) },
+        { rel: "alternate", type: "application/rss+xml", title: config.title, href: withBase("/rss.xml", baseURL) }
       ],
       script: scripts,
       title: config.title
@@ -236,7 +237,7 @@ export default defineNuxtConfig({
 
   hooks: {
     "nitro:build:public-assets"(nitro) {
-      generateSiteMap(nitro.options.output.publicDir);
+      generateFeeds(nitro.options.output.publicDir);
       if (!isTest) {
         uploadAlgoliaIndex();
         fs.rmSync(path.join(nitro.options.output.publicDir, "e2e"), { recursive: true });

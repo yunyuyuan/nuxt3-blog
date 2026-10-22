@@ -2,6 +2,7 @@ import config from "~~/config";
 import { useBlogItem } from "~/utils/hooks/useBlogItem";
 import { useMarkdownParser } from "~/utils/hooks/useMarkdownParser";
 import type { CommonItem } from "~/utils/common/types";
+import { markdownExcerpt } from "~/utils/common/utils";
 import { DBOperate } from ".";
 import { getCurrentTab, watchUntil } from "../utils";
 import { useUnmount } from "~/utils/hooks/useUnmount";
@@ -38,11 +39,24 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
     }, { immediate: true }, isAuthor => isAuthor !== null, "cancelAfterUntil");
   }
 
+  // meta description：整篇加密的条目不暴露任何内容；知识库优先用自己的 summary
+  const description = computed(() => {
+    const item = decryptedItem.value;
+    if (!item || item.encrypt) {
+      return undefined;
+    }
+    if ("summary" in item && item.summary) {
+      return item.summary;
+    }
+    return markdownExcerpt(decryptedMd.value) || undefined;
+  });
+
   return {
     originList,
     item: decryptedItem.value,
     htmlContent,
     menuItems,
-    markdownRef
+    markdownRef,
+    description
   };
 }

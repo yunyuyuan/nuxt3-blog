@@ -7,8 +7,8 @@ import { Visitors, Comments, WroteDate } from "~/utils/nuxt/public/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
-const { item, htmlContent, markdownRef } = await useContentPage<RecordItem>();
-useCommonSEOTitle(computed(() => `${translate("records")}: ${formatTime(item.time, "date")}`));
+const { item, htmlContent, markdownRef, description } = await useContentPage<RecordItem>();
+useCommonSEOTitle(() => `${translate("records")}: ${formatTime(item.time, "date")}`, undefined, description);
 
 const root = ref<HTMLElement>();
 initViewer(root);

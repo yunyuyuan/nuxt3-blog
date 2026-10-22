@@ -6,8 +6,8 @@ import { Visitors, Comments, WroteDate } from "~/utils/nuxt/public/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
-const { item, markdownRef, htmlContent } = await useContentPage<KnowledgeItem>();
-useCommonSEOTitle(computed(() => item.title));
+const { item, markdownRef, htmlContent, description } = await useContentPage<KnowledgeItem>();
+useCommonSEOTitle(() => item.title, undefined, description);
 
 const root = ref<HTMLElement>();
 initViewer(root);

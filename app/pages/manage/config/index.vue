@@ -9,7 +9,7 @@ import { translate } from "~/utils/nuxt/i18n";
 import { createDiffModal, useStatusText } from "~/utils/nuxt/manage";
 import { deepClone, useCommonSEOTitle } from "~/utils/nuxt/utils";
 
-useCommonSEOTitle(computed(() => translate("config-manage") + config.SEO_title));
+useCommonSEOTitle(computed(() => translate("config-manage")));
 
 const form = reactive(deepClone(config));
 const aboutText = ref(config.about.join("\n"));

@@ -4,7 +4,7 @@ import { algoliasearch, type Action, type BatchRequest } from "algoliasearch";
 import config from "../config";
 import type { AlgoliaBody, ArticleItem, KnowledgeItem, RecordItem } from "../app/utils/common/types";
 import { parseMarkdown } from "../app/utils/common/markdown";
-import { genRss, getAbsolutePath, getRebuildPath, nbLog, walkAllBlogData } from "./utils";
+import { genRss, genSitemap, getAbsolutePath, getRebuildPath, isDomainConfigured, nbLog, siteUrl, walkAllBlogData } from "./utils";
 import extractTextFromHtml from "./utils/html";
 
 export function generateThemeColorsCSS() {
@@ -49,10 +49,32 @@ export function generateThemeColorsCSS() {
   nbLog(`random themes generated: ${cssFilePath}`);
 }
 
-export function generateSiteMap(publicDir: string) {
-  nbLog("sitemap");
-  fs.writeFileSync(path.resolve(publicDir, "sitemap.xml"),
-    genRss(JSON.parse(fs.readFileSync(getRebuildPath("json", "articles.json")).toString())));
+/**
+ * 生成 rss.xml（订阅）和 sitemap.xml（搜索引擎），并在 robots.txt 中声明 sitemap
+ */
+export function generateFeeds(publicDir: string) {
+  const readList = (name: string) => JSON.parse(fs.readFileSync(getRebuildPath("json", `${name}.json`)).toString());
+  const articles = readList("articles");
+  fs.writeFileSync(path.resolve(publicDir, "rss.xml"), genRss(articles));
+  nbLog("rss.xml generated");
+
+  if (!isDomainConfigured()) {
+    nbLog("config.domain is not set, skip sitemap.xml");
+    return;
+  }
+  fs.writeFileSync(path.resolve(publicDir, "sitemap.xml"), genSitemap({
+    "/articles": articles,
+    "/records": readList("records"),
+    "/knowledges": readList("knowledges")
+  }));
+  const robotsPath = path.resolve(publicDir, "robots.txt");
+  if (fs.existsSync(robotsPath)) {
+    const robots = fs.readFileSync(robotsPath).toString();
+    if (!/^Sitemap:/im.test(robots)) {
+      fs.writeFileSync(robotsPath, `${robots.trimEnd()}\n\nSitemap: ${siteUrl("sitemap.xml")}\n`);
+    }
+  }
+  nbLog("sitemap.xml generated");
 }
 
 export async function uploadAlgoliaIndex() {
