@@ -1,0 +1,58 @@
+name: Check
+on:
+  pull_request:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    # Forks deploy from their own branches and commit content from /manage;
+    # only run the full check in the upstream repository.
+    if: ${{ github.repository == 'yunyuyuan/nuxt3-blog' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm exec eslint . --max-warnings 0
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Unit tests
+        run: pnpm test:unit
+      - name: Build
+        run: pnpm build
+  e2e:
+    if: ${{ github.repository == 'yunyuyuan/nuxt3-blog' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Build for e2e
+        run: pnpm build-for-test
+      - name: E2E tests
+        run: pnpm test:prod-and-e2e
