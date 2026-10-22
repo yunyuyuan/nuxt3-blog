@@ -12,6 +12,7 @@ import { useStaging, type StagedItem } from "~/utils/hooks/useStaging";
 import { getProcessedUploadInfo } from "~/utils/nuxt/manage/item-processor";
 import { encryptDecryptItem } from "~/utils/common/process-encrypt-decrypt";
 import { deepClone } from "~/utils/nuxt/utils";
+import { randomId } from "~/utils/nuxt/manage";
 
 const props = defineProps<{
   preProcessItem?: (editingItem: Ref<T>, originList: T[]) => void;
@@ -112,6 +113,12 @@ const showLoadStagedModal = ref(false);
 const stagedItemToLoad = ref<{ item: T; md: string } | null>(null);
 
 const doStage = async () => {
+  // 新条目在暂存时就分配 id。否则所有新条目都以 id=0 暂存，后一个会覆盖前一个。
+  // id 只分配一次，之后在同一页面重复暂存会替换同一个暂存项。
+  if (isNew && !editingItem.value.id) {
+    const stagedInTab = stagedItems.value.filter(s => s.targetTab === targetTab).map(s => s.item);
+    editingItem.value.id = randomId([...originList, ...stagedInTab]);
+  }
   const processedInfo = await getProcessedUploadInfo({
     editingItem: editingItem.value,
     editingMd: editingMd.value,

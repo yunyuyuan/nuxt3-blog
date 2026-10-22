@@ -34,6 +34,35 @@ describe("Staging Functionality", async () => {
     expect(await itemPage.getStagedItems()).lengthOf(1);
   });
 
+  it("stages two new items without overwriting each other", async () => {
+    const { itemPage, page } = await createItemPage(newArticlePath);
+
+    await itemPage.fillItemDetails("first new title", "firsttag", "first new content");
+    await itemPage.stageItem();
+
+    await page.goto(newArticlePath, { waitUntil: "hydration" });
+    await itemPage.fillItemDetails("second new title", "secondtag", "second new content");
+    await itemPage.stageItem();
+
+    const staged = await itemPage.getStagedItems() as { id: number; item: { title: string } }[];
+    expect(staged).lengthOf(2);
+    expect(staged.every(s => s.id > 0)).toBe(true);
+    expect(new Set(staged.map(s => s.id)).size).toBe(2);
+    expect(staged.map(s => s.item.title).sort()).toEqual(["first new title", "second new title"]);
+  });
+
+  it("reopens a staged new item from its id", async () => {
+    const { itemPage, page } = await createItemPage(newArticlePath);
+
+    await itemPage.fillItemDetails("reopen title", "reopentag", "reopen content");
+    await itemPage.stageItem();
+    const [staged] = await itemPage.getStagedItems() as { id: number }[];
+
+    await page.goto(articlePath(staged!.id), { waitUntil: "hydration" });
+    await itemPage.waitForTimeout(500);
+    expect(await itemPage.getByTestId("load-staged-modal").isVisible()).toBe(true);
+  });
+
   it("deletes a staged item", async () => {
     const { itemPage } = await createItemPage(newArticlePath);
 

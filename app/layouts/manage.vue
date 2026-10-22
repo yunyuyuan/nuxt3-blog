@@ -46,7 +46,7 @@ const activeRoute = computed(() => {
 const rocketUrl = computed(() => {
   return calcRocketUrl();
 });
-const allPassed = computed(() => !!githubToken && encryptor.passwdCorrect.value);
+const allPassed = computed(() => !!githubToken.value && encryptor.passwdCorrect.value);
 
 // 进入manage界面后，大概率会用到encrypt，所以这里先异步加载，尚未遇到bug
 encryptor.init();
