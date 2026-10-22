@@ -1,3 +1,5 @@
+// 公式样式随 Markdown 渲染一起加载（详情页和编辑器），不再放进全局入口 CSS
+import "katex/dist/katex.min.css";
 import { parseMarkdown } from "../common/markdown";
 import { afterInsertHtml } from "../nuxt/markdown";
 

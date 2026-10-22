@@ -24,11 +24,17 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false, signal
   // shiki: highlight code blocks not already processed server-side
   const codeBlocks = Array.from(mdEl.querySelectorAll<HTMLElement>("pre:not([data-shiki])>code"));
   if (codeBlocks.length) {
-    const { getSingletonHighlighter } = await import("shiki");
+    const [{ getSingletonHighlighter }, { createJavaScriptRegexEngine }] = await Promise.all([
+      import("shiki"),
+      import("shiki/engine/javascript")
+    ]);
     if (signal?.aborted) return destroyFns;
+    // 预渲染仍用 Oniguruma；浏览器只处理解密后的内容和编辑器预览，用 JS 正则引擎省掉 622KB 的 wasm。
+    // forgiving：遇到 JS 不支持的正则时跳过该规则，不抛错
     const highlighter = await getSingletonHighlighter({
       themes: [SHIKI_LIGHT_THEME, SHIKI_DARK_THEME],
-      langs: []
+      langs: [],
+      engine: createJavaScriptRegexEngine({ forgiving: true })
     });
     for (const el of codeBlocks) {
       if (signal?.aborted) return destroyFns;

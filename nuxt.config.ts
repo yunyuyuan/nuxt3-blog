@@ -152,7 +152,8 @@ export default defineNuxtConfig({
       title: config.title
     }
   },
-  css: ["~/assets/style/main.css", "./node_modules/katex/dist/katex.min.css", "./node_modules/viewerjs/dist/viewer.css"],
+  // katex.min.css 随 useMarkdownParser、viewer.css 随 utils/nuxt/viewer.ts 进入详情页和编辑器的 chunk
+  css: ["~/assets/style/main.css"],
 
   runtimeConfig: {
     // 仅服务端可见

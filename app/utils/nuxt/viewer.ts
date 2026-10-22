@@ -1,4 +1,5 @@
 import Viewer from "viewerjs";
+import "viewerjs/dist/viewer.css";
 import type { Ref } from "vue";
 import { ViewerAttr } from "~/utils/common/constants";
 
