@@ -1,10 +1,9 @@
-import { createVNode, render } from "vue";
 import type { CommonItem, RecordItem } from "~/utils/common/types";
 import { translate } from "~/utils/nuxt/i18n";
 import DiffModal from "~/pages/manage/comps/diff-modal.vue";
 import VersionUpdateModal from "~/pages/manage/comps/version-update-modal.vue";
 import { escapeNewLine } from "~/utils/common/utils";
-import { ModalContainerId } from "~/utils/common/constants";
+import { openModal } from "~/utils/nuxt/modal";
 
 export function randomId(exist: CommonItem[] = []) {
   const ids = exist.map(item => item.id);
@@ -82,7 +81,7 @@ export function compareMd(s1: string, s2: string) {
 }
 
 /**
- * 显示 diff 弹窗确认更改
+ * 显示 diff 弹窗确认更改：确定返回 true，关闭返回 false
  */
 export function createDiffModal({
   rawDiff,
@@ -90,49 +89,11 @@ export function createDiffModal({
   deletions,
   showOk = true
 }: Pick<InstanceType<typeof DiffModal>["$props"], "additions" | "deletions" | "showOk" | "rawDiff">) {
-  return new Promise<boolean>((resolve) => {
-    const container = document.createElement("div");
-    const vm = createVNode(DiffModal, {
-      modelValue: true,
-      rawDiff,
-      additions,
-      deletions,
-      showOk
-    });
-    vm.props!.onOk = () => {
-      render(null, container);
-      resolve(true);
-    };
-    vm.props!.onAfterClose = () => {
-      render(null, container);
-      resolve(false);
-    };
-    vm.appContext = useNuxtApp().vueApp._context;
-    render(vm, container);
-    document
-      .getElementById(ModalContainerId)!
-      .appendChild(container.firstElementChild!);
-  });
+  return openModal<boolean>(DiffModal, { rawDiff, additions, deletions, showOk }, { onOk: true }, false);
 }
-
 /**
- * 显示新版本提示弹窗
+ * 显示新版本提示弹窗，关闭后 resolve
  */
 export function createVersionUpdateModal(newVersion: string) {
-  return new Promise<void>((resolve) => {
-    const container = document.createElement("div");
-    const vm = createVNode(VersionUpdateModal, {
-      modelValue: true,
-      newVersion
-    });
-    vm.props!.onAfterClose = () => {
-      render(null, container);
-      resolve();
-    };
-    vm.appContext = useNuxtApp().vueApp._context;
-    render(vm, container);
-    document
-      .getElementById(ModalContainerId)!
-      .appendChild(container.firstElementChild!);
-  });
+  return openModal<undefined>(VersionUpdateModal, { newVersion }, {}, undefined);
 }
