@@ -6,6 +6,7 @@ import Stage from "~/pages/manage/comps/stage.vue";
 import UploadFile from "~/pages/manage/comps/upload-file.vue";
 import { GithubTokenKey } from "~/utils/common/constants";
 import { HeaderTabs, type HeaderTabUrl } from "~/utils/common/types";
+import { setHeadReadingActive } from "~/utils/nuxt/fetch";
 import { translate } from "~/utils/nuxt/i18n";
 import { rmLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
 import { notify } from "~/utils/nuxt/notify";
@@ -24,6 +25,12 @@ const encryptor = useEncryptor();
 const isAuthor = useIsAuthor();
 const { themeMode, toggleThemeMode } = useThemeMode();
 const sameSha = computed(() => useRemoteLatestSha().value === __NB_CURRENT_GIT_SHA__);
+const manageReloadKey = useManageReloadKey();
+
+// 后台页面读取仓库 HEAD 的内容（token 验证通过后生效），离开后台后恢复读取已部署的静态文件。
+// 在 setup 中设置，早于子页面读取数据
+setHeadReadingActive(true);
+onUnmounted(() => setHeadReadingActive(false));
 
 const IconMap = {
   "/articles": FileEdit,
@@ -222,7 +229,7 @@ onMounted(() => {
                 !githubToken && '!text-red-400',
                 allPassed && '!text-green-400'
               )"
-              :title="sameSha ? (allPassed ? $t('all-verified') : $t('token-and-passwd')) : $t('commit-id-not-correct')"
+              :title="sameSha ? (allPassed ? $t('all-verified') : $t('token-and-passwd')) : $t('deploy-behind-head')"
               data-testid="show-token-password-btn"
               @click="showPwdModal = true"
             >
@@ -234,9 +241,15 @@ onMounted(() => {
     </aside>
 
     <div class="min-h-screen flex-1 overflow-hidden">
-      <div class="mx-auto size-full max-w-[1440px] rounded-lg p-4 *:rounded-lg *:bg-white *:shadow-md *:dark:bg-dark-800 max-md:p-1">
+      <div class="mx-auto size-full max-w-[1440px] rounded-lg p-4 max-md:p-1">
         <client-only>
-          <slot />
+          <!-- key 改变时重新挂载页面（提交成功后）；contents 不产生盒子，样式仍作用于页面根元素 -->
+          <div
+            :key="manageReloadKey"
+            class="contents *:rounded-lg *:bg-white *:shadow-md *:dark:bg-dark-800"
+          >
+            <slot />
+          </div>
         </client-only>
       </div>
     </div>

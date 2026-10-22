@@ -9,7 +9,6 @@
   "book": "Books",
   "cancel": "Cancel",
   "click-to-retry": "Click to Retry",
-  "commit-id-not-correct": "Commit ID does not match the latest version, please wait for deployment",
   "commit-id-not-correct-confirm": "Commit ID does not match the latest version, confirm submission? This may overwrite the new version",
   "config": "Configuration",
   "config-manage": "Configuration Management",
@@ -204,5 +203,6 @@
   "upgrade-step-1": "Go to your repository website",
   "upgrade-step-2": "Click \"Sync fork\" → Click \"Update branch\"",
   "images": "Images",
-  "view-deploy-status": "View Deploy Status"
+  "commit-conflict": "The repository has new commits, so this change was not committed. Stage your changes and reload the page",
+  "deploy-behind-head": "The site has not deployed the latest commit yet. Manage reads the latest repository content, so you can keep committing"
 }

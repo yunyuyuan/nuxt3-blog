@@ -1,12 +1,10 @@
 import { createVNode, render } from "vue";
 import type { CommonItem, RecordItem } from "~/utils/common/types";
 import { translate } from "~/utils/nuxt/i18n";
-import CommonModal from "~/components/common-modal.vue";
 import DiffModal from "~/pages/manage/comps/diff-modal.vue";
 import VersionUpdateModal from "~/pages/manage/comps/version-update-modal.vue";
 import { escapeNewLine } from "~/utils/common/utils";
 import { ModalContainerId } from "~/utils/common/constants";
-import config from "~~/config";
 
 export function randomId(exist: CommonItem[] = []) {
   const ids = exist.map(item => item.id);
@@ -81,44 +79,6 @@ export function compareItem<T extends CommonItem>(item1: T, item2: T) {
  */
 export function compareMd(s1: string, s2: string) {
   return escapeNewLine(s1).trim() === escapeNewLine(s2).trim();
-}
-
-/**
- * commit id 不一致，阻止提交并引导用户查看部署状态
- */
-export function createNotCommittableModal() {
-  return new Promise<boolean>((resolve) => {
-    const container = document.createElement("div");
-    const commitsUrl = `https://github.com/${config.githubName}/${__NB_GITHUB_REPO__}/commits`;
-    const vm = createVNode(CommonModal, {
-      modelValue: true,
-      showOk: false
-    }, {
-      title: () => <span class="text-red-500">{translate("warning")}</span>,
-      body: () => (
-        <div>
-          <p>{translate("commit-id-not-correct")}</p>
-          <a
-            href={commitsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-2 inline-block text-primary-500 underline"
-          >
-            {translate("view-deploy-status")}
-          </a>
-        </div>
-      )
-    });
-    vm.props!.onAfterClose = () => {
-      render(null, container);
-      resolve(false);
-    };
-    vm.appContext = useNuxtApp().vueApp._context;
-    render(vm, container);
-    document
-      .getElementById(ModalContainerId)!
-      .appendChild(container.firstElementChild!);
-  });
 }
 
 /**
