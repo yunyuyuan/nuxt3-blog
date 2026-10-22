@@ -35,6 +35,10 @@ jobs:
         run: pnpm test:unit
       - name: Build
         run: pnpm build
+        env:
+          NB_PRERENDER_STRICT: "true"
+      - name: Check static output
+        run: test -f .output/public/404.html
   e2e:
     if: ${{ github.repository == 'yunyuyuan/nuxt3-blog' }}
     runs-on: ubuntu-latest

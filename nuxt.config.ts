@@ -27,7 +27,6 @@ generateThemeColorsCSS();
 
 // routes
 const routes: string[] = [];
-const ignoreRoutes: string[] = [];
 const routesConfig: Record<string, NitroRouteConfig> = {};
 
 HeaderTabs.forEach((url) => {
@@ -36,8 +35,11 @@ HeaderTabs.forEach((url) => {
     const json = JSON.parse(fs.readFileSync(path).toString()) as CommonItem[];
     json.forEach((item) => {
       if (item.customSlug) {
-        ignoreRoutes.push(`${url}/${item.id}`);
-        routesConfig[`${url}/${item.id}`] = { redirect: { to: `/${url}/${item.customSlug}` } };
+        // url 以 / 开头；原来的 `/${url}` 会得到 //articles/slug，被浏览器当成协议相对地址。
+        // Nitro 不会给重定向目标补 baseURL，这里自己加上。
+        // id 地址也参与预渲染：Nitro 会把重定向写成 meta refresh 页面，静态托管上旧链接依然可用。
+        routesConfig[`${url}/${item.id}`] = { redirect: { to: withBase(`${url}/${item.customSlug}`, baseURL) } };
+        routes.push(`${url}/${item.id}`);
       }
       routes.push(`${url}/${item.customSlug || item.id}`);
     });
@@ -169,9 +171,13 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      failOnError: false,
-      routes: routes,
-      ignore: ["/manage", ...ignoreRoutes]
+      // 默认不因单个页面出错（如文章里的失效站内链接）而中断博客部署；
+      // 本仓库的 CI 设置 NB_PRERENDER_STRICT=true，让模板本身的预渲染错误暴露出来
+      failOnError: process.env.NB_PRERENDER_STRICT === "true",
+      // /404.html 会被 Nuxt 渲染成 SPA 外壳。GitHub Pages 等静态托管对未知路径返回它，
+      // 从而可以直接打开或刷新 /manage/** 等未预渲染的页面
+      routes: [...routes, "/404.html"],
+      ignore: ["/manage"]
     },
     cloudflare: {
       pages: {
