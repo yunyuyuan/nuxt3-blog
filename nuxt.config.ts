@@ -28,11 +28,14 @@ generateThemeColorsCSS();
 // routes
 const routes: string[] = [];
 const routesConfig: Record<string, NitroRouteConfig> = {};
+// 每个栏目的条目 id，访客统计接口用它拒绝不存在的条目
+const itemIds: Record<string, number[]> = {};
 
 HeaderTabs.forEach((url) => {
   const path = `./public${isTest ? "/e2e" : ""}/rebuild/json${url}.json`;
   if (fs.existsSync(path)) {
     const json = JSON.parse(fs.readFileSync(path).toString()) as CommonItem[];
+    itemIds[url] = json.map(item => item.id);
     json.forEach((item) => {
       if (item.customSlug) {
         // url 以 / 开头；原来的 `/${url}` 会得到 //articles/slug，被浏览器当成协议相对地址。
@@ -152,6 +155,8 @@ export default defineNuxtConfig({
   css: ["~/assets/style/main.css", "./node_modules/katex/dist/katex.min.css", "./node_modules/viewerjs/dist/viewer.css"],
 
   runtimeConfig: {
+    // 仅服务端可见
+    nbItemIds: itemIds,
     public: {
       stickers
     }
