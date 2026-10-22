@@ -1,0 +1,45 @@
+import { describe, expect, it } from "vitest";
+import { parseMarkdown } from "./markdown";
+
+const render = async (md: string) => (await parseMarkdown(md)).md;
+
+describe("parseMarkdown attributes", () => {
+  it("escapes quotes in image alt and title", async () => {
+    const html = await render("![say \"hi\" <b>](https://a.com/x.png)");
+    expect(html).toContain("alt=\"say &quot;hi&quot; &lt;b&gt;\"");
+    expect(html).toContain("title=\"say &quot;hi&quot; &lt;b&gt;\"");
+    expect(html).toContain("src=\"https://a.com/x.png\"");
+  });
+
+  it("keeps the title of a sized image as plain text", async () => {
+    const html = await render("![with `code`[10rem x ]](https://a.com/x.png)");
+    expect(html).toContain("title=\"with `code`\"");
+    expect(html).toContain("style=\"width: 10rem !important;\"");
+  });
+
+  it("encodes quotes in custom link and media urls", async () => {
+    expect(await render("#[x](https://a.com/?q=\"y\")")).toContain("href=\"https://a.com/?q=%22y%22\"");
+    expect(await render("[video][v](https://a.com/p\".png|https://a.com/v.mp4)[/video]"))
+      .toContain("poster=\"https://a.com/p%22.png\"");
+  });
+
+  it("uses plain text for iframe titles", async () => {
+    const html = await render("[youtube][a \"quoted\" **title**](https://youtube.com/embed/x)[/youtube]");
+    expect(html).toContain("title=\"a &quot;quoted&quot; **title**\"");
+    expect(html).toContain("<strong>title</strong>");
+  });
+
+  it("escapes the code block language", async () => {
+    const html = await render("```a\"b\nx\n```");
+    expect(html).toContain("data-lang=\"a&quot;b\"");
+  });
+});
+
+describe("parseMarkdown media embeds", () => {
+  it("recognizes [bili] and [audio] in the middle of a paragraph", async () => {
+    const bili = await render("before [bili][b](https://player.bilibili.com/x?a=1)[/bili] after");
+    expect(bili).toContain("class=\"embed-media bili\"");
+    const audio = await render("before [audio][a](https://a.com/a.mp3)[/audio] after");
+    expect(audio).toContain("class=\"embed-media vanilla-audio\"");
+  });
+});
