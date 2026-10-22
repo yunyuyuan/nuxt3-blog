@@ -12,6 +12,7 @@ import { notify } from "~/utils/nuxt/notify";
 import { calcRocketUrl, watchUntil } from "~/utils/nuxt/utils";
 import { isDev } from "~/utils/nuxt/constants";
 import { useStaging } from "~/utils/hooks/useStaging";
+import config from "~~/config";
 
 const inputTokenDisabled = isDev || __NB_BUILDTIME_VITESTING__;
 
@@ -55,6 +56,19 @@ encryptor.init();
 watch(githubToken, (token) => {
   inputToken.value = token;
 });
+
+// 后台只用到 GraphQL 的 viewer、ref 查询和 createCommitOnBranch，fine-grained token 只需 Contents 读写（Metadata 只读自动包含）。
+// GitHub 的模板 URL 不能预选仓库，提示里写明要手动选择本仓库。
+const repoName = __NB_GITHUB_REPO__;
+const createTokenUrl = `https://github.com/settings/personal-access-tokens/new?${new URLSearchParams({
+  name: `${repoName} manage`.slice(0, 40),
+  description: `nuxt3-blog /manage for ${config.githubName}/${repoName}`,
+  target_name: config.githubName,
+  expires_in: "90",
+  contents: "write"
+})}`;
+// ghp_ 前缀是 classic token，权限覆盖账号下所有仓库
+const isClassicToken = computed(() => inputToken.value.startsWith("ghp_"));
 
 const modalOk = async () => {
   // 密码不用判断，直接修改
@@ -252,6 +266,20 @@ onMounted(() => {
           data-focus
           :disabled="inputTokenDisabled"
         >
+        <small class="mt-1 text-dark-500">
+          {{ $t('token-fine-grained-hint', [repoName]) }}
+          <a
+            class="text-primary-600 underline"
+            target="_blank"
+            :href="createTokenUrl"
+            data-testid="create-token-link"
+          >{{ $t('token-create-link') }}</a>
+        </small>
+        <small
+          v-if="isClassicToken"
+          class="mt-1 text-yellow-600"
+          data-testid="classic-token-warning"
+        >{{ $t('token-classic-warning') }}</small>
       </label>
       <label class="mt-4 flex flex-col">
         <span class="mb-1 flex gap-1.5">

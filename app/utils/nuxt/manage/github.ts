@@ -18,7 +18,7 @@ async function post(data: string, token_?: string) {
     { query: data },
     {
       headers: {
-        Authorization: "token " + token
+        Authorization: "Bearer " + token
       }
     }
   );

@@ -17,6 +17,18 @@ describe("Manage Navigation", async () => {
     }
   });
 
+  it("links to a pre-filled fine-grained token form", async () => {
+    const { page, listPage } = await createListPage(articleListPath());
+    await listPage.waitForTestId("list-delete-btn");
+    await listPage.clickElement("show-token-password-btn");
+    await listPage.waitForTestId("create-token-link");
+    const href = new URL((await page.locator("[data-testid=create-token-link]").getAttribute("href"))!);
+    expect(href.origin + href.pathname).toBe("https://github.com/settings/personal-access-tokens/new");
+    expect(href.searchParams.get("contents")).toBe("write");
+    expect(href.searchParams.get("target_name")).toBeTruthy();
+    expect(href.searchParams.get("name")!.length).toBeLessThanOrEqual(40);
+  });
+
   it("navigates list → detail → config → list → new", async () => {
     const { page, listPage } = await createListPage(articleListPath());
     await listPage.waitForTestId("list-delete-btn");
