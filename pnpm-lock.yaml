@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      axios:
-        specifier: ^1.11.0
-        version: 1.11.0(debug@4.4.1)
       clipboard:
         specifier: ^2.0.11
         version: 2.0.11

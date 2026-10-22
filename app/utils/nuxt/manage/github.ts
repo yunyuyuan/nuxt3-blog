@@ -1,68 +1,56 @@
-import axios from "axios";
 import { encode } from "js-base64";
 import { formatTime } from "../format-time";
 import { translate } from "../i18n";
 import { notify } from "../notify";
 import { getCurrentTab } from "../utils";
+import { AuthorQuery, buildCommitInput, CreateCommitMutation, type AuthorQueryData, type CreateCommitData } from "./github-queries";
 import { createNotCommittableModal, createDiffModal } from ".";
 import config from "~~/config";
 import type { CommitParams, CommonItem, CommitParamsAddition } from "~/utils/common/types";
 
-async function post(data: string, token_?: string) {
+type GraphQLResponse<T> = { data?: T; errors?: { type?: string; message: string }[] };
+
+async function post<T = unknown>(query: string, variables?: Record<string, unknown>, token_?: string): Promise<GraphQLResponse<T>> {
   const token = token_ || useGithubToken().value;
   if (!token) {
     throw new Error(translate("need-token"));
   }
-  return await axios.post(
-    "https://api.github.com/graphql",
-    { query: data },
-    {
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    }
-  );
-}
-
-function encodeB64(str: string) {
-  return encode(str);
+  // 只在浏览器中运行；e2e 用 page.route 拦截这个地址
+  const res = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ query, variables })
+  });
+  if (!res.ok) {
+    // 401（token 无效）等错误：GitHub 返回 { message }
+    const body = await res.json().catch(() => ({})) as { message?: string };
+    throw new Error(`GitHub API ${res.status}: ${body.message || res.statusText}`);
+  }
+  return await res.json() as GraphQLResponse<T>;
 }
 
 /** @description 是否管理员 */
 export async function isAuthor(token: string): Promise<boolean> {
-  const result = await post(`query {
-    viewer {
-      login
-    }
-    repository(name: "${__NB_GITHUB_REPO__}", owner: "${config.githubName}") {
-      ref(qualifiedName: "${__NB_GIT_BRANCH__}") {
-        target {
-          ... on Commit {
-            history(first: 1) {
-              nodes {
-                oid
-              }
-            }
-          }
-        }
-      }
-    }
-  }`,
-  token
-  );
-  const err = result.data.errors;
-  if (err) {
-    throw new Error(err);
-  } else {
-    const verified = result.data.data.viewer.login === config.githubName;
-    if (verified) {
-      // token 验证成功
-      useGithubToken().value = token;
-      // 更新 commit id
-      useRemoteLatestSha().value = result.data.data.repository.ref.target.history.nodes[0].oid;
-    }
-    return verified;
+  const result = await post<AuthorQueryData>(AuthorQuery, {
+    owner: config.githubName,
+    name: __NB_GITHUB_REPO__,
+    branch: __NB_GIT_BRANCH__
+  }, token);
+  if (result.errors?.length) {
+    throw new Error(result.errors.map(e => e.message).join("; "));
   }
+  // GitHub 用户名不区分大小写
+  const verified = result.data?.viewer?.login?.toLowerCase() === config.githubName.toLowerCase();
+  if (verified) {
+    // token 验证成功
+    useGithubToken().value = token;
+    // 更新 commit id
+    useRemoteLatestSha().value = result.data?.repository?.ref?.target?.history?.nodes?.[0]?.oid ?? "";
+  }
+  return verified;
 }
 
 /**
@@ -88,49 +76,24 @@ export async function createCommit(
   if (!(await createDiffModal({ additions, deletions }))) {
     return false;
   }
-  let add = "";
-  let del = "";
-  if (additions?.length) {
-    add = "additions: [";
-    additions.forEach((item) => {
-      add += `{path: "${item.path}",contents: "${encodeB64(item.content)}"},`;
-    });
-    add += "],";
-  }
-  if (deletions?.length) {
-    del = "deletions: [";
-    deletions.forEach((item) => {
-      del += `{path: "${item.path}"},`;
-    });
-    del += "]";
-  }
   try {
-    const result = await post(`mutation {
-    createCommitOnBranch(
-      input: {
-        branch: {
-          branchName: "${__NB_GIT_BRANCH__}",
-          repositoryNameWithOwner: "${config.githubName}/${__NB_GITHUB_REPO__}"
-        },
-        message: {
-          headline: "[${formatTime()}]${commit}"
-        },
-        expectedHeadOid: "${correctSha}",
-        fileChanges: {
-          ${add}
-          ${del}
-        }
-      }
-    ) {
-      clientMutationId
-    }
-  }`);
-    const err = result.data.errors;
-    if (err) {
+    const result = await post<CreateCommitData>(CreateCommitMutation, {
+      input: buildCommitInput({
+        owner: config.githubName,
+        repo: __NB_GITHUB_REPO__,
+        branch: __NB_GIT_BRANCH__,
+        headline: `[${formatTime()}]${commit}`,
+        expectedHeadOid: correctSha,
+        additions,
+        deletions
+      }, encode)
+    });
+    const err = result.errors;
+    if (err?.length) {
       notify({
-        title: err[0].type,
+        title: err[0]!.type || "Error",
         type: "error",
-        description: err[0].message
+        description: err[0]!.message
       });
       return false;
     }
