@@ -50,6 +50,22 @@ export class ManageBasePage {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  /**
+   * Run `action`, then wait until the UI sends a new commit. A fixed wait was
+   * too short when building the commit took longer (encryption, a busy CI
+   * machine). Validation errors send no commit, so stop after `timeout` ms and
+   * let the test assert on what was (not) committed.
+   */
+  async waitForCommitAfter(action: () => Promise<unknown>, timeout = 3000) {
+    const previous = unref(this.requestDataRef);
+    await action();
+    for (let waited = 0; unref(this.requestDataRef) === previous && waited < timeout; waited += 50) {
+      await this.waitForTimeout(50);
+    }
+    // Let the page handle the response (notification, remount) as before.
+    await this.waitForTimeout();
+  }
+
   getByTestId(testId: string) {
     return this.page.getByTestId(testId);
   }
