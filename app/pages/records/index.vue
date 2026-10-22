@@ -9,7 +9,7 @@ import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
 
 const currentYear = useRouteQuery("year", s => s ? parseInt(s) : undefined);
 
-const recordList = await useListPage<RecordItem>();
+const { list: recordList, isShown } = await useListPage<RecordItem>();
 
 const years = computed(() => {
   const result: {
@@ -31,7 +31,7 @@ const years = computed(() => {
   return result.sort((a, b) => b.year - a.year);
 });
 
-const currentItems = computed(() => years.value.find(i => i.year === currentYear.value)?.items.filter(i => !!i._show));
+const currentItems = computed(() => years.value.find(i => i.year === currentYear.value)?.items.filter(i => isShown(i)));
 
 onMounted(() => {
   if (years.value.length && !currentYear.value) {
@@ -50,7 +50,7 @@ onMounted(() => {
         <div class="flex flex-wrap items-center justify-center gap-3">
           <NuxtLink
             v-for="year in years"
-            v-show="year.items.some(item => item._show)"
+            v-show="year.items.some(item => isShown(item))"
             :key="year.year"
             :class="twMerge($style.year, currentYear==year.year && $style.yearActive)"
             :to="`?year=${year.year}`"

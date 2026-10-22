@@ -18,9 +18,7 @@ export function createNewItem(url: HeaderTabUrl): CommonItem {
     time: 0,
     modifyTime: 0,
     showComments: false,
-    encrypt: false,
-    _show: true,
-    _visitors: 0
+    encrypt: false
   };
 
   if (url === "/articles") {

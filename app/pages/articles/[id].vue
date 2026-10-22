@@ -6,7 +6,7 @@ import { Comments, Visitors, WroteDate } from "~/utils/nuxt/public/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
-const { related: relativeArticles, item, menuItems, htmlContent, markdownRef, description } = await useContentPage<ArticleItem>(() => {
+const { related: relativeArticles, item, menuItems, htmlContent, markdownRef, description, visitors } = await useContentPage<ArticleItem>(() => {
   const hash = useRoute().hash;
   if (hash) {
     window.scrollTo({
@@ -101,7 +101,7 @@ initViewer(root);
           class="mb-6 flex flex-wrap items-center gap-4 border-b border-dark-300 pb-3 text-sm text-dark-500 dark:border-dark-600 dark:text-dark-400"
         >
           <WroteDate :item="item" />
-          <Visitors :visitors="item._visitors" />
+          <Visitors :visitors="visitors" />
           <div class="flex flex-wrap gap-2">
             <the-tag
               v-for="tag in item.tags"

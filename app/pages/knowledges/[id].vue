@@ -6,7 +6,7 @@ import { Visitors, Comments, WroteDate } from "~/utils/nuxt/public/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
-const { item, markdownRef, htmlContent, description } = await useContentPage<KnowledgeItem>();
+const { item, markdownRef, htmlContent, description, visitors } = await useContentPage<KnowledgeItem>();
 useCommonSEOTitle(() => item.title, undefined, description);
 
 const root = ref<HTMLElement>();
@@ -40,7 +40,7 @@ initViewer(root);
           </a>
           <div class="flex items-center space-x-4 text-sm text-dark-500 dark:text-dark-400">
             <WroteDate :item="item" />
-            <Visitors :visitors="item._visitors" />
+            <Visitors :visitors="visitors" />
           </div>
         </div>
 

@@ -10,7 +10,7 @@ import { useManageContent, deleteItem, editItem } from "~/utils/nuxt/manage/deta
 import { notify } from "~/utils/nuxt/notify";
 import { useStaging, type StagedItem } from "~/utils/hooks/useStaging";
 import { getProcessedUploadInfo } from "~/utils/nuxt/manage/item-processor";
-import { encryptDecryptItem } from "~/utils/common/process-encrypt-decrypt";
+import { decryptEncryptBlocks, encryptDecryptItem } from "~/utils/common/process-encrypt-decrypt";
 import { deepClone } from "~/utils/nuxt/utils";
 import { randomId } from "~/utils/nuxt/manage";
 
@@ -157,13 +157,8 @@ const overrideEditingItem = async (item: T, md: string) => {
   }
   editingItem.value = item;
 
-  if (item.encryptBlocks) {
-    let newMarkdownContent = md;
-    for (const block of item.encryptBlocks) {
-      const { start, end } = block;
-      newMarkdownContent = newMarkdownContent.slice(0, start) + await encryptor.decrypt(newMarkdownContent.slice(start, end)) + newMarkdownContent.slice(end);
-    }
-    editingMd.value = newMarkdownContent;
+  if (item.encryptBlocks?.length) {
+    editingMd.value = await decryptEncryptBlocks(md, encryptor.decrypt);
   } else if (!item.encrypt) {
     editingMd.value = md;
   }

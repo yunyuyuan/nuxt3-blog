@@ -2,7 +2,7 @@ import fs from "fs";
 import colors from "colors";
 import CryptoJS from "crypto-js";
 import type { CommonItem, DecryptFunction, HeaderTabUrl } from "../../app/utils/common/types";
-import { encryptDecryptItem, getEncryptedBlocks } from "../../app/utils/common/process-encrypt-decrypt";
+import { decryptEncryptBlocks, encryptDecryptItem, getEncryptedBlocks } from "../../app/utils/common/process-encrypt-decrypt";
 import { walkAllBlogData } from ".";
 
 export async function encrypt(s: string, pwd: string): Promise<string> {
@@ -42,11 +42,8 @@ export async function processBlogItem(
           // 解密markdown
           decryptedMd = await _decrypt(decryptedMd);
         } else if (item.encryptBlocks?.length) {
-          // 解密 encrypted blocks
-          for (const block of item.encryptBlocks) {
-            const { start, end } = block;
-            decryptedMd = decryptedMd.slice(0, start) + await _decrypt(decryptedMd.slice(start, end)) + decryptedMd.slice(end);
-          }
+          // 解密 encrypted blocks（位置从 [encrypt] 标记解析）
+          decryptedMd = await decryptEncryptBlocks(decryptedMd, _decrypt);
         }
         await processItem({ decryptedItem: item, decryptedMd, type, mdPath: item._mdPath });
         count += 1;

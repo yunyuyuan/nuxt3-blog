@@ -26,16 +26,16 @@ export const useBlogItem = async <T extends CommonItem>(id: string, url: HeaderT
           successDecrypt.value = true;
         }
       );
-    } else if (item.encryptBlocks) {
-      const blocks = item.encryptBlocks;
+    } else if (item.encryptBlocks?.length) {
+      // encryptBlocks 只表示“有加密块”，位置从正文的 [encrypt] 标记解析
       watch(githubToken, async (logined) => {
         // 已登录：加密块显示为占位；未登录：直接隐藏
         decryptedMd.value = logined
-          ? showEncryptBlocksPlaceholder(originMd, blocks, translate("encrypted-content"))
-          : hideEncryptBlocks(originMd, blocks);
+          ? showEncryptBlocksPlaceholder(originMd, translate("encrypted-content"))
+          : hideEncryptBlocks(originMd);
 
         await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
-          decryptedMd.value = await decryptEncryptBlocks(originMd, blocks, decrypt);
+          decryptedMd.value = await decryptEncryptBlocks(originMd, decrypt);
           successDecrypt.value = true;
         });
       }, { immediate: true });

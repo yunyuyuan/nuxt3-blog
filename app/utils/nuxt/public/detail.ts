@@ -51,15 +51,15 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
         await encryptDecryptItem(item, decrypt, targetTab);
         shownMd.value = await decrypt(originMd);
       });
-    } else if (item.encryptBlocks) {
-      const blocks = item.encryptBlocks;
+    } else if (item.encryptBlocks?.length) {
+      // encryptBlocks 只表示“有加密块”，位置从正文的 [encrypt] 标记解析
       watch(githubToken, async (logined) => {
         // 已登录：加密块显示为占位；未登录：直接隐藏
         shownMd.value = logined
-          ? showEncryptBlocksPlaceholder(originMd, blocks, translate("encrypted-content"))
-          : hideEncryptBlocks(originMd, blocks);
+          ? showEncryptBlocksPlaceholder(originMd, translate("encrypted-content"))
+          : hideEncryptBlocks(originMd);
         await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
-          shownMd.value = await decryptEncryptBlocks(originMd, blocks, decrypt);
+          shownMd.value = await decryptEncryptBlocks(originMd, decrypt);
         });
       }, { immediate: true });
     }
@@ -84,6 +84,7 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
     }
   });
 
+  const visitors = ref<number>();
   watchUntil(isAuthor, () => {
     DBOperate({
       apiPath: "/db/inc-visitors",
@@ -93,7 +94,7 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
         inc: config.database.visitFromOwner || !githubToken.value
       },
       callback: (data) => {
-        item._visitors = data;
+        visitors.value = data;
       }
     });
   }, { immediate: true }, isAuthor => isAuthor !== null, "cancelAfterUntil");
@@ -107,6 +108,7 @@ export async function useContentPage<T extends CommonItem> (onAfterInsertHtml?: 
     htmlContent,
     menuItems,
     markdownRef,
-    description
+    description,
+    visitors
   };
 }

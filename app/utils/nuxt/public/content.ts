@@ -25,7 +25,7 @@ export function visibleMarkdown(item: CommonItem, md: string) {
   if (item.encrypt) {
     return md;
   }
-  return item.encryptBlocks ? hideEncryptBlocks(md, item.encryptBlocks) : md;
+  return item.encryptBlocks?.length ? hideEncryptBlocks(md) : md;
 }
 
 function relatedItems<T extends CommonItem>(list: T[], item: T) {
