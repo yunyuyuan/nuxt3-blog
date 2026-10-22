@@ -17,6 +17,7 @@
     "test:prod-and-e2e": "start-server-and-test prod-for-test http://localhost:13000 test:e2e",
     "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e",
     "eslint": "eslint --fix .",
+    "typecheck": "nuxi typecheck",
     "preview": "nuxt preview",
     "prepare": "husky"
   },
@@ -72,7 +73,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "vue-tsc": "^3.3.13"
   },
   "husky": {
     "hooks": {

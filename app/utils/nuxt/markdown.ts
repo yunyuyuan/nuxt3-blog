@@ -51,7 +51,7 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false, signal
         themes: { light: SHIKI_LIGHT_THEME, dark: SHIKI_DARK_THEME }
       });
       const match = html.match(/<code>([\s\S]*)<\/code>/);
-      if (match) {
+      if (match?.[1] !== undefined) {
         el.innerHTML = match[1];
         pre.dataset.shiki = "true";
       }
@@ -71,7 +71,7 @@ export async function afterInsertHtml(mdEl: HTMLElement, forEdit = false, signal
   // mermaid
   const mermaidBlocks = mdEl.querySelectorAll<HTMLPreElement>("pre.mermaid-block");
   if (mermaidBlocks.length) {
-    const originalContent = Array.from(mermaidBlocks).map(pre => pre.textContent.trim());
+    const originalContent = Array.from(mermaidBlocks).map(pre => (pre.textContent ?? "").trim());
     const mermaid = (await import("mermaid")).default;
     if (signal?.aborted) return destroyFns;
 

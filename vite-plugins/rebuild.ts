@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import type { Plugin } from "vite";
-import type { CommitParams, CommitParamsAddition, CommitParamsDeletion } from "../utils/common/types";
+import type { CommitParams, CommitParamsAddition, CommitParamsDeletion } from "../app/utils/common/types";
 import { rebuildEvent } from "./types";
 
 function writeFile(file: CommitParamsAddition): void {

@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { algoliasearch, type Action } from "algoliasearch";
+import { algoliasearch, type Action, type BatchRequest } from "algoliasearch";
 import config from "../config";
 import type { AlgoliaBody, ArticleItem, KnowledgeItem, RecordItem } from "../app/utils/common/types";
 import { parseMarkdown } from "../app/utils/common/markdown";
@@ -110,7 +110,8 @@ export async function uploadAlgoliaIndex() {
       attributesToRetrieve: ["objectID"]
     } });
     exists.push(...hits.map(hit => hit.objectID));
-    if (page >= nbPages) {
+    // page 从 0 开始，nbPages 是总页数
+    if (page + 1 >= (nbPages ?? 0)) {
       break;
     }
     page++;
@@ -121,14 +122,14 @@ export async function uploadAlgoliaIndex() {
   const deletes = exists.filter(objectID => !allObjectIDs.includes(objectID));
 
   // 合并所有操作请求
-  const allRequests = [
+  const allRequests: BatchRequest[] = [
     ...adds.map(objectID => ({
       action: "addObject" as Action,
-      body: dataMap[objectID]
+      body: dataMap[objectID]!
     })),
     ...updates.map(objectID => ({
       action: "updateObject" as Action,
-      body: dataMap[objectID]
+      body: dataMap[objectID]!
     })),
     ...deletes.map(objectID => ({
       action: "deleteObject" as Action,
@@ -138,20 +139,20 @@ export async function uploadAlgoliaIndex() {
 
   // 每100条数据调用一个batch
   const batchSize = 100;
-  const batches = [];
+  const batches: BatchRequest[][] = [];
   for (let i = 0; i < allRequests.length; i += batchSize) {
     batches.push(allRequests.slice(i, i + batchSize));
   }
 
   // 执行所有批次
-  for (let i = 0; i < batches.length; i++) {
+  for (const [i, batch] of batches.entries()) {
     await client.batch({
       indexName,
       batchWriteParams: {
-        requests: batches[i]
+        requests: batch
       }
     });
-    nbLog(`Algolia batch ${i + 1}/${batches.length} uploaded (${batches[i].length} items)`);
+    nbLog(`Algolia batch ${i + 1}/${batches.length} uploaded (${batch.length} items)`);
   }
 
   nbLog(`Algolia index upload completed: ${adds.length} adds, ${updates.length} updates, ${deletes.length} deletes`);
