@@ -6,7 +6,7 @@ import { Comments, Visitors, WroteDate } from "~/utils/nuxt/public/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
-const { originList, item, menuItems, htmlContent, markdownRef, description } = await useContentPage<ArticleItem>(() => {
+const { related: relativeArticles, item, menuItems, htmlContent, markdownRef, description } = await useContentPage<ArticleItem>(() => {
   const hash = useRoute().hash;
   if (hash) {
     window.scrollTo({
@@ -16,11 +16,6 @@ const { originList, item, menuItems, htmlContent, markdownRef, description } = a
     });
   }
 });
-const relativeArticles = originList.filter(i => i.id !== item.id)
-  .map<{ count: number; item: ArticleItem }>(i => ({ item: i, count: i.tags.filter(t => item.tags.includes(t)).length }))
-  .filter(i => i && i.count > 0)
-  .sort((a, b) => b.count - a.count)
-  .slice(0, 5);
 
 useCommonSEOTitle(() => item.title, () => item.tags, description);
 const activeAnchor = ref<string>();

@@ -1,3 +1,4 @@
+import { decryptEncryptBlocks, hideEncryptBlocks, showEncryptBlocksPlaceholder } from "../common/process-encrypt-decrypt";
 import type { CommonItem, HeaderTabUrl } from "../common/types";
 import { fetchMd } from "../nuxt/fetch";
 import { translate } from "../nuxt/i18n";
@@ -26,25 +27,15 @@ export const useBlogItem = async <T extends CommonItem>(id: string, url: HeaderT
         }
       );
     } else if (item.encryptBlocks) {
+      const blocks = item.encryptBlocks;
       watch(githubToken, async (logined) => {
-        let newMarkdownContent = originMd;
-        for (const block of item.encryptBlocks!) {
-          const { start, end } = block;
-          newMarkdownContent = logined
-          // 如果已登录：给block显示为sticker表情
-            ? newMarkdownContent.slice(0, start) + translate("encrypted-content") + "![sticker](aru/59)" + newMarkdownContent.slice(end)
-          // 如果未登录：直接隐藏block
-            : newMarkdownContent.slice(0, start - 10) + newMarkdownContent.slice(end + 11);
-        }
-        decryptedMd.value = newMarkdownContent;
+        // 已登录：加密块显示为占位；未登录：直接隐藏
+        decryptedMd.value = logined
+          ? showEncryptBlocksPlaceholder(originMd, blocks, translate("encrypted-content"))
+          : hideEncryptBlocks(originMd, blocks);
 
         await encryptor.decryptOrWatchToDecrypt(async (decrypt) => {
-          let newMarkdownContent = originMd;
-          for (const block of item.encryptBlocks!) {
-            const { start, end } = block;
-            newMarkdownContent = newMarkdownContent.slice(0, start) + await decrypt(newMarkdownContent.slice(start, end)) + newMarkdownContent.slice(end);
-          }
-          decryptedMd.value = newMarkdownContent;
+          decryptedMd.value = await decryptEncryptBlocks(originMd, blocks, decrypt);
           successDecrypt.value = true;
         });
       }, { immediate: true });

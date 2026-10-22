@@ -1,5 +1,6 @@
 import { type CommonItem } from "~/utils/common/types";
-import { useBlogList } from "~/utils/hooks/useBlogList";
+import { decryptListWith } from "~/utils/hooks/useBlogList";
+import { fetchList } from "~/utils/nuxt/fetch";
 import { DBOperate } from ".";
 import { translate } from "../i18n";
 import { getCurrentTab, useCommonSEOTitle } from "../utils";
@@ -14,7 +15,9 @@ export async function useListPage<T extends CommonItem> () {
 
   useCommonSEOTitle(computed(() => translate(targetTab)));
 
-  const { decryptedList } = await useBlogList<T>(targetTab);
+  // 列表进入 payload：水合时不再请求 json
+  const { data } = await useAsyncData(`list:${targetTab}`, () => fetchList<T>(targetTab));
+  const { decryptedList } = await decryptListWith(encryptor, data.value ?? [], targetTab);
 
   DBOperate<any[]>({
     apiPath: "/db/get-visitors",

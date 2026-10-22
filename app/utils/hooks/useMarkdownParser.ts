@@ -6,6 +6,16 @@ type useMarkdownParserProps = {
   fromEdit?: boolean;
   onAfterInsertHtml?: CallableFunction;
   destroyFns?: CallableFunction[];
+  /**
+   * 构建期渲染的结果。md 是这份 HTML 对应的原文：mdValueRef 与它相同时直接复用，不再解析。
+   * 不同时调用 whenReady 安排重新解析（详情页用它等水合结束）。
+   */
+  initial?: {
+    html: string;
+    menu: Awaited<ReturnType<typeof parseMarkdown>>["menu"];
+    md: string;
+    whenReady: (_: () => void) => void;
+  };
 };
 
 const waitUntilConnected = (element: HTMLElement, signal: AbortSignal) => {
@@ -31,7 +41,7 @@ const waitUntilConnected = (element: HTMLElement, signal: AbortSignal) => {
   });
 };
 
-export const useMarkdownParser = async ({ mdValueRef, fromEdit, onAfterInsertHtml, destroyFns }: useMarkdownParserProps) => {
+export const useMarkdownParser = async ({ mdValueRef, fromEdit, onAfterInsertHtml, destroyFns, initial }: useMarkdownParserProps) => {
   const markdownRef = ref<HTMLElement>();
 
   const htmlContent = ref("");
@@ -51,7 +61,16 @@ export const useMarkdownParser = async ({ mdValueRef, fromEdit, onAfterInsertHtm
     await parse(md);
   });
 
-  await parse(mdValueRef.value);
+  if (initial) {
+    // 复用构建期 HTML：代码块和公式已经处理过，浏览器不用再加载 shiki 和 KaTeX
+    htmlContent.value = initial.html;
+    menuItems.value = initial.menu;
+    if (mdValueRef.value !== initial.md) {
+      initial.whenReady(() => void parse(mdValueRef.value));
+    }
+  } else {
+    await parse(mdValueRef.value);
+  }
 
   let disposed = false;
   let enhanceVersion = 0;

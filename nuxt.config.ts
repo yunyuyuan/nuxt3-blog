@@ -168,9 +168,6 @@ export default defineNuxtConfig({
     inlineStyles: false
   },
 
-  experimental: {
-    payloadExtraction: false
-  },
   compatibilityDate: "2025-02-15",
 
   nitro: {
