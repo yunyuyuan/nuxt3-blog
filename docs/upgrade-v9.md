@@ -39,7 +39,7 @@ encrypt: false
 
 ```bash
 git clone https://github.com/<你的账户>/<你的仓库>.git && cd <你的仓库>
-git remote add upstream https://github.com/yunyuyuan/nuxt3-blog.git
+git remote add upstream https://github.com/yunyuyuan/nuxt-blog.git
 git fetch upstream
 git merge upstream/master
 pnpm install
@@ -68,7 +68,7 @@ git push
 如果你没有修改过框架代码，可以改用 starter 模板。以后升级时只需要修改 `@yunyuyuan/nuxt-blog` 的版本号，不需要同步上游。
 
 1. 按上面的步骤完成迁移。
-2. 创建新站点：`npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog`。
+2. 创建新站点：`npx giget@latest "gh:yunyuyuan/nuxt-blog/starter#master" my-blog`。
 3. 把旧仓库中的 `config.ts`、`public/rebuild/` 和你自己的静态文件（例如 `public/favicon.png`）复制到新站点中。`public/rebuild/json/` 不需要复制。
 4. 把 `config.ts` 中的 `githubRepo` 改为新仓库的名字。后台通过它向仓库提交内容。
 5. 推送到新仓库，在部署平台上导入新仓库，并复制原来的环境变量。
@@ -93,7 +93,7 @@ Do the sync and the migration on your computer, then push once. Your platform th
 
 ```bash
 git clone https://github.com/<your-account>/<your-repo>.git && cd <your-repo>
-git remote add upstream https://github.com/yunyuyuan/nuxt3-blog.git
+git remote add upstream https://github.com/yunyuyuan/nuxt-blog.git
 git fetch upstream
 git merge upstream/master
 pnpm install
@@ -122,7 +122,7 @@ If you already clicked "Sync fork" on GitHub, the deployment fails and the build
 If you did not change the framework code, you can switch to the starter template. You then upgrade by changing the version of `@yunyuyuan/nuxt-blog`, without syncing with upstream.
 
 1. Do the migration with the steps above.
-2. Create a new site: `npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog`.
+2. Create a new site: `npx giget@latest "gh:yunyuyuan/nuxt-blog/starter#master" my-blog`.
 3. Copy `config.ts`, `public/rebuild/` and your own static files (for example `public/favicon.png`) from the old repository to the new site. Do not copy `public/rebuild/json/`.
 4. Change `githubRepo` in `config.ts` to the name of the new repository. The admin pages commit to this repository.
 5. Push to the new repository, import it on your platform, and copy your environment variables.

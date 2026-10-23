@@ -182,7 +182,7 @@ onUnmounted(() => {
         v-if="!r2Enabled"
         class="text-sm text-red-500 underline"
         target="_blank"
-        href="https://github.com/yunyuyuan/nuxt3-blog/wiki/2.2-%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87"
+        href="https://github.com/yunyuyuan/nuxt-blog/wiki/2.2-%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87"
       ><Info class="inline-block size-4" /></a>
       <template v-else>
         <a

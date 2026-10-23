@@ -13,7 +13,7 @@ jobs:
   check:
     # Forks deploy from their own branches and commit content from /manage;
     # only run the full check in the upstream repository.
-    if: ${{ github.repository == 'yunyuyuan/nuxt3-blog' }}
+    if: ${{ github.repository == 'yunyuyuan/nuxt-blog' }}
     # Pinned: ubuntu-latest is migrating to 26.04, which Playwright 1.54 does not support.
     runs-on: ubuntu-24.04
     steps:
@@ -51,7 +51,7 @@ jobs:
     # instead of the workspace, and no lockfile, so it also gets the latest
     # compatible Nuxt. The copy is outside this repository, so pnpm does not use
     # the workspace of this repository.
-    if: ${{ github.repository == 'yunyuyuan/nuxt3-blog' }}
+    if: ${{ github.repository == 'yunyuyuan/nuxt-blog' }}
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -104,7 +104,7 @@ jobs:
           for _ in $(seq 1 60); do curl -sf -o /dev/null http://localhost:3000/ && break; sleep 2; done
           node "$GITHUB_WORKSPACE/.github/scripts/check-optimized-deps.mjs" || { cat "$RUNNER_TEMP/dev.log"; exit 1; }
   e2e:
-    if: ${{ github.repository == 'yunyuyuan/nuxt3-blog' }}
+    if: ${{ github.repository == 'yunyuyuan/nuxt-blog' }}
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout

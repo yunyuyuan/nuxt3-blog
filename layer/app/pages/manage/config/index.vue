@@ -47,14 +47,14 @@ const generatedConfig = computed(() => `export default {
   SEO_keywords: ${str(form.SEO_keywords)}, // keywords meta header
   MSClarityId: ${str(form.MSClarityId)}, // Microsoft的Clarity统计，https://clarity.microsoft.com/
   CloudflareAnalyze: ${str(form.CloudflareAnalyze)}, // cloudflare的统计，https://developers.cloudflare.com/analytics/web-analytics
-  CommentRepoId: ${str(form.CommentRepoId)}, // 评论系统，参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.3-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F
+  CommentRepoId: ${str(form.CommentRepoId)}, // 评论系统，参考 https://github.com/yunyuyuan/nuxt-blog/wiki/2.3-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F
   CommentDiscussionCategoryId: ${str(form.CommentDiscussionCategoryId)}, // 评论系统
 
-  database: { // 参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.4-%E6%B5%8F%E8%A7%88%E9%87%8F%E7%BB%9F%E8%AE%A1
+  database: { // 参考 https://github.com/yunyuyuan/nuxt-blog/wiki/2.4-%E6%B5%8F%E8%A7%88%E9%87%8F%E7%BB%9F%E8%AE%A1
     initialVisitors: ${Number(form.database.initialVisitors) || 0}, // 如果设置成10000，那么发一篇文章立马就有10000个浏览量！
     visitFromOwner: ${form.database.visitFromOwner} // 网站拥有者访问时，是否增加浏览量
   },
-  algoliaSearch: { // 参考 https://github.com/yunyuyuan/nuxt3-blog/wiki/2.5-%E5%85%A8%E7%AB%99%E6%90%9C%E7%B4%A2
+  algoliaSearch: { // 参考 https://github.com/yunyuyuan/nuxt-blog/wiki/2.5-%E5%85%A8%E7%AB%99%E6%90%9C%E7%B4%A2
     appId: ${str(form.algoliaSearch.appId)},
     searchKey: ${str(form.algoliaSearch.searchKey)},
     indexName: ${str(form.algoliaSearch.indexName)}
@@ -154,7 +154,7 @@ const textSections: TextSection[] = [
     key: "comment",
     title: "config-section-comment",
     icon: MessageCircleMore,
-    link: "https://github.com/yunyuyuan/nuxt3-blog/wiki/2.3-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F",
+    link: "https://github.com/yunyuyuan/nuxt-blog/wiki/2.3-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F",
     fields: [
       { key: "CommentRepoId", label: "config-comment-repo-id", model: toRef(form, "CommentRepoId") },
       { key: "CommentDiscussionCategoryId", label: "config-comment-category-id", model: toRef(form, "CommentDiscussionCategoryId") }
@@ -164,7 +164,7 @@ const textSections: TextSection[] = [
     key: "search",
     title: "config-section-search",
     icon: Search,
-    link: "https://github.com/yunyuyuan/nuxt3-blog/wiki/2.5-%E5%85%A8%E7%AB%99%E6%90%9C%E7%B4%A2",
+    link: "https://github.com/yunyuyuan/nuxt-blog/wiki/2.5-%E5%85%A8%E7%AB%99%E6%90%9C%E7%B4%A2",
     fields: [
       { key: "algoliaAppId", label: "config-algolia-app-id", model: toRef(form.algoliaSearch, "appId") },
       { key: "algoliaSearchKey", label: "config-algolia-search-key", model: toRef(form.algoliaSearch, "searchKey") },
@@ -270,7 +270,7 @@ const textSections: TextSection[] = [
           <Eye class="size-5 opacity-70" />
           {{ $t('config-section-visitors') }}
           <a
-            href="https://github.com/yunyuyuan/nuxt3-blog/wiki/2.4-%E6%B5%8F%E8%A7%88%E9%87%8F%E7%BB%9F%E8%AE%A1"
+            href="https://github.com/yunyuyuan/nuxt-blog/wiki/2.4-%E6%B5%8F%E8%A7%88%E9%87%8F%E7%BB%9F%E8%AE%A1"
             target="_blank"
             class="ml-auto flex items-center gap-1 text-xs font-normal text-primary-600 hover:underline dark:text-primary-400"
           >

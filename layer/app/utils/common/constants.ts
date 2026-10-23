@@ -5,4 +5,4 @@ export const I18nStoreKey = "nb-lang";
 export const GithubTokenKey = "nb-github-token";
 export const ThemeModeKey = "nb-theme-mode";
 export const IgnoredVersionKey = "nb-ignored-version";
-export const OfficialRepo = "yunyuyuan/nuxt3-blog";
+export const OfficialRepo = "yunyuyuan/nuxt-blog";

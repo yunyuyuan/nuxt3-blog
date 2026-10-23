@@ -21,7 +21,7 @@ import { fileURLToPath } from "node:url";
 const PACKAGE = "@yunyuyuan/nuxt-blog";
 // pnpm pack 生成的文件名：scoped 包名去掉 "@"，"/" 换成 "-"
 const TARBALL_PREFIX = PACKAGE.replace(/^@/, "").replace("/", "-");
-const REPO = "yunyuyuan/nuxt3-blog";
+const REPO = "yunyuyuan/nuxt-blog";
 const BRANCH = "master";
 // 固定为官方 registry。本地如果配置了镜像（例如 npmmirror），发布到镜像会失败
 const REGISTRY = "https://registry.npmjs.org/";

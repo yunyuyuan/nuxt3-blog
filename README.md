@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">💎Nuxt3-Blog</h1>
 
-[![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v4-%2300DC82?logo=nuxt.js) [![](https://img.shields.io/npm/v/@yunyuyuan/nuxt-blog?logo=npm)](https://www.npmjs.com/package/@yunyuyuan/nuxt-blog)
+[![](https://img.shields.io/github/license/yunyuyuan/nuxt-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v4-%2300DC82?logo=nuxt.js) [![](https://img.shields.io/npm/v/@yunyuyuan/nuxt-blog?logo=npm)](https://www.npmjs.com/package/@yunyuyuan/nuxt-blog)
 
 [English Readme](/README.en.md) | 中文说明
 
@@ -31,7 +31,7 @@
 
 # 教我搭建
 
-## 详细搭建教程请参考 [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki)
+## 详细搭建教程请参考 [wiki](https://github.com/yunyuyuan/nuxt-blog/wiki)
 
 有两种搭建方式：
 
@@ -43,7 +43,7 @@
 **starter 模板**：框架以 npm 包 `@yunyuyuan/nuxt-blog` 的形式安装，站点仓库中只有 `config.ts`、内容和部署配置。详见 [starter/README.md](/starter/README.md)。
 
 ```bash
-npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
+npx giget@latest "gh:yunyuyuan/nuxt-blog/starter#master" my-blog
 ```
 
 **fork**：框架代码在 `layer/` 目录中，站点的文件在根目录中。如果只修改根目录的文件，同步上游时的冲突会少很多。

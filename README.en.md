@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">💎Nuxt3-Blog</h1>
 
-[![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v4-%2300DC82?logo=nuxt.js) [![](https://img.shields.io/npm/v/@yunyuyuan/nuxt-blog?logo=npm)](https://www.npmjs.com/package/@yunyuyuan/nuxt-blog)
+[![](https://img.shields.io/github/license/yunyuyuan/nuxt-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v4-%2300DC82?logo=nuxt.js) [![](https://img.shields.io/npm/v/@yunyuyuan/nuxt-blog?logo=npm)](https://www.npmjs.com/package/@yunyuyuan/nuxt-blog)
 
 English Readme | [中文说明](/README.md)
 
@@ -31,7 +31,7 @@ English Readme | [中文说明](/README.md)
 
 # Setup Guide
 
-## For detailed setup tutorial, please refer to the [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki)
+## For detailed setup tutorial, please refer to the [wiki](https://github.com/yunyuyuan/nuxt-blog/wiki)
 
 There are two ways to set up a blog:
 
@@ -43,7 +43,7 @@ There are two ways to set up a blog:
 **Starter template**: the framework is installed as the npm package `@yunyuyuan/nuxt-blog`. Your repository contains only `config.ts`, your content and the deployment configuration. See [starter/README.md](/starter/README.md).
 
 ```bash
-npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
+npx giget@latest "gh:yunyuyuan/nuxt-blog/starter#master" my-blog
 ```
 
 **Fork**: the framework code is in `layer/`, and the files of the site are in the root directory. If you change only the files in the root directory, syncing with upstream causes far fewer conflicts.
