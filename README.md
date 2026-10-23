@@ -120,7 +120,7 @@ npx giget@latest "gh:yunyuyuan/nuxt-blog/starter#master" my-blog
   "local:download-file": "gulp download-file", // 读取file-map.json，下载所有图片到files/
   "local:substitute-file": "gulp substitute-file", // 读取file-map.json，替换为新的图片（运行此脚本前，请先修改file-map.json里的newUrl为需要替换的url）
   "local:upload-algolia": "gulp upload-algolia", // 上传所有索引到algolia
-  "local:migrate-content": "gulp migrate-content", // 把旧格式的内容（JSON索引 + md）转换为frontmatter格式，见docs/upgrade-v9.md
+  "local:migrate-content": "gulp migrate-content", // 把旧格式的内容（JSON索引 + md）转换为frontmatter格式
   "release": "node scripts/release.mjs", // 维护者发布npm包，见docs/release.md
   "test:unit": "vitest run --exclude ./e2e", // unit测试
   "test:e2e": "vitest run --dir ./e2e", // e2e测试
@@ -133,9 +133,9 @@ npx giget@latest "gh:yunyuyuan/nuxt-blog/starter#master" my-blog
 }
 ```
 
-# 从 v8 升级到 v9
+# 旧版本
 
-v9 有两项不兼容的改动：框架代码移到了 `layer/` 目录；内容改为每个条目一个 md 文件，元数据写在 frontmatter 中。**升级前请先阅读 [docs/upgrade-v9.md](/docs/upgrade-v9.md)**，否则同步上游后构建会失败。
+v8 及更早的版本不再支持，也不提供升级步骤。
 
 # 更新日志
 

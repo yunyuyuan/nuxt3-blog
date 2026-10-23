@@ -120,7 +120,7 @@ Blog principle example:
   "local:download-file": "gulp download-file", // Read file-map.json, download all files to files/
   "local:substitute-file": "gulp substitute-file", // Read file-map.json, replace with new files (before running this script, modify newUrl in file-map.json to the URL to be replaced)
   "local:upload-algolia": "gulp upload-algolia", // Upload index data to Algolia
-  "local:migrate-content": "gulp migrate-content", // Convert content in the old format (JSON index + md) to the frontmatter format, see docs/upgrade-v9.md
+  "local:migrate-content": "gulp migrate-content", // Convert content in the old format (JSON index + md) to the frontmatter format
   "release": "node scripts/release.mjs", // Publish the npm package (maintainers), see docs/release.md
   "test:unit": "vitest run --exclude ./e2e", // Unit testing
   "test:e2e": "vitest run --dir ./e2e", // E2E testing
@@ -133,9 +133,9 @@ Blog principle example:
 }
 ```
 
-# Upgrade from v8 to v9
+# Old versions
 
-v9 has two breaking changes: the framework code moved to `layer/`, and the content is now one md file for each item, with the metadata in frontmatter. **Read [docs/upgrade-v9.md](/docs/upgrade-v9.md) before you upgrade.** If you sync with upstream without these steps, the build fails.
+v8 and earlier versions are no longer supported, and there are no upgrade steps from them.
 
 # Changelog
 
