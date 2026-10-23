@@ -97,6 +97,7 @@ Blog principle example:
   - `/vite-plugins` In development mode, writes commits from the admin pages to the local files
   - `/public/sticker` All emoji images
 - `/starter` Template for new sites, depends on the npm package `nuxt3-blog`
+- `/scripts/release.mjs` Release script for the maintainer (`pnpm release`), see [docs/release.md](./docs/release.md)
 - `/config.ts` Blog configuration, must be modified
 - `/public`
   - `/rebuild` All blog data. `articles/`, `records/` and `knowledges/` contain one md file for each item, with the metadata in YAML frontmatter at the start of the file. The build generates the indexes in `json/`; they are not committed

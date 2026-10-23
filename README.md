@@ -97,6 +97,7 @@ npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
   - `/vite-plugins` 开发模式下，把后台的提交写入本地文件
   - `/public/sticker` 所有表情图片
 - `/starter` 新站点的模板，依赖 npm 包 `nuxt3-blog`
+- `/scripts/release.mjs` 维护者的发版脚本（`pnpm release`），见 [docs/release.md](./docs/release.md)
 - `/config.ts` 博客配置，必须修改
 - `/public`
   - `/rebuild` 所有博客数据。`articles/`、`records/`、`knowledges/` 中每个条目一个 md 文件，元数据写在文件开头的 YAML frontmatter 中。`json/` 中的索引在构建时生成，不提交到仓库
