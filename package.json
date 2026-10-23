@@ -25,7 +25,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "nuxt3-blog": "workspace:*"
+    "@yunyuyuan/nuxt-blog": "workspace:*"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",

@@ -47,7 +47,7 @@ jobs:
       - name: Check static output
         run: test -f .output/public/404.html
   starter:
-    # Installs the starter like a new user does: nuxt3-blog from a packed tarball
+    # Installs the starter like a new user does: @yunyuyuan/nuxt-blog from a packed tarball
     # instead of the workspace, and no lockfile, so it also gets the latest
     # compatible Nuxt. The copy is outside this repository, so pnpm does not use
     # the workspace of this repository.
@@ -72,7 +72,7 @@ jobs:
           echo "STARTER_DIR=$STARTER_DIR" >> "$GITHUB_ENV"
           cp -r starter "$STARTER_DIR"
           cd "$STARTER_DIR"
-          npm pkg set "dependencies.nuxt3-blog=file:$(ls "$RUNNER_TEMP"/nuxt3-blog-*.tgz)"
+          npm pkg set "dependencies.@yunyuyuan/nuxt-blog=file:$(ls "$RUNNER_TEMP"/yunyuyuan-nuxt-blog-*.tgz)"
       - name: Install dependencies
         working-directory: ${{ env.STARTER_DIR }}
         run: pnpm install --no-frozen-lockfile

@@ -1,9 +1,9 @@
 ## [v9] 2026.10.23
 * **Breaking**: read [docs/upgrade-v9.md](/docs/upgrade-v9.md) before you upgrade. If you sync your fork without these steps, the build fails.
-* The framework code moved to `layer/` and is published as the npm package `nuxt3-blog` (a Nuxt layer). The root directory is still a complete site.
+* The framework code moved to `layer/` and is published as the npm package `@yunyuyuan/nuxt-blog` (a Nuxt layer). The root directory is still a complete site.
 * New `starter/` template: a site that depends on the npm package and contains only `config.ts`, the content and the deployment configuration.
 * Content format: one md file for each item, with the metadata in YAML frontmatter. The build generates the JSON indexes in `public/rebuild/json/`; they are no longer committed. Convert existing content with `pnpm local:migrate-content`.
-* The upgrade message in the admin pages shows the steps for your installation: update the `nuxt3-blog` dependency, or sync your fork.
+* The upgrade message in the admin pages shows the steps for your installation: update the `@yunyuyuan/nuxt-blog` dependency, or sync your fork.
 ## [v8] 2026.06.07
 * Upgrade Nuxt.
 * Added some e2e test cases.

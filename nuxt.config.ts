@@ -1,7 +1,7 @@
-// 博客站点。框架代码在 nuxt3-blog（本仓库的 layer/ 目录，也以 npm 包发布）中；
+// 博客站点。框架代码在 @yunyuyuan/nuxt-blog（本仓库的 layer/ 目录，也以 npm 包发布）中；
 // 本目录只放站点自己的文件：config.ts、public/rebuild/ 中的内容、图标等静态资源。
 export default defineNuxtConfig({
-  extends: ["nuxt3-blog"],
+  extends: ["@yunyuyuan/nuxt-blog"],
 
   // 开发和测试工具，只用于本仓库
   modules: [

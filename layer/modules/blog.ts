@@ -79,7 +79,7 @@ function readCurrentVersion() {
 
 /**
  * layer 是否从 npm 安装：真实路径在 node_modules 中。后台据此显示升级步骤
- * （npm：修改依赖的版本号；fork：同步上游）。本仓库根目录的 node_modules/nuxt3-blog
+ * （npm：修改依赖的版本号；fork：同步上游）。本仓库根目录的 node_modules/@yunyuyuan/nuxt-blog
  * 是指向 layer/ 的符号链接，所以要先取真实路径。
  */
 function isLayerFromNpm() {

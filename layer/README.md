@@ -1,4 +1,4 @@
-# nuxt3-blog
+# @yunyuyuan/nuxt-blog
 
 A blog framework as a [Nuxt layer](https://nuxt.com/docs/getting-started/layers): articles, records and knowledge items, an admin UI that commits to GitHub, encryption, comments, visitor counts, search, RSS and sitemap.
 
@@ -17,7 +17,7 @@ pnpm dev
 
 The starter contains the files of your site only:
 
-- `nuxt.config.ts` with `extends: ["nuxt3-blog"]`
+- `nuxt.config.ts` with `extends: ["@yunyuyuan/nuxt-blog"]`
 - `config.ts`, the site configuration
 - `public/rebuild/{articles,records,knowledges}/<id>.md`, the content: one file for each item, with the metadata in YAML frontmatter
 - `gulpfile.js`, which loads the local scripts (`pnpm local:*`) of this package
@@ -37,7 +37,7 @@ Put Vite options for the server build in `vite.$server`, not in `vite`. For exam
 Major versions can change the content format or the configuration. Read the [CHANGELOG](https://github.com/yunyuyuan/nuxt3-blog/blob/master/CHANGELOG.md), then:
 
 ```bash
-pnpm add nuxt3-blog@^<new major version>
+pnpm add @yunyuyuan/nuxt-blog@^<new major version>
 ```
 
 ## License

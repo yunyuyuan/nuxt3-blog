@@ -37,10 +37,10 @@
 
 | 方式 | 适合 | 升级方法 |
 | --- | --- | --- |
-| starter 模板（推荐新用户使用） | 只修改配置和内容，不改框架代码 | `pnpm add nuxt3-blog@^<主版本号>` |
+| starter 模板（推荐新用户使用） | 只修改配置和内容，不改框架代码 | `pnpm add @yunyuyuan/nuxt-blog@^<主版本号>` |
 | fork 本仓库 | 需要修改框架代码 | 在 GitHub 上点击 "Sync fork" |
 
-**starter 模板**：框架以 npm 包 `nuxt3-blog` 的形式安装，站点仓库中只有 `config.ts`、内容和部署配置。详见 [starter/README.md](/starter/README.md)。
+**starter 模板**：框架以 npm 包 `@yunyuyuan/nuxt-blog` 的形式安装，站点仓库中只有 `config.ts`、内容和部署配置。详见 [starter/README.md](/starter/README.md)。
 
 ```bash
 npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
@@ -88,7 +88,7 @@ npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
 
 # 项目结构
 
-- `/layer` 框架代码，以 npm 包 `nuxt3-blog` 发布
+- `/layer` 框架代码，以 npm 包 `@yunyuyuan/nuxt-blog` 发布
   - `/app` Nuxt 应用：页面、组件、composables、插件和工具函数
   - `/server` 服务端接口（图片上传、浏览量统计等）
   - `/modules/blog.ts` 构建期逻辑：读取站点配置和内容，生成索引，注入全局常量
@@ -96,14 +96,14 @@ npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
   - `/scripts` 本地脚本（`pnpm local:*`），由 Gulp 执行
   - `/vite-plugins` 开发模式下，把后台的提交写入本地文件
   - `/public/sticker` 所有表情图片
-- `/starter` 新站点的模板，依赖 npm 包 `nuxt3-blog`
+- `/starter` 新站点的模板，依赖 npm 包 `@yunyuyuan/nuxt-blog`
 - `/scripts/release.mjs` 维护者的发版脚本（`pnpm release`），见 [docs/release.md](./docs/release.md)
 - `/config.ts` 博客配置，必须修改
 - `/public`
   - `/rebuild` 所有博客数据。`articles/`、`records/`、`knowledges/` 中每个条目一个 md 文件，元数据写在文件开头的 YAML frontmatter 中。`json/` 中的索引在构建时生成，不提交到仓库
   - `/e2e/rebuild` 用于 e2e 测试的假数据
 - `/e2e` e2e 测试
-- `/nuxt.config.ts` `extends: ["nuxt3-blog"]`，通过 pnpm workspace 使用本仓库的 `layer/`
+- `/nuxt.config.ts` `extends: ["@yunyuyuan/nuxt-blog"]`，通过 pnpm workspace 使用本仓库的 `layer/`
 
 # Node脚本
 

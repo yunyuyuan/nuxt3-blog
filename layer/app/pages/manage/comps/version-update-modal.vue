@@ -15,7 +15,7 @@ const changelogUrl = `https://github.com/${OfficialRepo}/blob/master/CHANGELOG.m
 const repoUrl = `https://github.com/${config.githubName}/${__NB_GITHUB_REPO__}`;
 // 从 npm 安装（starter）时修改依赖的版本号；fork 本仓库时同步上游
 const fromNpm = __NB_LAYER_FROM_NPM__;
-const upgradeCommand = computed(() => `pnpm add nuxt3-blog@^${props.newVersion}`);
+const upgradeCommand = computed(() => `pnpm add @yunyuyuan/nuxt-blog@^${props.newVersion}`);
 </script>
 
 <template>

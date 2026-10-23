@@ -8,7 +8,7 @@ importers:
 
   .:
     dependencies:
-      nuxt3-blog:
+      '@yunyuyuan/nuxt-blog':
         specifier: workspace:*
         version: link:layer
     devDependencies:
