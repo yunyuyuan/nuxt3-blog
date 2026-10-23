@@ -1,7 +1,7 @@
 import { expect } from "vitest";
 import type { NuxtPage } from "@nuxt/test-utils";
 import { ref, unref } from "vue";
-import type { CommitParams } from "../../../app/utils/common/types";
+import type { CommitParams } from "../../../layer/app/utils/common/types";
 import { STAGING_KEY, TEST_PASSWORD } from "../../manage/fixtures";
 
 /**

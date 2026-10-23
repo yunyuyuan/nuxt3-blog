@@ -6,7 +6,6 @@ nuxt.d.ts
 file-map.json
 files/
 
-/app/assets/style/generated-theme-colors.css
 
 # Logs
 logs

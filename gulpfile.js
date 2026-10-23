@@ -2,7 +2,8 @@
 const path = require("path");
 
 require("ts-node").register({
-  project: path.join(__dirname, "./scripts/tsconfig.json")
+  project: path.join(__dirname, "./layer/scripts/tsconfig.json")
 });
 
-require("./scripts/gulpfile");
+// 本地脚本（local:*）以站点根目录为工作目录
+require("./layer/scripts/gulpfile");

@@ -1,0 +1,58 @@
+{
+  "name": "nuxt3-blog",
+  "version": "8.0.0",
+  "description": "A blog framework based on Nuxt: GitHub as the CMS, static deployment, encrypted posts. Use it as a Nuxt layer.",
+  "keywords": [
+    "nuxt",
+    "nuxt-layer",
+    "blog"
+  ],
+  "homepage": "https://github.com/yunyuyuan/nuxt3-blog",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yunyuyuan/nuxt3-blog.git",
+    "directory": "layer"
+  },
+  "license": "MIT",
+  "main": "./nuxt.config.ts",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.750.0",
+    "@nuxt/kit": "^4.4.7",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "algoliasearch": "^5.35.0",
+    "cheerio": "^1.1.2",
+    "clipboard": "^2.0.11",
+    "colors": "^1.4.0",
+    "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.13",
+    "jiti": "^2.7.0",
+    "js-base64": "^3.7.7",
+    "katex": "^0.16.22",
+    "lodash": "^4.17.21",
+    "lucide-vue-next": "^0.477.0",
+    "marked": "^17.0.4",
+    "marked-footnote": "^1.4.0",
+    "marked-token-position": "2.0.1",
+    "mermaid": "^11.9.0",
+    "monaco-editor": "^0.52.2",
+    "pangu": "^7.2.0",
+    "postcss-import": "^16.1.1",
+    "postcss-nesting": "^13.0.2",
+    "prompts": "^2.4.2",
+    "shiki": "^4.0.2",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^3.4.17",
+    "tinify": "^1.8.1",
+    "ufo": "^1.6.4",
+    "viewerjs": "^1.11.7"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/katex": "^0.16.7",
+    "@types/lodash": "^4.17.20",
+    "@types/prompts": "^2.4.9"
+  },
+  "peerDependencies": {
+    "nuxt": "^4.4.7"
+  }
+}

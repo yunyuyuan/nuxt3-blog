@@ -1,5 +1,5 @@
 import { expect } from "vitest";
-import type { CommonItem } from "../../../app/utils/common/types";
+import type { CommonItem } from "../../../layer/app/utils/common/types";
 import { ManageBasePage } from "./BasePage";
 
 /** Page object for the manage list table (`/manage/<tab>`). */

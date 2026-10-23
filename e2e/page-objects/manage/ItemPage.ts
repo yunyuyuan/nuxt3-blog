@@ -1,6 +1,6 @@
 import { expect } from "vitest";
 import { nextTick } from "vue";
-import type { ArticleItem } from "../../../app/utils/common/types";
+import type { ArticleItem } from "../../../layer/app/utils/common/types";
 import { ENCRYPTED_PREFIX } from "../../manage/fixtures";
 import { ManageBasePage } from "./BasePage";
 
