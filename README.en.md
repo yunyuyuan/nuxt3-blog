@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">💎Nuxt3-Blog</h1>
 
-[![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v3-%2300DC82?logo=nuxt.js)
+[![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v4-%2300DC82?logo=nuxt.js) [![](https://img.shields.io/npm/v/@yunyuyuan/nuxt-blog?logo=npm)](https://www.npmjs.com/package/@yunyuyuan/nuxt-blog)
 
 English Readme | [中文说明](/README.md)
 
@@ -37,10 +37,10 @@ There are two ways to set up a blog:
 
 | Way | Use it when | Upgrade |
 | --- | --- | --- |
-| Starter template (recommended for new users) | You change only the configuration and the content | `pnpm add nuxt3-blog@^<major version>` |
+| Starter template (recommended for new users) | You change only the configuration and the content | `pnpm add @yunyuyuan/nuxt-blog@^<major version>` |
 | Fork this repository | You change the framework code | Click "Sync fork" on GitHub |
 
-**Starter template**: the framework is installed as the npm package `nuxt3-blog`. Your repository contains only `config.ts`, your content and the deployment configuration. See [starter/README.md](/starter/README.md).
+**Starter template**: the framework is installed as the npm package `@yunyuyuan/nuxt-blog`. Your repository contains only `config.ts`, your content and the deployment configuration. See [starter/README.md](/starter/README.md).
 
 ```bash
 npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
@@ -88,7 +88,7 @@ Blog principle example:
 
 # Project Structure
 
-- `/layer` Framework code, published as the npm package `nuxt3-blog`
+- `/layer` Framework code, published as the npm package `@yunyuyuan/nuxt-blog`
   - `/app` Nuxt app: pages, components, composables, plugins and utilities
   - `/server` API server (image upload, page view statistics, etc.)
   - `/modules/blog.ts` Build-time logic: reads the site configuration and the content, generates the indexes, defines global constants
@@ -96,14 +96,14 @@ Blog principle example:
   - `/scripts` Local scripts (`pnpm local:*`), executed by Gulp
   - `/vite-plugins` In development mode, writes commits from the admin pages to the local files
   - `/public/sticker` All emoji images
-- `/starter` Template for new sites, depends on the npm package `nuxt3-blog`
+- `/starter` Template for new sites, depends on the npm package `@yunyuyuan/nuxt-blog`
 - `/scripts/release.mjs` Release script for the maintainer (`pnpm release`), see [docs/release.md](./docs/release.md)
 - `/config.ts` Blog configuration, must be modified
 - `/public`
   - `/rebuild` All blog data. `articles/`, `records/` and `knowledges/` contain one md file for each item, with the metadata in YAML frontmatter at the start of the file. The build generates the indexes in `json/`; they are not committed
   - `/e2e/rebuild` Mock data for E2E testing
 - `/e2e` E2E testing
-- `/nuxt.config.ts` `extends: ["nuxt3-blog"]`, which uses `layer/` of this repository through the pnpm workspace
+- `/nuxt.config.ts` `extends: ["@yunyuyuan/nuxt-blog"]`, which uses `layer/` of this repository through the pnpm workspace
 
 # Node Scripts
 
@@ -121,6 +121,7 @@ Blog principle example:
   "local:substitute-file": "gulp substitute-file", // Read file-map.json, replace with new files (before running this script, modify newUrl in file-map.json to the URL to be replaced)
   "local:upload-algolia": "gulp upload-algolia", // Upload index data to Algolia
   "local:migrate-content": "gulp migrate-content", // Convert content in the old format (JSON index + md) to the frontmatter format, see docs/upgrade-v9.md
+  "release": "node scripts/release.mjs", // Publish the npm package (maintainers), see docs/release.md
   "test:unit": "vitest run --exclude ./e2e", // Unit testing
   "test:e2e": "vitest run --dir ./e2e", // E2E testing
   "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e", // Run test service and start E2E testing

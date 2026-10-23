@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">💎Nuxt3-Blog</h1>
 
-[![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v3-%2300DC82?logo=nuxt.js)
+[![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v4-%2300DC82?logo=nuxt.js) [![](https://img.shields.io/npm/v/@yunyuyuan/nuxt-blog?logo=npm)](https://www.npmjs.com/package/@yunyuyuan/nuxt-blog)
 
 [English Readme](/README.en.md) | 中文说明
 
@@ -37,10 +37,10 @@
 
 | 方式 | 适合 | 升级方法 |
 | --- | --- | --- |
-| starter 模板（推荐新用户使用） | 只修改配置和内容，不改框架代码 | `pnpm add nuxt3-blog@^<主版本号>` |
+| starter 模板（推荐新用户使用） | 只修改配置和内容，不改框架代码 | `pnpm add @yunyuyuan/nuxt-blog@^<主版本号>` |
 | fork 本仓库 | 需要修改框架代码 | 在 GitHub 上点击 "Sync fork" |
 
-**starter 模板**：框架以 npm 包 `nuxt3-blog` 的形式安装，站点仓库中只有 `config.ts`、内容和部署配置。详见 [starter/README.md](/starter/README.md)。
+**starter 模板**：框架以 npm 包 `@yunyuyuan/nuxt-blog` 的形式安装，站点仓库中只有 `config.ts`、内容和部署配置。详见 [starter/README.md](/starter/README.md)。
 
 ```bash
 npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
@@ -88,7 +88,7 @@ npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
 
 # 项目结构
 
-- `/layer` 框架代码，以 npm 包 `nuxt3-blog` 发布
+- `/layer` 框架代码，以 npm 包 `@yunyuyuan/nuxt-blog` 发布
   - `/app` Nuxt 应用：页面、组件、composables、插件和工具函数
   - `/server` 服务端接口（图片上传、浏览量统计等）
   - `/modules/blog.ts` 构建期逻辑：读取站点配置和内容，生成索引，注入全局常量
@@ -96,14 +96,14 @@ npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
   - `/scripts` 本地脚本（`pnpm local:*`），由 Gulp 执行
   - `/vite-plugins` 开发模式下，把后台的提交写入本地文件
   - `/public/sticker` 所有表情图片
-- `/starter` 新站点的模板，依赖 npm 包 `nuxt3-blog`
+- `/starter` 新站点的模板，依赖 npm 包 `@yunyuyuan/nuxt-blog`
 - `/scripts/release.mjs` 维护者的发版脚本（`pnpm release`），见 [docs/release.md](./docs/release.md)
 - `/config.ts` 博客配置，必须修改
 - `/public`
   - `/rebuild` 所有博客数据。`articles/`、`records/`、`knowledges/` 中每个条目一个 md 文件，元数据写在文件开头的 YAML frontmatter 中。`json/` 中的索引在构建时生成，不提交到仓库
   - `/e2e/rebuild` 用于 e2e 测试的假数据
 - `/e2e` e2e 测试
-- `/nuxt.config.ts` `extends: ["nuxt3-blog"]`，通过 pnpm workspace 使用本仓库的 `layer/`
+- `/nuxt.config.ts` `extends: ["@yunyuyuan/nuxt-blog"]`，通过 pnpm workspace 使用本仓库的 `layer/`
 
 # Node脚本
 
@@ -121,6 +121,7 @@ npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
   "local:substitute-file": "gulp substitute-file", // 读取file-map.json，替换为新的图片（运行此脚本前，请先修改file-map.json里的newUrl为需要替换的url）
   "local:upload-algolia": "gulp upload-algolia", // 上传所有索引到algolia
   "local:migrate-content": "gulp migrate-content", // 把旧格式的内容（JSON索引 + md）转换为frontmatter格式，见docs/upgrade-v9.md
+  "release": "node scripts/release.mjs", // 维护者发布npm包，见docs/release.md
   "test:unit": "vitest run --exclude ./e2e", // unit测试
   "test:e2e": "vitest run --dir ./e2e", // e2e测试
   "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e", // 运行测试dev并开始e2e测试

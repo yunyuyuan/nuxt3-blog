@@ -1,6 +1,6 @@
-# 发布 npm 包 `nuxt3-blog`（维护者）
+# 发布 npm 包 `@yunyuyuan/nuxt-blog`（维护者）
 
-维护者在本地运行 `pnpm release`，把 `layer/` 发布为 npm 包 `nuxt3-blog`。仓库中没有自动发布的 workflow。脚本是 `scripts/release.mjs`。
+维护者在本地运行 `pnpm release`，把 `layer/` 发布为 npm 包 `@yunyuyuan/nuxt-blog`。仓库中没有自动发布的 workflow。脚本是 `scripts/release.mjs`。
 
 ## 准备（只需要做一次）
 
@@ -18,7 +18,7 @@
 1. 把改动合并到 `master`，并等待 GitHub Actions 中的 Check 通过（`check`、`starter`、`e2e` 三个 job）。
 2. 如果主版本号变化（例如从 9 升到 10），先在 PR 中改两个文件，并合并到 `master`：
    - 在 `CHANGELOG.md` 的顶部加入 `## [v10]` 条目。
-   - 把 `starter/package.json` 中 `nuxt3-blog` 的版本范围改为 `^10.0.0`。
+   - 把 `starter/package.json` 中 `@yunyuyuan/nuxt-blog` 的版本范围改为 `^10.0.0`。
 3. 在本地的 `master` 上先预览，再发布：
 
    ```bash

@@ -6,7 +6,7 @@ v9 有两项不兼容的改动。升级前请阅读本文，否则同步上游�
 
 ## 改动
 
-**1. 框架代码移到了 `layer/` 目录。** 原来在根目录的 `app/`、`server/`、`modules/`、`i18n/`、`scripts/`、`vite-plugins/`、Tailwind 配置和 `public/sticker/` 都移到了 `layer/` 中。`layer/` 以 npm 包 `nuxt3-blog` 发布。根目录仍然是一个完整的站点：`config.ts`、`public/rebuild/` 和部署配置（Vercel、Cloudflare、Netlify、GitHub Pages、Docker）的位置都没有变。
+**1. 框架代码移到了 `layer/` 目录。** 原来在根目录的 `app/`、`server/`、`modules/`、`i18n/`、`scripts/`、`vite-plugins/`、Tailwind 配置和 `public/sticker/` 都移到了 `layer/` 中。`layer/` 以 npm 包 `@yunyuyuan/nuxt-blog` 发布。根目录仍然是一个完整的站点：`config.ts`、`public/rebuild/` 和部署配置（Vercel、Cloudflare、Netlify、GitHub Pages、Docker）的位置都没有变。
 
 **2. 内容改为每个条目一个 md 文件。** 条目的元数据（标题、时间、标签、是否加密等）写在 md 文件开头的 YAML frontmatter 中。`public/rebuild/json/` 中的索引改为在构建时生成，不再提交到仓库。后台提交内容时，每个条目只写一个 md 文件。
 
@@ -65,7 +65,7 @@ git push
 
 ## 改用 starter 模板（可选）
 
-如果你没有修改过框架代码，可以改用 starter 模板。以后升级时只需要修改 `nuxt3-blog` 的版本号，不需要同步上游。
+如果你没有修改过框架代码，可以改用 starter 模板。以后升级时只需要修改 `@yunyuyuan/nuxt-blog` 的版本号，不需要同步上游。
 
 1. 按上面的步骤完成迁移。
 2. 创建新站点：`npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog`。
@@ -81,7 +81,7 @@ v9 has two breaking changes. Read this document before you upgrade. If you sync 
 
 ## Changes
 
-**1. The framework code moved to `layer/`.** `app/`, `server/`, `modules/`, `i18n/`, `scripts/`, `vite-plugins/`, the Tailwind configuration and `public/sticker/` moved from the root directory to `layer/`. `layer/` is published as the npm package `nuxt3-blog`. The root directory is still a complete site: `config.ts`, `public/rebuild/` and the deployment configuration (Vercel, Cloudflare, Netlify, GitHub Pages, Docker) did not move.
+**1. The framework code moved to `layer/`.** `app/`, `server/`, `modules/`, `i18n/`, `scripts/`, `vite-plugins/`, the Tailwind configuration and `public/sticker/` moved from the root directory to `layer/`. `layer/` is published as the npm package `@yunyuyuan/nuxt-blog`. The root directory is still a complete site: `config.ts`, `public/rebuild/` and the deployment configuration (Vercel, Cloudflare, Netlify, GitHub Pages, Docker) did not move.
 
 **2. The content is now one md file for each item.** The metadata of an item (title, time, tags, encryption and so on) is in YAML frontmatter at the start of its md file. The id of an item is its file name. The build generates the indexes in `public/rebuild/json/`; they are no longer committed. A commit from the admin pages writes one md file for each item.
 
@@ -119,7 +119,7 @@ If you already clicked "Sync fork" on GitHub, the deployment fails and the build
 
 ## Switch to the starter template (optional)
 
-If you did not change the framework code, you can switch to the starter template. You then upgrade by changing the version of `nuxt3-blog`, without syncing with upstream.
+If you did not change the framework code, you can switch to the starter template. You then upgrade by changing the version of `@yunyuyuan/nuxt-blog`, without syncing with upstream.
 
 1. Do the migration with the steps above.
 2. Create a new site: `npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog`.

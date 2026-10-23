@@ -1,5 +1,5 @@
 // Checks that the Vite dev server of a site pre-bundles every dependency in
-// nuxt3-blog/client-deps.ts. If one is missing, the browser fails to load the
+// @yunyuyuan/nuxt-blog/client-deps.ts. If one is missing, the browser fails to load the
 // CommonJS dependencies of the layer in development mode when the layer is
 // installed from npm (see client-deps.ts).
 //
@@ -10,7 +10,7 @@ import { createRequire } from "node:module";
 
 const siteRequire = createRequire(path.join(process.cwd(), "package.json"));
 const { createJiti } = siteRequire("jiti");
-const layerDir = path.dirname(siteRequire.resolve("nuxt3-blog/package.json"));
+const layerDir = path.dirname(siteRequire.resolve("@yunyuyuan/nuxt-blog/package.json"));
 const { clientDeps } = await createJiti(import.meta.url).import(path.join(layerDir, "client-deps.ts"));
 
 const metadataFile = path.join(process.cwd(), "node_modules/.cache/vite/client/deps/_metadata.json");

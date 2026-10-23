@@ -1,4 +1,4 @@
-// 发布 npm 包 nuxt3-blog（layer/ 目录）。维护者在本地运行，步骤和说明见 docs/release.md。
+// 发布 npm 包 @yunyuyuan/nuxt-blog（layer/ 目录）。维护者在本地运行，步骤和说明见 docs/release.md。
 //
 //   pnpm release                     发布 layer/package.json 中的当前版本
 //   pnpm release <x.y.z>             先把版本改成 x.y.z，再发布
@@ -18,7 +18,9 @@ import path from "node:path";
 import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 
-const PACKAGE = "nuxt3-blog";
+const PACKAGE = "@yunyuyuan/nuxt-blog";
+// pnpm pack 生成的文件名：scoped 包名去掉 "@"，"/" 换成 "-"
+const TARBALL_PREFIX = PACKAGE.replace(/^@/, "").replace("/", "-");
 const REPO = "yunyuyuan/nuxt3-blog";
 const BRANCH = "master";
 // 固定为官方 registry。本地如果配置了镜像（例如 npmmirror），发布到镜像会失败
@@ -219,7 +221,7 @@ async function checkCi(sha) {
   const hint = "确认 CI 已通过后，可以加 --skip-ci 跳过这项检查";
   let response;
   try {
-    response = await fetch(url, { headers: { "Accept": "application/vnd.github+json", "User-Agent": `${PACKAGE}-release` } });
+    response = await fetch(url, { headers: { "Accept": "application/vnd.github+json", "User-Agent": "nuxt3-blog-release" } });
   } catch (error) {
     fail(`无法读取 CI 结果：${error.message}。${hint}`);
   }
@@ -251,7 +253,7 @@ async function checkCi(sha) {
 
 function pack(dir, version) {
   run("pnpm", ["--dir", "layer", "pack", "--pack-destination", dir], { capture: true });
-  const tarball = path.join(dir, `${PACKAGE}-${version}.tgz`);
+  const tarball = path.join(dir, `${TARBALL_PREFIX}-${version}.tgz`);
   if (!fs.existsSync(tarball)) {
     fail(`打包后没有找到 ${tarball}`);
   }
@@ -328,7 +330,7 @@ async function main() {
     await checkCi(sha);
   }
 
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), `${PACKAGE}-release-`));
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), `${TARBALL_PREFIX}-release-`));
   let released = false;
   try {
     if (bumped) {

@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "nuxt": "^4.4.7",
-    "nuxt3-blog": "^9.0.0"
+    "@yunyuyuan/nuxt-blog": "^9.0.0"
   },
   "devDependencies": {
     "gulp": "^5.0.1",

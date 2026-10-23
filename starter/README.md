@@ -2,7 +2,7 @@
 
 中文 | [English](#english)
 
-这个站点基于 [nuxt3-blog](https://github.com/yunyuyuan/nuxt3-blog)。框架代码在 npm 包 `nuxt3-blog` 中，本仓库只放站点自己的文件。
+这个站点基于 [nuxt3-blog](https://github.com/yunyuyuan/nuxt3-blog)。框架代码在 npm 包 `@yunyuyuan/nuxt-blog` 中，本仓库只放站点自己的文件。
 
 ## 创建站点
 
@@ -16,7 +16,7 @@ pnpm install
 
 然后：
 
-1. 修改 `config.ts`。`githubName` 必须修改。
+1. 修改 `config.ts`。以下两项必须修改：`githubName` 改为你的 GitHub 用户名，`githubRepo` 改为第 2 步中新建的仓库名。后台用这两项读写你的仓库。
 2. 在 GitHub 上新建一个仓库，把本目录推送上去。
 3. 在部署平台（Vercel、Cloudflare Pages、Netlify、GitHub Pages 或 Docker）上导入这个仓库。环境变量见 `env.sample`，详细步骤见 [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki)。
 
@@ -27,7 +27,7 @@ pnpm install
 | `config.ts` | 站点配置 |
 | `public/rebuild/articles/`、`records/`、`knowledges/` | 内容。每个条目一个 `<id>.md` 文件，元数据写在文件开头的 YAML frontmatter 中 |
 | `public/` 中的其他文件 | 图标、`robots.txt` 等静态文件 |
-| `nuxt.config.ts` | `extends: ["nuxt3-blog"]` |
+| `nuxt.config.ts` | `extends: ["@yunyuyuan/nuxt-blog"]` |
 
 `public/rebuild/json/` 中的索引在构建时生成，不提交到仓库。示例条目可以删除。
 
@@ -51,7 +51,7 @@ pnpm install
 后台检测到新的主版本时会显示升级提示。升级前先阅读 [CHANGELOG](https://github.com/yunyuyuan/nuxt3-blog/blob/master/CHANGELOG.md)，然后运行：
 
 ```bash
-pnpm add nuxt3-blog@^<新的主版本号>
+pnpm add @yunyuyuan/nuxt-blog@^<新的主版本号>
 ```
 
 提交 `package.json` 和 `pnpm-lock.yaml`，部署平台会重新构建。
@@ -60,7 +60,7 @@ pnpm add nuxt3-blog@^<新的主版本号>
 
 ## English
 
-This site uses [nuxt3-blog](https://github.com/yunyuyuan/nuxt3-blog). The framework is the npm package `nuxt3-blog`. This repository contains only the files of your site.
+This site uses [nuxt3-blog](https://github.com/yunyuyuan/nuxt3-blog). The framework is the npm package `@yunyuyuan/nuxt-blog`. This repository contains only the files of your site.
 
 ### Create the site
 
@@ -74,7 +74,7 @@ You need Node.js 22 and pnpm 9. Keep `shamefully-hoist=true` in `.npmrc`: the bu
 
 Then:
 
-1. Edit `config.ts`. You must change `githubName`.
+1. Edit `config.ts`. You must change two fields: set `githubName` to your GitHub user name, and `githubRepo` to the name of the repository that you create in step 2. The admin pages use them to read and write your repository.
 2. Create a GitHub repository and push this directory to it.
 3. Import the repository on your platform (Vercel, Cloudflare Pages, Netlify, GitHub Pages or Docker). See `env.sample` for the environment variables and the [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki) for the steps.
 
@@ -85,7 +85,7 @@ Then:
 | `config.ts` | Site configuration |
 | `public/rebuild/articles/`, `records/`, `knowledges/` | Content. One `<id>.md` file for each item, with the metadata in YAML frontmatter at the start of the file |
 | Other files in `public/` | Icons, `robots.txt` and other static files |
-| `nuxt.config.ts` | `extends: ["nuxt3-blog"]` |
+| `nuxt.config.ts` | `extends: ["@yunyuyuan/nuxt-blog"]` |
 
 The build generates the indexes in `public/rebuild/json/`. Do not commit them. You can delete the sample items.
 
@@ -109,7 +109,7 @@ The admin pages are at `/manage`. A commit from the admin pages writes one md fi
 The admin pages show a message when a new major version is available. Read the [CHANGELOG](https://github.com/yunyuyuan/nuxt3-blog/blob/master/CHANGELOG.md) first, then run:
 
 ```bash
-pnpm add nuxt3-blog@^<new major version>
+pnpm add @yunyuyuan/nuxt-blog@^<new major version>
 ```
 
 Commit `package.json` and `pnpm-lock.yaml`. Your platform then rebuilds the site.
