@@ -1,11 +1,21 @@
 import { hash as cryptoHash } from "crypto";
+import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import postcssNesting from "postcss-nesting";
+import { clientDeps } from "./client-deps";
 import { ThemeModeKey } from "./app/utils/common/constants";
 import { HeaderTabs } from "./app/utils/common/types";
 
 /** layer 目录下的绝对路径。layer 的配置里不能用 "~/"，它指向站点项目的 app 目录 */
 const resolveLayer = (p: string) => fileURLToPath(new URL(p, import.meta.url));
+
+/**
+ * tailwindcss/nesting 插件文件的绝对路径，作为 postcss 插件名。
+ * Nuxt 4.6 起按 ESM 规则解析插件名。tailwindcss 3 没有 exports 字段，"tailwindcss/nesting"
+ * 是一个目录，ESM 不能导入目录，插件会被跳过（警告 NUXT_B7027），嵌套的 CSS 就不会展开。
+ * 文件路径在旧的（jiti）和新的解析方式下都能加载，而且从 layer 解析，不依赖站点的安装方式。
+ */
+const tailwindNesting = createRequire(import.meta.url).resolve("tailwindcss/nesting");
 
 /**
  * 服务端不打包的大依赖。vite 的 SSR 构建默认按“能否从站点根目录解析到”决定是否 external，
@@ -92,12 +102,19 @@ export default defineNuxtConfig({
   vite: {
     // 开发模式的写入插件和 define（__NB_*__ 常量）由 modules/blog.ts 注册
     optimizeDeps: {
+      // 本 layer 从 npm 安装时，Vite 不扫描 node_modules 中的源文件，要显式列出，见 client-deps.ts
+      include: clientDeps,
       exclude: ["monaco-editor"]
     },
-    ssr: {
-      // 只 external shiki 而打包它的子包 @shikijs/*（或反过来）时，rollup 会为 shiki/wasm
-      // 生成非法代码 _mergeNamespaces({ default: default })。ssr.external 会连同传递依赖一起 external
-      external: serverExternals
+    // 只写在服务端配置中，不用顶层的 ssr 字段。Nuxt 的 nuxt:environments 插件看到顶层配置有 ssr 字段时，
+    // 会清空 optimizeDeps.include（它据此判断是服务端实例）；写在共享配置中，客户端的 include 也会被清空。
+    // resolve.external 是环境级别的写法，Vite 把顶层的 ssr.external 也合并到 ssr 环境的 resolve.external
+    $server: {
+      resolve: {
+        // 只 external shiki 而打包它的子包 @shikijs/*（或反过来）时，rollup 会为 shiki/wasm
+        // 生成非法代码 _mergeNamespaces({ default: default })。external 会连同传递依赖一起 external
+        external: serverExternals
+      }
     },
     css: {
       modules: {
@@ -116,7 +133,7 @@ export default defineNuxtConfig({
       "postcss-import": {},
       // 传入插件本身而不是包名：传包名时 tailwindcss 会从它自己的安装目录 require，
       // 而 postcss-nesting 是本 layer 的依赖，pnpm 不一定把它放在 tailwindcss 能找到的位置
-      "tailwindcss/nesting": postcssNesting,
+      [tailwindNesting]: postcssNesting,
       "tailwindcss": {},
       "autoprefixer": {}
     }

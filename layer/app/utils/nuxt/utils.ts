@@ -40,9 +40,13 @@ export function useCommonSEOTitle(
   useSeoMeta({
     title,
     description: desc,
-    keywords,
     ogTitle: title,
     ogDescription: desc
+  });
+  // unhead 3（Nuxt 4.6 起）的 useSeoMeta 不再接受 keywords。meta 按 name 去重，
+  // 覆盖 modules/blog.ts 在全局 head 中写入的 keywords，结果和原来相同
+  useHead({
+    meta: [{ name: "keywords", content: keywords }]
   });
 }
 
