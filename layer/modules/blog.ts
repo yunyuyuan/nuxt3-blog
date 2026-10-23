@@ -77,6 +77,15 @@ function readCurrentVersion() {
   return pkg.version?.split(".")[0] || "1";
 }
 
+/**
+ * layer 是否从 npm 安装：真实路径在 node_modules 中。后台据此显示升级步骤
+ * （npm：修改依赖的版本号；fork：同步上游）。本仓库根目录的 node_modules/nuxt3-blog
+ * 是指向 layer/ 的符号链接，所以要先取真实路径。
+ */
+function isLayerFromNpm() {
+  return fs.realpathSync(layerDir).split(path.sep).includes("node_modules");
+}
+
 /** 依赖站点配置的 head 内容：标题、关键词、作者、图标、RSS 链接、随机主题色和统计脚本 */
 function addHead(nuxt: Nuxt, config: BlogConfig, baseURL: string) {
   const head = nuxt.options.app.head;
@@ -214,6 +223,7 @@ export default defineNuxtModule({
       ], "git rev-parse HEAD", rootDir),
       __NB_BUILDTIME_VITESTING__: isTest,
       __NB_CURRENT_VERSION__: readCurrentVersion(),
+      __NB_LAYER_FROM_NPM__: isLayerFromNpm(),
       __NB_BASE_URL__: baseURL
     } satisfies Record<string, string | boolean>;
 
