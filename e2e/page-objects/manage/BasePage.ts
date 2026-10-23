@@ -1,7 +1,11 @@
+import fs from "node:fs";
+import path from "node:path";
 import { expect } from "vitest";
 import type { NuxtPage } from "@nuxt/test-utils";
 import { ref, unref } from "vue";
-import type { CommitParams } from "../../../layer/app/utils/common/types";
+import type { CommitParams, CommonItem, HeaderTabUrl } from "../../../layer/app/utils/common/types";
+import { itemDirPath, parseItemFilePath } from "../../../layer/app/utils/common/content-body";
+import { parseItemFile, sortIndex, toIndexItem } from "../../../layer/app/utils/common/content-file";
 import { STAGING_KEY, TEST_PASSWORD } from "../../manage/fixtures";
 
 /**
@@ -37,9 +41,33 @@ export class ManageBasePage {
     return unref(this.requestDataRef) !== undefined;
   }
 
-  /** Parse the JSON content of one addition (defaults to the list json). */
-  parseAddition<T>(index = 0): T {
-    return JSON.parse(this.requestAdditions[index]?.content || "null") as T;
+  /**
+   * The list after the captured commit, built the same way as the build-time
+   * index: the seeded item files in `public/e2e/rebuild`, with the committed
+   * item files added or replaced and the deleted files removed. A commit only
+   * contains the changed item files, so the untouched items come from the seed.
+   */
+  committedList<T extends CommonItem>(tab: HeaderTabUrl = "/articles"): T[] {
+    const files = new Map<string, string>();
+    const seedDir = path.join("public/e2e/rebuild", tab);
+    for (const name of fs.readdirSync(seedDir)) {
+      if (name.endsWith(".md")) {
+        files.set(`${itemDirPath(tab)}/${name}`, fs.readFileSync(path.join(seedDir, name), "utf8"));
+      }
+    }
+    for (const { path: p, content } of this.requestAdditions) {
+      if (parseItemFilePath(p)?.tab === tab) {
+        files.set(p, content);
+      }
+    }
+    for (const { path: p } of this.requestDeletions) {
+      files.delete(p);
+    }
+    const list = [...files].map(([p, raw]) => {
+      const { item, body } = parseItemFile(tab, parseItemFilePath(p)!.id, raw, p);
+      return toIndexItem(item, body);
+    });
+    return sortIndex(list) as unknown as T[];
   }
 
   // ---------------------------------------------------------------------------

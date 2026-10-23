@@ -12,8 +12,8 @@ export interface ContentRepository {
   isAuthor(token: string): Promise<boolean>;
   /** 提交一组文件的新增和删除，返回是否成功 */
   createCommit(message: string, params: CommitParams): Promise<boolean>;
-  /** 删除当前栏目的若干条目：写入新列表并删除对应的 md */
-  deleteList(newList: CommonItem[], dels: { item: CommonItem; md: string }[]): Promise<boolean>;
+  /** 删除当前栏目的若干条目（每个条目一个 md 文件） */
+  deleteList(dels: { item: CommonItem; md: string }[]): Promise<boolean>;
   /** 一次提交暂存区的全部修改 */
   commitStagedItems(additions: CommitParamsAddition[]): Promise<boolean>;
 }

@@ -50,7 +50,7 @@ export default async function (pwd?: string, reg?: string) {
       pushFile(decryptedMd, mdPath);
       // 遍历item里的文件链接
       pushFile(JSON.stringify(decryptedItem), mdPath);
-    }, undefined, {
+    }, {
       decryptErrorMode: "skip-item"
     });
     fs.writeFileSync(getAbsolutePath("file-map.json"), JSON.stringify(fileMap, null, 2));

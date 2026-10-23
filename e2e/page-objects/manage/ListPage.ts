@@ -37,9 +37,9 @@ export class ManageListPage extends ManageBasePage {
   // Commit-payload assertions
   // ---------------------------------------------------------------------------
 
-  /** The full list as committed to the json file. */
+  /** The full article list after the commit (see `committedList`). */
   getCommittedList<T extends CommonItem = CommonItem>() {
-    return this.parseAddition<T[]>(0);
+    return this.committedList<T>("/articles");
   }
 
   /** Assert which markdown files the deletion commit targets. */

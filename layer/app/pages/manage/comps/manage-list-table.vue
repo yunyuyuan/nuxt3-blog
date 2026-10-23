@@ -11,7 +11,7 @@ const props = defineProps<{
   filterFn: (item: T, search: string) => boolean;
 }>();
 
-const { targetTab, list, originList, decryptedList } = await useManageList<T>();
+const { targetTab, list, decryptedList } = await useManageList<T>();
 const { isItemStaged } = useStaging();
 
 const searchValue = ref("");
@@ -36,10 +36,6 @@ watch([list, searchValue], () => {
   selectedList.splice(0, selectedList.length);
 });
 
-const newListToUpdate = computed(() => originList.filter(item =>
-  selectedList.find(selected => selected.id === item.id) === undefined
-));
-
 const changeSelect = (item: CommonItem) => {
   if (selectedList.includes(item)) {
     selectedList.splice(selectedList.indexOf(item), 1);
@@ -52,7 +48,7 @@ const deleteSelect = async () => {
   showConfirmModal.value = false;
   toggleProcessing();
   try {
-    await deleteList(newListToUpdate.value, selectedList.map(item => ({ item, md: "(content not loaded)" })));
+    await deleteList(selectedList.map(item => ({ item, md: "(content not loaded)" })));
   } finally {
     toggleProcessing();
   }

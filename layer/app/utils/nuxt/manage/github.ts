@@ -1,10 +1,11 @@
 import { encode } from "js-base64";
-import { invalidateHeadCache, setHeadReader } from "../fetch";
+import { itemFilePath } from "../../common/content-body";
+import { invalidateHeadCache, setHeadReader, type HeadDirEntry } from "../fetch";
 import { formatTime } from "../format-time";
 import { translate } from "../i18n";
 import { notify } from "../notify";
 import { getCurrentTab } from "../utils";
-import { AuthorQuery, buildCommitInput, CreateCommitMutation, type AuthorQueryData, type CreateCommitData } from "./github-queries";
+import { AuthorQuery, buildCommitInput, CreateCommitMutation, HeadDirectoryQuery, type AuthorQueryData, type CreateCommitData, type HeadDirectoryData } from "./github-queries";
 import { createDiffModal } from ".";
 import config from "~~/config";
 import type { CommitParams, CommonItem, CommitParamsAddition } from "#layers/nuxt3-blog/app/utils/common/types";
@@ -54,6 +55,30 @@ async function readRepoFile(token: string, repoPath: string): Promise<string> {
   return await res.text();
 }
 
+/**
+ * 读取仓库目录在 useRemoteLatestSha 这个提交时的全部文件（GraphQL 一次请求）。
+ * GitHub 会截断过大的文件内容；这些文件改用 readRepoFile 单独读取。
+ */
+async function readRepoDir(token: string, repoDir: string): Promise<HeadDirEntry[]> {
+  const ref = useRemoteLatestSha().value || __NB_GIT_BRANCH__;
+  const result = await post<HeadDirectoryData>(HeadDirectoryQuery, {
+    owner: config.githubName,
+    name: __NB_GITHUB_REPO__,
+    expression: `${ref}:${repoDir}`
+  }, token);
+  if (result.errors?.length) {
+    throw new Error(result.errors.map(e => e.message).join("; "));
+  }
+  // 目录不存在时 object 为 null；路径是文件时没有 entries
+  const entries = result.data?.repository?.object?.entries ?? [];
+  return Promise.all(entries.filter(e => e.type === "blob").map(async ({ name, object }) => ({
+    name,
+    text: object?.isTruncated || typeof object?.text !== "string"
+      ? await readRepoFile(token, `${repoDir}/${name}`)
+      : object.text
+  })));
+}
+
 /** @description 是否管理员 */
 export async function isAuthor(token: string): Promise<boolean> {
   const result = await post<AuthorQueryData>(AuthorQuery, {
@@ -73,7 +98,10 @@ export async function isAuthor(token: string): Promise<boolean> {
     const headOid = result.data?.repository?.ref?.target?.history?.nodes?.[0]?.oid ?? "";
     useRemoteLatestSha().value = headOid;
     // 此后后台从这个提交读取内容。若线上站点还没部署到这个提交，页面已经读过的是旧内容，重新挂载一次
-    setHeadReader(path => readRepoFile(token, path));
+    setHeadReader({
+      file: path => readRepoFile(token, path),
+      dir: dir => readRepoDir(token, dir)
+    });
     if (headOid && headOid !== __NB_CURRENT_GIT_SHA__) {
       reloadManagePage();
     }
@@ -153,23 +181,17 @@ export async function createCommit(
  * @returns 是否执行成功
  */
 export function deleteList(
-  newList: CommonItem[],
   dels: { item: CommonItem; md: string }[]
 ): Promise<boolean> {
   const commitInfo
     = dels.length === 1 ? `'${dels[0]!.item.id}'` : `${dels.length} items`;
   const folder = getCurrentTab();
+  // 每个条目只有一个文件；索引在构建时生成
   return createCommit(
     `Delete ${commitInfo} from ${folder}`,
     {
-      additions: [
-        {
-          path: `public/rebuild/json${folder}.json`,
-          content: JSON.stringify(newList)
-        }
-      ],
       deletions: dels.map(item => ({
-        path: `public/rebuild${folder}/${item.item.id}.md`,
+        path: itemFilePath(folder, item.item.id),
         content: item.md
       }))
     }

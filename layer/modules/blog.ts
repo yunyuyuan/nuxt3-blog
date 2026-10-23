@@ -13,7 +13,9 @@ import { loadBlogConfig, setBlogContext } from "../scripts/utils/context";
 import { rebuild } from "../vite-plugins";
 import type { BlogConfig } from "../app/utils/common/blog-config";
 import { getNowDayjsString } from "../app/utils/common/dayjs";
-import { HeaderTabs, type CommonItem } from "../app/utils/common/types";
+import { HeaderTabs, type HeaderTabUrl } from "../app/utils/common/tabs";
+import type { CommonItem } from "../app/utils/common/types";
+import { generateIndex } from "../scripts/utils/content";
 
 /** layer 的根目录（本文件在 <layer>/modules 下） */
 const layerDir = path.resolve(__dirname, "..");
@@ -44,18 +46,14 @@ function readStickers() {
   return stickers;
 }
 
-/** 从内容 JSON 得到预渲染路由、customSlug 的重定向规则，以及每个栏目的条目 id */
-function collectContent(rootDir: string, isTest: boolean, baseURL: string) {
+/** 从索引得到预渲染路由、customSlug 的重定向规则，以及每个栏目的条目 id */
+function collectContent(index: Record<HeaderTabUrl, CommonItem[]>, baseURL: string) {
   const routes: string[] = [];
   const routeRules: Record<string, NitroRouteConfig> = {};
   // 访客统计接口用它拒绝不存在的条目
   const itemIds: Record<string, number[]> = {};
   for (const url of HeaderTabs) {
-    const file = path.join(rootDir, `public${isTest ? "/e2e" : ""}/rebuild/json${url}.json`);
-    if (!fs.existsSync(file)) {
-      continue;
-    }
-    const list = JSON.parse(fs.readFileSync(file).toString()) as CommonItem[];
+    const list = index[url];
     itemIds[url] = list.map(item => item.id);
     for (const item of list) {
       if (item.customSlug) {
@@ -153,12 +151,37 @@ export default defineNuxtModule({
       };
     });
 
-    // 开发模式的“提交”写入站点目录
+    // 索引（public/rebuild/json/）从条目文件生成，不提交到仓库。站点数据总是生成：RSS、sitemap 和搜索索引用它。
+    // 测试构建另外为 e2e 数据生成一份，页面读取的是 e2e 数据。
+    const rebuildDirs = [path.join(rootDir, "public/rebuild")];
+    if (isTest) {
+      rebuildDirs.push(path.join(rootDir, "public/e2e/rebuild"));
+    }
+    const indexes = rebuildDirs.map(dir => generateIndex(dir));
+    const regenerate = () => rebuildDirs.forEach(dir => generateIndex(dir));
+
     if (nuxt.options.dev) {
-      addVitePlugin(rebuild(rootDir));
+      // 开发模式的“提交”写入站点目录，写完后重新生成索引
+      addVitePlugin(rebuild(rootDir, regenerate));
+      // 在编辑器中直接修改条目文件时，也重新生成索引；格式错误只记录，保留上一次的索引
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const watchers = rebuildDirs.filter(dir => fs.existsSync(dir)).map(dir => fs.watch(dir, { recursive: true }, (_event, filename) => {
+        if (!filename || filename.split(path.sep)[0] === "json") {
+          return;
+        }
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          try {
+            regenerate();
+          } catch (error) {
+            logger.error((error as Error).message);
+          }
+        }, 100);
+      }));
+      nuxt.hook("close", () => watchers.forEach(w => w.close()));
     }
 
-    const { routes, routeRules, itemIds } = collectContent(rootDir, isTest, baseURL);
+    const { routes, routeRules, itemIds } = collectContent(indexes.at(-1)!, baseURL);
     nuxt.options.routeRules = { ...routeRules, ...nuxt.options.routeRules };
     nuxt.options.nitro.prerender ||= {};
     nuxt.options.nitro.prerender.routes = [...(nuxt.options.nitro.prerender.routes ?? []), ...routes];

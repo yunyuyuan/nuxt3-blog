@@ -1,5 +1,9 @@
 import { BookOpen, Film, Gamepad2 } from "lucide-vue-next";
 import type { FunctionalComponent } from "vue";
+import type { HeaderTabUrl, KnowledgeTab } from "./tabs";
+
+export { HeaderTabs, KnowledgeTabs, KnowledgeTabsList } from "./tabs";
+export type { HeaderTabUrl, KnowledgeTab } from "./tabs";
 
 export type EncryptBlock = {
   start: number;
@@ -28,14 +32,6 @@ export type RecordItem = ItemBase<{
   alternative?: string;
 }>;
 
-export const KnowledgeTabsList = [
-  { key: "book", name: "book" },
-  { key: "film", name: "film" },
-  { key: "game", name: "game" }
-] as const;
-export const KnowledgeTabs = KnowledgeTabsList.map(item => item.key);
-export type KnowledgeTab = typeof KnowledgeTabs[number];
-
 export type KnowledgeItem = ItemBase<{
   title: string;
   type: KnowledgeTab;
@@ -58,13 +54,6 @@ export const KnowledgeColorMap = {
 
 export type CommonItem = ArticleItem | RecordItem | KnowledgeItem;
 
-export const HeaderTabs = [
-  "/articles",
-  "/records",
-  "/knowledges"
-] as const;
-
-export type HeaderTabUrl = typeof HeaderTabs[number];
 export type CommonItemByHeaderType<T extends HeaderTabUrl> = T extends "/articles"
   ? ArticleItem
   : T extends "/records"

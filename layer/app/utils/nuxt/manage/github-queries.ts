@@ -26,6 +26,37 @@ export type AuthorQueryData = {
   repository?: { ref?: { target?: { history?: { nodes?: { oid: string }[] } } } };
 };
 
+/**
+ * 一次读取某个提交中一个目录的全部文件（后台的条目列表）。
+ * expression 形如 "<commit oid>:public/rebuild/articles"。Blob 过大时 text 会被截断（isTruncated），调用方要单独读取。
+ */
+export const HeadDirectoryQuery = `query ($owner: String!, $name: String!, $expression: String!) {
+  repository(owner: $owner, name: $name) {
+    object(expression: $expression) {
+      ... on Tree {
+        entries {
+          name
+          type
+          object {
+            ... on Blob {
+              text
+              isTruncated
+            }
+          }
+        }
+      }
+    }
+  }
+}`;
+export type HeadDirectoryEntry = {
+  name: string;
+  type: string;
+  object?: { text?: string | null; isTruncated?: boolean } | null;
+};
+export type HeadDirectoryData = {
+  // 目录不存在时 object 为 null
+  repository?: { object?: { entries?: HeadDirectoryEntry[] } | null } | null;
+};
 export const CreateCommitMutation = `mutation ($input: CreateCommitOnBranchInput!) {
   createCommitOnBranch(input: $input) {
     commit {

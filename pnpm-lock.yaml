@@ -168,6 +168,9 @@ importers:
       viewerjs:
         specifier: ^1.11.7
         version: 1.11.7
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
     devDependencies:
       '@types/crypto-js':
         specifier: ^4.2.2

@@ -44,7 +44,8 @@
     "tailwindcss": "^3.4.17",
     "tinify": "^1.8.1",
     "ufo": "^1.6.4",
-    "viewerjs": "^1.11.7"
+    "viewerjs": "^1.11.7",
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",

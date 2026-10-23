@@ -6,10 +6,10 @@ import type { CommonItem } from "#layers/nuxt3-blog/app/utils/common/types";
 import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
 import { formatTime } from "#layers/nuxt3-blog/app/utils/nuxt/format-time";
 
-import { useManageContent, deleteItem, editItem } from "#layers/nuxt3-blog/app/utils/nuxt/manage/detail";
+import { hasSameIdOrSlug, useManageContent } from "#layers/nuxt3-blog/app/utils/nuxt/manage/detail";
 import { notify } from "#layers/nuxt3-blog/app/utils/nuxt/notify";
 import { useStaging, type StagedItem } from "#layers/nuxt3-blog/app/utils/hooks/useStaging";
-import { getProcessedUploadInfo } from "#layers/nuxt3-blog/app/utils/nuxt/manage/item-processor";
+import { getProcessedUploadInfo, itemFileAddition } from "#layers/nuxt3-blog/app/utils/nuxt/manage/item-processor";
 import { decryptEncryptBlocks, encryptDecryptItem } from "#layers/nuxt3-blog/app/utils/common/process-encrypt-decrypt";
 import { deepClone } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
 import { randomId } from "#layers/nuxt3-blog/app/utils/nuxt/manage";
@@ -73,20 +73,21 @@ const doUpload = async () => {
     return;
   }
   const { item: newItem, md } = info;
+  // 同一栏目中 id 或 customSlug 重复时不提交：两个条目会对应同一个地址
+  const duplicate = hasSameIdOrSlug([newItem, ...originList.filter(i => i.id !== newItem.id)]);
+  if (duplicate) {
+    notify({
+      type: "error",
+      title: translate("same-id-or-slug-found"),
+      description: duplicate
+    });
+    return;
+  }
   currentOperate.value = "upload";
   toggleProcessing();
   try {
     const success = await createCommit(`Update ${targetTab.replace("/", "")}-${newItem.id}`, {
-      additions: [
-        {
-          path: `public/rebuild/json${targetTab}.json`,
-          content: JSON.stringify(editItem(originList, newItem))
-        },
-        {
-          path: `public/rebuild${targetTab}/${newItem.id}.md`,
-          content: md
-        }
-      ]
+      additions: [itemFileAddition(targetTab, newItem, md)]
     });
     if (success) {
       useUnsavedContent().value = false;
@@ -102,7 +103,7 @@ const doDelete = async () => {
   currentOperate.value = "delete";
   toggleProcessing();
   try {
-    await deleteList(deleteItem(originList, unref(editingItem)), [{ item: decryptedItem.value, md: decryptedMd.value }]);
+    await deleteList([{ item: decryptedItem.value, md: decryptedMd.value }]);
   } finally {
     currentOperate.value = "";
     toggleProcessing();

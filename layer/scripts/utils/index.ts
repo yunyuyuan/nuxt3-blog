@@ -1,11 +1,11 @@
-import fs from "fs";
 import cmd from "child_process";
 import path from "path";
 import colors from "colors";
 import type { PromptObject } from "prompts";
 import prompts from "prompts";
 import type { CommonItemByHeaderType, HeaderTabUrl } from "../../app/utils/common/types";
-import { escapeNewLine } from "../../app/utils/common/utils";
+import { toIndexItem } from "../../app/utils/common/content-file";
+import { readContentEntries } from "./content";
 import { getBlogContext } from "./context";
 
 export async function promptTask<const T extends PromptObject & { name: string }>(params: T[], cb: (_: Record<T["name"], any>) => any | Promise<any>) {
@@ -31,16 +31,12 @@ export function getRebuildPath(...s: string[]) {
   return getAbsolutePath("public", "rebuild", ...s);
 }
 
+/** 读取全部条目文件；_md 是正文（不含 frontmatter），_mdPath 是条目文件的绝对路径 */
 export function walkAllBlogData() {
   const walk = <T extends HeaderTabUrl>(type: T) => {
-    const jsonPath = getRebuildPath("json", type + ".json");
-    const itemList: (CommonItemByHeaderType<T> & { _md: string; _mdPath: string })[] = JSON.parse(fs.readFileSync(jsonPath).toString());
-    for (const item of itemList) {
-      const mdPath = getRebuildPath(type, String(item.id) + ".md");
-      item._mdPath = mdPath;
-      item._md = escapeNewLine(fs.readFileSync(mdPath).toString());
-    }
-    return { type, jsonPath, list: itemList };
+    const itemList: (CommonItemByHeaderType<T> & { _md: string; _mdPath: string })[]
+      = readContentEntries(getRebuildPath(), type).map(e => ({ ...toIndexItem(e.item, e.body), _md: e.body, _mdPath: e.file }));
+    return { type, list: itemList };
   };
 
   return [
@@ -73,6 +69,7 @@ export type FileMap = Record<string, {
   appearIn: string[];
 }>;
 
+export * from "./content";
 export * from "./context";
 export * from "./encrypt";
 export * from "./rss";

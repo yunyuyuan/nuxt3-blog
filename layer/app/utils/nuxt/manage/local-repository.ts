@@ -1,4 +1,5 @@
 // ContentRepository 的开发模式实现：通过 Vite WebSocket 让 nb-rebuild-plugin 改写本地文件
+import { itemFilePath } from "../../common/content-body";
 import { translate } from "../i18n";
 import { getCurrentTab, devHotListen } from "../utils";
 import { createDiffModal } from ".";
@@ -26,19 +27,14 @@ export async function createCommit(
 }
 
 export async function deleteList(
-  newList: CommonItem[],
   dels: { item: CommonItem; md: string }[]
 ): Promise<boolean> {
   const folder = getCurrentTab();
   return createCommit(
     `Delete ${dels.length} items from ${folder}`,
     {
-      additions: [{
-        path: `public/rebuild/json${folder}.json`,
-        content: JSON.stringify(newList)
-      }],
       deletions: dels.map(item => ({
-        path: `public/rebuild${folder}/${item.item.id}.md`,
+        path: itemFilePath(folder, item.item.id),
         content: item.md
       }))
     }

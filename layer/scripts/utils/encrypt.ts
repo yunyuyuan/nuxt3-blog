@@ -1,8 +1,8 @@
-import fs from "fs";
 import colors from "colors";
 import CryptoJS from "crypto-js";
 import type { CommonItem, DecryptFunction, HeaderTabUrl } from "../../app/utils/common/types";
 import { decryptEncryptBlocks, encryptDecryptItem, getEncryptedBlocks } from "../../app/utils/common/process-encrypt-decrypt";
+import { writeContentEntry } from "./content";
 import { walkAllBlogData } from ".";
 
 export async function encrypt(s: string, pwd: string): Promise<string> {
@@ -21,8 +21,6 @@ export async function processBlogItem(
   pwd: string,
   /** 单个item回调 */
   processItem: (_: { decryptedItem: CommonItem; decryptedMd: string; type: HeaderTabUrl; mdPath: string }) => any | Promise<any>,
-  /** 整个json回调 */
-  processJson: (_: { decryptedItemList: CommonItem[]; type: HeaderTabUrl; jsonPath: string }) => any | Promise<any> = () => null,
   options: {
     decryptErrorMode?: "throw" | "skip-item";
   } = {}
@@ -31,7 +29,7 @@ export async function processBlogItem(
   const decryptErrorMode = options.decryptErrorMode || "throw";
 
   const blogData = walkAllBlogData();
-  for (const { type, jsonPath, list: itemList } of blogData) {
+  for (const { type, list: itemList } of blogData) {
     let count = 0;
     for (const item of itemList) {
       try {
@@ -57,31 +55,23 @@ export async function processBlogItem(
         throw e;
       }
     }
-    await processJson({ decryptedItemList: itemList, type, jsonPath });
     console.log(colors.bold.bgCyan(type.substring(1) + ` (${count} in total) processing completed!`));
   }
 }
 
 /**
- * 重新加密md并写入文件，同时处理item里的encrypted blocks
+ * 重新加密条目并写入条目文件（frontmatter + 正文）
  */
 export async function encryptAndWriteMd({ item, md, path, encrypt, type }: { item: CommonItem; md: string; path: string; encrypt: DecryptFunction; type: HeaderTabUrl }) {
   if (item.encrypt) {
-    // 重新加密item
+    // 重新加密 frontmatter 中的字段和正文
     await encryptDecryptItem(item, encrypt, type);
-    // 重新加密markdown
-    const encryptedMd = await encrypt(md);
-    fs.writeFileSync(path, encryptedMd);
+    writeContentEntry(path, type, item, await encrypt(md));
   } else if (item.encryptBlocks) {
-    // 重新加密blocks
-    const { md: encryptedMd, blocks } = await getEncryptedBlocks(md, encrypt);
-    fs.writeFileSync(path, encryptedMd);
-    if (blocks.length) {
-      item.encryptBlocks = blocks.reverse();
-    } else {
-      delete item.encryptBlocks;
-    }
+    // 重新加密 blocks；位置在读取时从 [encrypt] 标记解析，不写入文件
+    const { md: encryptedMd } = await getEncryptedBlocks(md, encrypt);
+    writeContentEntry(path, type, item, encryptedMd);
   } else {
-    fs.writeFileSync(path, md);
+    writeContentEntry(path, type, item, md);
   }
 }

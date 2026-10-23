@@ -2,12 +2,13 @@
 import { Eye, X } from "lucide-vue-next";
 import { commitStagedItems } from "#layers/nuxt3-blog/app/utils/nuxt/manage/repository";
 import type { CommitParamsAddition, CommonItem, HeaderTabUrl } from "#layers/nuxt3-blog/app/utils/common/types";
-import { fetchAny, fetchList } from "#layers/nuxt3-blog/app/utils/nuxt/fetch";
+import { fetchList } from "#layers/nuxt3-blog/app/utils/nuxt/fetch";
 import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
 import { createDiffModal, randomId } from "#layers/nuxt3-blog/app/utils/nuxt/manage";
 import { notify } from "#layers/nuxt3-blog/app/utils/nuxt/notify";
 import { deepClone } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
 import { hasSameIdOrSlug } from "#layers/nuxt3-blog/app/utils/nuxt/manage/detail";
+import { itemFileAddition } from "#layers/nuxt3-blog/app/utils/nuxt/manage/item-processor";
 import { useStaging } from "#layers/nuxt3-blog/app/utils/hooks/useStaging";
 
 const show = defineModel<boolean>({ required: true });
@@ -76,18 +77,9 @@ const handleCommitStaged = async () => {
         });
       }
 
-      // 添加JSON文件更新
-      additions.push({
-        path: `public/rebuild/json${targetTab}.json`,
-        content: JSON.stringify(updatedList)
-      });
-
-      // 添加markdown文件
+      // 每个条目一个文件；索引在构建时生成
       for (const { item, md } of items) {
-        additions.push({
-          path: `public/rebuild${targetTab}/${item.id}.md`,
-          content: md
-        });
+        additions.push(itemFileAddition(targetTab as HeaderTabUrl, item, md));
       }
     }
 
@@ -127,18 +119,13 @@ const isStagedItemSelected = (item: typeof stagedItems.value[number]) => {
 };
 
 const peekItemDiff = async (id: number, targetTab: HeaderTabUrl) => {
-  const item = stagedItems.value.find(s => s.id === id && s.targetTab === targetTab);
-  const jsonPath = `public/rebuild/json${targetTab}.json`;
+  const staged = stagedItems.value.find(s => s.id === id && s.targetTab === targetTab);
+  if (!staged) {
+    return;
+  }
+  // 对比整个条目文件（frontmatter + 正文）；原文由 diff 弹窗读取
   createDiffModal({
-    rawDiff: [{
-      path: jsonPath,
-      original: JSON.stringify((await fetchAny<CommonItem[]>(jsonPath)).find(i => i.id === id), null, 2),
-      modified: JSON.stringify(item?.item, null, 2)
-    }],
-    additions: [{
-      path: `public/rebuild${targetTab}/${id}.md`,
-      content: item?.md || ""
-    }],
+    additions: [itemFileAddition(targetTab, staged.item, staged.md)],
     showOk: false
   });
 };

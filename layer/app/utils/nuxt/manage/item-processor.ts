@@ -1,7 +1,9 @@
 import { notify } from "../notify";
 import { translate } from "../i18n";
-import type { ArticleItem, RecordItem, KnowledgeItem, CommonItem, HeaderTabUrl } from "#layers/nuxt3-blog/app/utils/common/types";
+import type { ArticleItem, RecordItem, KnowledgeItem, CommonItem, CommitParamsAddition, HeaderTabUrl } from "#layers/nuxt3-blog/app/utils/common/types";
 import { escapeNewLine } from "#layers/nuxt3-blog/app/utils/common/utils";
+import { itemFilePath } from "#layers/nuxt3-blog/app/utils/common/content-body";
+import { serializeItemFile } from "#layers/nuxt3-blog/app/utils/common/content-file";
 import { encryptDecryptItem, getEncryptedBlocks } from "#layers/nuxt3-blog/app/utils/common/process-encrypt-decrypt";
 import { getNowStamp } from "#layers/nuxt3-blog/app/utils/common/dayjs";
 import { randomId } from "#layers/nuxt3-blog/app/utils/nuxt/manage";
@@ -170,4 +172,9 @@ export async function getProcessedUploadInfo<T extends CommonItem>(params: {
     item: newItem,
     md: mdContent
   };
+}
+
+/** 条目文件的提交内容：frontmatter + 正文。索引在构建时从这些文件生成，不再提交 JSON */
+export function itemFileAddition(tab: HeaderTabUrl, item: CommonItem, md: string): CommitParamsAddition {
+  return { path: itemFilePath(tab, item.id), content: serializeItemFile(tab, item, md) };
 }

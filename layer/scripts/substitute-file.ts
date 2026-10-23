@@ -36,9 +36,6 @@ export default async function () {
         path: mdPath,
         encrypt: _encrypt
       });
-    }, ({ decryptedItemList, jsonPath }) => {
-      // 写入json，json本身是不加密的
-      fs.writeFileSync(jsonPath, JSON.stringify(decryptedItemList));
     }, {
       decryptErrorMode: "skip-item"
     });

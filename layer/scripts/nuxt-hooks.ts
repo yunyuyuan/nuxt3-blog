@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { algoliasearch, type Action, type BatchRequest } from "algoliasearch";
-import type { AlgoliaBody, ArticleItem, KnowledgeItem, RecordItem } from "../app/utils/common/types";
+import type { AlgoliaBody, ArticleItem, HeaderTabUrl, KnowledgeItem, RecordItem } from "../app/utils/common/types";
 import { parseMarkdown } from "../app/utils/common/markdown";
-import { genRss, genSitemap, getBlogContext, getRebuildPath, isDomainConfigured, nbLog, siteUrl, walkAllBlogData } from "./utils";
+import { genRss, genSitemap, getBlogContext, getRebuildPath, isDomainConfigured, nbLog, readIndex, siteUrl, walkAllBlogData } from "./utils";
 import extractTextFromHtml from "./utils/html";
 
 /** 主题色的 CSS 变量：:root 用第一个颜色，.theme-<color> 用于随机切换。theme() 由 tailwind 解析 */
@@ -23,8 +23,8 @@ export function themeColorsCSS(themeColors: string[]) {
  * 生成 rss.xml（订阅）和 sitemap.xml（搜索引擎），并在 robots.txt 中声明 sitemap
  */
 export function generateFeeds(publicDir: string) {
-  const readList = (name: string) => JSON.parse(fs.readFileSync(getRebuildPath("json", `${name}.json`)).toString());
-  const articles = readList("articles");
+  const readList = <T extends HeaderTabUrl>(tab: T) => readIndex(getRebuildPath(), tab);
+  const articles = readList("/articles");
   fs.writeFileSync(path.resolve(publicDir, "rss.xml"), genRss(articles));
   nbLog("rss.xml generated");
 
@@ -34,8 +34,8 @@ export function generateFeeds(publicDir: string) {
   }
   fs.writeFileSync(path.resolve(publicDir, "sitemap.xml"), genSitemap({
     "/articles": articles,
-    "/records": readList("records"),
-    "/knowledges": readList("knowledges")
+    "/records": readList("/records"),
+    "/knowledges": readList("/knowledges")
   }));
   const robotsPath = path.resolve(publicDir, "robots.txt");
   if (fs.existsSync(robotsPath)) {
