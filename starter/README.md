@@ -16,7 +16,7 @@ pnpm install
 
 然后：
 
-1. 修改 `config.ts`。`githubName` 必须修改。
+1. 修改 `config.ts`。以下两项必须修改：`githubName` 改为你的 GitHub 用户名，`githubRepo` 改为第 2 步中新建的仓库名。后台用这两项读写你的仓库。
 2. 在 GitHub 上新建一个仓库，把本目录推送上去。
 3. 在部署平台（Vercel、Cloudflare Pages、Netlify、GitHub Pages 或 Docker）上导入这个仓库。环境变量见 `env.sample`，详细步骤见 [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki)。
 
@@ -74,7 +74,7 @@ You need Node.js 22 and pnpm 9. Keep `shamefully-hoist=true` in `.npmrc`: the bu
 
 Then:
 
-1. Edit `config.ts`. You must change `githubName`.
+1. Edit `config.ts`. You must change two fields: set `githubName` to your GitHub user name, and `githubRepo` to the name of the repository that you create in step 2. The admin pages use them to read and write your repository.
 2. Create a GitHub repository and push this directory to it.
 3. Import the repository on your platform (Vercel, Cloudflare Pages, Netlify, GitHub Pages or Docker). See `env.sample` for the environment variables and the [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki) for the steps.
 
