@@ -37,4 +37,15 @@ describe("github queries", () => {
     const input = buildCommitInput({ owner: "o", repo: "r", branch: "b", headline: "h", expectedHeadOid: "x", additions: [], deletions: [] }, encode);
     expect(input.fileChanges).toEqual({});
   });
+
+  it("commits to the name that GitHub resolved", () => {
+    // config.ts 中还是旧仓库名；AuthorQuery 返回的是现在的名字
+    const params = { owner: "me", repo: "old-name", branch: "b", headline: "h", expectedHeadOid: "x" };
+    expect(buildCommitInput({ ...params, nameWithOwner: "me/new-name" }, encode).branch.repositoryNameWithOwner).toBe("me/new-name");
+    expect(buildCommitInput({ ...params, nameWithOwner: "" }, encode).branch.repositoryNameWithOwner).toBe("me/old-name");
+  });
+
+  it("reads the current repository name in AuthorQuery", () => {
+    expect(AuthorQuery).toMatch(/repository\(owner: \$owner, name: \$name\) \{\s+nameWithOwner/);
+  });
 });

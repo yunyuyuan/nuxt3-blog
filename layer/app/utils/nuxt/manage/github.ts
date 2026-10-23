@@ -12,6 +12,9 @@ import type { CommitParams, CommonItem, CommitParamsAddition } from "#layers/nux
 
 type GraphQLResponse<T> = { data?: T; errors?: { type?: string; message: string }[] };
 
+/** isAuthor 时 GitHub 返回的仓库名（owner/repo）。仓库改名后与 config.ts 不同，提交要用这个名字 */
+let resolvedRepo = "";
+
 async function post<T = unknown>(query: string, variables?: Record<string, unknown>, token_?: string): Promise<GraphQLResponse<T>> {
   const token = token_ || useGithubToken().value;
   if (!token) {
@@ -87,6 +90,10 @@ export async function isAuthor(token: string): Promise<boolean> {
     branch: __NB_GIT_BRANCH__
   }, token);
   if (result.errors?.length) {
+    // 仓库不存在，或者 token 不能访问这个仓库
+    if (result.errors.some(e => e.type === "NOT_FOUND") && !result.data?.repository) {
+      throw new Error(translate("repo-not-found", [`${config.githubName}/${__NB_GITHUB_REPO__}`]));
+    }
     throw new Error(result.errors.map(e => e.message).join("; "));
   }
   // GitHub 用户名不区分大小写
@@ -94,6 +101,7 @@ export async function isAuthor(token: string): Promise<boolean> {
   if (verified) {
     // token 验证成功
     useGithubToken().value = token;
+    resolvedRepo = result.data?.repository?.nameWithOwner ?? "";
     // 更新 commit id
     const headOid = result.data?.repository?.ref?.target?.history?.nodes?.[0]?.oid ?? "";
     useRemoteLatestSha().value = headOid;
@@ -134,6 +142,7 @@ export async function createCommit(
       input: buildCommitInput({
         owner: config.githubName,
         repo: __NB_GITHUB_REPO__,
+        nameWithOwner: resolvedRepo,
         branch: __NB_GIT_BRANCH__,
         headline: `[${formatTime()}]${commit}`,
         expectedHeadOid: correctSha,

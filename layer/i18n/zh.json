@@ -121,6 +121,7 @@
   "token-deleted-from-local": "已从本地删除Token",
   "token-saved": "已将Token保存到本地",
   "token-unverified": "Token验证失败",
+  "repo-not-found": "找不到仓库 {0}。请检查 config.ts 中的 githubName 和 githubRepo 是否与 GitHub 上的仓库一致，以及 token 能否访问这个仓库",
   "token-verified": "Token验证成功",
   "token-fine-grained-hint": "推荐使用 fine-grained token：仓库只选 {0}，权限选 Contents: Read and write。",
   "token-create-link": "去创建",

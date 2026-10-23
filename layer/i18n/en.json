@@ -120,6 +120,7 @@
   "token-deleted-from-local": "Token removed from local storage",
   "token-saved": "Token saved to local storage",
   "token-unverified": "Token verification failed",
+  "repo-not-found": "Repository {0} was not found. Check that githubName and githubRepo in config.ts match the repository on GitHub, and that the token can access it",
   "token-verified": "Token verified successfully",
   "token-fine-grained-hint": "Recommended: a fine-grained token with access to the {0} repository only, permission Contents: Read and write.",
   "token-create-link": "Create one",
