@@ -1,4 +1,4 @@
-// 发布 npm 包 @yunyuyuan/nuxt-blog（layer/ 目录）。维护者在本地运行，步骤和说明见 docs/release.md。
+// 发布 npm 包 @yunyuyuan/nuxt-blog（layer/ 目录）。
 //
 //   pnpm release                     发布 layer/package.json 中的当前版本
 //   pnpm release <x.y.z>             先把版本改成 x.y.z，再发布
@@ -35,8 +35,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const layerPkgPath = path.join(root, "layer", "package.json");
 const isWindows = process.platform === "win32";
 
-const USAGE = `用法：pnpm release [<x.y.z> | patch | minor | major] [--dry-run] [--skip-ci] [--remote <name>]
-说明见 docs/release.md。`;
+const USAGE = `用法：pnpm release [<x.y.z> | patch | minor | major] [--dry-run] [--skip-ci] [--remote <name>]`;
 
 class ReleaseError extends Error {}
 
