@@ -1,11 +1,11 @@
 <script setup lang="ts" generic="T extends CommonItem">
 import { Lock, Plus, Search, Trash2 } from "lucide-vue-next";
-import { deleteList } from "#layers/nuxt3-blog/app/utils/nuxt/manage/repository";
-import type { CommonItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { useStatusText } from "#layers/nuxt3-blog/app/utils/nuxt/manage";
-import { useManageList } from "#layers/nuxt3-blog/app/utils/nuxt/manage/list";
-import { formatTime } from "#layers/nuxt3-blog/app/utils/nuxt/format-time";
-import { useStaging } from "#layers/nuxt3-blog/app/utils/hooks/useStaging";
+import { deleteList } from "#layers/nuxt-blog/app/utils/nuxt/manage/repository";
+import type { CommonItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { useStatusText } from "#layers/nuxt-blog/app/utils/nuxt/manage";
+import { useManageList } from "#layers/nuxt-blog/app/utils/nuxt/manage/list";
+import { formatTime } from "#layers/nuxt-blog/app/utils/nuxt/format-time";
+import { useStaging } from "#layers/nuxt-blog/app/utils/hooks/useStaging";
 
 const props = defineProps<{
   filterFn: (item: T, search: string) => boolean;

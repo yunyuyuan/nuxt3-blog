@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { X } from "lucide-vue-next";
-import { ModalContainerId } from "#layers/nuxt3-blog/app/utils/common/constants";
+import { ModalContainerId } from "#layers/nuxt-blog/app/utils/common/constants";
 
 const show = defineModel<boolean>({ required: true });
 

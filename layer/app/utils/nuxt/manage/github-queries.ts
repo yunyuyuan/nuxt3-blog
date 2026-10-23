@@ -1,12 +1,16 @@
 // GitHub GraphQL 文档与变量构建。这个文件不依赖 Nuxt，方便单独测试和用 GitHub schema 校验。
 // 所有动态值都通过 variables 传入，不拼接进查询字符串：标题里的引号、反斜杠不会破坏查询。
 
-/** 验证 token 属于博客作者，并读取分支最新的 commit oid */
+/**
+ * 验证 token 属于博客作者，并读取分支最新的 commit oid。
+ * nameWithOwner 是仓库现在的名字：仓库改名后，查询仍能用旧名找到仓库，但 createCommitOnBranch 只认现在的名字。
+ */
 export const AuthorQuery = `query ($owner: String!, $name: String!, $branch: String!) {
   viewer {
     login
   }
   repository(owner: $owner, name: $name) {
+    nameWithOwner
     ref(qualifiedName: $branch) {
       target {
         ... on Commit {
@@ -23,7 +27,7 @@ export const AuthorQuery = `query ($owner: String!, $name: String!, $branch: Str
 
 export type AuthorQueryData = {
   viewer?: { login?: string };
-  repository?: { ref?: { target?: { history?: { nodes?: { oid: string }[] } } } };
+  repository?: { nameWithOwner?: string; ref?: { target?: { history?: { nodes?: { oid: string }[] } } } } | null;
 };
 
 /**
@@ -72,6 +76,8 @@ export type CreateCommitData = {
 export type CommitInputParams = {
   owner: string;
   repo: string;
+  /** AuthorQuery 返回的仓库名（owner/repo）。有值时代替 owner/repo */
+  nameWithOwner?: string;
   branch: string;
   headline: string;
   expectedHeadOid: string;
@@ -94,7 +100,7 @@ export function buildCommitInput(p: CommitInputParams, encode: (_: string) => st
   return {
     branch: {
       branchName: p.branch,
-      repositoryNameWithOwner: `${p.owner}/${p.repo}`
+      repositoryNameWithOwner: p.nameWithOwner || `${p.owner}/${p.repo}`
     },
     message: {
       headline: p.headline

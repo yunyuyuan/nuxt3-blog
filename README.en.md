@@ -1,9 +1,9 @@
 <p align="center">
 <img width="200px" src="public/favicon.png" />
 </p>
-<h1 align="center">💎Nuxt3-Blog</h1>
+<h1 align="center">💎Nuxt-Blog</h1>
 
-[![](https://img.shields.io/github/license/yunyuyuan/nuxt3-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v4-%2300DC82?logo=nuxt.js) [![](https://img.shields.io/npm/v/@yunyuyuan/nuxt-blog?logo=npm)](https://www.npmjs.com/package/@yunyuyuan/nuxt-blog)
+[![](https://img.shields.io/github/license/yunyuyuan/nuxt-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v4-%2300DC82?logo=nuxt.js) [![](https://img.shields.io/npm/v/@yunyuyuan/nuxt-blog?logo=npm)](https://www.npmjs.com/package/@yunyuyuan/nuxt-blog)
 
 English Readme | [中文说明](/README.md)
 
@@ -31,7 +31,7 @@ English Readme | [中文说明](/README.md)
 
 # Setup Guide
 
-## For detailed setup tutorial, please refer to the [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki)
+## For detailed setup tutorial, please refer to the [wiki](https://github.com/yunyuyuan/nuxt-blog/wiki)
 
 There are two ways to set up a blog:
 
@@ -43,7 +43,7 @@ There are two ways to set up a blog:
 **Starter template**: the framework is installed as the npm package `@yunyuyuan/nuxt-blog`. Your repository contains only `config.ts`, your content and the deployment configuration. See [starter/README.md](/starter/README.md).
 
 ```bash
-npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
+npx giget@latest "gh:yunyuyuan/nuxt-blog/starter#master" my-blog
 ```
 
 **Fork**: the framework code is in `layer/`, and the files of the site are in the root directory. If you change only the files in the root directory, syncing with upstream causes far fewer conflicts.
@@ -120,7 +120,7 @@ Blog principle example:
   "local:download-file": "gulp download-file", // Read file-map.json, download all files to files/
   "local:substitute-file": "gulp substitute-file", // Read file-map.json, replace with new files (before running this script, modify newUrl in file-map.json to the URL to be replaced)
   "local:upload-algolia": "gulp upload-algolia", // Upload index data to Algolia
-  "local:migrate-content": "gulp migrate-content", // Convert content in the old format (JSON index + md) to the frontmatter format, see docs/upgrade-v9.md
+  "local:migrate-content": "gulp migrate-content", // Convert content in the old format (JSON index + md) to the frontmatter format
   "release": "node scripts/release.mjs", // Publish the npm package (maintainers), see docs/release.md
   "test:unit": "vitest run --exclude ./e2e", // Unit testing
   "test:e2e": "vitest run --dir ./e2e", // E2E testing
@@ -133,9 +133,9 @@ Blog principle example:
 }
 ```
 
-# Upgrade from v8 to v9
+# Old versions
 
-v9 has two breaking changes: the framework code moved to `layer/`, and the content is now one md file for each item, with the metadata in frontmatter. **Read [docs/upgrade-v9.md](/docs/upgrade-v9.md) before you upgrade.** If you sync with upstream without these steps, the build fails.
+v8 and earlier versions are no longer supported, and there are no upgrade steps from them.
 
 # Changelog
 

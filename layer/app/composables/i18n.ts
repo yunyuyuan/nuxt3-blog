@@ -1,8 +1,8 @@
 import config from "~~/config";
-import { I18nStoreKey } from "#layers/nuxt3-blog/app/utils/common/constants";
-import type { I18nCode } from "#layers/nuxt3-blog/app/utils/common/locales";
-import { loadI18nJson } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
-import { setLocalStorage } from "#layers/nuxt3-blog/app/utils/nuxt/localStorage";
+import { I18nStoreKey } from "#layers/nuxt-blog/app/utils/common/constants";
+import type { I18nCode } from "#layers/nuxt-blog/app/utils/common/locales";
+import { loadI18nJson } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
+import { setLocalStorage } from "#layers/nuxt-blog/app/utils/nuxt/localStorage";
 
 export const useI18nCode = () => {
   const i18nCode = useState<I18nCode>(I18nStoreKey, () => config.defaultLang as I18nCode);

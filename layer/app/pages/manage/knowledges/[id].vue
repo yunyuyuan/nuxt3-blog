@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Blocks, BookMarked, Captions, Image, Link } from "lucide-vue-next";
-import ManageContentEdit from "#layers/nuxt3-blog/app/pages/manage/comps/manage-content-edit.vue";
-import { KnowledgeColorMap, KnowledgeIconMap, KnowledgeTabs, KnowledgeTabsList, type KnowledgeItem } from "#layers/nuxt3-blog/app/utils/common/types";
+import ManageContentEdit from "#layers/nuxt-blog/app/pages/manage/comps/manage-content-edit.vue";
+import { KnowledgeColorMap, KnowledgeIconMap, KnowledgeTabs, KnowledgeTabsList, type KnowledgeItem } from "#layers/nuxt-blog/app/utils/common/types";
 
 const typeSelectShow = ref(false);
 

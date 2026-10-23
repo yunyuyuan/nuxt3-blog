@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import CommonNotification from "#layers/nuxt3-blog/app/utils/nuxt/notify/common-notification.vue";
-import { notifyEntries, removeNotification } from "#layers/nuxt3-blog/app/utils/nuxt/notify";
-import { NotificationContainerId } from "#layers/nuxt3-blog/app/utils/common/constants";
+import CommonNotification from "#layers/nuxt-blog/app/utils/nuxt/notify/common-notification.vue";
+import { notifyEntries, removeNotification } from "#layers/nuxt-blog/app/utils/nuxt/notify";
+import { NotificationContainerId } from "#layers/nuxt-blog/app/utils/common/constants";
 </script>
 
 <template>

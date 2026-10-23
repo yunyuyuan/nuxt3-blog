@@ -1,6 +1,6 @@
 import * as github from "./github";
 import * as local from "./local-repository";
-import type { CommitParams, CommitParamsAddition, CommonItem } from "#layers/nuxt3-blog/app/utils/common/types";
+import type { CommitParams, CommitParamsAddition, CommonItem } from "#layers/nuxt-blog/app/utils/common/types";
 
 /**
  * 后台写入内容的方式。

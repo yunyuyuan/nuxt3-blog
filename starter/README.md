@@ -2,12 +2,12 @@
 
 中文 | [English](#english)
 
-这个站点基于 [nuxt3-blog](https://github.com/yunyuyuan/nuxt3-blog)。框架代码在 npm 包 `@yunyuyuan/nuxt-blog` 中，本仓库只放站点自己的文件。
+这个站点基于 [nuxt-blog](https://github.com/yunyuyuan/nuxt-blog)。框架代码在 npm 包 `@yunyuyuan/nuxt-blog` 中，本仓库只放站点自己的文件。
 
 ## 创建站点
 
 ```bash
-npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
+npx giget@latest "gh:yunyuyuan/nuxt-blog/starter#master" my-blog
 cd my-blog
 pnpm install
 ```
@@ -18,7 +18,7 @@ pnpm install
 
 1. 修改 `config.ts`。以下两项必须修改：`githubName` 改为你的 GitHub 用户名，`githubRepo` 改为第 2 步中新建的仓库名。后台用这两项读写你的仓库。
 2. 在 GitHub 上新建一个仓库，把本目录推送上去。
-3. 在部署平台（Vercel、Cloudflare Pages、Netlify、GitHub Pages 或 Docker）上导入这个仓库。环境变量见 `env.sample`，详细步骤见 [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki)。
+3. 在部署平台（Vercel、Cloudflare Pages、Netlify、GitHub Pages 或 Docker）上导入这个仓库。环境变量见 `env.sample`，详细步骤见 [wiki](https://github.com/yunyuyuan/nuxt-blog/wiki)。
 
 ## 文件
 
@@ -48,7 +48,7 @@ pnpm install
 
 ## 升级
 
-后台检测到新的主版本时会显示升级提示。升级前先阅读 [CHANGELOG](https://github.com/yunyuyuan/nuxt3-blog/blob/master/CHANGELOG.md)，然后运行：
+后台检测到新的主版本时会显示升级提示。升级前先阅读 [CHANGELOG](https://github.com/yunyuyuan/nuxt-blog/blob/master/CHANGELOG.md)，然后运行：
 
 ```bash
 pnpm add @yunyuyuan/nuxt-blog@^<新的主版本号>
@@ -60,12 +60,12 @@ pnpm add @yunyuyuan/nuxt-blog@^<新的主版本号>
 
 ## English
 
-This site uses [nuxt3-blog](https://github.com/yunyuyuan/nuxt3-blog). The framework is the npm package `@yunyuyuan/nuxt-blog`. This repository contains only the files of your site.
+This site uses [nuxt-blog](https://github.com/yunyuyuan/nuxt-blog). The framework is the npm package `@yunyuyuan/nuxt-blog`. This repository contains only the files of your site.
 
 ### Create the site
 
 ```bash
-npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
+npx giget@latest "gh:yunyuyuan/nuxt-blog/starter#master" my-blog
 cd my-blog
 pnpm install
 ```
@@ -76,7 +76,7 @@ Then:
 
 1. Edit `config.ts`. You must change two fields: set `githubName` to your GitHub user name, and `githubRepo` to the name of the repository that you create in step 2. The admin pages use them to read and write your repository.
 2. Create a GitHub repository and push this directory to it.
-3. Import the repository on your platform (Vercel, Cloudflare Pages, Netlify, GitHub Pages or Docker). See `env.sample` for the environment variables and the [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki) for the steps.
+3. Import the repository on your platform (Vercel, Cloudflare Pages, Netlify, GitHub Pages or Docker). See `env.sample` for the environment variables and the [wiki](https://github.com/yunyuyuan/nuxt-blog/wiki) for the steps.
 
 ### Files
 
@@ -106,7 +106,7 @@ The admin pages are at `/manage`. A commit from the admin pages writes one md fi
 
 ### Upgrade
 
-The admin pages show a message when a new major version is available. Read the [CHANGELOG](https://github.com/yunyuyuan/nuxt3-blog/blob/master/CHANGELOG.md) first, then run:
+The admin pages show a message when a new major version is available. Read the [CHANGELOG](https://github.com/yunyuyuan/nuxt-blog/blob/master/CHANGELOG.md) first, then run:
 
 ```bash
 pnpm add @yunyuyuan/nuxt-blog@^<new major version>

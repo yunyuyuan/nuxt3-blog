@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Loader2 } from "lucide-vue-next";
 import type { editor as MonacoEditor } from "monaco-editor";
-import type { CommitParamsAddition, CommitParamsDeletion } from "#layers/nuxt3-blog/app/utils/common/types";
-import { fetchAny } from "#layers/nuxt3-blog/app/utils/nuxt/fetch";
+import type { CommitParamsAddition, CommitParamsDeletion } from "#layers/nuxt-blog/app/utils/common/types";
+import { fetchAny } from "#layers/nuxt-blog/app/utils/nuxt/fetch";
 
 const show = defineModel<boolean>({ required: true });
 

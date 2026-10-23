@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { ArticleItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { useListPage } from "#layers/nuxt3-blog/app/utils/nuxt/public/list";
-import { staggerDelay } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { Visitors, Words } from "#layers/nuxt3-blog/app/utils/nuxt/public/components";
-import { formatTime } from "#layers/nuxt3-blog/app/utils/nuxt/format-time";
-import { useRouteQuery } from "#layers/nuxt3-blog/app/utils/hooks/useRouteQuery";
+import type { ArticleItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { useListPage } from "#layers/nuxt-blog/app/utils/nuxt/public/list";
+import { staggerDelay } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { Visitors, Words } from "#layers/nuxt-blog/app/utils/nuxt/public/components";
+import { formatTime } from "#layers/nuxt-blog/app/utils/nuxt/format-time";
+import { useRouteQuery } from "#layers/nuxt-blog/app/utils/hooks/useRouteQuery";
 
 definePageMeta({
   alias: "/"

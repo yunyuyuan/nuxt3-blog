@@ -27,7 +27,7 @@ export async function hasRepoPushAccess(token: string | undefined): Promise<bool
     headers: {
       "Accept": "application/vnd.github+json",
       "Authorization": `Bearer ${token}`,
-      "User-Agent": "nuxt3-blog",
+      "User-Agent": "nuxt-blog",
       "X-GitHub-Api-Version": "2022-11-28"
     }
   });

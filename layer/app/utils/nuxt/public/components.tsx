@@ -3,7 +3,7 @@ import type { CommonItem } from "../../common/types";
 import { formatTime } from "../format-time";
 import { watchUntil } from "../utils";
 import config from "~~/config";
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
 
 export function Visitors(props: { visitors?: number }) {
   return (

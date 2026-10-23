@@ -61,7 +61,7 @@ pnpm release
 
 | 阶段 | 内容 |
 |---|---|
-| 检查 git | 当前分支是 `master`；工作区没有未提交的改动；remote 指向 `yunyuyuan/nuxt3-blog`；本地 `master` 与远程一致。 |
+| 检查 git | 当前分支是 `master`；工作区没有未提交的改动；remote 指向 `yunyuyuan/nuxt-blog`；本地 `master` 与远程一致。 |
 | 检查 npm | 已经登录；包已存在时，当前账号是它的维护者。 |
 | 检查版本号 | 版本号格式是 `x.y.z`，高于 npm 上的最新版本，还没有发布过；本地和远程都没有对应的 tag；`CHANGELOG.md` 中第一个 `## [vN]` 与新版本的主版本号一致；`starter/package.json` 的版本范围包含新版本。 |
 | 检查 CI | 通过 GitHub 的公开 API 确认这个 commit 的 `check`、`starter`、`e2e` 都已通过。不需要登录 GitHub。 |

@@ -2,10 +2,10 @@ import { translate } from "../i18n";
 import { getCurrentTab, useCommonSEOTitle, deepClone } from "../utils";
 import { compareItem, compareMd } from "../manage";
 import { useStatusText } from ".";
-import type { CommonItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { createNewItem } from "#layers/nuxt3-blog/app/utils/common/utils";
-import { useBlogItem } from "#layers/nuxt3-blog/app/utils/hooks/useBlogItem";
-import { useStaging } from "#layers/nuxt3-blog/app/utils/hooks/useStaging";
+import type { CommonItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { createNewItem } from "#layers/nuxt-blog/app/utils/common/utils";
+import { useBlogItem } from "#layers/nuxt-blog/app/utils/hooks/useBlogItem";
+import { useStaging } from "#layers/nuxt-blog/app/utils/hooks/useStaging";
 
 // const editingItem = ref() as Ref<CommonItem>;
 // const editingMd = ref("");

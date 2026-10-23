@@ -1,5 +1,5 @@
-import { isPrerender } from "#layers/nuxt3-blog/app/utils/nuxt/constants";
-import { withBase } from "#layers/nuxt3-blog/app/utils/nuxt/with-base";
+import { isPrerender } from "#layers/nuxt-blog/app/utils/nuxt/constants";
+import { withBase } from "#layers/nuxt-blog/app/utils/nuxt/with-base";
 
 export function DBOperate<T = any> (
   { apiPath, query, callback }:

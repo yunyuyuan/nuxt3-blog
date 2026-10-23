@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AlertCircle, AlertTriangle, CheckCircle, X } from "lucide-vue-next";
-import type { NotifyType } from "#layers/nuxt3-blog/app/utils/nuxt/notify";
+import type { NotifyType } from "#layers/nuxt-blog/app/utils/nuxt/notify";
 
 withDefaults(defineProps<{
   type?: NotifyType;

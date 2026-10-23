@@ -1,13 +1,13 @@
 import { notify } from "../notify";
 import { translate } from "../i18n";
-import type { ArticleItem, RecordItem, KnowledgeItem, CommonItem, CommitParamsAddition, HeaderTabUrl } from "#layers/nuxt3-blog/app/utils/common/types";
-import { escapeNewLine } from "#layers/nuxt3-blog/app/utils/common/utils";
-import { itemFilePath } from "#layers/nuxt3-blog/app/utils/common/content-body";
-import { serializeItemFile } from "#layers/nuxt3-blog/app/utils/common/content-file";
-import { encryptDecryptItem, getEncryptedBlocks } from "#layers/nuxt3-blog/app/utils/common/process-encrypt-decrypt";
-import { getNowStamp } from "#layers/nuxt3-blog/app/utils/common/dayjs";
-import { randomId } from "#layers/nuxt3-blog/app/utils/nuxt/manage";
-import { deepClone } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
+import type { ArticleItem, RecordItem, KnowledgeItem, CommonItem, CommitParamsAddition, HeaderTabUrl } from "#layers/nuxt-blog/app/utils/common/types";
+import { escapeNewLine } from "#layers/nuxt-blog/app/utils/common/utils";
+import { itemFilePath } from "#layers/nuxt-blog/app/utils/common/content-body";
+import { serializeItemFile } from "#layers/nuxt-blog/app/utils/common/content-file";
+import { encryptDecryptItem, getEncryptedBlocks } from "#layers/nuxt-blog/app/utils/common/process-encrypt-decrypt";
+import { getNowStamp } from "#layers/nuxt-blog/app/utils/common/dayjs";
+import { randomId } from "#layers/nuxt-blog/app/utils/nuxt/manage";
+import { deepClone } from "#layers/nuxt-blog/app/utils/nuxt/utils";
 
 /**
  * 根据不同类型处理item内容

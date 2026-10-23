@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { modalEntries } from "#layers/nuxt3-blog/app/utils/nuxt/modal";
+import { modalEntries } from "#layers/nuxt-blog/app/utils/nuxt/modal";
 </script>
 
 <template>

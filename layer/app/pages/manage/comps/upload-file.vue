@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Info, Plus, Save, Upload } from "lucide-vue-next";
 import ClipboardJS from "clipboard";
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
-import { getLocalStorage, rmLocalStorage, setLocalStorage } from "#layers/nuxt3-blog/app/utils/nuxt/localStorage";
-import { notify } from "#layers/nuxt3-blog/app/utils/nuxt/notify";
-import { watchUntil } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { withBase } from "#layers/nuxt3-blog/app/utils/nuxt/with-base";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
+import { getLocalStorage, rmLocalStorage, setLocalStorage } from "#layers/nuxt-blog/app/utils/nuxt/localStorage";
+import { notify } from "#layers/nuxt-blog/app/utils/nuxt/notify";
+import { watchUntil } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { withBase } from "#layers/nuxt-blog/app/utils/nuxt/with-base";
 
 const show = defineModel<boolean>({ required: true });
 
@@ -182,7 +182,7 @@ onUnmounted(() => {
         v-if="!r2Enabled"
         class="text-sm text-red-500 underline"
         target="_blank"
-        href="https://github.com/yunyuyuan/nuxt3-blog/wiki/2.2-%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87"
+        href="https://github.com/yunyuyuan/nuxt-blog/wiki/2.2-%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87"
       ><Info class="inline-block size-4" /></a>
       <template v-else>
         <a

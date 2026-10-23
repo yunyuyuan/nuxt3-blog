@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { StyleValue, PropType, CSSProperties } from "vue";
 import { Loader2, CircleX } from "lucide-vue-next";
-import { ViewerAttr } from "#layers/nuxt3-blog/app/utils/common/constants";
-import { addScrollListener, rmScrollListener } from "#layers/nuxt3-blog/app/utils/common/scroll-event";
-import { isPrerender } from "#layers/nuxt3-blog/app/utils/nuxt/constants";
-import { watchUntil } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { withBase } from "#layers/nuxt3-blog/app/utils/nuxt/with-base";
+import { ViewerAttr } from "#layers/nuxt-blog/app/utils/common/constants";
+import { addScrollListener, rmScrollListener } from "#layers/nuxt-blog/app/utils/common/scroll-event";
+import { isPrerender } from "#layers/nuxt-blog/app/utils/nuxt/constants";
+import { watchUntil } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { withBase } from "#layers/nuxt-blog/app/utils/nuxt/with-base";
 
 const props = defineProps({
   src: { type: String, required: true },

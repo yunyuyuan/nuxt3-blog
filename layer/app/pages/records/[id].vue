@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { RecordItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { formatTime } from "#layers/nuxt3-blog/app/utils/nuxt/format-time";
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
-import { useContentPage } from "#layers/nuxt3-blog/app/utils/nuxt/public/detail";
-import { Visitors, Comments, WroteDate } from "#layers/nuxt3-blog/app/utils/nuxt/public/components";
-import { useCommonSEOTitle } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { initViewer } from "#layers/nuxt3-blog/app/utils/nuxt/viewer";
+import type { RecordItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { formatTime } from "#layers/nuxt-blog/app/utils/nuxt/format-time";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
+import { useContentPage } from "#layers/nuxt-blog/app/utils/nuxt/public/detail";
+import { Visitors, Comments, WroteDate } from "#layers/nuxt-blog/app/utils/nuxt/public/components";
+import { useCommonSEOTitle } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { initViewer } from "#layers/nuxt-blog/app/utils/nuxt/viewer";
 
 const { item, htmlContent, markdownRef, description, visitors } = await useContentPage<RecordItem>();
 useCommonSEOTitle(() => `${translate("records")}: ${formatTime(item.time, "date")}`, undefined, description);

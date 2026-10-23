@@ -7,10 +7,10 @@
     "nuxt-layer",
     "blog"
   ],
-  "homepage": "https://github.com/yunyuyuan/nuxt3-blog",
+  "homepage": "https://github.com/yunyuyuan/nuxt-blog",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yunyuyuan/nuxt3-blog.git",
+    "url": "git+https://github.com/yunyuyuan/nuxt-blog.git",
     "directory": "layer"
   },
   "license": "MIT",

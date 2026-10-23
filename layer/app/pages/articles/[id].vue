@@ -1,10 +1,10 @@
 <script setup lang="tsx">
-import { addScrollListener, rmScrollListener } from "#layers/nuxt3-blog/app/utils/common/scroll-event";
-import type { ArticleItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { useContentPage } from "#layers/nuxt3-blog/app/utils/nuxt/public/detail";
-import { Comments, Visitors, WroteDate } from "#layers/nuxt3-blog/app/utils/nuxt/public/components";
-import { useCommonSEOTitle } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { initViewer } from "#layers/nuxt3-blog/app/utils/nuxt/viewer";
+import { addScrollListener, rmScrollListener } from "#layers/nuxt-blog/app/utils/common/scroll-event";
+import type { ArticleItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { useContentPage } from "#layers/nuxt-blog/app/utils/nuxt/public/detail";
+import { Comments, Visitors, WroteDate } from "#layers/nuxt-blog/app/utils/nuxt/public/components";
+import { useCommonSEOTitle } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { initViewer } from "#layers/nuxt-blog/app/utils/nuxt/viewer";
 
 const { related: relativeArticles, item, menuItems, htmlContent, markdownRef, description, visitors } = await useContentPage<ArticleItem>(() => {
   const hash = useRoute().hash;

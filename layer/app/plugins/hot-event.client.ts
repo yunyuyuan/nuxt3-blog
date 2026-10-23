@@ -1,5 +1,5 @@
-import { isDev } from "#layers/nuxt3-blog/app/utils/nuxt/constants";
-import { allHotEvent } from "#layers/nuxt3-blog/vite-plugins/types";
+import { isDev } from "#layers/nuxt-blog/app/utils/nuxt/constants";
+import { allHotEvent } from "#layers/nuxt-blog/vite-plugins/types";
 
 // HACK need `import.meta.hot.off()`
 export default defineNuxtPlugin(() => {

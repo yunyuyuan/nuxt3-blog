@@ -1,5 +1,5 @@
 ## [v9] 2026.10.23
-* **Breaking**: read [docs/upgrade-v9.md](/docs/upgrade-v9.md) before you upgrade. If you sync your fork without these steps, the build fails.
+* **Breaking**: v8 and earlier versions are no longer supported, and there are no upgrade steps from them. Create a new site from `starter/`.
 * The framework code moved to `layer/` and is published as the npm package `@yunyuyuan/nuxt-blog` (a Nuxt layer). The root directory is still a complete site.
 * New `starter/` template: a site that depends on the npm package and contains only `config.ts`, the content and the deployment configuration.
 * Content format: one md file for each item, with the metadata in YAML frontmatter. The build generates the JSON indexes in `public/rebuild/json/`; they are no longer committed. Convert existing content with `pnpm local:migrate-content`.

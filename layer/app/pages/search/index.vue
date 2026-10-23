@@ -2,7 +2,7 @@
 import { algoliasearch, type Hit } from "algoliasearch";
 import debounce from "lodash/debounce.js";
 import { Image, Loader2, Search } from "lucide-vue-next";
-import { HeaderTabs, KnowledgeColorMap, KnowledgeIconMap, KnowledgeTabsList, type AlgoliaBody, type HeaderTabUrl, type KnowledgeTab } from "#layers/nuxt3-blog/app/utils/common/types";
+import { HeaderTabs, KnowledgeColorMap, KnowledgeIconMap, KnowledgeTabsList, type AlgoliaBody, type HeaderTabUrl, type KnowledgeTab } from "#layers/nuxt-blog/app/utils/common/types";
 
 const input = ref("");
 const filter = ref<HeaderTabUrl | undefined>();

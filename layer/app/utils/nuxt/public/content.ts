@@ -1,9 +1,9 @@
-import { parseMarkdown } from "#layers/nuxt3-blog/app/utils/common/markdown";
-import { hideEncryptBlocks } from "#layers/nuxt3-blog/app/utils/common/process-encrypt-decrypt";
-import type { CommonItem, HeaderTabUrl } from "#layers/nuxt3-blog/app/utils/common/types";
-import { markdownExcerpt } from "#layers/nuxt3-blog/app/utils/common/utils";
-import { fetchList, fetchMd } from "#layers/nuxt3-blog/app/utils/nuxt/fetch";
-import { isPrerender } from "#layers/nuxt3-blog/app/utils/nuxt/constants";
+import { parseMarkdown } from "#layers/nuxt-blog/app/utils/common/markdown";
+import { hideEncryptBlocks } from "#layers/nuxt-blog/app/utils/common/process-encrypt-decrypt";
+import type { CommonItem, HeaderTabUrl } from "#layers/nuxt-blog/app/utils/common/types";
+import { markdownExcerpt } from "#layers/nuxt-blog/app/utils/common/utils";
+import { fetchList, fetchMd } from "#layers/nuxt-blog/app/utils/nuxt/fetch";
+import { isPrerender } from "#layers/nuxt-blog/app/utils/nuxt/constants";
 
 export type MarkdownMenu = Awaited<ReturnType<typeof parseMarkdown>>["menu"];
 

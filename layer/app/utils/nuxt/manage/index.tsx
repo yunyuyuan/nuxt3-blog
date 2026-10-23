@@ -1,9 +1,9 @@
-import type { CommonItem, RecordItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
-import DiffModal from "#layers/nuxt3-blog/app/pages/manage/comps/diff-modal.vue";
-import VersionUpdateModal from "#layers/nuxt3-blog/app/pages/manage/comps/version-update-modal.vue";
-import { escapeNewLine } from "#layers/nuxt3-blog/app/utils/common/utils";
-import { openModal } from "#layers/nuxt3-blog/app/utils/nuxt/modal";
+import type { CommonItem, RecordItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
+import DiffModal from "#layers/nuxt-blog/app/pages/manage/comps/diff-modal.vue";
+import VersionUpdateModal from "#layers/nuxt-blog/app/pages/manage/comps/version-update-modal.vue";
+import { escapeNewLine } from "#layers/nuxt-blog/app/utils/common/utils";
+import { openModal } from "#layers/nuxt-blog/app/utils/nuxt/modal";
 
 export function randomId(exist: CommonItem[] = []) {
   const ids = exist.map(item => item.id);

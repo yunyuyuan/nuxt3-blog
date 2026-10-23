@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import tinify from "tinify";
-import { getNowDayjs } from "#layers/nuxt3-blog/app/utils/common/dayjs";
+import { getNowDayjs } from "#layers/nuxt-blog/app/utils/common/dayjs";
 
 /** 允许上传的 MIME 类型前缀 */
 export const R2AllowedTypes = ["image/", "video/", "audio/"];
