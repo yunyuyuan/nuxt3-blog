@@ -97,7 +97,6 @@ Blog principle example:
   - `/vite-plugins` In development mode, writes commits from the admin pages to the local files
   - `/public/sticker` All emoji images
 - `/starter` Template for new sites, depends on the npm package `@yunyuyuan/nuxt-blog`
-- `/scripts/release.mjs` Release script for the maintainer (`pnpm release`), see [docs/release.md](./docs/release.md)
 - `/config.ts` Blog configuration, must be modified
 - `/public`
   - `/rebuild` All blog data. `articles/`, `records/` and `knowledges/` contain one md file for each item, with the metadata in YAML frontmatter at the start of the file. The build generates the indexes in `json/`; they are not committed
@@ -121,7 +120,6 @@ Blog principle example:
   "local:substitute-file": "gulp substitute-file", // Read file-map.json, replace with new files (before running this script, modify newUrl in file-map.json to the URL to be replaced)
   "local:upload-algolia": "gulp upload-algolia", // Upload index data to Algolia
   "local:migrate-content": "gulp migrate-content", // Convert content in the old format (JSON index + md) to the frontmatter format
-  "release": "node scripts/release.mjs", // Publish the npm package (maintainers), see docs/release.md
   "test:unit": "vitest run --exclude ./e2e", // Unit testing
   "test:e2e": "vitest run --dir ./e2e", // E2E testing
   "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e", // Run test service and start E2E testing
