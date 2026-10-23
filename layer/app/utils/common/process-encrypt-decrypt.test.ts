@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { decryptEncryptBlocks, findEncryptBlocks, getEncryptedBlocks, hideEncryptBlocks, showEncryptBlocksPlaceholder } from "./process-encrypt-decrypt";
+import { decryptEncryptBlocks, encryptDecryptItem, findEncryptBlocks, getEncryptedBlocks, hideEncryptBlocks, showEncryptBlocksPlaceholder } from "./process-encrypt-decrypt";
+import type { RecordItem } from "./types";
 
 // 假的加解密：密文比明文长，与真实密文一样不含换行
 const encrypt = async (s: string) => "ENC(" + Buffer.from(s).toString("base64") + ")";
@@ -32,5 +33,26 @@ describe("findEncryptBlocks", () => {
     expect(findEncryptBlocks("a [encrypt]\nx\n[/encrypt]")).toEqual([]);
     expect(findEncryptBlocks("[encrypt]\n\n[/encrypt]")).toEqual([]);
     expect(findEncryptBlocks("no blocks")).toEqual([]);
+  });
+});
+
+describe("encryptDecryptItem", () => {
+  const record = (): RecordItem => ({
+    id: 1, customSlug: "", time: 1, modifyTime: 1, showComments: false, encrypt: true,
+    images: [], alternative: "the first 50 characters of the record"
+  });
+  it("encrypts and decrypts the alternative text of a record without images", async () => {
+    const item = record();
+    await encryptDecryptItem(item, encrypt, "/records");
+    expect(item.alternative).toBe(await encrypt("the first 50 characters of the record"));
+    await encryptDecryptItem(item, decrypt, "/records");
+    expect(item.alternative).toBe("the first 50 characters of the record");
+  });
+  it("leaves a record without alternative text unchanged", async () => {
+    const item = { ...record(), images: [{ src: "a.png", alt: "a" }] };
+    delete item.alternative;
+    await encryptDecryptItem(item, encrypt, "/records");
+    expect(item.alternative).toBeUndefined();
+    expect(item.images[0]!.src).toBe(await encrypt("a.png"));
   });
 });

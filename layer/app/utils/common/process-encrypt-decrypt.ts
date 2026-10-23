@@ -19,6 +19,10 @@ export async function encryptDecryptItem(
         img.src = await fn(img.src);
         img.alt = await fn(img.alt);
       }
+      // 没有图片时，列表显示正文的前 50 个字符，它也要加密
+      if (item.alternative) {
+        item.alternative = await fn(item.alternative);
+      }
       break;
     case "/knowledges":
       item = item as KnowledgeItem;
