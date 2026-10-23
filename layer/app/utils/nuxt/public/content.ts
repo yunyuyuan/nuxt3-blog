@@ -3,6 +3,7 @@ import { hideEncryptBlocks } from "#layers/nuxt3-blog/app/utils/common/process-e
 import type { CommonItem, HeaderTabUrl } from "#layers/nuxt3-blog/app/utils/common/types";
 import { markdownExcerpt } from "#layers/nuxt3-blog/app/utils/common/utils";
 import { fetchList, fetchMd } from "#layers/nuxt3-blog/app/utils/nuxt/fetch";
+import { isPrerender } from "#layers/nuxt3-blog/app/utils/nuxt/constants";
 
 export type MarkdownMenu = Awaited<ReturnType<typeof parseMarkdown>>["menu"];
 
@@ -51,7 +52,7 @@ export async function loadContentPage<T extends CommonItem>(tab: HeaderTabUrl, i
   }
   const md = await fetchMd(tab, String(item.id));
   const shown = visibleMarkdown(item, md);
-  const { md: html, menu } = await parseMarkdown(shown, __NB_BASE_URL__);
+  const { md: html, menu } = await parseMarkdown(shown, __NB_BASE_URL__, { prerender: isPrerender });
   const summary = "summary" in item && typeof item.summary === "string" ? item.summary : "";
   return {
     item,

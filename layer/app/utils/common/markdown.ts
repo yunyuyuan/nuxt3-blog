@@ -5,7 +5,6 @@ import { withBase } from "ufo";
 import { ViewerAttr } from "../common/constants";
 import { SHIKI_LIGHT_THEME, SHIKI_DARK_THEME } from "../common/shiki";
 import { escapeHtml } from "../common/utils";
-import { isPrerender } from "../nuxt/constants";
 
 export const MarkedDataLineAttr = "data-marked-line";
 
@@ -29,7 +28,12 @@ function dataLine(token: any): string {
   return line != null ? ` ${MarkedDataLineAttr}="${line + 1}"` : "";
 }
 
-export async function parseMarkdown(text: string, baseURL: string = "/") {
+/**
+ * @param options.prerender 在服务端渲染公式（katex）和代码高亮（shiki）。只在预渲染时传 true：
+ * 这两个库体积大，只在服务端加载。本文件也被 Node 脚本（RSS）使用，所以不直接依赖 Nuxt 的标志
+ */
+export async function parseMarkdown(text: string, baseURL: string = "/", options: { prerender?: boolean } = {}) {
+  const isPrerender = options.prerender ?? false;
   const katex = isPrerender ? (await import("katex")).default : null;
 
   let shikiHighlighter: Awaited<ReturnType<typeof import("shiki")["getSingletonHighlighter"]>> | null = null;

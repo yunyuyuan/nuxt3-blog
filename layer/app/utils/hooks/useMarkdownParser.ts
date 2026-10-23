@@ -2,6 +2,7 @@
 import "katex/dist/katex.min.css";
 import { parseMarkdown } from "../common/markdown";
 import { afterInsertHtml } from "../nuxt/markdown";
+import { isPrerender } from "../nuxt/constants";
 
 type useMarkdownParserProps = {
   mdValueRef: Ref<string>;
@@ -52,7 +53,7 @@ export const useMarkdownParser = async ({ mdValueRef, fromEdit, onAfterInsertHtm
   let parseVersion = 0;
   const parse = async (md: string) => {
     const version = ++parseVersion;
-    const result = await parseMarkdown(md, __NB_BASE_URL__);
+    const result = await parseMarkdown(md, __NB_BASE_URL__, { prerender: isPrerender });
     if (version === parseVersion) {
       htmlContent.value = result.md;
       menuItems.value = result.menu;
