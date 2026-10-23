@@ -1,6 +1,6 @@
 {
   "name": "nuxt3-blog",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "description": "A blog framework based on Nuxt: GitHub as the CMS, static deployment, encrypted posts. Use it as a Nuxt layer.",
   "keywords": [
     "nuxt",
@@ -15,10 +15,33 @@
   },
   "license": "MIT",
   "main": "./nuxt.config.ts",
+  "files": [
+    "app",
+    "i18n",
+    "modules",
+    "public",
+    "scripts",
+    "server",
+    "vite-plugins",
+    "client-deps.ts",
+    "nuxt.config.ts",
+    "shim.d.ts",
+    "tailwind.config.mjs",
+    "!**/*.test.ts",
+    "!server/tsconfig.json"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.750.0",
     "@nuxt/kit": "^4.4.7",
     "@nuxtjs/tailwindcss": "^6.14.0",
+    "@types/crypto-js": "^4.2.2",
+    "@types/katex": "^0.16.7",
+    "@types/lodash": "^4.17.20",
+    "@types/node": ">=22.0.0",
+    "@types/prompts": "^2.4.9",
     "algoliasearch": "^5.35.0",
     "cheerio": "^1.1.2",
     "clipboard": "^2.0.11",
@@ -47,13 +70,13 @@
     "viewerjs": "^1.11.7",
     "yaml": "^2.9.0"
   },
-  "devDependencies": {
-    "@types/crypto-js": "^4.2.2",
-    "@types/katex": "^0.16.7",
-    "@types/lodash": "^4.17.20",
-    "@types/prompts": "^2.4.9"
-  },
   "peerDependencies": {
+    "gulp": "^5.0.0",
     "nuxt": "^4.4.7"
+  },
+  "peerDependenciesMeta": {
+    "gulp": {
+      "optional": true
+    }
   }
 }
