@@ -1,23 +1,20 @@
-import axios from "axios";
 import type { HeaderTabUrl } from "../../common/types";
 import config from "../../../../config";
 
+type D1RawResponse = { result: { success: boolean; results?: { columns: string[]; rows: unknown[][] } }[] };
+
 const request = async (sql: string, params: string[]) => {
-  const res = await axios.post(`https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_D1_ACCOUNT_ID!}/d1/database/${process.env.CLOUDFLARE_D1_DATABASE_ID}/raw`,
-    { sql, params },
-    {
-      headers: {
-        "Authorization": `Bearer ${process.env.CLOUDFLARE_D1_TOKEN!}`,
-        "Content-Type": "application/json"
-      }
+  // $fetch 遇到非 2xx 状态会抛错
+  const res = await $fetch<D1RawResponse>(`https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_D1_ACCOUNT_ID!}/d1/database/${process.env.CLOUDFLARE_D1_DATABASE_ID}/raw`, {
+    method: "POST",
+    body: { sql, params },
+    headers: {
+      Authorization: `Bearer ${process.env.CLOUDFLARE_D1_TOKEN!}`
     }
-  );
-  if (res.status !== 200) {
-    throw res.statusText;
-  }
-  const result = res.data.result[0];
-  if (!result.success) {
-    throw "sql error";
+  });
+  const result = res.result[0];
+  if (!result?.success) {
+    throw new Error("sql error");
   }
   return result.results;
 };

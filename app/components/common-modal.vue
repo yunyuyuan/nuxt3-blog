@@ -36,7 +36,16 @@ const props = withDefaults(defineProps<{
   showOk: true,
   showCancel: true,
   maskClosable: true,
-  modalWidth: "500px"
+  modalWidth: "500px",
+  modalTitle: undefined,
+  modalContent: undefined,
+  testId: undefined,
+  okTestId: undefined,
+  cancelTestId: undefined,
+  onClose: undefined,
+  onOk: undefined,
+  onAfterOpen: undefined,
+  onAfterClose: undefined
 });
 
 const root = ref<HTMLElement>();

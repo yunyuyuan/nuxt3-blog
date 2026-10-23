@@ -9,7 +9,6 @@
   "book": "Books",
   "cancel": "Cancel",
   "click-to-retry": "Click to Retry",
-  "commit-id-not-correct": "Commit ID does not match the latest version, please wait for deployment",
   "commit-id-not-correct-confirm": "Commit ID does not match the latest version, confirm submission? This may overwrite the new version",
   "config": "Configuration",
   "config-manage": "Configuration Management",
@@ -122,6 +121,9 @@
   "token-saved": "Token saved to local storage",
   "token-unverified": "Token verification failed",
   "token-verified": "Token verified successfully",
+  "token-fine-grained-hint": "Recommended: a fine-grained token with access to the {0} repository only, permission Contents: Read and write.",
+  "token-create-link": "Create one",
+  "token-classic-warning": "This is a classic token and can access all of your repositories. Consider replacing it with a fine-grained token for this repository only.",
   "type": "Type",
   "unfold-menu": "Expand Menu",
   "update": "Update",
@@ -132,6 +134,12 @@
   "upload-file": "Upload File",
   "upload-result": "Upload Result",
   "upload-successful": "Upload successful",
+  "r2-unavailable": "Upload API is not available on this deployment",
+  "r2-server-key": "The R2 key is kept on the server. Uploads are authorized with your GitHub token.",
+  "r2-legacy-key": "Recommended: set CLOUDFLARE_R2_SECRET_ACCESS_KEY on the server instead of saving the key in the browser",
+  "r2-local-key-removed": "The server holds the R2 key, the key saved in this browser was removed",
+  "file-type-not-allowed": "Only images, videos and audio can be uploaded",
+  "file-too-large": "File is larger than {0} MB",
   "visit-time": "Viewed {0} times",
   "warning": "Warning",
   "weeks-ago": "{0} weeks ago",
@@ -195,5 +203,6 @@
   "upgrade-step-1": "Go to your repository website",
   "upgrade-step-2": "Click \"Sync fork\" → Click \"Update branch\"",
   "images": "Images",
-  "view-deploy-status": "View Deploy Status"
+  "commit-conflict": "The repository has new commits, so this change was not committed. Stage your changes and reload the page",
+  "deploy-behind-head": "The site has not deployed the latest commit yet. Manage reads the latest repository content, so you can keep committing"
 }

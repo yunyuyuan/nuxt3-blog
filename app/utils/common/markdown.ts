@@ -9,6 +9,21 @@ import { isPrerender } from "../nuxt/constants";
 
 export const MarkedDataLineAttr = "data-marked-line";
 
+/** 属性中的文本：转义引号和尖括号，避免标题或说明文字中的 " 截断属性 */
+function attr(value: unknown): string {
+  return escapeHtml(String(value ?? ""));
+}
+
+/** 属性中的 URL：与 marked 默认渲染器一致先 encodeURI，再转义 */
+function attrUrl(href: unknown): string {
+  const raw = String(href ?? "");
+  try {
+    return attr(encodeURI(raw).replace(/%25/g, "%"));
+  } catch {
+    return attr(raw);
+  }
+}
+
 function dataLine(token: any): string {
   const line = token?.position?.start?.line;
   return line != null ? ` ${MarkedDataLineAttr}="${line + 1}"` : "";
@@ -65,23 +80,23 @@ export async function parseMarkdown(text: string, baseURL: string = "/") {
           const matcher = href?.match(/^(.*?)\/(\d*)$/);
           if (matcher) {
             const [, name, tone] = matcher;
-            return `<img src="${withBase(`/sticker/${name}/${tone}.png`, baseURL)}" alt="${text}"/>`;
+            return `<img src="${attrUrl(withBase(`/sticker/${name}/${tone}.png`, baseURL))}" alt="${attr(text)}"/>`;
           }
         }
         const matcher = text?.match(/^(.*?)\[(.*?) x (.*?)]$/);
         if (!matcher) {
-          return `<span class="image-container"><img ${ViewerAttr} alt="${text}" title="${text}" src="${href}"/><small class="desc">${instance.parseInline(text)}</small></span>`;
+          return `<span class="image-container"><img ${ViewerAttr} alt="${attr(text)}" title="${attr(text)}" src="${attrUrl(href)}"/><small class="desc">${instance.parseInline(text)}</small></span>`;
         }
         // with dimension
         const [, alt_, w, h] = matcher;
         const justHeight = !w;
         return `<span class="image-container${
           justHeight ? " just-height" : ""
-        }"><img ${ViewerAttr} alt="${alt_}" title="${instance.parseInline(alt_ || "")}" style="${
-          w ? `width: ${w} !important;` : ""
+        }"><img ${ViewerAttr} alt="${attr(alt_)}" title="${attr(alt_)}" style="${
+          w ? `width: ${attr(w)} !important;` : ""
         }${
-          h ? `height: ${h} !important;` : ""
-        }" src="${href}"/><small class="desc">${instance.parseInline(alt_ || "")}</small></span>`;
+          h ? `height: ${attr(h)} !important;` : ""
+        }" src="${attrUrl(href)}"/><small class="desc">${instance.parseInline(alt_ || "")}</small></span>`;
       },
       code(token) {
         let { text } = token;
@@ -101,7 +116,7 @@ export async function parseMarkdown(text: string, baseURL: string = "/") {
           // hydration: escape first, will be highlighted in afterInsertHtml
           text = escaped ? text : escapeHtml(text);
         }
-        return `<pre${dataLine(token)} data-lang="${lang}"${shikiHighlighter ? " data-shiki" : ""}><code class="language-${lang}">${text}</code></pre>`;
+        return `<pre${dataLine(token)} data-lang="${attr(lang)}"${shikiHighlighter ? " data-shiki" : ""}><code class="language-${attr(lang)}">${text}</code></pre>`;
       },
       paragraph(token) {
         return `<p${dataLine(token)}>${this.parser.parseInline(token.tokens)}</p>\n`;
@@ -157,7 +172,7 @@ export async function parseMarkdown(text: string, baseURL: string = "/") {
           }
         },
         renderer({ text, href }) {
-          return `<a href="${href}" target="_blank">${this.parser.parseInline(text)}</a>`;
+          return `<a href="${attrUrl(href)}" target="_blank">${this.parser.parseInline(text)}</a>`;
         }
       },
       {
@@ -207,15 +222,16 @@ export async function parseMarkdown(text: string, baseURL: string = "/") {
             return {
               type: "embed-youtube",
               raw: match[0],
+              title: match[1],
               text: this.lexer.inlineTokens(match[1] || ""),
               href: match[2]
             };
           }
         },
-        renderer({ text, href }) {
+        renderer({ text, title, href }) {
           text = this.parser.parseInline(text);
           return `<div class="embed-media youtube">
-                      <iframe src="${href}" title="${text}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      <iframe src="${attrUrl(href)}" title="${attr(title)}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                       <small class="desc">${text}</small>
                   </div>`;
         }
@@ -223,22 +239,23 @@ export async function parseMarkdown(text: string, baseURL: string = "/") {
       {
         name: "embed-bili",
         level: "inline",
-        start(src: string) { return src.match(/\[youtube]/)?.index; },
+        start(src: string) { return src.match(/\[bili]/)?.index; },
         tokenizer(src: string) {
           const match = /^\[bili]\[(.+?)]\((https?:\/\/.*?)\)\[\/bili]/.exec(src);
           if (match) {
             return {
               type: "embed-bili",
               raw: match[0],
+              title: match[1],
               text: this.lexer.inlineTokens(match[1] || ""),
               href: match[2]
             };
           }
         },
-        renderer({ text, href }) {
+        renderer({ text, title, href }) {
           text = this.parser.parseInline(text);
           return `<div class="embed-media bili">
-                      <iframe src="${href}&autoplay=0" title="${text}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      <iframe src="${attrUrl(`${href}&autoplay=0`)}" title="${attr(title)}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                       <small class="desc">${text}</small>
                   </div>`;
         }
@@ -262,7 +279,7 @@ export async function parseMarkdown(text: string, baseURL: string = "/") {
         renderer({ text, poster, href }) {
           text = this.parser.parseInline(text);
           return `<div class="embed-media vanilla-video">
-                      <video src="${href}" controls${poster ? ` poster="${poster}"` : ""}></video>
+                      <video src="${attrUrl(href)}" controls${poster ? ` poster="${attrUrl(poster)}"` : ""}></video>
                       <small class="desc">${text}</small>
                   </div>`;
         }
@@ -270,7 +287,7 @@ export async function parseMarkdown(text: string, baseURL: string = "/") {
       {
         name: "embed-audio",
         level: "inline",
-        start(src: string) { return src.match(/\[video]/)?.index; },
+        start(src: string) { return src.match(/\[audio]/)?.index; },
         tokenizer(src: string) {
           const match = /^\[audio]\[(.+?)]\((https?:\/\/.+?)\)\[\/audio]/.exec(src);
           if (match) {
@@ -285,7 +302,7 @@ export async function parseMarkdown(text: string, baseURL: string = "/") {
         renderer({ text, href }) {
           text = this.parser.parseInline(text);
           return `<div class="embed-media vanilla-audio">
-                      <audio src="${href}" controls></audio>
+                      <audio src="${attrUrl(href)}" controls></audio>
                       <small class="desc">${text}</small>
                   </div>`;
         }

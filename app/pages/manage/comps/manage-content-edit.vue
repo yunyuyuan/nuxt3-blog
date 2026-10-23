@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T extends CommonItem">
-import { createCommit, deleteList } from "ls:~/utils/nuxt/manage/github";
 import { FolderOpen, Hash, Lock, MessageCircleMore, Save, Trash2, Upload } from "lucide-vue-next";
+import { createCommit, deleteList } from "~/utils/nuxt/manage/repository";
 import MdEditor from "~/pages/manage/comps/md-editor.vue";
 import type { CommonItem } from "~/utils/common/types";
 import { translate } from "~/utils/nuxt/i18n";
@@ -10,8 +10,9 @@ import { useManageContent, deleteItem, editItem } from "~/utils/nuxt/manage/deta
 import { notify } from "~/utils/nuxt/notify";
 import { useStaging, type StagedItem } from "~/utils/hooks/useStaging";
 import { getProcessedUploadInfo } from "~/utils/nuxt/manage/item-processor";
-import { encryptDecryptItem } from "~/utils/common/process-encrypt-decrypt";
+import { decryptEncryptBlocks, encryptDecryptItem } from "~/utils/common/process-encrypt-decrypt";
 import { deepClone } from "~/utils/nuxt/utils";
+import { randomId } from "~/utils/nuxt/manage";
 
 const props = defineProps<{
   preProcessItem?: (editingItem: Ref<T>, originList: T[]) => void;
@@ -112,6 +113,12 @@ const showLoadStagedModal = ref(false);
 const stagedItemToLoad = ref<{ item: T; md: string } | null>(null);
 
 const doStage = async () => {
+  // 新条目在暂存时就分配 id。否则所有新条目都以 id=0 暂存，后一个会覆盖前一个。
+  // id 只分配一次，之后在同一页面重复暂存会替换同一个暂存项。
+  if (isNew && !editingItem.value.id) {
+    const stagedInTab = stagedItems.value.filter(s => s.targetTab === targetTab).map(s => s.item);
+    editingItem.value.id = randomId([...originList, ...stagedInTab]);
+  }
   const processedInfo = await getProcessedUploadInfo({
     editingItem: editingItem.value,
     editingMd: editingMd.value,
@@ -150,13 +157,8 @@ const overrideEditingItem = async (item: T, md: string) => {
   }
   editingItem.value = item;
 
-  if (item.encryptBlocks) {
-    let newMarkdownContent = md;
-    for (const block of item.encryptBlocks) {
-      const { start, end } = block;
-      newMarkdownContent = newMarkdownContent.slice(0, start) + await encryptor.decrypt(newMarkdownContent.slice(start, end)) + newMarkdownContent.slice(end);
-    }
-    editingMd.value = newMarkdownContent;
+  if (item.encryptBlocks?.length) {
+    editingMd.value = await decryptEncryptBlocks(md, encryptor.decrypt);
   } else if (!item.encrypt) {
     editingMd.value = md;
   }

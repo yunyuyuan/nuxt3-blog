@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T extends CommonItem">
-import { deleteList } from "ls:~/utils/nuxt/manage/github";
 import { Lock, Plus, Search, Trash2 } from "lucide-vue-next";
+import { deleteList } from "~/utils/nuxt/manage/repository";
 import type { CommonItem } from "~/utils/common/types";
 import { useStatusText } from "~/utils/nuxt/manage";
 import { useManageList } from "~/utils/nuxt/manage/list";

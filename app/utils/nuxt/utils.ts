@@ -17,24 +17,33 @@ export function staggerDelay(index: number) {
   return `${Math.min(index * 60, 480)}ms`;
 }
 
-export function useCommonSEOTitle(head: ComputedRef<string>, keys?: ComputedRef<string[]>) {
-  watch([head, keys].filter(i => !!i), ([head, keys]) => {
-    const title = head + config.SEO_title;
-    useHead({
-      title,
-      meta: [{
-        name: "description",
-        content: title
-      }, {
-        name: "keywords",
-        content: computed(() => `${head}${(Array.isArray(keys) && keys.length) ? ("," + keys?.join(",")) : ""},${config.SEO_keywords}`)
-      }]
-    });
-    useSeoMeta({
-      ogTitle: title,
-      ogDescription: title
-    });
-  }, { immediate: true });
+/**
+ * 设置页面标题、描述和关键词。只在 setup 中调用一次，传入的值变化时 head 会自动更新。
+ * @param description 页面摘要，缺省时使用标题
+ */
+export function useCommonSEOTitle(
+  head: MaybeRefOrGetter<string>,
+  keys?: MaybeRefOrGetter<string[] | undefined>,
+  description?: MaybeRefOrGetter<string | undefined>
+) {
+  // 不能直接把 computed 交给 useSeoMeta：服务端在 renderSSRHead 时才读取它们，
+  // 那时已离开 Nuxt 上下文，head/keys 中的 translate() 会报 "[nuxt] instance unavailable"。
+  // 所以在 setup 中同步求值写入 ref（服务端执行一次，客户端随依赖更新），head 只读 ref。
+  const title = ref("");
+  const desc = ref("");
+  const keywords = ref("");
+  watchEffect(() => {
+    title.value = toValue(head) + config.SEO_title;
+    desc.value = toValue(description) || title.value;
+    keywords.value = [toValue(head), ...(toValue(keys) ?? []), config.SEO_keywords].filter(Boolean).join(",");
+  });
+  useSeoMeta({
+    title,
+    description: desc,
+    keywords,
+    ogTitle: title,
+    ogDescription: desc
+  });
 }
 
 /**

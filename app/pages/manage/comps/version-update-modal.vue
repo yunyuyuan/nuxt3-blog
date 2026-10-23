@@ -12,7 +12,7 @@ defineProps<{
 }>();
 
 const changelogUrl = `https://github.com/${OfficialRepo}/blob/master/CHANGELOG.md`;
-const repoUrl = `https://github.com/${config.githubName}/nuxt3-blog`;
+const repoUrl = `https://github.com/${config.githubName}/${__NB_GITHUB_REPO__}`;
 </script>
 
 <template>

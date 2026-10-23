@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Eye, X } from "lucide-vue-next";
-import { commitStagedItems } from "ls:~/utils/nuxt/manage/github";
+import { commitStagedItems } from "~/utils/nuxt/manage/repository";
 import type { CommitParamsAddition, CommonItem, HeaderTabUrl } from "~/utils/common/types";
 import { fetchAny, fetchList } from "~/utils/nuxt/fetch";
 import { translate } from "~/utils/nuxt/i18n";
@@ -55,8 +55,9 @@ const handleCommitStaged = async () => {
       // 更新列表
       const updatedList = [...originList];
       for (const { item } of items) {
+        // 兼容旧版本以 id=0 暂存的新条目；用 updatedList 生成，避免同一批新条目 id 冲突
         if (!item.id) {
-          item.id = randomId(originList);
+          item.id = randomId(updatedList);
         }
         const foundIndex = updatedList.findIndex(i => i.id === item.id);
         if (foundIndex >= 0) {

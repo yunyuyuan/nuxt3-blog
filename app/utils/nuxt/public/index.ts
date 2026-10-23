@@ -1,4 +1,3 @@
-import axios from "axios";
 import { isPrerender } from "~/utils/nuxt/constants";
 import { withBase } from "~/utils/nuxt/with-base";
 
@@ -13,6 +12,8 @@ export function DBOperate<T = any> (
       } catch { }
     };
 
-    axios.post(withBase(`/api${apiPath}`), query).then(res => cb(res.data));
+    $fetch(withBase(`/api${apiPath}`), { method: "POST", body: query })
+      .then(res => cb(res as T))
+      .catch(() => { /* 统计失败不影响页面 */ });
   }
 }

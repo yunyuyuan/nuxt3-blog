@@ -1,26 +1,52 @@
 <script setup lang="ts">
-import axios from "axios";
 import { Info, Plus, Save, Upload } from "lucide-vue-next";
 import ClipboardJS from "clipboard";
 import { translate } from "~/utils/nuxt/i18n";
-import { getLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
+import { getLocalStorage, rmLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
 import { notify } from "~/utils/nuxt/notify";
 import { watchUntil } from "~/utils/nuxt/utils";
 import { withBase } from "~/utils/nuxt/with-base";
 
 const show = defineModel<boolean>({ required: true });
 
-const r2Enabled = __NB_R2_ENABLED__;
+type R2Status = { enabled: boolean; serverKey: boolean; maxBytes: number; types: string[] };
+const R2SecretKey = "r2-secret-access-key";
 
 const dragIn = ref(false);
 const file = ref<File>();
 const fileUrl = ref();
 const isImage = computed(() => file.value?.type.startsWith("image"));
 const isVideo = computed(() => file.value?.type.startsWith("video"));
-const r2SecretAccessKey = ref(getLocalStorage("r2-secret-access-key") || "");
+const r2SecretAccessKey = ref(getLocalStorage(R2SecretKey) || "");
 const tinyPngToken = ref(getLocalStorage("tinypng-token") || "");
 const resultUrl = ref("");
 const uploading = ref(false);
+
+// 运行时探测：纯静态托管没有 /api/r2/status，请求失败或返回的不是 JSON 都视为不可用
+const r2Status = ref<R2Status>();
+const r2Enabled = computed(() => !!r2Status.value?.enabled);
+const serverKey = computed(() => !!r2Status.value?.serverKey);
+const githubToken = useGithubToken();
+
+const loadR2Status = async () => {
+  try {
+    const res = await $fetch<R2Status>(withBase("/api/r2/status"));
+    r2Status.value = typeof res === "object" && res ? res : undefined;
+  } catch {
+    r2Status.value = undefined;
+  }
+  if (serverKey.value && getLocalStorage(R2SecretKey)) {
+    // 服务端已持有密钥，浏览器里的旧密钥不再需要
+    rmLocalStorage(R2SecretKey);
+    r2SecretAccessKey.value = "";
+    notify({ title: translate("r2-local-key-removed") });
+  }
+};
+watch(show, (v) => {
+  if (v && !r2Status.value) {
+    loadR2Status();
+  }
+}, { immediate: true });
 
 const setFile = (e: Event) => {
   const f = (e.target as HTMLInputElement).files?.[0];
@@ -73,46 +99,50 @@ const saveToken = (k: string, v: string) => {
   });
 };
 
-const afterUpload = (res: any) => {
-  try {
-    if (typeof res === "string") {
-      throw new TypeError(res);
-    }
-    if (res.data.success) {
-      resultUrl.value = res.data.url;
-      notify({
-        title: translate("upload-successful"),
-        description: translate("manually-copy-link")
-      });
-    } else {
-      throw new Error(res.data.message);
-    }
-  } catch (e: any) {
-    notify({
-      type: "error",
-      title: translate("upload-failed"),
-      description: e.toString()
-    });
-  } finally {
-    uploading.value = false;
+const canUpload = computed(() => !!file.value && r2Enabled.value && (serverKey.value ? !!githubToken.value : !!r2SecretAccessKey.value));
+
+// 与服务端相同的限制，先在浏览器里拦下
+const checkFile = (f: File) => {
+  const status = r2Status.value!;
+  if (!status.types.some(t => f.type.startsWith(t))) {
+    return translate("file-type-not-allowed");
+  }
+  if (f.size > status.maxBytes) {
+    return translate("file-too-large", [status.maxBytes / 1024 / 1024]);
   }
 };
 
 const doUpload = async () => {
+  const invalid = checkFile(file.value!);
+  if (invalid) {
+    return notify({ type: "warn", title: translate("upload-failed"), description: invalid });
+  }
   uploading.value = true;
   try {
     const formData = new FormData();
-    formData.append("secretAccessKey", r2SecretAccessKey.value);
+    if (!serverKey.value) {
+      formData.append("secretAccessKey", r2SecretAccessKey.value);
+    }
     formData.append("tinyPngToken", tinyPngToken.value);
     formData.append("file", file.value!);
-    const res = await axios({
-      url: withBase("/api/r2/upload"),
-      method: "post",
-      data: formData
+    const res = await $fetch<{ success: boolean; url: string }>(withBase("/api/r2/upload"), {
+      method: "POST",
+      body: formData,
+      headers: serverKey.value ? { Authorization: `Bearer ${githubToken.value}` } : {}
     });
-    afterUpload(res);
-  } catch (e) {
-    afterUpload(JSON.stringify(e));
+    resultUrl.value = res.url;
+    notify({
+      title: translate("upload-successful"),
+      description: translate("manually-copy-link")
+    });
+  } catch (e: any) {
+    notify({
+      type: "error",
+      title: translate("upload-failed"),
+      description: e?.data?.message || e?.message || String(e)
+    });
+  } finally {
+    uploading.value = false;
   }
 };
 
@@ -220,7 +250,19 @@ onUnmounted(() => {
           <span v-else>{{ file.name }}</span>
         </label>
         <div class="flex flex-col gap-2">
-          <div class="flex items-center">
+          <small
+            v-if="!r2Enabled"
+            class="text-red-500"
+          >{{ $t('r2-unavailable') }}</small>
+          <small v-else-if="serverKey">{{ $t('r2-server-key') }}</small>
+          <small
+            v-else
+            class="text-yellow-600"
+          >{{ $t('r2-legacy-key') }}</small>
+          <div
+            v-if="r2Enabled && !serverKey"
+            class="flex items-center"
+          >
             <input
               v-model="r2SecretAccessKey"
               type="password"
@@ -230,7 +272,7 @@ onUnmounted(() => {
             <button
               class="ml-2 text-primary-600"
               :title="$t('save')"
-              @click="saveToken('r2-secret-access-key', r2SecretAccessKey)"
+              @click="saveToken(R2SecretKey, r2SecretAccessKey)"
             >
               <Save />
             </button>
@@ -252,7 +294,7 @@ onUnmounted(() => {
           <CommonButton
             :icon="Upload"
             :loading="uploading"
-            :disabled="!file || !r2SecretAccessKey"
+            :disabled="!canUpload"
             class="mt-2 self-center"
             theme="primary"
             @click="doUpload"
