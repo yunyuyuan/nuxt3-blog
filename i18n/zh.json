@@ -9,7 +9,6 @@
   "book": "书籍",
   "cancel": "取消",
   "click-to-retry": "点击重试",
-  "commit-id-not-correct": "commit-id 与最新版本不一致，请等待部署",
   "commit-id-not-correct-confirm": "commit-id 与最新版本不一致，确认提交？可能会覆盖新版本",
   "config": "配置",
   "config-manage": "配置管理",
@@ -123,6 +122,9 @@
   "token-saved": "已将Token保存到本地",
   "token-unverified": "Token验证失败",
   "token-verified": "Token验证成功",
+  "token-fine-grained-hint": "推荐使用 fine-grained token：仓库只选 {0}，权限选 Contents: Read and write。",
+  "token-create-link": "去创建",
+  "token-classic-warning": "这是 classic token，可以访问你的所有仓库。建议换成只授权本仓库的 fine-grained token。",
   "type": "类型",
   "unfold-menu": "展开目录",
   "update": "更新",
@@ -133,6 +135,12 @@
   "upload-file": "上传文件",
   "upload-result": "上传结果",
   "upload-successful": "上传成功",
+  "r2-unavailable": "当前部署没有可用的上传接口",
+  "r2-server-key": "R2 密钥保存在服务端，上传时用你的 GitHub token 验证身份。",
+  "r2-legacy-key": "建议在服务端设置 CLOUDFLARE_R2_SECRET_ACCESS_KEY，不要把密钥保存在浏览器中",
+  "r2-local-key-removed": "服务端已持有 R2 密钥，已删除此浏览器中保存的密钥",
+  "file-type-not-allowed": "只能上传图片、视频和音频",
+  "file-too-large": "文件超过 {0} MB",
   "visit-time": "被浏览 {0} 次",
   "warning": "警告",
   "weeks-ago": "{0}周前",
@@ -196,5 +204,6 @@
   "upgrade-step-1": "进入你的仓库网站",
   "upgrade-step-2": "点击 \"Sync fork\" → 点击 \"Update branch\"",
   "images": "图片",
-  "view-deploy-status": "查看部署状态"
+  "commit-conflict": "仓库有新的提交，本次修改未提交。请暂存修改后刷新页面",
+  "deploy-behind-head": "线上站点还没有部署最新提交。后台读取的是仓库最新内容，可以继续提交"
 }

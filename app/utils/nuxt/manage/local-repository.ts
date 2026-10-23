@@ -1,3 +1,4 @@
+// ContentRepository 的开发模式实现：通过 Vite WebSocket 让 nb-rebuild-plugin 改写本地文件
 import { translate } from "../i18n";
 import { getCurrentTab, devHotListen } from "../utils";
 import { createDiffModal } from ".";

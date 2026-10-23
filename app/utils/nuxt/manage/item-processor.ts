@@ -155,7 +155,10 @@ export async function getProcessedUploadInfo<T extends CommonItem>(params: {
   // 更新时间
   const nowTime = getNowStamp();
   if (isNew) {
-    newItem.id = randomId(originList);
+    // 暂存过的新条目已经有 id，保留它，以便和暂存项对应
+    if (!newItem.id) {
+      newItem.id = randomId(originList);
+    }
     newItem.time = nowTime;
   }
   newItem.modifyTime = nowTime;

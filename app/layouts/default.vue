@@ -190,7 +190,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
         >{{ config.nickName }}</a> | {{ footerDomain }}</b></span>
         <span class="flex"><a
           target="_blank"
-          :href="withBase('/sitemap.xml')"
+          :href="withBase('/rss.xml')"
           title="rss"
         >RSS <Rss class="size-4" /></a>| Powered By <a
           :href="`https://github.com/${OfficialRepo}`"

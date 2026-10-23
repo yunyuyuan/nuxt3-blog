@@ -18,7 +18,7 @@ const tags = useRouteQuery("tag", (tags) => {
   }
 });
 
-const articlesList = await useListPage<ArticleItem>();
+const { list: articlesList, visitors, isShown } = await useListPage<ArticleItem>();
 
 const articleTagList = new Map<string, number>();
 
@@ -31,7 +31,7 @@ watch(articlesList, () => {
 
 const filteredList = computed(() => {
   return articlesList.filter(item =>
-    !!item._show && (!tags.value.length || tags.value.some(tag => item.tags.includes(tag)))
+    isShown(item) && (!tags.value.length || tags.value.some(tag => item.tags.includes(tag)))
   );
 });
 
@@ -113,7 +113,7 @@ const toggleTags = (tag: string) => {
             </div>
             <div class="flex flex-wrap items-center gap-4 text-[13px] text-dark-500 dark:text-dark-300">
               <Words :len="item.len" />
-              <Visitors :visitors="item._visitors" />
+              <Visitors :visitors="visitors[item.id]" />
             </div>
           </NuxtLink>
         </article>

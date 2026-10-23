@@ -1,10 +1,10 @@
 import fs from "fs";
 import path from "path";
-import { algoliasearch, type Action } from "algoliasearch";
+import { algoliasearch, type Action, type BatchRequest } from "algoliasearch";
 import config from "../config";
 import type { AlgoliaBody, ArticleItem, KnowledgeItem, RecordItem } from "../app/utils/common/types";
 import { parseMarkdown } from "../app/utils/common/markdown";
-import { genRss, getAbsolutePath, getRebuildPath, nbLog, walkAllBlogData } from "./utils";
+import { genRss, genSitemap, getAbsolutePath, getRebuildPath, isDomainConfigured, nbLog, siteUrl, walkAllBlogData } from "./utils";
 import extractTextFromHtml from "./utils/html";
 
 export function generateThemeColorsCSS() {
@@ -49,10 +49,32 @@ export function generateThemeColorsCSS() {
   nbLog(`random themes generated: ${cssFilePath}`);
 }
 
-export function generateSiteMap(publicDir: string) {
-  nbLog("sitemap");
-  fs.writeFileSync(path.resolve(publicDir, "sitemap.xml"),
-    genRss(JSON.parse(fs.readFileSync(getRebuildPath("json", "articles.json")).toString())));
+/**
+ * 生成 rss.xml（订阅）和 sitemap.xml（搜索引擎），并在 robots.txt 中声明 sitemap
+ */
+export function generateFeeds(publicDir: string) {
+  const readList = (name: string) => JSON.parse(fs.readFileSync(getRebuildPath("json", `${name}.json`)).toString());
+  const articles = readList("articles");
+  fs.writeFileSync(path.resolve(publicDir, "rss.xml"), genRss(articles));
+  nbLog("rss.xml generated");
+
+  if (!isDomainConfigured()) {
+    nbLog("config.domain is not set, skip sitemap.xml");
+    return;
+  }
+  fs.writeFileSync(path.resolve(publicDir, "sitemap.xml"), genSitemap({
+    "/articles": articles,
+    "/records": readList("records"),
+    "/knowledges": readList("knowledges")
+  }));
+  const robotsPath = path.resolve(publicDir, "robots.txt");
+  if (fs.existsSync(robotsPath)) {
+    const robots = fs.readFileSync(robotsPath).toString();
+    if (!/^Sitemap:/im.test(robots)) {
+      fs.writeFileSync(robotsPath, `${robots.trimEnd()}\n\nSitemap: ${siteUrl("sitemap.xml")}\n`);
+    }
+  }
+  nbLog("sitemap.xml generated");
 }
 
 export async function uploadAlgoliaIndex() {
@@ -110,7 +132,8 @@ export async function uploadAlgoliaIndex() {
       attributesToRetrieve: ["objectID"]
     } });
     exists.push(...hits.map(hit => hit.objectID));
-    if (page >= nbPages) {
+    // page 从 0 开始，nbPages 是总页数
+    if (page + 1 >= (nbPages ?? 0)) {
       break;
     }
     page++;
@@ -121,14 +144,14 @@ export async function uploadAlgoliaIndex() {
   const deletes = exists.filter(objectID => !allObjectIDs.includes(objectID));
 
   // 合并所有操作请求
-  const allRequests = [
+  const allRequests: BatchRequest[] = [
     ...adds.map(objectID => ({
       action: "addObject" as Action,
-      body: dataMap[objectID]
+      body: dataMap[objectID]!
     })),
     ...updates.map(objectID => ({
       action: "updateObject" as Action,
-      body: dataMap[objectID]
+      body: dataMap[objectID]!
     })),
     ...deletes.map(objectID => ({
       action: "deleteObject" as Action,
@@ -138,20 +161,20 @@ export async function uploadAlgoliaIndex() {
 
   // 每100条数据调用一个batch
   const batchSize = 100;
-  const batches = [];
+  const batches: BatchRequest[][] = [];
   for (let i = 0; i < allRequests.length; i += batchSize) {
     batches.push(allRequests.slice(i, i + batchSize));
   }
 
   // 执行所有批次
-  for (let i = 0; i < batches.length; i++) {
+  for (const [i, batch] of batches.entries()) {
     await client.batch({
       indexName,
       batchWriteParams: {
-        requests: batches[i]
+        requests: batch
       }
     });
-    nbLog(`Algolia batch ${i + 1}/${batches.length} uploaded (${batches[i].length} items)`);
+    nbLog(`Algolia batch ${i + 1}/${batches.length} uploaded (${batch.length} items)`);
   }
 
   nbLog(`Algolia index upload completed: ${adds.length} adds, ${updates.length} updates, ${deletes.length} deletes`);

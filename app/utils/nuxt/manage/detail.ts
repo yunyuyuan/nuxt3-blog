@@ -21,16 +21,27 @@ export async function useManageContent<T extends CommonItem>() {
 
   useCommonSEOTitle(computed(() => translate("detail-manage", [translate(targetTab)])));
 
-  const isNew = itemId === "0";
-
   const blogItemResult = await useBlogItem<T>(itemId, targetTab, false);
   const { originList, decryptedList, originMd, decryptedMd, successDecrypt } = blogItemResult;
   let { originItem, decryptedItem } = blogItemResult;
+
+  // 暂存功能
+  const { getStagedItem, initializeStagedItems } = useStaging();
+  // layout 在 onMounted 中才初始化暂存，这里需要提前读取
+  if (import.meta.client) {
+    initializeStagedItems();
+  }
+  // 新条目暂存时就分配了 id，在提交前只存在于暂存区
+  const stagedNewId = !originItem && itemId !== "0" && getStagedItem(Number(itemId), targetTab)
+    ? Number(itemId)
+    : 0;
+  const isNew = itemId === "0" || !!stagedNewId;
 
   if (!originItem) {
     // isNew
     successDecrypt.value = true;
     originItem = createNewItem(targetTab) as T;
+    originItem.id = stagedNewId;
     decryptedItem = readonly(ref(deepClone(originItem))) as Readonly<Ref<T>>;
   }
 
@@ -44,9 +55,6 @@ export async function useManageContent<T extends CommonItem>() {
   watch(decryptedItem, (decryptedItem) => {
     editingItem.value = deepClone(decryptedItem);
   }, { immediate: true, deep: true });
-
-  // 暂存功能
-  const { getStagedItem } = useStaging();
 
   // 比较是否与原始内容相同
   const sameWithOrigin = computed(() => {

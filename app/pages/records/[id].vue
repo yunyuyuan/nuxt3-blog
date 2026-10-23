@@ -7,8 +7,8 @@ import { Visitors, Comments, WroteDate } from "~/utils/nuxt/public/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
-const { item, htmlContent, markdownRef } = await useContentPage<RecordItem>();
-useCommonSEOTitle(computed(() => `${translate("records")}: ${formatTime(item.time, "date")}`));
+const { item, htmlContent, markdownRef, description, visitors } = await useContentPage<RecordItem>();
+useCommonSEOTitle(() => `${translate("records")}: ${formatTime(item.time, "date")}`, undefined, description);
 
 const root = ref<HTMLElement>();
 initViewer(root);
@@ -45,7 +45,7 @@ initViewer(root);
         <div class="border-t border-dark-100 py-6 dark:border-dark-700">
           <div class="flex items-center space-x-4 text-sm text-dark-500 dark:text-dark-400">
             <WroteDate :item="item" />
-            <Visitors :visitors="item._visitors" />
+            <Visitors :visitors="visitors" />
           </div>
         </div>
       </div>

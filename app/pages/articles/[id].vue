@@ -6,7 +6,7 @@ import { Comments, Visitors, WroteDate } from "~/utils/nuxt/public/components";
 import { useCommonSEOTitle } from "~/utils/nuxt/utils";
 import { initViewer } from "~/utils/nuxt/viewer";
 
-const { originList, item, menuItems, htmlContent, markdownRef } = await useContentPage<ArticleItem>(() => {
+const { related: relativeArticles, item, menuItems, htmlContent, markdownRef, description, visitors } = await useContentPage<ArticleItem>(() => {
   const hash = useRoute().hash;
   if (hash) {
     window.scrollTo({
@@ -16,13 +16,8 @@ const { originList, item, menuItems, htmlContent, markdownRef } = await useConte
     });
   }
 });
-const relativeArticles = originList.filter(i => i.id !== item.id)
-  .map<{ count: number; item: ArticleItem }>(i => ({ item: i, count: i.tags.filter(t => item.tags.includes(t)).length }))
-  .filter(i => i && i.count > 0)
-  .sort((a, b) => b.count - a.count)
-  .slice(0, 5);
 
-useCommonSEOTitle(computed(() => item.title), computed(() => item.tags));
+useCommonSEOTitle(() => item.title, () => item.tags, description);
 const activeAnchor = ref<string>();
 
 const onScroll = () => {
@@ -106,7 +101,7 @@ initViewer(root);
           class="mb-6 flex flex-wrap items-center gap-4 border-b border-dark-300 pb-3 text-sm text-dark-500 dark:border-dark-600 dark:text-dark-400"
         >
           <WroteDate :item="item" />
-          <Visitors :visitors="item._visitors" />
+          <Visitors :visitors="visitors" />
           <div class="flex flex-wrap gap-2">
             <the-tag
               v-for="tag in item.tags"

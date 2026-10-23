@@ -8,7 +8,7 @@ import { useRouteQuery } from "~/utils/hooks/useRouteQuery";
 
 const currentTab = useRouteQuery("type");
 
-const knowledgeList = await useListPage<KnowledgeItem>();
+const { list: knowledgeList, isShown } = await useListPage<KnowledgeItem>();
 
 const isAll = computed(
   () => !(KnowledgeTabs as string[]).includes(currentTab.value)
@@ -20,13 +20,13 @@ const tabs = computed(() => [
 ]);
 
 const filteredList = computed(() => {
-  return (isAll.value ? knowledgeList : knowledgeList.filter(item => item.type === currentTab.value)).filter(i => !!i._show);
+  return (isAll.value ? knowledgeList : knowledgeList.filter(item => item.type === currentTab.value)).filter(i => isShown(i));
 });
 
 const tabLengthMap = computed(() => {
   const map = new Map<string, number>();
   tabs.value.forEach((tab) => {
-    map.set(tab.key, knowledgeList.filter(item => item._show && (!tab.key || item.type === tab.key)).length);
+    map.set(tab.key, knowledgeList.filter(item => isShown(item) && (!tab.key || item.type === tab.key)).length);
   });
   return map;
 });

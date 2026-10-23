@@ -12,10 +12,9 @@ export type ItemBase<T> = T & {
   time: number;
   modifyTime: number;
   encrypt: boolean;
+  // 有加密块时存在。读取时位置从正文的 [encrypt] 标记解析，这里的 start/end 只为兼容旧数据而继续写入
   encryptBlocks?: EncryptBlock[];
   showComments: boolean;
-  _visitors?: number;
-  _show?: boolean;
 };
 
 export type ArticleItem = ItemBase<{

@@ -61,14 +61,14 @@ export class ManageItemPage extends ManageBasePage {
   // ---------------------------------------------------------------------------
 
   async uploadItem() {
-    await this.getByTestId("item-upload-btn").click();
-    await this.waitForTimeout();
+    await this.waitForCommitAfter(() => this.getByTestId("item-upload-btn").click());
   }
 
   async deleteItem() {
-    await this.getByTestId("item-delete-btn").click();
-    await this.clickElement("confirm-item-delete");
-    await this.waitForTimeout();
+    await this.waitForCommitAfter(async () => {
+      await this.getByTestId("item-delete-btn").click();
+      await this.clickElement("confirm-item-delete");
+    });
   }
 
   async stageItem() {
@@ -101,7 +101,7 @@ export class ManageItemPage extends ManageBasePage {
   /** Open the staged-items modal and confirm the commit. */
   async commitStaged() {
     await this.openCommitStagedModal();
-    await this.confirmCommitStaged();
+    await this.waitForCommitAfter(() => this.confirmCommitStaged());
   }
 
   // ---------------------------------------------------------------------------

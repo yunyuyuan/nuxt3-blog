@@ -1,48 +1,14 @@
-import path from "path";
-import fs from "fs";
-import { execSync } from "child_process";
 import { hash as cryptoHash } from "crypto";
-import type { NitroRouteConfig } from "nitropack";
 import type { AppHeadMetaObject } from "@nuxt/schema";
 import { withBase } from "ufo";
-import { generateSiteMap, generateThemeColorsCSS, uploadAlgoliaIndex } from "./scripts/nuxt-hooks";
 import config from "./config";
 import { allPlugins, buildPlugins } from "./vite-plugins";
-import { getNowDayjsString } from "./app/utils/common/dayjs";
 import { ThemeModeKey } from "./app/utils/common/constants";
-import { HeaderTabs, type CommonItem } from "./app/utils/common/types";
+import { HeaderTabs } from "./app/utils/common/types";
 
+// 读取内容、git 信息、生成主题色和 feed 等构建期逻辑在 modules/blog.ts 中
 const isDev = process.env.NODE_ENV === "development";
-const isTest = process.env.VITESTING === "true";
 const baseURL = process.env.NUXT_APP_BASE_URL || "/";
-
-// stickers
-const stickers: Record<string, any> = {};
-fs.readdirSync("./public/sticker").forEach((dir) => {
-  stickers[dir] = fs.readdirSync(`./public/sticker/${dir}`).length;
-});
-
-// random theme
-generateThemeColorsCSS();
-
-// routes
-const routes: string[] = [];
-const ignoreRoutes: string[] = [];
-const routesConfig: Record<string, NitroRouteConfig> = {};
-
-HeaderTabs.forEach((url) => {
-  const path = `./public${isTest ? "/e2e" : ""}/rebuild/json${url}.json`;
-  if (fs.existsSync(path)) {
-    const json = JSON.parse(fs.readFileSync(path).toString()) as CommonItem[];
-    json.forEach((item) => {
-      if (item.customSlug) {
-        ignoreRoutes.push(`${url}/${item.id}`);
-        routesConfig[`${url}/${item.id}`] = { redirect: { to: `/${url}/${item.customSlug}` } };
-      }
-      routes.push(`${url}/${item.customSlug || item.id}`);
-    });
-  }
-});
 
 const scripts: AppHeadMetaObject["script"] = [];
 // dark mode
@@ -72,46 +38,6 @@ if (!isDev) {
   }
 }
 
-let githubBranch = "main";
-for (const b of [
-  // vercel
-  process.env.VERCEL_GIT_COMMIT_REF,
-  // cloudflare page
-  process.env.CF_PAGES_BRANCH,
-  // netlify
-  process.env.BRANCH,
-  // XXX Why `git rev-parse --abbrev-ref HEAD` not works as expected?
-  // git cli for fallback
-  execSync("git rev-parse --abbrev-ref HEAD").toString().trim()
-]) {
-  if (b) {
-    githubBranch = b;
-    break;
-  }
-}
-
-let gitCurrentSha = "";
-for (const b of [
-  // vercel
-  process.env.VERCEL_GIT_COMMIT_SHA,
-  // cloudflare page
-  process.env.CF_PAGES_COMMIT_SHA,
-  // netlify
-  process.env.COMMIT_REF,
-  // git cli for fallback
-  execSync("git rev-parse HEAD").toString().trim()
-]) {
-  if (b) {
-    gitCurrentSha = b;
-    break;
-  }
-}
-
-// current version from CHANGELOG.md
-const changelogContent = fs.readFileSync("./CHANGELOG.md").toString();
-const versionMatch = changelogContent.match(/##\s*\[v(\d+)\]/);
-const currentVersion = versionMatch ? versionMatch[1] : "1";
-
 // const prefix = "monaco-editor/esm/vs";
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
@@ -140,37 +66,42 @@ export default defineNuxtConfig({
         { name: "author", content: config.nickName }
       ],
       link: [
-        { rel: "shortcut icon", href: withBase("/icon.png", baseURL) }
+        { rel: "shortcut icon", href: withBase("/icon.png", baseURL) },
+        { rel: "alternate", type: "application/rss+xml", title: config.title, href: withBase("/rss.xml", baseURL) }
       ],
       script: scripts,
       title: config.title
     }
   },
-  css: ["~/assets/style/main.css", "./node_modules/katex/dist/katex.min.css", "./node_modules/viewerjs/dist/viewer.css"],
+  // katex.min.css 随 useMarkdownParser、viewer.css 随 utils/nuxt/viewer.ts 进入详情页和编辑器的 chunk
+  css: ["~/assets/style/main.css"],
 
+  // 由 modules/blog.ts 在构建时填充；这里的初始值用于类型推导
   runtimeConfig: {
+    // 仅服务端可见
+    nbItemIds: {} as Record<string, number[]>,
     public: {
-      stickers
+      stickers: {} as Record<string, number>
     }
   },
-
-  routeRules: routesConfig,
 
   features: {
     inlineStyles: false
   },
 
-  experimental: {
-    payloadExtraction: false
-  },
   compatibilityDate: "2025-02-15",
 
   nitro: {
     prerender: {
       crawlLinks: true,
-      failOnError: false,
-      routes: routes,
-      ignore: ["/manage", ...ignoreRoutes]
+      // 默认不因单个页面出错（如文章里的失效站内链接）而中断博客部署；
+      // 本仓库的 CI 设置 NB_PRERENDER_STRICT=true，让模板本身的预渲染错误暴露出来
+      failOnError: process.env.NB_PRERENDER_STRICT === "true",
+      // /404.html 会被 Nuxt 渲染成 SPA 外壳。GitHub Pages 等静态托管对未知路径返回它，
+      // 从而可以直接打开或刷新 /manage/** 等未预渲染的页面
+      // 内容页面的路由由 modules/blog.ts 追加
+      routes: ["/404.html"],
+      ignore: ["/manage"]
     },
     cloudflare: {
       pages: {
@@ -189,26 +120,7 @@ export default defineNuxtConfig({
     optimizeDeps: {
       exclude: ["monaco-editor"]
     },
-    define: {
-      __NB_DATABASE_ENABLED__: !!process.env.CLOUDFLARE_D1_TOKEN && !!process.env.CLOUDFLARE_D1_ACCOUNT_ID && !!process.env.CLOUDFLARE_D1_DATABASE_ID,
-      __NB_R2_ENABLED__: !!process.env.CLOUDFLARE_D1_ACCOUNT_ID && !!process.env.CLOUDFLARE_R2_ACCESS_KEY_ID && !!process.env.CLOUDFLARE_R2_BUCKET_NAME && !!process.env.CLOUDFLARE_R2_PUBLIC_URL,
-      __NB_CMTREPOID__: JSON.stringify(config.CommentRepoId),
-      __NB_CMTREPOCATEID__: JSON.stringify(config.CommentDiscussionCategoryId),
-      __NB_ALGOLIA_APP_ID__: JSON.stringify(config.algoliaSearch.appId),
-      __NB_ALGOLIA_SEARCH_KEY__: JSON.stringify(config.algoliaSearch.searchKey),
-      __NB_ALGOLIA_INDEX_NAME__: JSON.stringify(config.algoliaSearch.indexName),
-      __NB_ALGOLIA_ENABLED__: JSON.stringify(
-        !!(config.algoliaSearch.appId)
-        && !!(config.algoliaSearch.searchKey)
-        && !!(config.algoliaSearch.indexName)),
-      __NB_BUILD_TIME__: JSON.stringify(getNowDayjsString()),
-      __NB_GITHUB_REPO__: JSON.stringify(config.githubRepo),
-      __NB_GIT_BRANCH__: JSON.stringify(githubBranch),
-      __NB_CURRENT_GIT_SHA__: JSON.stringify(gitCurrentSha),
-      __NB_BUILDTIME_VITESTING__: isTest,
-      __NB_CURRENT_VERSION__: JSON.stringify(currentVersion),
-      __NB_BASE_URL__: JSON.stringify(baseURL)
-    },
+    // define（__NB_*__ 常量）由 modules/blog.ts 注入
     css: {
       modules: {
         generateScopedName: (name, css) => {
@@ -233,16 +145,6 @@ export default defineNuxtConfig({
     }
   },
   telemetry: false,
-
-  hooks: {
-    "nitro:build:public-assets"(nitro) {
-      generateSiteMap(nitro.options.output.publicDir);
-      if (!isTest) {
-        uploadAlgoliaIndex();
-        fs.rmSync(path.join(nitro.options.output.publicDir, "e2e"), { recursive: true });
-      }
-    }
-  },
 
   eslint: {
     config: {

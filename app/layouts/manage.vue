@@ -1,17 +1,19 @@
 <script setup lang="tsx">
 import { BookOpen, CheckCheck, FileEdit, Image, ImagePlus, Key, Menu, MoonStar, Rocket, Settings, Sun, Upload, X } from "lucide-vue-next";
 import type { FunctionalComponent } from "vue";
-import { isAuthor as checkIsAuthor } from "ls:~/utils/nuxt/manage/github";
+import { isAuthor as checkIsAuthor } from "~/utils/nuxt/manage/repository";
 import Stage from "~/pages/manage/comps/stage.vue";
 import UploadFile from "~/pages/manage/comps/upload-file.vue";
 import { GithubTokenKey } from "~/utils/common/constants";
 import { HeaderTabs, type HeaderTabUrl } from "~/utils/common/types";
+import { setHeadReadingActive } from "~/utils/nuxt/fetch";
 import { translate } from "~/utils/nuxt/i18n";
 import { rmLocalStorage, setLocalStorage } from "~/utils/nuxt/localStorage";
 import { notify } from "~/utils/nuxt/notify";
 import { calcRocketUrl, watchUntil } from "~/utils/nuxt/utils";
 import { isDev } from "~/utils/nuxt/constants";
 import { useStaging } from "~/utils/hooks/useStaging";
+import config from "~~/config";
 
 const inputTokenDisabled = isDev || __NB_BUILDTIME_VITESTING__;
 
@@ -23,6 +25,12 @@ const encryptor = useEncryptor();
 const isAuthor = useIsAuthor();
 const { themeMode, toggleThemeMode } = useThemeMode();
 const sameSha = computed(() => useRemoteLatestSha().value === __NB_CURRENT_GIT_SHA__);
+const manageReloadKey = useManageReloadKey();
+
+// 后台页面读取仓库 HEAD 的内容（token 验证通过后生效），离开后台后恢复读取已部署的静态文件。
+// 在 setup 中设置，早于子页面读取数据
+setHeadReadingActive(true);
+onUnmounted(() => setHeadReadingActive(false));
 
 const IconMap = {
   "/articles": FileEdit,
@@ -46,7 +54,7 @@ const activeRoute = computed(() => {
 const rocketUrl = computed(() => {
   return calcRocketUrl();
 });
-const allPassed = computed(() => !!githubToken && encryptor.passwdCorrect.value);
+const allPassed = computed(() => !!githubToken.value && encryptor.passwdCorrect.value);
 
 // 进入manage界面后，大概率会用到encrypt，所以这里先异步加载，尚未遇到bug
 encryptor.init();
@@ -55,6 +63,19 @@ encryptor.init();
 watch(githubToken, (token) => {
   inputToken.value = token;
 });
+
+// 后台只用到 GraphQL 的 viewer、ref 查询和 createCommitOnBranch，fine-grained token 只需 Contents 读写（Metadata 只读自动包含）。
+// GitHub 的模板 URL 不能预选仓库，提示里写明要手动选择本仓库。
+const repoName = __NB_GITHUB_REPO__;
+const createTokenUrl = `https://github.com/settings/personal-access-tokens/new?${new URLSearchParams({
+  name: `${repoName} manage`.slice(0, 40),
+  description: `nuxt3-blog /manage for ${config.githubName}/${repoName}`,
+  target_name: config.githubName,
+  expires_in: "90",
+  contents: "write"
+})}`;
+// ghp_ 前缀是 classic token，权限覆盖账号下所有仓库
+const isClassicToken = computed(() => inputToken.value.startsWith("ghp_"));
 
 const modalOk = async () => {
   // 密码不用判断，直接修改
@@ -208,7 +229,7 @@ onMounted(() => {
                 !githubToken && '!text-red-400',
                 allPassed && '!text-green-400'
               )"
-              :title="sameSha ? (allPassed ? $t('all-verified') : $t('token-and-passwd')) : $t('commit-id-not-correct')"
+              :title="sameSha ? (allPassed ? $t('all-verified') : $t('token-and-passwd')) : $t('deploy-behind-head')"
               data-testid="show-token-password-btn"
               @click="showPwdModal = true"
             >
@@ -220,9 +241,15 @@ onMounted(() => {
     </aside>
 
     <div class="min-h-screen flex-1 overflow-hidden">
-      <div class="mx-auto size-full max-w-[1440px] rounded-lg p-4 *:rounded-lg *:bg-white *:shadow-md *:dark:bg-dark-800 max-md:p-1">
+      <div class="mx-auto size-full max-w-[1440px] rounded-lg p-4 max-md:p-1">
         <client-only>
-          <slot />
+          <!-- key 改变时重新挂载页面（提交成功后）；contents 不产生盒子，样式仍作用于页面根元素 -->
+          <div
+            :key="manageReloadKey"
+            class="contents *:rounded-lg *:bg-white *:shadow-md *:dark:bg-dark-800"
+          >
+            <slot />
+          </div>
         </client-only>
       </div>
     </div>
@@ -252,6 +279,20 @@ onMounted(() => {
           data-focus
           :disabled="inputTokenDisabled"
         >
+        <small class="mt-1 text-dark-500">
+          {{ $t('token-fine-grained-hint', [repoName]) }}
+          <a
+            class="text-primary-600 underline"
+            target="_blank"
+            :href="createTokenUrl"
+            data-testid="create-token-link"
+          >{{ $t('token-create-link') }}</a>
+        </small>
+        <small
+          v-if="isClassicToken"
+          class="mt-1 text-yellow-600"
+          data-testid="classic-token-warning"
+        >{{ $t('token-classic-warning') }}</small>
       </label>
       <label class="mt-4 flex flex-col">
         <span class="mb-1 flex gap-1.5">

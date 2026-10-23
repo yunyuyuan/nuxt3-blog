@@ -1,68 +1,84 @@
-import axios from "axios";
 import { encode } from "js-base64";
+import { invalidateHeadCache, setHeadReader } from "../fetch";
 import { formatTime } from "../format-time";
 import { translate } from "../i18n";
 import { notify } from "../notify";
 import { getCurrentTab } from "../utils";
-import { createNotCommittableModal, createDiffModal } from ".";
+import { AuthorQuery, buildCommitInput, CreateCommitMutation, type AuthorQueryData, type CreateCommitData } from "./github-queries";
+import { createDiffModal } from ".";
 import config from "~~/config";
 import type { CommitParams, CommonItem, CommitParamsAddition } from "~/utils/common/types";
 
-async function post(data: string, token_?: string) {
+type GraphQLResponse<T> = { data?: T; errors?: { type?: string; message: string }[] };
+
+async function post<T = unknown>(query: string, variables?: Record<string, unknown>, token_?: string): Promise<GraphQLResponse<T>> {
   const token = token_ || useGithubToken().value;
   if (!token) {
     throw new Error(translate("need-token"));
   }
-  return await axios.post(
-    "https://api.github.com/graphql",
-    { query: data },
-    {
-      headers: {
-        Authorization: "token " + token
-      }
-    }
-  );
+  // 只在浏览器中运行；e2e 用 page.route 拦截这个地址
+  const res = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ query, variables })
+  });
+  if (!res.ok) {
+    // 401（token 无效）等错误：GitHub 返回 { message }
+    const body = await res.json().catch(() => ({})) as { message?: string };
+    throw new Error(`GitHub API ${res.status}: ${body.message || res.statusText}`);
+  }
+  return await res.json() as GraphQLResponse<T>;
 }
 
-function encodeB64(str: string) {
-  return encode(str);
+/**
+ * 读取仓库文件在 useRemoteLatestSha 这个提交时的原文（REST contents API，raw 格式）。
+ * 后台的列表、正文和 diff 原文都由它读取，所以与下一次提交的 expectedHeadOid 一致。
+ */
+async function readRepoFile(token: string, repoPath: string): Promise<string> {
+  const ref = useRemoteLatestSha().value || __NB_GIT_BRANCH__;
+  const encodedPath = repoPath.split("/").map(encodeURIComponent).join("/");
+  const res = await fetch(`https://api.github.com/repos/${config.githubName}/${__NB_GITHUB_REPO__}/contents/${encodedPath}?ref=${encodeURIComponent(ref)}`, {
+    headers: {
+      "Authorization": "Bearer " + token,
+      "Accept": "application/vnd.github.raw+json",
+      "X-GitHub-Api-Version": "2022-11-28"
+    }
+  });
+  if (!res.ok) {
+    // 与读取静态文件时一样，非 2xx 抛错（例如 404：条目的 md 不存在）
+    throw Object.assign(new Error(`GitHub API ${res.status}: ${repoPath}`), { status: res.status, statusCode: res.status });
+  }
+  return await res.text();
 }
 
 /** @description 是否管理员 */
 export async function isAuthor(token: string): Promise<boolean> {
-  const result = await post(`query {
-    viewer {
-      login
-    }
-    repository(name: "${__NB_GITHUB_REPO__}", owner: "${config.githubName}") {
-      ref(qualifiedName: "${__NB_GIT_BRANCH__}") {
-        target {
-          ... on Commit {
-            history(first: 1) {
-              nodes {
-                oid
-              }
-            }
-          }
-        }
-      }
-    }
-  }`,
-  token
-  );
-  const err = result.data.errors;
-  if (err) {
-    throw new Error(err);
-  } else {
-    const verified = result.data.data.viewer.login === config.githubName;
-    if (verified) {
-      // token 验证成功
-      useGithubToken().value = token;
-      // 更新 commit id
-      useRemoteLatestSha().value = result.data.data.repository.ref.target.history.nodes[0].oid;
-    }
-    return verified;
+  const result = await post<AuthorQueryData>(AuthorQuery, {
+    owner: config.githubName,
+    name: __NB_GITHUB_REPO__,
+    branch: __NB_GIT_BRANCH__
+  }, token);
+  if (result.errors?.length) {
+    throw new Error(result.errors.map(e => e.message).join("; "));
   }
+  // GitHub 用户名不区分大小写
+  const verified = result.data?.viewer?.login?.toLowerCase() === config.githubName.toLowerCase();
+  if (verified) {
+    // token 验证成功
+    useGithubToken().value = token;
+    // 更新 commit id
+    const headOid = result.data?.repository?.ref?.target?.history?.nodes?.[0]?.oid ?? "";
+    useRemoteLatestSha().value = headOid;
+    // 此后后台从这个提交读取内容。若线上站点还没部署到这个提交，页面已经读过的是旧内容，重新挂载一次
+    setHeadReader(path => readRepoFile(token, path));
+    if (headOid && headOid !== __NB_CURRENT_GIT_SHA__) {
+      reloadManagePage();
+    }
+  }
+  return verified;
 }
 
 /**
@@ -81,67 +97,44 @@ export async function createCommit(
     await post(JSON.stringify({ additions, deletions }));
     return true;
   }
-  if (correctSha !== __NB_CURRENT_GIT_SHA__ && !(await createNotCommittableModal())) {
-    return false;
-  }
   // 显示 diff 弹窗让用户确认更改
   if (!(await createDiffModal({ additions, deletions }))) {
     return false;
   }
-  let add = "";
-  let del = "";
-  if (additions?.length) {
-    add = "additions: [";
-    additions.forEach((item) => {
-      add += `{path: "${item.path}",contents: "${encodeB64(item.content)}"},`;
-    });
-    add += "],";
-  }
-  if (deletions?.length) {
-    del = "deletions: [";
-    deletions.forEach((item) => {
-      del += `{path: "${item.path}"},`;
-    });
-    del += "]";
-  }
   try {
-    const result = await post(`mutation {
-    createCommitOnBranch(
-      input: {
-        branch: {
-          branchName: "${__NB_GIT_BRANCH__}",
-          repositoryNameWithOwner: "${config.githubName}/${__NB_GITHUB_REPO__}"
-        },
-        message: {
-          headline: "[${formatTime()}]${commit}"
-        },
-        expectedHeadOid: "${correctSha}",
-        fileChanges: {
-          ${add}
-          ${del}
-        }
-      }
-    ) {
-      clientMutationId
-    }
-  }`);
-    const err = result.data.errors;
-    if (err) {
+    const result = await post<CreateCommitData>(CreateCommitMutation, {
+      input: buildCommitInput({
+        owner: config.githubName,
+        repo: __NB_GITHUB_REPO__,
+        branch: __NB_GIT_BRANCH__,
+        headline: `[${formatTime()}]${commit}`,
+        expectedHeadOid: correctSha,
+        additions,
+        deletions
+      }, encode)
+    });
+    const err = result.errors;
+    if (err?.length) {
+      // expectedHeadOid 不是分支的最新提交：后台读取内容之后，仓库有了别的提交。不覆盖，提示刷新
+      const conflict = /Expected branch to point to/i.test(err[0]!.message);
       notify({
-        title: err[0].type,
+        title: conflict ? translate("commit-conflict") : (err[0]!.type || "Error"),
         type: "error",
-        description: err[0].message
+        description: err[0]!.message
       });
       return false;
     }
+    // 不刷新页面：记录新提交，清除这些文件的缓存，重新挂载当前后台页面。下一次提交基于新提交
+    const newOid = result.data?.createCommitOnBranch?.commit?.oid;
+    if (newOid) {
+      useRemoteLatestSha().value = newOid;
+    }
+    invalidateHeadCache([...(additions ?? []), ...(deletions ?? [])].map(file => file.path));
     notify({
-      title: translate("update-success"),
-      description: translate("refresh-after-sec", [1])
+      title: translate("update-success")
     });
-    // 更新成功必刷新页面，防止后续操作commit id不正确。若存在草稿，此操作依旧会被beforeUnload拦截
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
+    // 等调用方处理完成功后的逻辑（如清理暂存区）再重新挂载
+    setTimeout(reloadManagePage);
     return true;
   } catch (e: any) {
     notify({
