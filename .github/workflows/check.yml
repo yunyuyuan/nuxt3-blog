@@ -37,12 +37,72 @@ jobs:
         run: pnpm typecheck
       - name: Unit tests
         run: pnpm test:unit
+      - name: Load the local script tasks
+        # Loads every task module, so errors at the top level of layer/scripts show up here
+        run: pnpm exec gulp --tasks
       - name: Build
         run: pnpm build
         env:
           NB_PRERENDER_STRICT: "true"
       - name: Check static output
         run: test -f .output/public/404.html
+  starter:
+    # Installs the starter like a new user does: nuxt3-blog from a packed tarball
+    # instead of the workspace, and no lockfile, so it also gets the latest
+    # compatible Nuxt. The copy is outside this repository, so pnpm does not use
+    # the workspace of this repository.
+    if: ${{ github.repository == 'yunyuyuan/nuxt3-blog' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Pack the layer
+        run: pnpm --dir layer pack --pack-destination "$RUNNER_TEMP"
+      - name: Copy the starter and use the packed layer
+        # The runner context is not available in job-level env, so the later steps
+        # read STARTER_DIR from GITHUB_ENV
+        run: |
+          STARTER_DIR="$RUNNER_TEMP/starter"
+          echo "STARTER_DIR=$STARTER_DIR" >> "$GITHUB_ENV"
+          cp -r starter "$STARTER_DIR"
+          cd "$STARTER_DIR"
+          npm pkg set "dependencies.nuxt3-blog=file:$(ls "$RUNNER_TEMP"/nuxt3-blog-*.tgz)"
+      - name: Install dependencies
+        working-directory: ${{ env.STARTER_DIR }}
+        run: pnpm install --no-frozen-lockfile
+      - name: Prepare Nuxt
+        working-directory: ${{ env.STARTER_DIR }}
+        run: pnpm exec nuxi prepare
+      - name: Typecheck
+        working-directory: ${{ env.STARTER_DIR }}
+        run: pnpm typecheck
+      - name: Load the local script tasks
+        working-directory: ${{ env.STARTER_DIR }}
+        run: pnpm exec gulp --tasks
+      - name: Build
+        working-directory: ${{ env.STARTER_DIR }}
+        run: pnpm build
+        env:
+          NB_PRERENDER_STRICT: "true"
+      - name: Check static output
+        working-directory: ${{ env.STARTER_DIR }}
+        run: |
+          test -f .output/public/404.html
+          test -f .output/public/articles/93332711/index.html
+          test -d .output/public/sticker
+      - name: Check that the dev server pre-bundles the client dependencies
+        # Last step: the dev server keeps running in the background until the job ends
+        working-directory: ${{ env.STARTER_DIR }}
+        run: |
+          pnpm exec nuxt dev --port 3000 > "$RUNNER_TEMP/dev.log" 2>&1 &
+          for _ in $(seq 1 60); do curl -sf -o /dev/null http://localhost:3000/ && break; sleep 2; done
+          node "$GITHUB_WORKSPACE/.github/scripts/check-optimized-deps.mjs" || { cat "$RUNNER_TEMP/dev.log"; exit 1; }
   e2e:
     if: ${{ github.repository == 'yunyuyuan/nuxt3-blog' }}
     runs-on: ubuntu-24.04
