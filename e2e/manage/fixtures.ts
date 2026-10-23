@@ -27,7 +27,7 @@ export const STAGING_KEY = "nb-staged-items";
 export const ENCRYPTED_PREFIX = "U2Fs";
 
 /**
- * The three seeded articles in `public/e2e/rebuild/json/articles.json`, one per
+ * The three seeded articles in `public/e2e/rebuild/articles/*.md`, one per
  * encryption mode the manage UI must support. Ids double as the `[id]` route
  * segment, e.g. `/manage/articles/1111`.
  */

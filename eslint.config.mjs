@@ -10,6 +10,12 @@ export default withNuxt(
   ...pluginVue.configs["flat/recommended"],
   ...tailwind.configs["flat/recommended"],
   {
+    // tailwind 配置在 layer 中；dark 色板用默认值检查，构建时才换成站点配置的颜色
+    settings: {
+      tailwindcss: { config: "layer/tailwind.config.mjs" }
+    }
+  },
+  {
     files: ["**/*.ts", "**/*.tsx", "**/*.vue"],
     rules: {
       "quotes": ["error", "double"],

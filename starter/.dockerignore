@@ -1,0 +1,4 @@
+# The image only copies .output (see Dockerfile) — keep everything else
+# (node_modules, .git, sources) out of the build context.
+*
+!.output

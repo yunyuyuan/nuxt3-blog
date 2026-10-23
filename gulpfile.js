@@ -1,8 +1,3 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const path = require("path");
-
-require("ts-node").register({
-  project: path.join(__dirname, "./scripts/tsconfig.json")
-});
-
-require("./scripts/gulpfile");
+// 本地脚本（local:*）的任务在 nuxt3-blog 包中，以站点根目录为工作目录
+require("nuxt3-blog/scripts/gulpfile.cjs");

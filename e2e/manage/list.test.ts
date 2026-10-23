@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ArticleItem } from "../../app/utils/common/types";
+import type { ArticleItem } from "../../layer/app/utils/common/types";
 import { ARTICLES, ARTICLE_COUNT, articleListPath } from "./fixtures";
 import { createListPage, setupTestEnvironment } from "./test-helpers";
 

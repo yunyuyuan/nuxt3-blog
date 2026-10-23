@@ -1,0 +1,9 @@
+{
+    "framework": null,
+    "buildCommand": "pnpm build",
+    "installCommand": "pnpm install",
+    "github": {
+        "silent": true,
+        "autoJobCancelation": true
+    }
+}

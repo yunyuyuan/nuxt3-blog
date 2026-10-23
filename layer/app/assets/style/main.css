@@ -1,0 +1,78 @@
+@import "./markdown.css";
+
+html {
+  @apply font-sans;
+  &.smooth-scroll {
+    @apply scroll-smooth;
+  }
+}
+
+html,
+body {
+  @apply min-w-full;
+}
+
+body {
+  @apply bg-nb-light dark:bg-nb-dark text-dark-900 dark:text-dark-300;
+  transition: background 0s linear 0.5s;
+
+  &.resizing {
+    @apply select-none cursor-ew-resize;
+  }
+}
+
+input,
+textarea,
+button {
+  @apply outline-none;
+}
+
+input, textarea {
+  @apply rounded-lg border border-dark-300 bg-dark-50 py-2 px-3 placeholder:text-dark-400 dark:border-dark-600 dark:bg-dark-700 dark:text-white max-md:text-sm min-w-5 transition-[border];
+  @apply focus:border-primary-400 dark:focus:border-primary-600;
+  @apply hover:border-primary-500 dark:hover:border-primary-500;
+}
+
+img[data-viewer] {
+  @apply cursor-zoom-in;
+}
+
+::-webkit-scrollbar {
+  @apply size-2.5 bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded bg-dark-300 hover:bg-dark-400 dark:bg-dark-500 dark:hover:bg-dark-400;
+}
+
+/* 页面跳转特效：玻璃拟态（模糊 + 缩放淡入淡出） */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.36s ease, transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), filter 0.36s ease;
+  will-change: opacity, transform;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: scale(0.97) translateY(10px);
+  filter: blur(12px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: scale(1.02);
+  filter: blur(12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter-active,
+  .page-leave-active {
+    transition-duration: 0.01ms !important;
+  }
+
+  .page-enter-from,
+  .page-leave-to {
+    transform: none !important;
+    filter: none !important;
+  }
+}

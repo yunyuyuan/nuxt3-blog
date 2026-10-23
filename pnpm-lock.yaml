@@ -8,46 +8,10 @@ importers:
 
   .:
     dependencies:
-      clipboard:
-        specifier: ^2.0.11
-        version: 2.0.11
-      crypto-js:
-        specifier: ^4.2.0
-        version: 4.2.0
-      dayjs:
-        specifier: ^1.11.13
-        version: 1.11.13
-      katex:
-        specifier: ^0.16.22
-        version: 0.16.22
-      marked:
-        specifier: ^17.0.4
-        version: 17.0.4
-      marked-footnote:
-        specifier: ^1.4.0
-        version: 1.4.0(marked@17.0.4)
-      marked-token-position:
-        specifier: 2.0.1
-        version: 2.0.1(marked@17.0.4)
-      mermaid:
-        specifier: ^11.9.0
-        version: 11.9.0
-      monaco-editor:
-        specifier: ^0.52.2
-        version: 0.52.2
-      pangu:
-        specifier: ^7.2.0
-        version: 7.2.0
-      shiki:
-        specifier: ^4.0.2
-        version: 4.0.2
-      viewerjs:
-        specifier: ^1.11.7
-        version: 1.11.7
+      nuxt3-blog:
+        specifier: workspace:*
+        version: link:layer
     devDependencies:
-      '@aws-sdk/client-s3':
-        specifier: ^3.750.0
-        version: 3.1000.0
       '@eslint/js':
         specifier: ^9.32.0
         version: 9.32.0
@@ -57,39 +21,15 @@ importers:
       '@nuxt/test-utils':
         specifier: ^3.19.2
         version: 3.19.2(@playwright/test@1.54.1)(@vue/test-utils@2.4.6)(happy-dom@17.6.3)(magicast@0.5.3)(playwright-core@1.54.1)(typescript@5.8.3)(vitest@3.2.4(@types/node@24.1.0)(happy-dom@17.6.3)(jiti@2.7.0)(sass@1.85.0)(terser@5.43.1)(yaml@2.9.0))
-      '@nuxtjs/tailwindcss':
-        specifier: ^6.14.0
-        version: 6.14.0(magicast@0.5.3)(ts-node@10.9.2(@types/node@24.1.0)(typescript@5.8.3))
       '@playwright/test':
         specifier: ^1.54.1
         version: 1.54.1
-      '@types/crypto-js':
-        specifier: ^4.2.2
-        version: 4.2.2
       '@types/gulp':
         specifier: ^4.0.17
         version: 4.0.17
-      '@types/katex':
-        specifier: ^0.16.7
-        version: 0.16.7
-      '@types/lodash':
-        specifier: ^4.17.20
-        version: 4.17.20
-      '@types/prompts':
-        specifier: ^2.4.9
-        version: 2.4.9
       '@vue/test-utils':
         specifier: ^2.4.6
         version: 2.4.6
-      algoliasearch:
-        specifier: ^5.35.0
-        version: 5.35.0
-      cheerio:
-        specifier: ^1.1.2
-        version: 1.1.2
-      colors:
-        specifier: ^1.4.0
-        version: 1.4.0
       cross-env:
         specifier: ^10.0.0
         version: 10.0.0
@@ -111,42 +51,15 @@ importers:
       husky:
         specifier: ^9.1.7
         version: 9.1.7
-      js-base64:
-        specifier: ^3.7.7
-        version: 3.7.7
       lint-staged:
         specifier: ^15.5.2
         version: 15.5.2
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
-      lucide-vue-next:
-        specifier: ^0.477.0
-        version: 0.477.0(vue@3.5.35(typescript@5.8.3))
       nuxt:
         specifier: ^4.4.7
         version: 4.4.7(@babel/plugin-syntax-jsx@7.27.1(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@netlify/blobs@9.1.2)(@parcel/watcher@2.5.6)(@types/node@24.1.0)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4)(eslint@9.32.0(jiti@2.7.0))(ioredis@5.11.1)(magicast@0.5.3)(meow@13.2.0)(optionator@0.9.4)(rollup-plugin-visualizer@7.0.1(rollup@4.61.1))(rollup@4.61.1)(sass@1.85.0)(terser@5.43.1)(typescript@5.8.3)(vite@7.3.5(@types/node@24.1.0)(jiti@2.7.0)(sass@1.85.0)(terser@5.43.1)(yaml@2.9.0))(vue-tsc@3.3.13(typescript@5.8.3))(yaml@2.9.0)
-      postcss-import:
-        specifier: ^16.1.1
-        version: 16.1.1(postcss@8.5.15)
-      postcss-nesting:
-        specifier: ^13.0.2
-        version: 13.0.2(postcss@8.5.15)
-      prompts:
-        specifier: ^2.4.2
-        version: 2.4.2
       start-server-and-test:
         specifier: ^2.0.12
         version: 2.0.12
-      tailwind-merge:
-        specifier: ^3.3.1
-        version: 3.3.1
-      tinify:
-        specifier: ^1.8.1
-        version: 1.8.1
-      ts-node:
-        specifier: ^10.9.2
-        version: 10.9.2(@types/node@24.1.0)(typescript@5.8.3)
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -159,6 +72,120 @@ importers:
       vue-tsc:
         specifier: ^3.3.13
         version: 3.3.13(typescript@5.8.3)
+
+  layer:
+    dependencies:
+      '@aws-sdk/client-s3':
+        specifier: ^3.750.0
+        version: 3.1000.0
+      '@nuxt/kit':
+        specifier: ^4.4.7
+        version: 4.4.7(magicast@0.5.3)
+      '@nuxtjs/tailwindcss':
+        specifier: ^6.14.0
+        version: 6.14.0(magicast@0.5.3)(ts-node@10.9.2(@types/node@24.1.0)(typescript@5.8.3))
+      '@types/crypto-js':
+        specifier: ^4.2.2
+        version: 4.2.2
+      '@types/katex':
+        specifier: ^0.16.7
+        version: 0.16.7
+      '@types/lodash':
+        specifier: ^4.17.20
+        version: 4.17.20
+      '@types/node':
+        specifier: '>=22.0.0'
+        version: 24.1.0
+      '@types/prompts':
+        specifier: ^2.4.9
+        version: 2.4.9
+      algoliasearch:
+        specifier: ^5.35.0
+        version: 5.35.0
+      cheerio:
+        specifier: ^1.1.2
+        version: 1.1.2
+      clipboard:
+        specifier: ^2.0.11
+        version: 2.0.11
+      colors:
+        specifier: ^1.4.0
+        version: 1.4.0
+      crypto-js:
+        specifier: ^4.2.0
+        version: 4.2.0
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
+      gulp:
+        specifier: ^5.0.0
+        version: 5.0.1
+      jiti:
+        specifier: ^2.7.0
+        version: 2.7.0
+      js-base64:
+        specifier: ^3.7.7
+        version: 3.7.7
+      katex:
+        specifier: ^0.16.22
+        version: 0.16.22
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      lucide-vue-next:
+        specifier: ^0.477.0
+        version: 0.477.0(vue@3.5.35(typescript@5.8.3))
+      marked:
+        specifier: ^17.0.4
+        version: 17.0.4
+      marked-footnote:
+        specifier: ^1.4.0
+        version: 1.4.0(marked@17.0.4)
+      marked-token-position:
+        specifier: 2.0.1
+        version: 2.0.1(marked@17.0.4)
+      mermaid:
+        specifier: ^11.9.0
+        version: 11.9.0
+      monaco-editor:
+        specifier: ^0.52.2
+        version: 0.52.2
+      nuxt:
+        specifier: ^4.4.7
+        version: 4.4.7(@babel/plugin-syntax-jsx@7.27.1(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@netlify/blobs@9.1.2)(@parcel/watcher@2.5.6)(@types/node@24.1.0)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4)(eslint@9.32.0(jiti@2.7.0))(ioredis@5.11.1)(magicast@0.5.3)(meow@13.2.0)(optionator@0.9.4)(rollup-plugin-visualizer@7.0.1(rollup@4.61.1))(rollup@4.61.1)(sass@1.85.0)(terser@5.43.1)(typescript@5.8.3)(vite@7.3.5(@types/node@24.1.0)(jiti@2.7.0)(sass@1.85.0)(terser@5.43.1)(yaml@2.9.0))(vue-tsc@3.3.13(typescript@5.8.3))(yaml@2.9.0)
+      pangu:
+        specifier: ^7.2.0
+        version: 7.2.0
+      postcss-import:
+        specifier: ^16.1.1
+        version: 16.1.1(postcss@8.5.15)
+      postcss-nesting:
+        specifier: ^13.0.2
+        version: 13.0.2(postcss@8.5.15)
+      prompts:
+        specifier: ^2.4.2
+        version: 2.4.2
+      shiki:
+        specifier: ^4.0.2
+        version: 4.0.2
+      tailwind-merge:
+        specifier: ^3.3.1
+        version: 3.3.1
+      tailwindcss:
+        specifier: ^3.4.17
+        version: 3.4.17(ts-node@10.9.2(@types/node@24.1.0)(typescript@5.8.3))
+      tinify:
+        specifier: ^1.8.1
+        version: 1.8.1
+      ufo:
+        specifier: ^1.6.4
+        version: 1.6.4
+      viewerjs:
+        specifier: ^1.11.7
+        version: 1.11.7
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
 
 packages:
 
@@ -6831,10 +6858,6 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  uuid@11.1.0:
-    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
-    hasBin: true
-
   uuid@11.1.1:
     resolution: {integrity: sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==}
     hasBin: true
@@ -8044,6 +8067,7 @@ snapshots:
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
+    optional: true
 
   '@csstools/selector-resolve-nested@3.1.0(postcss-selector-parser@7.1.1)':
     dependencies:
@@ -8484,6 +8508,7 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+    optional: true
 
   '@jsdevtools/ono@7.1.3': {}
 
@@ -9856,13 +9881,17 @@ snapshots:
       - supports-color
       - typescript
 
-  '@tsconfig/node10@1.0.11': {}
+  '@tsconfig/node10@1.0.11':
+    optional: true
 
-  '@tsconfig/node12@1.0.11': {}
+  '@tsconfig/node12@1.0.11':
+    optional: true
 
-  '@tsconfig/node14@1.0.3': {}
+  '@tsconfig/node14@1.0.3':
+    optional: true
 
-  '@tsconfig/node16@1.0.4': {}
+  '@tsconfig/node16@1.0.4':
+    optional: true
 
   '@tybys/wasm-util@0.10.2':
     dependencies:
@@ -10507,6 +10536,7 @@ snapshots:
   acorn-walk@8.3.4:
     dependencies:
       acorn: 8.16.0
+    optional: true
 
   acorn@8.16.0: {}
 
@@ -10583,7 +10613,8 @@ snapshots:
 
   are-docs-informative@0.0.2: {}
 
-  arg@4.1.3: {}
+  arg@4.1.3:
+    optional: true
 
   arg@5.0.2: {}
 
@@ -10835,7 +10866,7 @@ snapshots:
   chevrotain-allstar@0.3.1(chevrotain@11.0.3):
     dependencies:
       chevrotain: 11.0.3
-      lodash-es: 4.17.21
+      lodash-es: 4.18.1
 
   chevrotain@11.0.3:
     dependencies:
@@ -11023,7 +11054,8 @@ snapshots:
       crc-32: 1.2.2
       readable-stream: 4.7.0
 
-  create-require@1.1.1: {}
+  create-require@1.1.1:
+    optional: true
 
   croner@10.0.1: {}
 
@@ -11297,7 +11329,7 @@ snapshots:
   dagre-d3-es@7.0.11:
     dependencies:
       d3: 7.9.0
-      lodash-es: 4.17.21
+      lodash-es: 4.18.1
 
   data-uri-to-buffer@4.0.1:
     optional: true
@@ -11376,7 +11408,8 @@ snapshots:
 
   didyoumean@1.2.2: {}
 
-  diff@4.0.2: {}
+  diff@4.0.2:
+    optional: true
 
   diff@8.0.4: {}
 
@@ -12739,8 +12772,7 @@ snapshots:
 
   lodash-es@4.17.21: {}
 
-  lodash-es@4.18.1:
-    optional: true
+  lodash-es@4.18.1: {}
 
   lodash.debounce@4.0.8:
     optional: true
@@ -12796,7 +12828,8 @@ snapshots:
       '@babel/types': 7.29.7
       source-map-js: 1.2.1
 
-  make-error@1.3.6: {}
+  make-error@1.3.6:
+    optional: true
 
   map-cache@0.2.2: {}
 
@@ -12857,12 +12890,12 @@ snapshots:
       dompurify: 3.2.6
       katex: 0.16.22
       khroma: 2.1.0
-      lodash-es: 4.17.21
+      lodash-es: 4.18.1
       marked: 16.4.2
       roughjs: 4.6.6
       stylis: 4.3.6
       ts-dedent: 2.2.0
-      uuid: 11.1.0
+      uuid: 11.1.1
     transitivePeerDependencies:
       - supports-color
 
@@ -14610,6 +14643,7 @@ snapshots:
       typescript: 5.8.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    optional: true
 
   tslib@2.8.1: {}
 
@@ -14888,12 +14922,10 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  uuid@11.1.0: {}
+  uuid@11.1.1: {}
 
-  uuid@11.1.1:
+  v8-compile-cache-lib@3.0.1:
     optional: true
-
-  v8-compile-cache-lib@3.0.1: {}
 
   v8flags@4.0.1: {}
 
@@ -15337,7 +15369,8 @@ snapshots:
 
   ylru@1.4.0: {}
 
-  yn@3.1.1: {}
+  yn@3.1.1:
+    optional: true
 
   yocto-queue@0.1.0: {}
 

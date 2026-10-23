@@ -1,0 +1,77 @@
+import { BookOpen, Film, Gamepad2 } from "lucide-vue-next";
+import type { FunctionalComponent } from "vue";
+import type { HeaderTabUrl, KnowledgeTab } from "./tabs";
+
+export { HeaderTabs, KnowledgeTabs, KnowledgeTabsList } from "./tabs";
+export type { HeaderTabUrl, KnowledgeTab } from "./tabs";
+
+export type EncryptBlock = {
+  start: number;
+  end: number;
+};
+
+export type ItemBase<T> = T & {
+  id: number;
+  customSlug: string;
+  time: number;
+  modifyTime: number;
+  encrypt: boolean;
+  // 有加密块时存在。读取时位置从正文的 [encrypt] 标记解析，这里的 start/end 只为兼容旧数据而继续写入
+  encryptBlocks?: EncryptBlock[];
+  showComments: boolean;
+};
+
+export type ArticleItem = ItemBase<{
+  title: string;
+  len: number;
+  tags: string[];
+}>;
+
+export type RecordItem = ItemBase<{
+  images: { src: string; alt: string; id?: number }[];
+  alternative?: string;
+}>;
+
+export type KnowledgeItem = ItemBase<{
+  title: string;
+  type: KnowledgeTab;
+  link: string;
+  cover: string;
+  summary: string;
+}>;
+
+export const KnowledgeIconMap = {
+  game: Gamepad2,
+  film: Film,
+  book: BookOpen
+} as Record<KnowledgeTab, FunctionalComponent>;
+
+export const KnowledgeColorMap = {
+  game: "bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300",
+  film: "bg-rose-100 text-rose-500 dark:bg-rose-900/30 dark:text-rose-400",
+  book: "bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300"
+} as Record<KnowledgeTab, string>;
+
+export type CommonItem = ArticleItem | RecordItem | KnowledgeItem;
+
+export type CommonItemByHeaderType<T extends HeaderTabUrl> = T extends "/articles"
+  ? ArticleItem
+  : T extends "/records"
+    ? RecordItem : KnowledgeItem;
+
+export type DecryptFunction = (_s: string) => Promise<string>;
+
+export type CommitParamsAddition = { path: string; content: string };
+export type CommitParamsDeletion = { path: string; content: string };
+
+export type CommitParams = {
+  additions?: CommitParamsAddition[];
+  deletions?: CommitParamsDeletion[];
+};
+
+export type AlgoliaBody = {
+  title: string;
+  content: string;
+  cover: string;
+  metaData: any;
+};

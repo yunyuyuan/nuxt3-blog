@@ -1,0 +1,17 @@
+node_modules/
+.nuxt
+.output
+.data
+dist
+nuxt.d.ts
+*.log
+*.tsbuildinfo
+.eslintcache
+.env
+.env.*
+!env.sample
+# 本地脚本 local:generate-file-map 和 local:download-file 的输出
+file-map.json
+files/
+# 索引在构建时从条目文件生成
+public/rebuild/json/

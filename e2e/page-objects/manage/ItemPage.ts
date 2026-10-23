@@ -1,6 +1,6 @@
 import { expect } from "vitest";
 import { nextTick } from "vue";
-import type { ArticleItem } from "../../../app/utils/common/types";
+import type { ArticleItem } from "../../../layer/app/utils/common/types";
 import { ENCRYPTED_PREFIX } from "../../manage/fixtures";
 import { ManageBasePage } from "./BasePage";
 
@@ -108,9 +108,9 @@ export class ManageItemPage extends ManageBasePage {
   // Commit-payload assertions
   // ---------------------------------------------------------------------------
 
-  /** The full article list as committed to the json file. */
+  /** The full article list after the commit (see `committedList`). */
   getCommittedList() {
-    return this.parseAddition<ArticleItem[]>(0);
+    return this.committedList<ArticleItem>("/articles");
   }
 
   /** Find the committed article matching a predicate. */
@@ -119,7 +119,7 @@ export class ManageItemPage extends ManageBasePage {
   }
 
   /**
-   * Assert properties of the committed list. The list always contains *every*
+   * Assert properties of the list after the commit. The list contains *every*
    * item (edited + untouched), so the counts below reflect the whole list.
    */
   expectCommittedList(options: {

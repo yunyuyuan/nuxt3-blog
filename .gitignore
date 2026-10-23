@@ -6,7 +6,6 @@ nuxt.d.ts
 file-map.json
 files/
 
-/app/assets/style/generated-theme-colors.css
 
 # Logs
 logs
@@ -138,3 +137,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# 索引在构建时从条目文件生成（layer/scripts/utils/content.ts）
+public/rebuild/json/
+public/e2e/rebuild/json/
