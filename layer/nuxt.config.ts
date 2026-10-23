@@ -25,7 +25,7 @@ const tailwindNesting = createRequire(import.meta.url).resolve("tailwindcss/nest
 const serverExternals = ["monaco-editor", "shiki", "mermaid", "katex"];
 
 /**
- * nuxt3-blog 的框架层（Nuxt layer）。站点项目在 nuxt.config.ts 中 extends 本包，
+ * nuxt-blog 的框架层（Nuxt layer）。站点项目在 nuxt.config.ts 中 extends 本包，
  * 并在根目录提供 config.ts 和 public/rebuild/ 中的内容。
  * 依赖站点配置的部分（head、主题色、全局常量、预渲染路由）在 modules/blog.ts 中。
  */
@@ -34,8 +34,8 @@ export default defineNuxtConfig({
     resolveLayer("./modules/blog"),
     "@nuxtjs/tailwindcss"
   ],
-  // #layers/nuxt3-blog 别名的名字。layer 内的代码都通过这个别名互相导入
-  $meta: { name: "nuxt3-blog" },
+  // #layers/nuxt-blog 别名的名字。layer 内的代码都通过这个别名互相导入
+  $meta: { name: "nuxt-blog" },
   imports: {
     presets: [
       {

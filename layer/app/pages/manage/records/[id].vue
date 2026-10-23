@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ArrowUp, Edit, Eye, Image, Plus, Trash } from "lucide-vue-next";
-import ManageContentEdit from "#layers/nuxt3-blog/app/pages/manage/comps/manage-content-edit.vue";
-import type { RecordItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { getUniqueId } from "#layers/nuxt3-blog/app/utils/common/utils";
-import { initViewer } from "#layers/nuxt3-blog/app/utils/nuxt/viewer";
+import ManageContentEdit from "#layers/nuxt-blog/app/pages/manage/comps/manage-content-edit.vue";
+import type { RecordItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { getUniqueId } from "#layers/nuxt-blog/app/utils/common/utils";
+import { initViewer } from "#layers/nuxt-blog/app/utils/nuxt/viewer";
 
 const editing = ref(true);
 const imagesEl = ref<HTMLElement>();

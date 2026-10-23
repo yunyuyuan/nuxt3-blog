@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ChevronRight } from "lucide-vue-next";
-import { KnowledgeColorMap, KnowledgeIconMap, type KnowledgeItem, type KnowledgeTab, KnowledgeTabs, KnowledgeTabsList } from "#layers/nuxt3-blog/app/utils/common/types";
-import { useListPage } from "#layers/nuxt3-blog/app/utils/nuxt/public/list";
-import { staggerDelay } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { formatTime } from "#layers/nuxt3-blog/app/utils/nuxt/format-time";
-import { useRouteQuery } from "#layers/nuxt3-blog/app/utils/hooks/useRouteQuery";
+import { KnowledgeColorMap, KnowledgeIconMap, type KnowledgeItem, type KnowledgeTab, KnowledgeTabs, KnowledgeTabsList } from "#layers/nuxt-blog/app/utils/common/types";
+import { useListPage } from "#layers/nuxt-blog/app/utils/nuxt/public/list";
+import { staggerDelay } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { formatTime } from "#layers/nuxt-blog/app/utils/nuxt/format-time";
+import { useRouteQuery } from "#layers/nuxt-blog/app/utils/hooks/useRouteQuery";
 
 const currentTab = useRouteQuery("type");
 

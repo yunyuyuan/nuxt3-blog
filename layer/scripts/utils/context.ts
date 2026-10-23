@@ -18,7 +18,7 @@ export function setBlogContext(ctx: BlogContext) {
 
 export function getBlogContext(): BlogContext {
   if (!current) {
-    throw new Error("[nuxt3-blog] blog context is not set, call setBlogContext() first");
+    throw new Error("[nuxt-blog] blog context is not set, call setBlogContext() first");
   }
   return current;
 }

@@ -2,7 +2,7 @@
 
 中文 | [English](#english)
 
-这个站点基于 [nuxt3-blog](https://github.com/yunyuyuan/nuxt-blog)。框架代码在 npm 包 `@yunyuyuan/nuxt-blog` 中，本仓库只放站点自己的文件。
+这个站点基于 [nuxt-blog](https://github.com/yunyuyuan/nuxt-blog)。框架代码在 npm 包 `@yunyuyuan/nuxt-blog` 中，本仓库只放站点自己的文件。
 
 ## 创建站点
 
@@ -60,7 +60,7 @@ pnpm add @yunyuyuan/nuxt-blog@^<新的主版本号>
 
 ## English
 
-This site uses [nuxt3-blog](https://github.com/yunyuyuan/nuxt-blog). The framework is the npm package `@yunyuyuan/nuxt-blog`. This repository contains only the files of your site.
+This site uses [nuxt-blog](https://github.com/yunyuyuan/nuxt-blog). The framework is the npm package `@yunyuyuan/nuxt-blog`. This repository contains only the files of your site.
 
 ### Create the site
 

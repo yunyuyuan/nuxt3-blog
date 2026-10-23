@@ -1,8 +1,8 @@
 import { itemDirPath, itemFilePath, parseItemFilePath, stripFrontmatter } from "../common/content-body";
 import { escapeNewLine } from "../common/utils";
-import type { CommonItem, HeaderTabUrl } from "#layers/nuxt3-blog/app/utils/common/types";
-import { isDev, isPrerender } from "#layers/nuxt3-blog/app/utils/nuxt/constants";
-import { withBase } from "#layers/nuxt3-blog/app/utils/nuxt/with-base";
+import type { CommonItem, HeaderTabUrl } from "#layers/nuxt-blog/app/utils/common/types";
+import { isDev, isPrerender } from "#layers/nuxt-blog/app/utils/nuxt/constants";
+import { withBase } from "#layers/nuxt-blog/app/utils/nuxt/with-base";
 
 // 读的是静态文件，不需要 Nitro 的路由类型。直接调用带类型的 $fetch，在新增带方法后缀的 API 路由后
 // 会让类型推导栈深度超限；所以先转成简单的函数类型。仍用 $fetch 而不是原生 fetch：

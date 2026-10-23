@@ -1,4 +1,4 @@
-import type { I18nCode } from "#layers/nuxt3-blog/app/utils/common/locales";
+import type { I18nCode } from "#layers/nuxt-blog/app/utils/common/locales";
 
 // 语言文件按需加载。不能写 import(`../../../i18n/${code}.json?raw`)：vite 默认不转换
 // node_modules 中带变量的动态导入（build.dynamicImportVarsOptions.exclude），而 layer

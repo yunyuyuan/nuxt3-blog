@@ -2,12 +2,12 @@
 import twColors from "tailwindcss/colors";
 import { BarChart3, Check, ExternalLink, Eye, FileDiff, Github, Info, Languages, MessageCircleMore, Moon, Palette, Search, Upload } from "lucide-vue-next";
 import type { FunctionalComponent } from "vue";
-import { createCommit } from "#layers/nuxt3-blog/app/utils/nuxt/manage/repository";
+import { createCommit } from "#layers/nuxt-blog/app/utils/nuxt/manage/repository";
 import configString from "~~/config.ts?raw";
 import config from "~~/config";
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
-import { createDiffModal, useStatusText } from "#layers/nuxt3-blog/app/utils/nuxt/manage";
-import { deepClone, useCommonSEOTitle } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
+import { createDiffModal, useStatusText } from "#layers/nuxt-blog/app/utils/nuxt/manage";
+import { deepClone, useCommonSEOTitle } from "#layers/nuxt-blog/app/utils/nuxt/utils";
 
 useCommonSEOTitle(computed(() => translate("config-manage")));
 

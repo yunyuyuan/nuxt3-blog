@@ -8,7 +8,7 @@ import { getCurrentTab } from "../utils";
 import { AuthorQuery, buildCommitInput, CreateCommitMutation, HeadDirectoryQuery, type AuthorQueryData, type CreateCommitData, type HeadDirectoryData } from "./github-queries";
 import { createDiffModal } from ".";
 import config from "~~/config";
-import type { CommitParams, CommonItem, CommitParamsAddition } from "#layers/nuxt3-blog/app/utils/common/types";
+import type { CommitParams, CommonItem, CommitParamsAddition } from "#layers/nuxt-blog/app/utils/common/types";
 
 type GraphQLResponse<T> = { data?: T; errors?: { type?: string; message: string }[] };
 

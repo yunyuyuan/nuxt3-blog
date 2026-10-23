@@ -1,6 +1,6 @@
 import { useState } from "#app";
 
-import { GithubTokenKey } from "#layers/nuxt3-blog/app/utils/common/constants";
+import { GithubTokenKey } from "#layers/nuxt-blog/app/utils/common/constants";
 
 // avoid loading during SSG
 export const useFirstLoad = () => useState("first-loaded", () => true);

@@ -1,7 +1,7 @@
 <p align="center">
 <img width="200px" src="public/favicon.png" />
 </p>
-<h1 align="center">💎Nuxt3-Blog</h1>
+<h1 align="center">💎Nuxt-Blog</h1>
 
 [![](https://img.shields.io/github/license/yunyuyuan/nuxt-blog)](/LICENSE) ![](https://img.shields.io/badge/vue-v3-%234FC08D?logo=vue.js) ![](https://img.shields.io/badge/nuxt-v4-%2300DC82?logo=nuxt.js) [![](https://img.shields.io/npm/v/@yunyuyuan/nuxt-blog?logo=npm)](https://www.npmjs.com/package/@yunyuyuan/nuxt-blog)
 

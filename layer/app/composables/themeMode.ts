@@ -1,5 +1,5 @@
-import { ThemeModeKey } from "#layers/nuxt3-blog/app/utils/common/constants";
-import { setLocalStorage } from "#layers/nuxt3-blog/app/utils/nuxt/localStorage";
+import { ThemeModeKey } from "#layers/nuxt-blog/app/utils/common/constants";
+import { setLocalStorage } from "#layers/nuxt-blog/app/utils/nuxt/localStorage";
 
 export const useThemeMode = () => {
   const themeMode = useState<"light" | "dark" | "">(ThemeModeKey, () => "");

@@ -9,7 +9,7 @@ const localStorageMock = vi.hoisted(() => ({
   rmLocalStorage: vi.fn()
 }));
 
-vi.mock("#layers/nuxt3-blog/app/utils/nuxt/localStorage", () => localStorageMock);
+vi.mock("#layers/nuxt-blog/app/utils/nuxt/localStorage", () => localStorageMock);
 
 const createArticleItem = (overrides: Partial<ArticleItem> = {}): ArticleItem => ({
   id: 1,

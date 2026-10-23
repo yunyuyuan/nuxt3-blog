@@ -1,4 +1,4 @@
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
 
 export default defineNuxtPlugin(() => {
   const unSavedContent = useUnsavedContent();

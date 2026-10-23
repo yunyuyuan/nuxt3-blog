@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AlertCircle, Home, RefreshCw } from "lucide-vue-next";
 import type { NuxtError } from "#app";
-import { OfficialRepo } from "#layers/nuxt3-blog/app/utils/common/constants";
+import { OfficialRepo } from "#layers/nuxt-blog/app/utils/common/constants";
 
 defineProps<{
   error: NuxtError;

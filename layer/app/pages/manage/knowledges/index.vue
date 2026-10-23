@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ManageListTable from "#layers/nuxt3-blog/app/pages/manage/comps/manage-list-table.vue";
-import { KnowledgeColorMap, KnowledgeIconMap, type KnowledgeItem, KnowledgeTabsList } from "#layers/nuxt3-blog/app/utils/common/types";
+import ManageListTable from "#layers/nuxt-blog/app/pages/manage/comps/manage-list-table.vue";
+import { KnowledgeColorMap, KnowledgeIconMap, type KnowledgeItem, KnowledgeTabsList } from "#layers/nuxt-blog/app/utils/common/types";
 
 const searchFn = (item: KnowledgeItem, s: string) => {
   return item.title.includes(s);

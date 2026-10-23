@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { withBase } from "#layers/nuxt3-blog/app/utils/nuxt/with-base";
+import { withBase } from "#layers/nuxt-blog/app/utils/nuxt/with-base";
 
 const showStickers = defineModel<boolean>({ required: true });
 

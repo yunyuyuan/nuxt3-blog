@@ -1,11 +1,11 @@
 <script setup lang="tsx">
 import { Languages, Sun, MoonStar, Rocket, Menu, Rss, Key, Search } from "lucide-vue-next";
 import config from "~~/config";
-import { i18nLocales, type I18nCode } from "#layers/nuxt3-blog/app/utils/common/locales";
-import { HeaderTabs } from "#layers/nuxt3-blog/app/utils/common/types";
-import { calcRocketUrl } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { withBase } from "#layers/nuxt3-blog/app/utils/nuxt/with-base";
-import { OfficialRepo } from "#layers/nuxt3-blog/app/utils/common/constants";
+import { i18nLocales, type I18nCode } from "#layers/nuxt-blog/app/utils/common/locales";
+import { HeaderTabs } from "#layers/nuxt-blog/app/utils/common/types";
+import { calcRocketUrl } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { withBase } from "#layers/nuxt-blog/app/utils/nuxt/with-base";
+import { OfficialRepo } from "#layers/nuxt-blog/app/utils/common/constants";
 
 const algoliaEnabled = __NB_ALGOLIA_ENABLED__;
 
@@ -195,7 +195,7 @@ const inputPwd = ref(encryptor.usePasswd.value);
         >RSS <Rss class="size-4" /></a>| Powered By <a
           :href="`https://github.com/${OfficialRepo}`"
           target="_blank"
-        >nuxt3-blog</a></span>
+        >nuxt-blog</a></span>
       </div>
     </footer>
 

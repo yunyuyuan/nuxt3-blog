@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { CircleFadingArrowUp, ExternalLink, ScrollText, Sparkles } from "lucide-vue-next";
 import config from "~~/config";
-import { OfficialRepo } from "#layers/nuxt3-blog/app/utils/common/constants";
-import { withBase } from "#layers/nuxt3-blog/app/utils/nuxt/with-base";
+import { OfficialRepo } from "#layers/nuxt-blog/app/utils/common/constants";
+import { withBase } from "#layers/nuxt-blog/app/utils/nuxt/with-base";
 
 const show = defineModel<boolean>({ required: true });
 

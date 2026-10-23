@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ManageListTable from "#layers/nuxt3-blog/app/pages/manage/comps/manage-list-table.vue";
-import type { RecordItem } from "#layers/nuxt3-blog/app/utils/common/types";
+import ManageListTable from "#layers/nuxt-blog/app/pages/manage/comps/manage-list-table.vue";
+import type { RecordItem } from "#layers/nuxt-blog/app/utils/common/types";
 
 const searchFn = (item: RecordItem, s: string) => !item.images.length || item.images.some(img => img.alt.includes(s));
 </script>

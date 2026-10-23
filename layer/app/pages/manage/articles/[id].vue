@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Captions, Tags } from "lucide-vue-next";
-import ManageContentEdit from "#layers/nuxt3-blog/app/pages/manage/comps/manage-content-edit.vue";
-import type { ArticleItem } from "#layers/nuxt3-blog/app/utils/common/types";
+import ManageContentEdit from "#layers/nuxt-blog/app/pages/manage/comps/manage-content-edit.vue";
+import type { ArticleItem } from "#layers/nuxt-blog/app/utils/common/types";
 
 const allTags = reactive(new Set<string>());
 const showTagSelect = ref(false);

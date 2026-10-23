@@ -4,11 +4,11 @@ import debounce from "lodash/debounce.js";
 import { Columns2, Loader2, Menu, SquareAsterisk } from "lucide-vue-next";
 import type { editor as MonacoEditor } from "monaco-editor";
 import StickerPick from "./sticker-pick.vue";
-import { initViewer } from "#layers/nuxt3-blog/app/utils/nuxt/viewer";
-import { useMarkdownParser } from "#layers/nuxt3-blog/app/utils/hooks/useMarkdownParser";
-import { useUnmount } from "#layers/nuxt3-blog/app/utils/hooks/useUnmount";
-import { MarkedDataLineAttr } from "#layers/nuxt3-blog/app/utils/common/markdown";
-import { withBase } from "#layers/nuxt3-blog/app/utils/nuxt/with-base";
+import { initViewer } from "#layers/nuxt-blog/app/utils/nuxt/viewer";
+import { useMarkdownParser } from "#layers/nuxt-blog/app/utils/hooks/useMarkdownParser";
+import { useUnmount } from "#layers/nuxt-blog/app/utils/hooks/useUnmount";
+import { MarkedDataLineAttr } from "#layers/nuxt-blog/app/utils/common/markdown";
+import { withBase } from "#layers/nuxt-blog/app/utils/nuxt/with-base";
 
 const props = defineProps<{
   disabled?: boolean;

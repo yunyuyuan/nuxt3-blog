@@ -1,8 +1,8 @@
 import config from "~~/config";
-import type { CommonItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { decryptEncryptBlocks, encryptDecryptItem, hideEncryptBlocks, showEncryptBlocksPlaceholder } from "#layers/nuxt3-blog/app/utils/common/process-encrypt-decrypt";
-import { useMarkdownParser } from "#layers/nuxt3-blog/app/utils/hooks/useMarkdownParser";
-import { useUnmount } from "#layers/nuxt3-blog/app/utils/hooks/useUnmount";
+import type { CommonItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { decryptEncryptBlocks, encryptDecryptItem, hideEncryptBlocks, showEncryptBlocksPlaceholder } from "#layers/nuxt-blog/app/utils/common/process-encrypt-decrypt";
+import { useMarkdownParser } from "#layers/nuxt-blog/app/utils/hooks/useMarkdownParser";
+import { useUnmount } from "#layers/nuxt-blog/app/utils/hooks/useUnmount";
 import { DBOperate } from ".";
 import { loadContentPage, visibleMarkdown } from "./content";
 import { translate } from "../i18n";

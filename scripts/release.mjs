@@ -221,7 +221,7 @@ async function checkCi(sha) {
   const hint = "确认 CI 已通过后，可以加 --skip-ci 跳过这项检查";
   let response;
   try {
-    response = await fetch(url, { headers: { "Accept": "application/vnd.github+json", "User-Agent": "nuxt3-blog-release" } });
+    response = await fetch(url, { headers: { "Accept": "application/vnd.github+json", "User-Agent": "nuxt-blog-release" } });
   } catch (error) {
     fail(`无法读取 CI 结果：${error.message}。${hint}`);
   }

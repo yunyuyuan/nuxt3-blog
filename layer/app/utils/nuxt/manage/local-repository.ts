@@ -3,9 +3,9 @@ import { itemFilePath } from "../../common/content-body";
 import { translate } from "../i18n";
 import { getCurrentTab, devHotListen } from "../utils";
 import { createDiffModal } from ".";
-import type { CommitParams, CommitParamsAddition, CommonItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { notify } from "#layers/nuxt3-blog/app/utils/nuxt/notify";
-import { rebuildEvent } from "#layers/nuxt3-blog/vite-plugins/types";
+import type { CommitParams, CommitParamsAddition, CommonItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { notify } from "#layers/nuxt-blog/app/utils/nuxt/notify";
+import { rebuildEvent } from "#layers/nuxt-blog/vite-plugins/types";
 
 export function isAuthor(): never {
   throw new Error("Can't do that");

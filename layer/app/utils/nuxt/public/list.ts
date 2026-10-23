@@ -1,6 +1,6 @@
-import { type CommonItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { decryptListWith } from "#layers/nuxt3-blog/app/utils/hooks/useBlogList";
-import { fetchList } from "#layers/nuxt3-blog/app/utils/nuxt/fetch";
+import { type CommonItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { decryptListWith } from "#layers/nuxt-blog/app/utils/hooks/useBlogList";
+import { fetchList } from "#layers/nuxt-blog/app/utils/nuxt/fetch";
 import { DBOperate } from ".";
 import { translate } from "../i18n";
 import { getCurrentTab, useCommonSEOTitle } from "../utils";

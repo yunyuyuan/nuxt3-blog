@@ -1,7 +1,7 @@
 import { translate } from "../i18n";
 import { getCurrentTab, useCommonSEOTitle } from "../utils";
-import type { CommonItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { useBlogList } from "#layers/nuxt3-blog/app/utils/hooks/useBlogList";
+import type { CommonItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { useBlogList } from "#layers/nuxt-blog/app/utils/hooks/useBlogList";
 
 /**
  * 管理页面列表通用功能

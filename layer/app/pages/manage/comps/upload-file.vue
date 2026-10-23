@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Info, Plus, Save, Upload } from "lucide-vue-next";
 import ClipboardJS from "clipboard";
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
-import { getLocalStorage, rmLocalStorage, setLocalStorage } from "#layers/nuxt3-blog/app/utils/nuxt/localStorage";
-import { notify } from "#layers/nuxt3-blog/app/utils/nuxt/notify";
-import { watchUntil } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { withBase } from "#layers/nuxt3-blog/app/utils/nuxt/with-base";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
+import { getLocalStorage, rmLocalStorage, setLocalStorage } from "#layers/nuxt-blog/app/utils/nuxt/localStorage";
+import { notify } from "#layers/nuxt-blog/app/utils/nuxt/notify";
+import { watchUntil } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { withBase } from "#layers/nuxt-blog/app/utils/nuxt/with-base";
 
 const show = defineModel<boolean>({ required: true });
 

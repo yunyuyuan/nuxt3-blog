@@ -1,7 +1,7 @@
 import Viewer from "viewerjs";
 import "viewerjs/dist/viewer.css";
 import type { Ref } from "vue";
-import { ViewerAttr } from "#layers/nuxt3-blog/app/utils/common/constants";
+import { ViewerAttr } from "#layers/nuxt-blog/app/utils/common/constants";
 
 function useMutationObserver(
   target: HTMLElement,

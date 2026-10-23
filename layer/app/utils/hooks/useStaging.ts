@@ -1,5 +1,5 @@
-import type { CommonItem, HeaderTabUrl } from "#layers/nuxt3-blog/app/utils/common/types";
-import { getLocalStorage, setLocalStorage, rmLocalStorage } from "#layers/nuxt3-blog/app/utils/nuxt/localStorage";
+import type { CommonItem, HeaderTabUrl } from "#layers/nuxt-blog/app/utils/common/types";
+import { getLocalStorage, setLocalStorage, rmLocalStorage } from "#layers/nuxt-blog/app/utils/nuxt/localStorage";
 
 export interface StagedItem<T extends CommonItem> {
   item: T;

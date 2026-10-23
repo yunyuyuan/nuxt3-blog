@@ -1,18 +1,18 @@
 <script setup lang="ts" generic="T extends CommonItem">
 import { FolderOpen, Hash, Lock, MessageCircleMore, Save, Trash2, Upload } from "lucide-vue-next";
-import { createCommit, deleteList } from "#layers/nuxt3-blog/app/utils/nuxt/manage/repository";
-import MdEditor from "#layers/nuxt3-blog/app/pages/manage/comps/md-editor.vue";
-import type { CommonItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
-import { formatTime } from "#layers/nuxt3-blog/app/utils/nuxt/format-time";
+import { createCommit, deleteList } from "#layers/nuxt-blog/app/utils/nuxt/manage/repository";
+import MdEditor from "#layers/nuxt-blog/app/pages/manage/comps/md-editor.vue";
+import type { CommonItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
+import { formatTime } from "#layers/nuxt-blog/app/utils/nuxt/format-time";
 
-import { hasSameIdOrSlug, useManageContent } from "#layers/nuxt3-blog/app/utils/nuxt/manage/detail";
-import { notify } from "#layers/nuxt3-blog/app/utils/nuxt/notify";
-import { useStaging, type StagedItem } from "#layers/nuxt3-blog/app/utils/hooks/useStaging";
-import { getProcessedUploadInfo, itemFileAddition } from "#layers/nuxt3-blog/app/utils/nuxt/manage/item-processor";
-import { decryptEncryptBlocks, encryptDecryptItem } from "#layers/nuxt3-blog/app/utils/common/process-encrypt-decrypt";
-import { deepClone } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { randomId } from "#layers/nuxt3-blog/app/utils/nuxt/manage";
+import { hasSameIdOrSlug, useManageContent } from "#layers/nuxt-blog/app/utils/nuxt/manage/detail";
+import { notify } from "#layers/nuxt-blog/app/utils/nuxt/notify";
+import { useStaging, type StagedItem } from "#layers/nuxt-blog/app/utils/hooks/useStaging";
+import { getProcessedUploadInfo, itemFileAddition } from "#layers/nuxt-blog/app/utils/nuxt/manage/item-processor";
+import { decryptEncryptBlocks, encryptDecryptItem } from "#layers/nuxt-blog/app/utils/common/process-encrypt-decrypt";
+import { deepClone } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { randomId } from "#layers/nuxt-blog/app/utils/nuxt/manage";
 
 const props = defineProps<{
   preProcessItem?: (editingItem: Ref<T>, originList: T[]) => void;

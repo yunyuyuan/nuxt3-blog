@@ -1,10 +1,10 @@
-import { GithubTokenKey, IgnoredVersionKey, OfficialRepo } from "#layers/nuxt3-blog/app/utils/common/constants";
-import { isDev } from "#layers/nuxt3-blog/app/utils/nuxt/constants";
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
-import { getLocalStorage, setLocalStorage } from "#layers/nuxt3-blog/app/utils/nuxt/localStorage";
-import { isAuthor } from "#layers/nuxt3-blog/app/utils/nuxt/manage/github";
-import { createVersionUpdateModal } from "#layers/nuxt3-blog/app/utils/nuxt/manage";
-import { notify } from "#layers/nuxt3-blog/app/utils/nuxt/notify";
+import { GithubTokenKey, IgnoredVersionKey, OfficialRepo } from "#layers/nuxt-blog/app/utils/common/constants";
+import { isDev } from "#layers/nuxt-blog/app/utils/nuxt/constants";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
+import { getLocalStorage, setLocalStorage } from "#layers/nuxt-blog/app/utils/nuxt/localStorage";
+import { isAuthor } from "#layers/nuxt-blog/app/utils/nuxt/manage/github";
+import { createVersionUpdateModal } from "#layers/nuxt-blog/app/utils/nuxt/manage";
+import { notify } from "#layers/nuxt-blog/app/utils/nuxt/notify";
 
 async function checkVersion() {
   try {

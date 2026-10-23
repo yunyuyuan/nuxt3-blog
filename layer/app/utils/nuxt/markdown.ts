@@ -4,7 +4,7 @@ import { pangu } from "pangu/browser";
 import { SHIKI_LIGHT_THEME, SHIKI_DARK_THEME } from "../common/shiki";
 import { translate } from "./i18n";
 import { notify } from "./notify";
-import lazyImgVue from "#layers/nuxt3-blog/app/components/the-lazy-img.vue";
+import lazyImgVue from "#layers/nuxt-blog/app/components/the-lazy-img.vue";
 
 let mermaidRenderQueue = Promise.resolve();
 

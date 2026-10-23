@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ArrowLeft } from "lucide-vue-next";
-import { useCommonSEOTitle } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import bg from "#layers/nuxt3-blog/app/assets/image/outerwilds.jpg";
+import { useCommonSEOTitle } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import bg from "#layers/nuxt-blog/app/assets/image/outerwilds.jpg";
 import config from "~~/config";
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
 
 definePageMeta({
   layout: "blank"

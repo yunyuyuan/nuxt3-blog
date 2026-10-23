@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Link } from "lucide-vue-next";
-import type { KnowledgeItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { useContentPage } from "#layers/nuxt3-blog/app/utils/nuxt/public/detail";
-import { Visitors, Comments, WroteDate } from "#layers/nuxt3-blog/app/utils/nuxt/public/components";
-import { useCommonSEOTitle } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { initViewer } from "#layers/nuxt3-blog/app/utils/nuxt/viewer";
+import type { KnowledgeItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { useContentPage } from "#layers/nuxt-blog/app/utils/nuxt/public/detail";
+import { Visitors, Comments, WroteDate } from "#layers/nuxt-blog/app/utils/nuxt/public/components";
+import { useCommonSEOTitle } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { initViewer } from "#layers/nuxt-blog/app/utils/nuxt/viewer";
 
 const { item, decrypted, markdownRef, htmlContent, description, visitors } = await useContentPage<KnowledgeItem>();
 useCommonSEOTitle(() => item.title, undefined, description);

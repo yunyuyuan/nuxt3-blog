@@ -1,6 +1,6 @@
-import { NotificationContainerId, ModalContainerId, ThemeModeKey, I18nStoreKey } from "#layers/nuxt3-blog/app/utils/common/constants";
-import { initScrollTrigger } from "#layers/nuxt3-blog/app/utils/common/scroll-event";
-import { getLocalStorage } from "#layers/nuxt3-blog/app/utils/nuxt/localStorage";
+import { NotificationContainerId, ModalContainerId, ThemeModeKey, I18nStoreKey } from "#layers/nuxt-blog/app/utils/common/constants";
+import { initScrollTrigger } from "#layers/nuxt-blog/app/utils/common/scroll-event";
+import { getLocalStorage } from "#layers/nuxt-blog/app/utils/nuxt/localStorage";
 
 export default defineNuxtPlugin((app) => {
   initScrollTrigger();

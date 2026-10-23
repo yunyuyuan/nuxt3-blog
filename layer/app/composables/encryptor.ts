@@ -1,8 +1,8 @@
 import type cryptoJS from "crypto-js";
-import { notify } from "#layers/nuxt3-blog/app/utils/nuxt/notify";
-import type { DecryptFunction } from "#layers/nuxt3-blog/app/utils/common/types";
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
-import { useUnmount } from "#layers/nuxt3-blog/app/utils/hooks/useUnmount";
+import { notify } from "#layers/nuxt-blog/app/utils/nuxt/notify";
+import type { DecryptFunction } from "#layers/nuxt-blog/app/utils/common/types";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
+import { useUnmount } from "#layers/nuxt-blog/app/utils/hooks/useUnmount";
 
 let CryptoJS: typeof cryptoJS;
 

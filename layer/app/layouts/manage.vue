@@ -1,18 +1,18 @@
 <script setup lang="tsx">
 import { BookOpen, CheckCheck, FileEdit, Image, ImagePlus, Key, Menu, MoonStar, Rocket, Settings, Sun, Upload, X } from "lucide-vue-next";
 import type { FunctionalComponent } from "vue";
-import { isAuthor as checkIsAuthor } from "#layers/nuxt3-blog/app/utils/nuxt/manage/repository";
-import Stage from "#layers/nuxt3-blog/app/pages/manage/comps/stage.vue";
-import UploadFile from "#layers/nuxt3-blog/app/pages/manage/comps/upload-file.vue";
-import { GithubTokenKey } from "#layers/nuxt3-blog/app/utils/common/constants";
-import { HeaderTabs, type HeaderTabUrl } from "#layers/nuxt3-blog/app/utils/common/types";
-import { setHeadReadingActive } from "#layers/nuxt3-blog/app/utils/nuxt/fetch";
-import { translate } from "#layers/nuxt3-blog/app/utils/nuxt/i18n";
-import { rmLocalStorage, setLocalStorage } from "#layers/nuxt3-blog/app/utils/nuxt/localStorage";
-import { notify } from "#layers/nuxt3-blog/app/utils/nuxt/notify";
-import { calcRocketUrl, watchUntil } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { isDev } from "#layers/nuxt3-blog/app/utils/nuxt/constants";
-import { useStaging } from "#layers/nuxt3-blog/app/utils/hooks/useStaging";
+import { isAuthor as checkIsAuthor } from "#layers/nuxt-blog/app/utils/nuxt/manage/repository";
+import Stage from "#layers/nuxt-blog/app/pages/manage/comps/stage.vue";
+import UploadFile from "#layers/nuxt-blog/app/pages/manage/comps/upload-file.vue";
+import { GithubTokenKey } from "#layers/nuxt-blog/app/utils/common/constants";
+import { HeaderTabs, type HeaderTabUrl } from "#layers/nuxt-blog/app/utils/common/types";
+import { setHeadReadingActive } from "#layers/nuxt-blog/app/utils/nuxt/fetch";
+import { translate } from "#layers/nuxt-blog/app/utils/nuxt/i18n";
+import { rmLocalStorage, setLocalStorage } from "#layers/nuxt-blog/app/utils/nuxt/localStorage";
+import { notify } from "#layers/nuxt-blog/app/utils/nuxt/notify";
+import { calcRocketUrl, watchUntil } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { isDev } from "#layers/nuxt-blog/app/utils/nuxt/constants";
+import { useStaging } from "#layers/nuxt-blog/app/utils/hooks/useStaging";
 import config from "~~/config";
 
 const inputTokenDisabled = isDev || __NB_BUILDTIME_VITESTING__;
@@ -69,7 +69,7 @@ watch(githubToken, (token) => {
 const repoName = __NB_GITHUB_REPO__;
 const createTokenUrl = `https://github.com/settings/personal-access-tokens/new?${new URLSearchParams({
   name: `${repoName} manage`.slice(0, 40),
-  description: `nuxt3-blog /manage for ${config.githubName}/${repoName}`,
+  description: `nuxt-blog /manage for ${config.githubName}/${repoName}`,
   target_name: config.githubName,
   expires_in: "90",
   contents: "write"

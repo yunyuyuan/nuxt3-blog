@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Calendar, Clock, Image } from "lucide-vue-next";
-import { getNowDayjs } from "#layers/nuxt3-blog/app/utils/common/dayjs";
-import type { RecordItem } from "#layers/nuxt3-blog/app/utils/common/types";
-import { useListPage } from "#layers/nuxt3-blog/app/utils/nuxt/public/list";
-import { staggerDelay } from "#layers/nuxt3-blog/app/utils/nuxt/utils";
-import { formatTime } from "#layers/nuxt3-blog/app/utils/nuxt/format-time";
-import { useRouteQuery } from "#layers/nuxt3-blog/app/utils/hooks/useRouteQuery";
+import { getNowDayjs } from "#layers/nuxt-blog/app/utils/common/dayjs";
+import type { RecordItem } from "#layers/nuxt-blog/app/utils/common/types";
+import { useListPage } from "#layers/nuxt-blog/app/utils/nuxt/public/list";
+import { staggerDelay } from "#layers/nuxt-blog/app/utils/nuxt/utils";
+import { formatTime } from "#layers/nuxt-blog/app/utils/nuxt/format-time";
+import { useRouteQuery } from "#layers/nuxt-blog/app/utils/hooks/useRouteQuery";
 
 const currentYear = useRouteQuery("year", s => s ? parseInt(s) : undefined);
 
