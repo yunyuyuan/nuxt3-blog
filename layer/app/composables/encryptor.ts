@@ -80,7 +80,9 @@ export const useEncryptor = () => {
   ): Promise<void> => {
     try {
       if (!usePasswd.value) {
-        throw new Error(translate("need-passwd"));
+        // 这个错误只用于跳到 catch，消息不显示。不调用 translate：调用方常在 await 之后执行到这里，
+        // 这时 Nuxt 上下文已经丢失，translate 读取 useState 和 useNuxtApp 会报 NUXT_E1001
+        throw new Error("need-passwd");
       }
       await callback(decrypt);
     } catch {
