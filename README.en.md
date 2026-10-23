@@ -33,6 +33,21 @@ English Readme | [中文说明](/README.md)
 
 ## For detailed setup tutorial, please refer to the [wiki](https://github.com/yunyuyuan/nuxt3-blog/wiki)
 
+There are two ways to set up a blog:
+
+| Way | Use it when | Upgrade |
+| --- | --- | --- |
+| Starter template (recommended for new users) | You change only the configuration and the content | `pnpm add nuxt3-blog@^<major version>` |
+| Fork this repository | You change the framework code | Click "Sync fork" on GitHub |
+
+**Starter template**: the framework is installed as the npm package `nuxt3-blog`. Your repository contains only `config.ts`, your content and the deployment configuration. See [starter/README.md](/starter/README.md).
+
+```bash
+npx giget@latest "gh:yunyuyuan/nuxt3-blog/starter#master" my-blog
+```
+
+**Fork**: the framework code is in `layer/`, and the files of the site are in the root directory. If you change only the files in the root directory, syncing with upstream causes far fewer conflicts.
+
 Blog principle example:
 
 <center>
@@ -73,30 +88,21 @@ Blog principle example:
 
 # Project Structure
 
-- `/assets`
-  - `/image` Images imported by Vite
-  - `/style` Public/functional styles
-- `/components` Vue components, automatically loaded by Nuxt
-- `/composables` Vue reactivity, automatically loaded by Nuxt
-- `/e2e` E2E testing
-- `/i18n` Internationalization translation files
-- `/layouts` Nuxt layout files
-- `/middleware` Nuxt route guards
-- `/pages` All web views
-- `/plugins` Nuxt plugins
-- `/public`
-  - `/e2e/rebuild` Mock data for E2E testing
-  - `/rebuild` All blog data
-  - `/sticker` All emoji images
-- `/scripts` Scripts executed by Gulp
-- `/server` API server (Node.js)
-- `/utils`
-  - `/api` Functions called by `/server`
-  - `/common` JavaScript-related functional code (not dependent on Vue or Nuxt)
-  - `/hooks` Some composable encapsulation logic
-  - `/nuxt` Nuxt-related functional code
-- `/vite-plugins` Vite plugins
+- `/layer` Framework code, published as the npm package `nuxt3-blog`
+  - `/app` Nuxt app: pages, components, composables, plugins and utilities
+  - `/server` API server (image upload, page view statistics, etc.)
+  - `/modules/blog.ts` Build-time logic: reads the site configuration and the content, generates the indexes, defines global constants
+  - `/i18n` Internationalization translation files
+  - `/scripts` Local scripts (`pnpm local:*`), executed by Gulp
+  - `/vite-plugins` In development mode, writes commits from the admin pages to the local files
+  - `/public/sticker` All emoji images
+- `/starter` Template for new sites, depends on the npm package `nuxt3-blog`
 - `/config.ts` Blog configuration, must be modified
+- `/public`
+  - `/rebuild` All blog data. `articles/`, `records/` and `knowledges/` contain one md file for each item, with the metadata in YAML frontmatter at the start of the file. The build generates the indexes in `json/`; they are not committed
+  - `/e2e/rebuild` Mock data for E2E testing
+- `/e2e` E2E testing
+- `/nuxt.config.ts` `extends: ["nuxt3-blog"]`, which uses `layer/` of this repository through the pnpm workspace
 
 # Node Scripts
 
@@ -104,7 +110,7 @@ Blog principle example:
 "scripts": {
   "build": "nuxt build", // Compile for SSR
   "dev": "nuxt dev", // Development
-  "dev-for-test": "cross-env NUXT_PORT=13000 VITESTING=\"true\" nuxt dev", // For E2E testing
+  "dev-for-test": "cross-env PORT=13000 VITESTING=\"true\" nuxt dev", // For E2E testing
   "build-for-test": "cross-env VITESTING=\"true\" nuxt build", // For E2E testing
   "prod-for-test": "cross-env PORT=13000 node .output/server/index.mjs", // For E2E testing
   "generate": "nuxt generate", // Deprecated
@@ -113,15 +119,21 @@ Blog principle example:
   "local:download-file": "gulp download-file", // Read file-map.json, download all files to files/
   "local:substitute-file": "gulp substitute-file", // Read file-map.json, replace with new files (before running this script, modify newUrl in file-map.json to the URL to be replaced)
   "local:upload-algolia": "gulp upload-algolia", // Upload index data to Algolia
+  "local:migrate-content": "gulp migrate-content", // Convert content in the old format (JSON index + md) to the frontmatter format, see docs/upgrade-v9.md
   "test:unit": "vitest run --exclude ./e2e", // Unit testing
   "test:e2e": "vitest run --dir ./e2e", // E2E testing
   "test:dev-and-e2e": "start-server-and-test dev-for-test http://localhost:13000 test:e2e", // Run test service and start E2E testing
   "test:prod-and-e2e": "start-server-and-test prod-for-test http://localhost:13000 test:e2e", // Run test prod and start E2E testing
   "eslint": "eslint --fix .", // Run eslint
+  "typecheck": "nuxi typecheck", // Type checking
   "preview": "nuxt preview", // Preview compiled website
   "prepare": "husky" // Install husky
 }
 ```
+
+# Upgrade from v8 to v9
+
+v9 has two breaking changes: the framework code moved to `layer/`, and the content is now one md file for each item, with the metadata in frontmatter. **Read [docs/upgrade-v9.md](/docs/upgrade-v9.md) before you upgrade.** If you sync with upstream without these steps, the build fails.
 
 # Changelog
 
